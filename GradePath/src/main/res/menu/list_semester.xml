@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.EditCoursesActivity">
+    <item
+        android:id="@+id/action_list_semester_sort"
+        android:icon="@drawable/ic_action_overflow"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_list_sort_by" />
+</menu>

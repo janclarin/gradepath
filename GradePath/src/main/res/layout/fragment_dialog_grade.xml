@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/dialogPrompt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.janclarin.gradepath.dialog.GradeDialogFragment">
+
+    <EditText
+        android:id="@+id/et_grade_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tv_dialog_grade_name"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/tv_dialog_grade_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_grade_name"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_dialog_grade" />
+
+    <LinearLayout
+        android:id="@+id/ll_grade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_grade_name"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_grade_received"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:hint="@string/et_grade_received"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/et_grade_possible"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:hint="@string/et_grade_possible"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <!-- Course spinner -->
+    <TextView
+        android:id="@+id/tv_dialog_grade_course_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_grade"
+        android:layout_marginTop="8dp"
+        android:text="@string/dialog_course" />
+
+    <Spinner
+        android:id="@+id/spn_dialog_grade_courses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_grade"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:minHeight="40dp" />
+
+    <!-- Grade component spinner -->
+    <TextView
+        android:id="@+id/tv_dialog_grade_component_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spn_dialog_grade_courses"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_dialog_grade_component" />
+
+    <Spinner
+        android:id="@+id/spn_dialog_grade_components"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/spn_dialog_grade_courses"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:minHeight="40dp" />
+
+
+</RelativeLayout>

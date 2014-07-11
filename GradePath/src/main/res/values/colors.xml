@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_primary_color">@android:color/holo_blue_light</color>
+    <color name="theme_secondary_color">@android:color/holo_blue_dark</color>
+
+    <color name="card_fill">#fff</color>
+    <color name="card_shadow">#ccc</color>
+    <color name="card_fill_pressed">#11000000</color>
+    <color name="card_shadow_pressed">#ddd</color>
+</resources>

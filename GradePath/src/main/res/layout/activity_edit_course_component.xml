@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/btn_grade_component"
+        style="?android:borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="?android:attr/listPreferredItemHeightLarge"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/cd_btn_grade_component"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_grade_component_add" />
+
+    <View
+        android:id="@+id/divider_grade_component"
+        android:layout_width="1dp"
+        android:layout_height="?android:attr/listPreferredItemHeightLarge"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@id/btn_grade_component"
+        android:background="?android:dividerVertical" />
+
+    <EditText
+        android:id="@+id/et_grade_component_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/divider_grade_component"
+        android:hint="@string/et_grade_component"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords"
+        android:singleLine="true" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/et_grade_component_name"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/divider_grade_component"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_grade_component_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_weight="0.5"
+            android:hint="@string/et_grade_component_weight"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/et_grade_component_number_of_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="0.5"
+            android:hint="@string/et_grade_component_number_of_items"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+</RelativeLayout>

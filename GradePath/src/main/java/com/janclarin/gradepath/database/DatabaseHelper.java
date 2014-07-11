@@ -1,0 +1,168 @@
+package com.janclarin.gradepath.database;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+/**
+ * Database object allowing control of SQL mDatabase.
+ */
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    /**
+     * Primary key column name.
+     */
+    public static final String COLUMN_ID = "_id";
+
+    /**
+     * Shared columns.
+     */
+    public static final String COLUMN_COURSE_ID = "course_id";
+    public static final String COLUMN_IS_COMPLETED = "is_completed";
+    public static final String COLUMN_YEAR_ADDED = "year_added";
+    public static final String COLUMN_MONTH_ADDED = "month_added";
+    public static final String COLUMN_DAY_ADDED = "day_added";
+
+    /**
+     * Semester table.
+     */
+    public static final String TABLE_SEMESTERS = "semesters";
+    public static final String COLUMN_SEASON = "season";
+    public static final String COLUMN_YEAR = "year";
+    public static final String COLUMN_SEMESTER_GPA = "semester_gpa";
+    public static final String COLUMN_IS_CURRENT = "is_current";
+    public static final String COLUMN_END_YEAR = "end_year";
+    public static final String COLUMN_END_MONTH = "end_month";
+    public static final String COLUMN_END_DAY = "end_day";
+    private static final String CREATE_TABLE_SEMESTERS = "CREATE TABLE "
+            + TABLE_SEMESTERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_SEASON + " TEXT NOT NULL, "
+            + COLUMN_YEAR + " INTEGER NOT NULL, "
+            + COLUMN_SEMESTER_GPA + " REAL NOT NULL, "
+            + COLUMN_IS_CURRENT + " INTEGER NOT NULL, "
+            + COLUMN_END_YEAR + " INTEGER NOT NULL, "
+            + COLUMN_END_MONTH + " INTEGER NOT NULL, "
+            + COLUMN_END_DAY + " INTEGER NOT NULL"
+            + ");";
+
+    /**
+     * Course table.
+     */
+    public static final String TABLE_COURSES = "list_course";
+    public static final String COLUMN_SEMESTER_ID = "semester_id";
+    public static final String COLUMN_COURSE_NAME = "course_name";
+    public static final String COLUMN_FINAL_GRADE = "final_grade";
+    private static final String CREATE_TABLE_COURSES = "CREATE TABLE "
+            + TABLE_COURSES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_SEMESTER_ID + " INTEGER NOT NULL, "
+            + COLUMN_COURSE_NAME + " TEXT NOT NULL, "
+            + COLUMN_FINAL_GRADE + " INTEGER NOT NULL, "
+            + COLUMN_IS_COMPLETED + " INTEGER NOT NULL"
+            + ");";
+
+    /**
+     * Grade component table.
+     */
+    public static final String TABLE_COMPONENTS = "grade_components";
+    public static final String COLUMN_COMPONENT_NAME = "component_name";
+    public static final String COLUMN_COMPONENT_WEIGHT = "component_weight";
+    public static final String COLUMN_COMPONENT_NUM_ITEMS = "component_num_items";
+    private static final String CREATE_TABLE_COMPONENTS = "CREATE TABLE "
+            + TABLE_COMPONENTS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
+            + COLUMN_COMPONENT_NAME + " TEXT NOT NULL, "
+            + COLUMN_COMPONENT_WEIGHT + " REAL NOT NULL, "
+            + COLUMN_COMPONENT_NUM_ITEMS + " INTEGER NOT NULL"
+            + ");";
+
+    /**
+     * Grade table.
+     * Includes course id, year added, day of year added.
+     */
+    public static final String TABLE_GRADES = "grades";
+    public static final String COLUMN_COMPONENT_ID = "component_id";
+    public static final String COLUMN_GRADE_NAME = "grade_name";
+    public static final String COLUMN_POINTS_EARNED = "points_earned";
+    public static final String COLUMN_POINTS_POSSIBLE = "points_possible";
+    private static final String CREATE_TABLE_GRADES = "CREATE TABLE "
+            + TABLE_GRADES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
+            + COLUMN_COMPONENT_ID + " INTEGER NOT NULL, "
+            + COLUMN_GRADE_NAME + " TEXT NOT NULL, "
+            + COLUMN_POINTS_EARNED + " REAL NOT NULL, "
+            + COLUMN_POINTS_POSSIBLE + " REAL NOT NULL, "
+            + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_DAY_ADDED + " INTEGER NOT NULL"
+            + ");";
+
+    /**
+     * Task table.
+     * Includes course id, year added, day of year added.
+     */
+    public static final String TABLE_TASKS = "tasks";
+    public static final String COLUMN_TASK_NAME = "task_name";
+    public static final String COLUMN_IS_GRADED = "is_graded";
+    public static final String COLUMN_YEAR_DUE = "year_due";
+    public static final String COLUMN_MONTH_DUE = "month_due";
+    public static final String COLUMN_DAY_DUE = "day_due";
+    private static final String CREATE_TABLE_TASKS = "CREATE TABLE "
+            + TABLE_TASKS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
+            + COLUMN_TASK_NAME + " TEXT NOT NULL, "
+            + COLUMN_IS_GRADED + " INTEGER NOT NULL, "
+            + COLUMN_IS_COMPLETED + " INTEGER NOT NULL, "
+            + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_DAY_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_YEAR_DUE + " INTEGER NOT NULL, "
+            + COLUMN_MONTH_DUE + " INTEGER NOT NULL, "
+            + COLUMN_DAY_DUE + " INTEGER NOT NULL"
+            + ");";
+    /**
+     * Database variables.
+     */
+    private static final String DATABASE_NAME = "gradepath.db";
+    private static final int DATABASE_VERSION = 1;
+    private static DatabaseHelper sInstance;
+
+    /**
+     * Constructor
+     *
+     * @param context
+     */
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DatabaseHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DatabaseHelper(context);
+        }
+        return sInstance;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase database) {
+        database.execSQL(CREATE_TABLE_SEMESTERS);
+        database.execSQL(CREATE_TABLE_COURSES);
+        database.execSQL(CREATE_TABLE_COMPONENTS);
+        database.execSQL(CREATE_TABLE_GRADES);
+        database.execSQL(CREATE_TABLE_TASKS);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        Log.w(DatabaseHelper.class.getName(),
+                "Upgrading mDatabase version from " + oldVersion + " to "
+                        + newVersion + " deleting all old data"
+        );
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_SEMESTERS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPONENTS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_GRADES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
+        onCreate(database);
+    }
+}

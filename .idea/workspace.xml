@@ -88,7 +88,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="29426ab1-1d9d-4690-8e88-e7956c827f4b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/contributors.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradlew.bat" afterPath="$PROJECT_DIR$/gradlew.bat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -1966,7 +1965,11 @@
       <created>1405097078389</created>
       <updated>1405097078390</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="Contextual action bar set up. Deleting items now possible.">
+      <created>1405097391025</created>
+      <updated>1405097391025</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">

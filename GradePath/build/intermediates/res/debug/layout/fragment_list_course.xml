@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ListCourseFragment">
+
+    <ListView
+        android:id="@+id/lv_list_course"
+        style="@style/cardListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_list_course_semester"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="4dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:fontFamily="sans-serif-light"
+        android:textAllCaps="true"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_list_course_empty"
+        style="@style/emptyListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/tv_list_course_empty"
+        android:visibility="gone" />
+
+</FrameLayout>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_course.xml -->

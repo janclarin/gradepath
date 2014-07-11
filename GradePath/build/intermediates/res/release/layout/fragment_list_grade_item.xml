@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/cardView"
+    android:layout_width="wrap_content"
+    android:layout_height="?android:attr/listPreferredItemHeight">
+
+    <TextView
+        android:id="@+id/tv_recent_grade_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:singleLine="true"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_recent_grade_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/tv_recent_grade_grade"
+        android:singleLine="true"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_recent_grade_course"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tv_recent_grade_name"
+        android:layout_toLeftOf="@id/tv_recent_grade_grade"
+        android:fontFamily="sans-serif-condensed"
+        android:singleLine="true"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="14sp" />
+
+
+</RelativeLayout><!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_grade_item.xml -->

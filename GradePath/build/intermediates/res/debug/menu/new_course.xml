@@ -1,0 +1,5 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.NewCourseActivity" >
+</menu>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/new_course.xml -->

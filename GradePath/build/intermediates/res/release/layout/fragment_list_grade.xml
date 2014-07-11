@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".fragments.GradeListFragment">
+
+    <ListView
+        android:id="@+id/lv_list_grade"
+        style="@style/cardListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice" />
+
+    <TextView
+        android:id="@+id/tv_list_grade_empty"
+        style="@style/emptyListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/tv_list_grade_empty"
+        android:visibility="gone" />
+
+</FrameLayout>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_grade.xml -->

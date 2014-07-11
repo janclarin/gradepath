@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="20.0.0" >
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/res" />
+    </dataSet>
+    <dataSet config="20.0.0" >
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/res" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res" >
+            <file
+                name="drawer_shadow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/drawer_shadow.9.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_new_course.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_cancel"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_cancel.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_launcher.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_drawer"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_drawer.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_new_grade.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_remove"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_grade_component_remove.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_add"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_grade_component_add.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_done"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_done.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="row_selector"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/row_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="rectangle_border"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/rectangle_border.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="bg_card"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/bg_card.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/dimens.xml"
+                qualifiers="" >
+                <dimen name="navigation_drawer_width" >240dp
+                </dimen>
+                <dimen name="activity_horizontal_margin" >16dp
+                </dimen>
+                <dimen name="activity_vertical_margin" >16dp
+                </dimen>
+            </file>
+            <file
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/strings.xml"
+                qualifiers="" >
+                <string name="title_grade_dialog" >Grade
+                </string>
+                <string name="btn_alert_delete_positive" >Delete
+                </string>
+                <string name="navigation_drawer_close" >Close navigation drawer
+                </string>
+                <string name="dialog_cancel" >Cancel
+                </string>
+                <string name="season_spring" >Spring
+                </string>
+                <string name="tv_course_information" >Course information
+                </string>
+                <string name="cb_current_semester" >Current
+                </string>
+                <string name="title_fragment_list_semesters" >Semesters
+                </string>
+                <string name="contextual_action_delete" >Delete
+                </string>
+                <string name="message_delete_semester_dialog" >You\'ll delete every course in this semester!
+                </string>
+                <string name="added" >Added
+                </string>
+                <string name="toast_semester_saved" >Semester saved
+                </string>
+                <string name="semester_days_left" >Days\nLeft
+                </string>
+                <string name="cd_show_button_bar" >Show button bar
+                </string>
+                <string name="cd_add_button" >Add button
+                </string>
+                <string name="title_fragment_settings" >Settings
+                </string>
+                <string name="et_grade_received" >Received
+                </string>
+                <string name="tv_grade_components" >Grade components
+                </string>
+                <string name="semester_current" >Current
+                </string>
+                <string name="dialog_item_name" >Name
+                </string>
+
+                <string-array name="seasons_array" >
+                    <item>
+@string/season_fall
+                    </item>
+                    <item>
+@string/season_winter
+                    </item>
+                    <item>
+@string/season_spring
+                    </item>
+                    <item>
+@string/season_summer
+                    </item>
+                </string-array>
+
+                <string name="action_list_sort_by" >Sort by
+                </string>
+                <string name="tv_course_grades_current_average" >Current average:
+                </string>
+                <string name="title_delete_course_dialog" >Delete %1$s?
+                </string>
+                <string name="action_settings" >Settings
+                </string>
+                <string name="tv_drawer_current_courses" >Current courses
+                </string>
+                <string name="course_saved_new" >New course saved
+                </string>
+                <string name="tv_gpa" >\nGPA
+                </string>
+                <string name="tv_dialog_semester_last_day" >Last day
+                </string>
+                <string name="rb_final_grade_yes" >Yes
+                </string>
+                <string name="season_winter" >Winter
+                </string>
+                <string name="tv_course_fragment_grades" >Grades
+                </string>
+                <string name="prompt_enter_course_name" >Enter course name
+                </string>
+                <string name="btn_fragment_home_add_grade" >Grade
+                </string>
+                <string name="tv_dialog_task_type" >Type
+                </string>
+                <string name="et_grade_component" >Component name
+                </string>
+                <string name="tv_semester" >Semester
+                </string>
+                <string name="tv_dialog_grade" >Grade
+                </string>
+                <string name="hint_dialog_semester_gpa" >GPA for this semester
+                </string>
+                <string name="title_activity_edit_course" >Edit course
+                </string>
+                <string name="title_update_semester_dialog" >Update semester
+                </string>
+                <string name="warning_no_semesters" >You have no semesters yet, add one first
+                </string>
+                <string name="selected" >selected
+                </string>
+                <string name="btn_date_picker_negative" >Cancel
+                </string>
+                <string name="cb_graded" >To be graded
+                </string>
+                <string name="tv_list_semester_empty" >No semesters
+                </string>
+                <string name="tv_list_course_set_current_course" >Set a\ncurrent semester
+                </string>
+                <string name="tv_list_task_empty" >No tasks
+                </string>
+                <string name="action_new_course" >New course
+                </string>
+                <string name="tv_completed" >Completed
+                </string>
+                <string name="title_activity_detail_course" >Course details
+                </string>
+                <string name="toast_task_saved" >Task saved
+                </string>
+                <string name="title_date_picker_due_date" >Set due date
+                </string>
+                <string name="task_due_date_today" >Today
+                </string>
+                <string name="tv_semesters" >Semesters
+                </string>
+                <string name="grade_received_missing" >No received grade
+                </string>
+                <string name="hint_course_name" >Course name
+                </string>
+                <string name="app_name" >GradePath
+                </string>
+                <string name="et_grade_component_weight" >% weight
+                </string>
+                <string name="yesterday" >yesterday
+                </string>
+                <string name="actionbar_update" >Update
+                </string>
+                <string name="title_delete_semester_dialog" >Delete %1$s?
+                </string>
+                <string name="et_grade_component_number_of_items" ># of items
+                </string>
+                <string name="action_list_sort_alphabet_ascending" >Alphabetical ascending
+                </string>
+                <string name="tv_dialog_task_due_date" >Due Date
+                </string>
+                <string name="title_task_dialog" >Task
+                </string>
+                <string name="task_due_date_none" >No tasks
+                </string>
+                <string name="title_fragment_list_grades" >Grades
+                </string>
+                <string name="tv_dialog_grade_name" >Grade name
+                </string>
+                <string name="bullet" >•
+                </string>
+                <string name="btn_alert_delete_negative" >Cancel
+                </string>
+                <string name="course_saved_update" >Course updated
+                </string>
+                <string name="tv_list_course_empty" >No courses
+                </string>
+                <string name="task_due_date_two_days" >In 2 days
+                </string>
+                <string name="tv_dialog_task_name" >Task name
+                </string>
+                <string name="task_due_date_on" >On
+                </string>
+                <string name="navigation_drawer_open" >Open navigation drawer
+                </string>
+                <string name="tv_list_grade_empty" >No grades
+                </string>
+                <string name="tv_dialog_grade_component" >Component
+                </string>
+                <string name="dialog_update" >Update
+                </string>
+                <string name="title_new_task_dialog" >New task
+                </string>
+                <string name="today" >today
+                </string>
+                <string name="title_fragment_list_courses" >Courses
+                </string>
+                <string name="title_new_semester_dialog" >New semester
+                </string>
+                <string name="season_summer" >Summer
+                </string>
+                <string name="grade_name_missing" >No name
+                </string>
+                <string name="task_due_date_tomorrow" >Tomorrow
+                </string>
+                <string name="contextual_action_edit" >Edit
+                </string>
+                <string name="dialog_course" >Course
+                </string>
+                <string name="dialog_save" >Save
+                </string>
+                <string name="task_name_missing" >No name
+                </string>
+                <string name="toast_task_updated" >Task updated
+                </string>
+                <string name="et_grade_possible" >Possible
+                </string>
+                <string name="actionbar_save" >Save
+                </string>
+                <string name="semester_past" >Past
+                </string>
+                <string name="toast_alert_delete_confirmation" >%1$s deleted
+                </string>
+                <string name="title_new_grade_dialog" >New grade
+                </string>
+                <string name="btn_date_picker_positive" >Set
+                </string>
+                <string name="toast_semester_updated" >Semester updated
+                </string>
+                <string name="toast_grade_saved" >Grade saved
+                </string>
+                <string name="cd_btn_grade_component" >Add/remove grade component
+                </string>
+                <string name="title_fragment_home" >Home
+                </string>
+                <string name="on" >on
+                </string>
+                <string name="rb_final_grade_no" >No
+                </string>
+                <string name="warning_no_courses_yet" >You have no courses, go add one first
+                </string>
+                <string name="tv_not_set" >N/A
+                </string>
+                <string name="of" >of
+                </string>
+                <string name="toast_grade_updated" >Grade updated
+                </string>
+                <string name="actionbar_cancel" >Cancel
+                </string>
+                <string name="btn_date_picker_neutral" >Tomorrow
+                </string>
+                <string name="task_due_date_late" >Late
+                </string>
+                <string name="action_list_sort_alphabet_descending" >Alphabetical descending
+                </string>
+                <string name="btn_fragment_home_add_task" >Task
+                </string>
+                <string name="message_delete_course_dialog" >You\'ll delete every grade and task related to this course!
+                </string>
+                <string name="season_fall" >Fall
+                </string>
+                <string name="grade_possible_missing" >No possible grade
+                </string>
+                <string name="title_fragment_list_tasks" >Tasks
+                </string>
+            </file>
+            <file
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/styles.xml"
+                qualifiers="" >
+
+                <style
+                    name="emptyListTextView"
+                    parent="android:Widget.Holo.Button.Borderless" >
+                    <item name="android:padding">
+8dp
+                    </item>
+                    <item name="android:textColor">
+@android:color/tertiary_text_light
+                    </item>
+                    <item name="android:textSize">
+34sp
+                    </item>
+                    <item name="android:fontFamily">
+sans-serif-thin
+                    </item>
+                    <item name="android:gravity">
+center
+                    </item>
+                </style>
+
+                <style
+                    name="spinnerButton"
+                    parent="android:Widget.Holo.Light.Spinner" >
+                    <item name="android:layout_height">
+40dp
+                    </item>
+                    <item name="android:enabled">
+true
+                    </item>
+                    <item name="android:paddingLeft">
+12dp
+                    </item>
+                </style>
+
+                <style name="cardListView" >
+                    <item name="android:paddingLeft">
+8dp
+                    </item>
+                    <item name="android:paddingRight">
+8dp
+                    </item>
+                    <item name="android:paddingTop">
+8dp
+                    </item>
+                    <item name="android:paddingBottom">
+72dp
+                    </item>
+                    <item name="android:divider">
+@null
+                    </item>
+                    <item name="android:dividerHeight">
+8dp
+                    </item>
+                    <item name="android:clipToPadding">
+false
+                    </item>
+                    <item name="android:scrollbarStyle">
+outsideOverlay
+                    </item>
+                    <item name="android:drawSelectorOnTop">
+true
+                    </item>
+                </style>
+
+                <style name="cardView" >
+                    <item name="android:background">
+@drawable/bg_card
+                    </item>
+                    <item name="android:paddingBottom">
+2dp
+                    </item>
+                </style>
+
+                <style name="headerTextView" >
+                    <item name="android:gravity">
+center_vertical|left
+                    </item>
+                    <item name="android:paddingLeft">
+12dp
+                    </item>
+                    <item name="android:textAllCaps">
+true
+                    </item>
+                    <item name="android:textColor">
+@android:color/secondary_text_light_nodisable
+                    </item>
+                </style>
+
+                <style name="dialogPrompt" >
+                    <item name="android:layout_gravity">
+center_horizontal
+                    </item>
+                    <item name="android:layout_marginBottom">
+48dp
+                    </item>
+                    <item name="android:paddingBottom">
+32dp
+                    </item>
+                    <item name="android:paddingLeft">
+8dp
+                    </item>
+                    <item name="android:paddingRight">
+8dp
+                    </item>
+                    <item name="android:paddingTop">
+8dp
+                    </item>
+                </style>
+
+                <style name="checkBoxDialog" >
+                    <item name="android:layout_marginLeft">
+6dp
+                    </item>
+                    <item name="android:layout_marginTop">
+8dp
+                    </item>
+                    <item name="android:textAllCaps">
+true
+                    </item>
+                    <item name="android:textColor">
+@android:color/secondary_text_light_nodisable
+                    </item>
+                    <item name="android:textSize">
+14sp
+                    </item>
+                </style>
+
+                <style
+                    name="CustomActionBar"
+                    parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse" >
+                    <item name="android:windowActionBarOverlay">
+true
+                    </item>
+                    <item name="android:background">
+@android:color/holo_blue_light
+                    </item>
+                </style>
+
+                <style
+                    name="AppTheme"
+                    parent="android:Theme.Holo.Light" >
+
+                    <!-- Customize your theme here. -->
+                    <item name="android:actionBarStyle">
+@style/CustomActionBar
+                    </item>
+                    <item name="android:windowContentOverlay">
+@null
+                    </item>
+                </style>
+            </file>
+            <file
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values-w820dp/dimens.xml"
+                qualifiers="w820dp-v13" >
+                <dimen name="activity_horizontal_margin" >64dp
+                </dimen>
+            </file>
+            <file
+                name="fragment_navigation_drawer"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_navigation_drawer.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_course_grades_group"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/list_course_grades_group.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_main"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/activity_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_dialog_task"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_dialog_task.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="actionbar_done_button"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/actionbar_done_button.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_edit_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/activity_edit_course.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="actionbar_cancel_button"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/actionbar_cancel_button.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_dialog_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_dialog_grade.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_course_grades"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_course_grades.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_main"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_course_grades_child"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/list_course_grades_child.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="actionbar_done_cancel"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/actionbar_done_cancel.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="new_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/new_course.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="main"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/main.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="global"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/global.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="drawer_shadow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/drawer_shadow.9.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_new_course.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_cancel"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_cancel.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_launcher.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_new_grade.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_remove"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_grade_component_remove.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_add"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_grade_component_add.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_done"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_done.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="drawer_shadow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/drawer_shadow.9.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_cancel"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_cancel.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_launcher.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_new_grade.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_remove"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_grade_component_remove.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_add"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_grade_component_add.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_done"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_done.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="drawer_shadow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/drawer_shadow.9.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_new_course.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_cancel"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_cancel.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_launcher.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_drawer"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_drawer.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_new_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_new_grade.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_remove"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_grade_component_remove.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_grade_component_add"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_grade_component_add.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_done"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_done.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="fragment_sliding_tabs"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_sliding_tabs.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_course.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_grade"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_grade.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_semester"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_semester.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_navigation_drawer_item"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_navigation_drawer_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_edit_course_component"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/activity_edit_course_component.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_course_item"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_course_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_navigation_drawer_header"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_navigation_drawer_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="circle_button"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/circle_button.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/colors.xml"
+                qualifiers="" >
+                <color name="theme_secondary_color" >@android:color/holo_blue_dark
+                </color>
+                <color name="theme_primary_color" >@android:color/holo_blue_light
+                </color>
+                <color name="card_fill" >#fff
+                </color>
+                <color name="card_shadow_pressed" >#ddd
+                </color>
+                <color name="card_shadow" >#ccc
+                </color>
+                <color name="card_fill_pressed" >#11000000
+                </color>
+            </file>
+            <file
+                name="detail_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/detail_course.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="activity_detail_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/activity_detail_course.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="ic_action_edit_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_edit_course.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_edit_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_edit_course.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_edit_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_edit_course.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="fragment_list_settings"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_settings.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="ic_action_list_course_sort"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_list_course_sort.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="list_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/list_course.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="ic_action_list_course_sort"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_list_course_sort.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_list_course_sort"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_list_course_sort.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_list_course_sort"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_list_course_sort.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="list_semester"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/list_semester.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="fragment_dialog_semester"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_dialog_semester.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_semester_item"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_semester_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="floating_add_button"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/floating_add_button.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="bg_tab"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/bg_tab.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="ic_action_contextual_delete"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_contextual_delete.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_contextual_delete"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_contextual_delete.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_contextual_delete"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_contextual_delete.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_contextual_delete"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_contextual_delete.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_contextual_edit"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_contextual_edit.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="card_selector"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/card_selector.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="course_grade_task_add"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/course_grade_task_add.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_overflow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xhdpi/ic_action_overflow.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_overflow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-hdpi/ic_action_overflow.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_overflow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-xxhdpi/ic_action_overflow.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_overflow"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable-mdpi/ic_action_overflow.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="fragment_list_grade_item"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_grade_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_task_item"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_task_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_task"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_task.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_list_header_course"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_header_course.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="list_item_selected"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/list_item_selected.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="bg_card_default_background"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/bg_card_default_background.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="bg_card_pressed_background"
+                path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/drawable/bg_card_pressed_background.xml"
+                qualifiers=""
+                type="drawable" />
+        </source>
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/build/generated/res/rs/debug" />
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/build/generated/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/debug/res" />
+    </dataSet>
+
+</merger>

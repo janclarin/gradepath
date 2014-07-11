@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/dialogPrompt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dialog.SemesterDialog">
+
+    <CheckBox
+        android:id="@+id/cb_dialog_semester_current"
+        style="@style/checkBoxDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_current_semester" />
+
+    <TextView
+        android:id="@+id/tv_dialog_semester_name_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cb_dialog_semester_current"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_semester" />
+
+    <Spinner
+        android:id="@+id/spn_dialog_semester_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/cb_dialog_semester_current"
+        android:layout_marginTop="20dp"
+        android:minHeight="40dp"
+        android:paddingRight="16dp" />
+
+    <Spinner
+        android:id="@+id/spn_dialog_semester_season"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/cb_dialog_semester_current"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@id/spn_dialog_semester_year"
+        android:minHeight="40dp"
+        android:paddingRight="16dp" />
+
+    <EditText
+        android:id="@+id/et_dialog_semester_gpa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="8dp"
+        android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+        android:hint="@string/hint_dialog_semester_gpa"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/tv_dialog_semester_last_day_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_dialog_semester_last_day"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_dialog_semester_last_day"
+        style="@style/spinnerButton"
+        android:layout_width="match_parent"
+        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_dialog_semester.xml -->

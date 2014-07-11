@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_list_course_sort"
+        android:icon="@drawable/ic_action_overflow"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_list_sort_by">
+        <menu>
+            <item
+                android:id="@+id/action_list_course_sort_alphabet_ascending"
+                android:title="@string/action_list_sort_alphabet_ascending" />
+            <item
+                android:id="@+id/action_list_course_sort_alphabet_descending"
+                android:title="@string/action_list_sort_alphabet_descending" />
+        </menu>
+    </item>
+
+</menu>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/list_course.xml -->

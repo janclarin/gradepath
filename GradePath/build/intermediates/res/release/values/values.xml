@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string-array name="seasons_array">
+        <item>@string/season_fall</item>
+        <item>@string/season_winter</item>
+        <item>@string/season_spring</item>
+        <item>@string/season_summer</item>
+    </string-array>
+    <!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/colors.xml -->
+    <eat-comment />
+
+    <color name="card_fill">@android:color/white</color>
+    <color name="card_shadow">#ccc</color>
+    <color name="theme_primary_color">@android:color/holo_blue_light</color>
+    <color name="theme_secondary_color">@android:color/holo_blue_dark</color>
+    <!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="action_course_delete">Delete course</string>
+    <string name="action_course_edit">Edit course</string>
+    <string name="action_list_sort_alphabet_ascending">Alphabetical ascending</string>
+    <string name="action_list_sort_alphabet_descending">Alphabetical descending</string>
+    <string name="action_list_sort_by">Sort by</string>
+    <string name="action_new_course">New course</string>
+    <string name="action_semester_delete">Delete semester</string>
+    <string name="action_semester_edit">Edit semester</string>
+    <string name="action_settings">Settings</string>
+    <string name="actionbar_cancel">Cancel</string>
+    <string name="actionbar_save">Save</string>
+    <string name="actionbar_update">Update</string>
+    <string name="app_name">GradePath</string>
+    <string name="btn_alert_delete_negative">Cancel</string>
+    <string name="btn_alert_delete_positive">Delete</string>
+    <string name="btn_date_picker_negative">Cancel</string>
+    <string name="btn_date_picker_neutral">Tomorrow</string>
+    <string name="btn_date_picker_positive">Set</string>
+    <string name="btn_fragment_home_add_grade">Grade</string>
+    <string name="btn_fragment_home_add_task">Task</string>
+    <string name="bullet">•</string>
+    <string name="cb_current_semester">Current</string>
+    <string name="cb_graded">To be graded</string>
+    <string name="cd_add_button">Add button</string>
+    <string name="cd_btn_grade_component">Add/remove grade component</string>
+    <string name="cd_show_button_bar">Show button bar</string>
+    <string name="course_saved_new">New course saved</string>
+    <string name="course_saved_update">Course updated</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_course">Course</string>
+    <string name="dialog_item_name">Name</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_update">Update</string>
+    <string name="et_grade_component">Component name</string>
+    <string name="et_grade_component_number_of_items"># of items</string>
+    <string name="et_grade_component_weight">% weight</string>
+    <string name="et_grade_possible">Possible</string>
+    <string name="et_grade_received">Received</string>
+    <string name="grade_name_missing">No name</string>
+    <string name="grade_possible_missing">No possible grade</string>
+    <string name="grade_received_missing">No received grade</string>
+    <string name="hint_course_name">Course name</string>
+    <string name="hint_dialog_semester_gpa">GPA for this semester</string>
+    <string name="message_delete_course_dialog">You\'ll delete every grade and task related to this course!</string>
+    <string name="message_delete_semester_dialog">You\'ll delete every course in this semester!</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="of">of</string>
+    <string name="prompt_enter_course_name">Enter course name</string>
+    <string name="rb_final_grade_no">No</string>
+    <string name="rb_final_grade_yes">Yes</string>
+    <string name="season_fall">Fall</string>
+    <string name="season_spring">Spring</string>
+    <string name="season_summer">Summer</string>
+    <string name="season_winter">Winter</string>
+    <string name="semester_current">Current</string>
+    <string name="semester_days_left">Days\nLeft</string>
+    <string name="semester_past">Past</string>
+    <string name="task_due_date_late">Late</string>
+    <string name="task_due_date_none">No tasks</string>
+    <string name="task_due_date_on">On</string>
+    <string name="task_due_date_today">Today</string>
+    <string name="task_due_date_tomorrow">Tomorrow</string>
+    <string name="task_due_date_two_days">In 2 days</string>
+    <string name="task_name_missing">No name</string>
+    <string name="title_activity_detail_course">Course details</string>
+    <string name="title_activity_edit_course">Edit course</string>
+    <string name="title_date_picker_due_date">Set due date</string>
+    <string name="title_delete_course_dialog">Delete %1$s?</string>
+    <string name="title_delete_semester_dialog">Delete %1$s?</string>
+    <string name="title_fragment_home">Home</string>
+    <string name="title_fragment_list_courses">Courses</string>
+    <string name="title_fragment_list_grades">Grades</string>
+    <string name="title_fragment_list_semesters">Semesters</string>
+    <string name="title_fragment_list_tasks">Tasks</string>
+    <string name="title_fragment_settings">Settings</string>
+    <string name="title_grade_dialog">Grade</string>
+    <string name="title_new_grade_dialog">New grade</string>
+    <string name="title_new_semester_dialog">New semester</string>
+    <string name="title_new_task_dialog">New task</string>
+    <string name="title_task_dialog">Task</string>
+    <string name="title_update_semester_dialog">Update semester</string>
+    <string name="toast_alert_delete_confirmation">%1$s deleted</string>
+    <string name="toast_grade_saved">Grade saved</string>
+    <string name="toast_grade_updated">Grade updated</string>
+    <string name="toast_semester_saved">Semester saved</string>
+    <string name="toast_semester_updated">Semester updated</string>
+    <string name="toast_task_saved">Task saved</string>
+    <string name="toast_task_updated">Task updated</string>
+    <string name="tv_completed">Completed</string>
+    <string name="tv_course_fragment_grades">Grades</string>
+    <string name="tv_course_grades_current_average">Current average:</string>
+    <string name="tv_course_information">Course information</string>
+    <string name="tv_dialog_grade">Grade</string>
+    <string name="tv_dialog_grade_component">Component</string>
+    <string name="tv_dialog_grade_name">Grade name</string>
+    <string name="tv_dialog_semester_last_day">Last day</string>
+    <string name="tv_dialog_task_due_date">Due Date</string>
+    <string name="tv_dialog_task_name">Task name</string>
+    <string name="tv_dialog_task_type">Type</string>
+    <string name="tv_drawer_current_courses">Current courses</string>
+    <string name="tv_gpa">\nGPA</string>
+    <string name="tv_grade_components">Grade components</string>
+    <string name="tv_list_course_empty">No courses</string>
+    <string name="tv_list_course_set_current_course">Set a\ncurrent semester</string>
+    <string name="tv_list_grade_empty">No grades</string>
+    <string name="tv_list_semester_empty">No semesters</string>
+    <string name="tv_not_set">N/A</string>
+    <string name="tv_semester">Semester</string>
+    <string name="tv_semesters">Semesters</string>
+    <string name="warning_no_courses_yet">You have no courses, go add one first</string>
+    <string name="warning_no_semesters">You have no semesters yet, add one first</string>
+    <!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/values/styles.xml -->
+    <eat-comment />
+
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
+
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="CustomActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:background">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="cardListView">
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">72dp</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">8dp</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:drawSelectorOnTop">true</item>
+    </style>
+
+    <style name="cardView">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:paddingBottom">2dp</item>
+    </style>
+
+    <style name="checkBoxDialog">
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="dialogPrompt">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">48dp</item>
+        <item name="android:paddingBottom">32dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+    </style>
+
+    <style name="emptyListTextView" parent="android:Widget.Holo.Button.Borderless">
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="headerTextView">
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>
+    </style>
+
+    <style name="spinnerButton" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:enabled">true</item>
+        <item name="android:paddingLeft">12dp</item>
+    </style>
+
+</resources>

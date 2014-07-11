@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
+
+    <View
+        android:id="@+id/view_course_color"
+        android:layout_width="8dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_blue_dark"
+        android:focusable="false" />
+
+    <ImageButton
+        android:id="@+id/btn_course_show_button_bar"
+        style="?android:borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="64dp"
+        android:layout_alignParentRight="true"
+        android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/cd_show_button_bar"
+        android:focusable="false"
+        android:src="@drawable/course_grade_task_add" />
+
+    <View
+        android:id="@+id/view_course_item_divider_vertical"
+        android:layout_width="1dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@id/btn_course_show_button_bar"
+        android:background="?android:dividerVertical" />
+
+    <TextView
+        android:id="@+id/tv_course_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_toLeftOf="@id/view_course_item_divider_vertical"
+        android:layout_toRightOf="@id/view_course_color"
+        android:fontFamily="sans-serif-light"
+        android:singleLine="true"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_next_due_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_course_name"
+        android:layout_alignRight="@id/tv_course_name"
+        android:layout_below="@id/tv_course_name"
+        android:singleLine="true"
+        android:textColor="@android:color/tertiary_text_light"
+        android:textSize="14sp" />
+
+    <View
+        android:id="@+id/view_course_item_divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/view_course_color"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="0.5dp"
+        android:layout_marginRight="0.5dp"
+        android:background="?android:dividerHorizontal"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:id="@+id/ll_button_bar"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/view_course_item_divider_horizontal"
+        android:focusable="false"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_bar_add_grade"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:focusable="false"
+            android:text="@string/btn_fragment_home_add_grade"
+            android:textAllCaps="true"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_bar_add_task"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:focusable="false"
+            android:text="@string/btn_fragment_home_add_task"
+            android:textAllCaps="true"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+</RelativeLayout><!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/fragment_list_course_item.xml -->

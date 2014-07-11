@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_course_edit"
+        android:title="@string/action_course_edit"
+        android:icon="@drawable/ic_action_contextual_edit"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
+    <item
+        android:id="@+id/action_course_delete"
+        android:title="@string/action_course_delete"
+        android:icon="@drawable/ic_action_contextual_delete"
+        android:orderInCategory="200"
+        android:showAsAction="always" />
+</menu><!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/menu/list_course_selected.xml -->

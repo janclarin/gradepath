@@ -1,0 +1,158 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".activities.NewCourseActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_course_information"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_course_information" />
+
+        <!-- Course Information -->
+        <EditText
+            android:id="@+id/et_course_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_course_information"
+            android:layout_marginTop="8dp"
+            android:hint="@string/hint_course_name"
+            android:imeOptions="actionDone"
+            android:inputType="textCapWords" />
+
+        <TextView
+            android:id="@+id/tv_semester"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/et_course_name"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="12dp"
+            android:text="@string/tv_semester"
+            android:textAllCaps="true"
+            android:textColor="@android:color/secondary_text_light_nodisable" />
+
+        <View
+            android:id="@+id/view_semester_completed_divider"
+            android:layout_width="1dp"
+            android:layout_height="44dp"
+            android:layout_below="@id/et_course_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:background="?android:dividerVertical" />
+
+        <TextView
+            android:id="@+id/tv_edit_course_completed_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_course_name"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/view_semester_completed_divider"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="20dp"
+            android:text="@string/tv_completed"
+            android:textAllCaps="true"
+            android:textColor="@android:color/secondary_text_light_nodisable" />
+
+        <Spinner
+            android:id="@+id/spn_semester"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/et_course_name"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@id/view_semester_completed_divider"
+            android:paddingRight="16dp" />
+
+
+        <RadioGroup
+            android:id="@+id/rg_completed"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/et_course_name"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/view_semester_completed_divider"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_new_course_complete_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:text="@string/rb_final_grade_no" />
+
+            <RadioButton
+                android:id="@+id/rb_new_course_complete_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="@string/rb_final_grade_yes" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_letter_grade"
+            android:layout_width="48dp"
+            android:layout_height="36dp"
+            android:layout_below="@id/spn_semester"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle_border"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <SeekBar
+            android:id="@+id/seek_letter_grade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/spn_semester"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/tv_letter_grade"
+            android:gravity="center_vertical" />
+
+        <!-- Grade Components -->
+        <TextView
+            android:id="@+id/tv_grade_components"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seek_letter_grade"
+            android:layout_marginTop="8dp"
+            android:text="@string/tv_grade_components" />
+
+        <LinearLayout
+            android:id="@+id/ll_grade_components"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_grade_components"
+            android:divider="?android:dividerHorizontal"
+            android:orientation="vertical"
+            android:showDividers="middle" />
+
+    </RelativeLayout>
+
+</ScrollView>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/activity_edit_course.xml -->

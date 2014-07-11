@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/tv_grade_percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_grade_fraction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_grade_percentage"
+        android:gravity="right"
+        android:singleLine="true"
+        android:textColor="@android:color/tertiary_text_light"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_grade_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/tv_grade_percentage"
+        android:textSize="16sp" />
+
+</RelativeLayout>
+<!-- From: file:/home/jan/Dropbox/android/workspace/GradePath/GradePath/src/main/res/layout/list_course_grades_child.xml -->

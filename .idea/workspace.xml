@@ -87,180 +87,10 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.janclarin.gradepath" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="29426ab1-1d9d-4690-8e88-e7956c827f4b" name="Default" comment="Task tab functional.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.0-rc1/classes.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/classes.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0-rc1/classes.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/course_grade_task_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/drawer_shadow.9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/drawer_shadow.9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/drawer_shadow.9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/drawer_shadow.9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/floating_add_button.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_cancel.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_cancel.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_cancel.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_cancel.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_contextual_delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_contextual_delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_contextual_delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_contextual_delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_contextual_edit.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_done.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_done.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_done.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_done.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_edit_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_edit_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_edit_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_list_course_sort.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_list_course_sort.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_list_course_sort.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_list_course_sort.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_new_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_new_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_new_course.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_new_grade.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_new_grade.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_new_grade.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_new_grade.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_action_overflow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_action_overflow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_action_overflow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_action_overflow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_drawer.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_drawer.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_grade_component_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_grade_component_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_grade_component_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_grade_component_add.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_grade_component_remove.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_grade_component_remove.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_grade_component_remove.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_grade_component_remove.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/ic_launcher-web.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-hdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-mdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable-xxhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/libs/internal_impl-20.0.0.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0-rc1/libs/internal_impl-21.0.0-rc1.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/model_data.bin" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.0-rc1/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0-rc1/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/BaseListFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/build/generated/source/buildConfig/debug/com/janclarin/gradepath/BuildConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/build/generated/source/buildConfig/release/com/janclarin/gradepath/BuildConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/Course.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/database/DatabaseFacade.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/database/DatabaseHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/DatabaseItem.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/activity/DetailCourseActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/activity/EditCourseActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/Grade.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/GradeComponent.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/dialog/GradeDialogFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/GradePath-GradePath.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/aidl/android/support/v4/app/INotificationSideChannel.aidl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListCourseFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListCourseGradeFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListGradeFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListSemesterFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListSettingFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/ListTaskFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/activity/MainActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/NavigationDrawerFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/build/generated/source/r/debug/com/janclarin/gradepath/R.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/build/generated/source/r/release/com/janclarin/gradepath/R.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.0-rc1/R.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/README" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/Semester.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/dialog/SemesterDialogFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/fragment/SlidingTabFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/view/SlidingTabLayout.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/view/SlidingTabStrip.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/model/Task.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/java/com/janclarin/gradepath/dialog/TaskDialogFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/actionbar_cancel_button.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/actionbar_done_button.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/actionbar_done_cancel.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/activity_detail_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/activity_edit_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/activity_edit_course_component.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/activity_main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/bg_card.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/bg_card_default_background.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/bg_card_pressed_background.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/bg_tab.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/dex-cache/cache.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/card_selector.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/circle_button.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/values/colors.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/detail_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/values/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/values-w820dp/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_course_grades.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_dialog_grade.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_dialog_semester.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_dialog_task.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_course_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_grade.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_grade_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_header_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_semester.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_semester_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_task.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_list_task_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_navigation_drawer.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_navigation_drawer_header.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_navigation_drawer_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/fragment_sliding_tabs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/global.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/list_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/list_course_grades_child.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/layout/list_course_grades_group.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/list_item_selected.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/list_semester.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/local.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/menu/new_course.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/proguard-rules.pro" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/rectangle_border.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/drawable/row_selector.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/values/strings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GradePath/src/main/res/values/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/support_annotations_20_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/support_v13_20_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/support_v4_20_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.0-rc1/res/values/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    <list default="true" id="29426ab1-1d9d-4690-8e88-e7956c827f4b" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/contributors.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradlew.bat" afterPath="$PROJECT_DIR$/gradlew.bat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GradePath.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -386,7 +216,7 @@
       </list>
     </option>
     <option name="PUSH_AUTO_UPDATE" value="true" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/GradePath" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="tasksExpandState">
@@ -2132,7 +1962,11 @@
       <created>1405092567040</created>
       <updated>1405092567040</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Contextual action bar set up. Deleting items now possible.">
+      <created>1405097078389</created>
+      <updated>1405097078390</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2163,7 +1997,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31832796" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31747788" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28938907" sideWeight="0.49973246" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2658092" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4158628" sideWeight="0.25013715" order="8" side_tool="true" content_ui="tabs" />
@@ -2237,7 +2071,6 @@
       <TodoPanelSettings />
     </option>
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
-    <MESSAGE value="Dynamic Grade Component List View working properly." />
     <MESSAGE value="Manage Course is now a Fragment." />
     <MESSAGE value="New Grade Fragment added." />
     <MESSAGE value="Grade Expandable List View added and functional." />
@@ -2262,7 +2095,8 @@
     <MESSAGE value="Course list fixed. Displays next due date." />
     <MESSAGE value="Created base classes for list fragments and database items. Cleaned up code." />
     <MESSAGE value="Task tab functional." />
-    <option name="LAST_COMMIT_MESSAGE" value="Task tab functional." />
+    <MESSAGE value="Contextual action bar set up. Deleting items now possible." />
+    <option name="LAST_COMMIT_MESSAGE" value="Contextual action bar set up. Deleting items now possible." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,0 +1,19 @@
+# built application files
+*.apk
+*.apk_
+
+# Java class files
+*.class
+
+# local configuration file
+local.properties
+
+# Android Studio project files. Can be imported from settings.gradle
+.idea
+*.iiml
+
+# Local IDEA workspace
+.idea/workspace.xml
+
+# Grade cache
+.gradle

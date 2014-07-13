@@ -7,7 +7,6 @@ import com.janclarin.gradepath.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Task extends DatabaseItem implements Comparable<Task> {
 
@@ -78,29 +77,51 @@ public class Task extends DatabaseItem implements Comparable<Task> {
         Calendar today = Calendar.getInstance();
 
         // Add one because it rounds down.
-        long daysApart = super.getDayDifference(dueDate, today) + 1;
+        long daysLeftBeforeDue = super.getDayDifference(dueDate, today) + 1;
+
+        String due = context.getString(R.string.due) + " ";
 
         // Late.
-        if (daysApart == -1) {
-            return context.getString(R.string.task_due_date_late);
-        } else if (daysApart == 0) {
+        if (daysLeftBeforeDue == -1) {
+            due = context.getString(R.string.task_due_date_late);
+        } else if (daysLeftBeforeDue == 0) {
             // Today.
-            return context.getString(R.string.task_due_date_today);
-        } else if (daysApart == 1) {
+            due += context.getString(R.string.task_due_date_today);
+        } else if (daysLeftBeforeDue == 1) {
             // Tomorrow.
-            return context.getString(R.string.task_due_date_tomorrow);
-        } else if (daysApart <= 2) {
+            due += context.getString(R.string.task_due_date_tomorrow);
+        } else if (daysLeftBeforeDue <= 2) {
             // 2 days.
-            return context.getString(R.string.task_due_date_two_days);
-        } else if (daysApart < 7) {
+            due += context.getString(R.string.task_due_date_two_days);
+        } else if (daysLeftBeforeDue < 7) {
             // This week.
-            return context.getString(R.string.task_due_date_on) + " "
+            due += context.getString(R.string.task_due_date_on) + " "
                     + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         } else {
-            return new SimpleDateFormat("E, MMM d").format(dueDate.getTime());
+            due += new SimpleDateFormat("E, MMM d").format(dueDate.getTime());
         }
+
+        return due;
     }
 
+    /**
+     * Returns the color to display beside a course based on its due date urgency
+     *
+     * @return
+     */
+    public int getUrgencyColor(Context context) {
+        Calendar today = Calendar.getInstance();
+
+        long daysLeftBeforeDue = super.getDayDifference(dueDate, today) + 1;
+
+        if (daysLeftBeforeDue < 3) {
+            return R.color.course_urgency_1;
+        } else if (daysLeftBeforeDue < 14) {
+            return R.color.course_urgency_2;
+        } else {
+            return R.color.course_urgency_3;
+        }
+    }
 
     /**
      * Compares the due dates of two tasks for sorting.

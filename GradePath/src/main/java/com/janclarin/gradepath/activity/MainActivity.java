@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -179,6 +178,18 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDatabase.open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDatabase.close();
+    }
+
     /**
      * Listener methods
      */
@@ -197,6 +208,7 @@ public class MainActivity extends Activity
                 fragmentTransaction.replace(R.id.container, mSlidingTabFragment);
 
                 // Set title.
+                mTitle = getString(R.string.title_fragment_home);
                 break;
             case SETTINGS:
                 // TODO: Settings fragment.

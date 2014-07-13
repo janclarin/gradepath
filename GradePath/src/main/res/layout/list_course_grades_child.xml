@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_default_background"
+    android:background="@drawable/bg_card_default"
     android:orientation="horizontal"
     android:paddingBottom="4dp"
     android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"

@@ -130,11 +130,11 @@
     <string name="course_saved_new">New course saved</string>
     <string name="course_saved_update">Course updated</string>
     <string name="tv_course_grades_current_average">Current average:</string>
-    <string name="task_due_date_two_days">In 2 days</string>
-    <string name="task_due_date_on">On</string>
+    <string name="task_due_date_two_days">in 2 days</string>
+    <string name="task_due_date_on">on</string>
     <string name="task_due_date_late">Late</string>
-    <string name="task_due_date_today">Today</string>
-    <string name="task_due_date_tomorrow">Tomorrow</string>
+    <string name="task_due_date_today">today</string>
+    <string name="task_due_date_tomorrow">tomorrow</string>
     <string name="task_due_date_none">No tasks</string>
     <string name="bullet">•</string>
     <string name="cd_show_button_bar">Show button bar</string>
@@ -160,6 +160,9 @@
     <string name="yesterday">yesterday</string>
     <string name="on">on</string>
     <string name="selected">selected</string>
+    <string name="due">Due</string>
+    <string name="cd_show_semester_options">Show semester options</string>
+    <string name="list_semester_set_to_current">Set to current</string>
 
 
 </resources>

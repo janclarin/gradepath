@@ -8,10 +8,6 @@
 # local configuration file
 local.properties
 
-# Android Studio project files. Can be imported from settings.gradle
-.idea
-*.iiml
-
 # Local IDEA workspace
 .idea/workspace.xml
 

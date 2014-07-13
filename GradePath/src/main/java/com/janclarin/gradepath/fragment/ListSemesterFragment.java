@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -19,7 +21,8 @@ import com.janclarin.gradepath.model.Semester;
 /**
  * Fragment with list of list_course that allows for editing and sets option for a new course.
  */
-public class ListSemesterFragment extends BaseListFragment<Semester> {
+public class ListSemesterFragment extends BaseListFragment<Semester>
+        implements PopupMenu.OnMenuItemClickListener {
 
     private FragmentListSemesterListener mListener;
 
@@ -68,7 +71,7 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
 
                 Semester semester = mListItems.get(position);
 
-                ViewHolder viewHolder;
+                final ViewHolder viewHolder;
 
                 if (convertView == null) {
                     viewHolder = new ViewHolder();
@@ -76,11 +79,13 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_semester_item, null);
 
                     viewHolder.tvSemesterName = (TextView) convertView.findViewById(R.id.tv_semester_name);
-                    viewHolder.tvSemesterLabel = (TextView) convertView.findViewById(R.id.tv_semester_label);
+//                    viewHolder.tvSemesterLabel = (TextView) convertView.findViewById(R.id.tv_semester_label);
                     viewHolder.tvInformation =
                             (TextView) convertView.findViewById(R.id.tv_semester_information);
                     viewHolder.tvInformationLabel =
                             (TextView) convertView.findViewById(R.id.tv_semester_information_label);
+                    viewHolder.btnSemesterOptions =
+                            (ImageButton) convertView.findViewById(R.id.btn_semester_options);
 
                     convertView.setTag(viewHolder);
                 } else {
@@ -91,13 +96,13 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
 
                 // Set semester label to current or completed based on semester value.
                 if (semester.isCurrent()) {
-                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_current));
+//                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_current));
                     viewHolder.tvInformation.setText(semester.getDaysLeft());
                     viewHolder.tvInformationLabel.setText(mContext.getString(R.string.semester_days_left));
                 } else {
                     double gpa = semester.getGpa();
                     // Otherwise set label to completed and information to gpa.
-                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_past));
+//                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_past));
 
                     // Set gpa if it exists.
                     viewHolder.tvInformation.setText(gpa > -1 ? Double.toString(semester.getGpa()) :
@@ -105,6 +110,13 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
                     );
                     viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
                 }
+
+                viewHolder.btnSemesterOptions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopupMenu(viewHolder.btnSemesterOptions);
+                    }
+                });
 
                 return convertView;
             }
@@ -114,6 +126,7 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
                 TextView tvSemesterLabel;
                 TextView tvInformation;
                 TextView tvInformationLabel;
+                ImageButton btnSemesterOptions;
             }
         };
     }
@@ -137,6 +150,26 @@ public class ListSemesterFragment extends BaseListFragment<Semester> {
             }
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void showPopupMenu(View view) {
+        // TODO: Change to PopupWindow.
+        PopupMenu popup = new PopupMenu(mContext, view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.list_semester_options, popup.getMenu());
+        popup.show();
+
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_semester_to_current:
+                // TODO: Display dialog to set end date.
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

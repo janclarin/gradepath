@@ -4,9 +4,9 @@
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@drawable/bg_card_default_background" />
+        android:drawable="@drawable/bg_card_default" />
     <item
         android:state_focused="true"
         android:state_enabled="true"
-        android:drawable="@drawable/bg_card_default_background" />
+        android:drawable="@drawable/bg_card_default" />
 </selector>

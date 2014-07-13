@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_primary_color">@android:color/holo_blue_light</color>
-    <color name="theme_secondary_color">@android:color/holo_blue_dark</color>
+    <color name="theme_primary_color">#00B893</color>
+    <color name="theme_secondary_color">#009376</color>
 
     <color name="card_fill">#fff</color>
     <color name="card_shadow">#ccc</color>
     <color name="card_fill_pressed">#11000000</color>
     <color name="card_shadow_pressed">#ddd</color>
+
+    <color name="course_urgency_1">@android:color/holo_red_dark</color>
+    <color name="course_urgency_2">@android:color/holo_orange_dark</color>
+    <color name="course_urgency_3">@color/theme_primary_color</color>
 </resources>

@@ -117,6 +117,7 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
                     Task task = (Task) mListItems.get(position);
                     viewHolder.tvName.setText(task.getName());
                     viewHolder.tvDueDate.setText(task.getDueDate(mContext));
+                    viewHolder.tvDueDate.setTextColor(task.getUrgencyColor(mContext));
                     viewHolder.cbCompleted.setChecked(task.isCompleted());
                     viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
                 }

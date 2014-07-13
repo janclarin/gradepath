@@ -4,9 +4,8 @@
     style="@style/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="4dp"
-    android:paddingLeft="16dp"
-    android:paddingTop="8dp">
+    android:descendantFocusability="blocksDescendants"
+    android:paddingLeft="16dp">
 
     <TextView
         android:id="@+id/tv_semester_name"
@@ -16,49 +15,48 @@
         android:fontFamily="sans-serif-thin"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="34sp" />
+        android:textSize="24sp" />
+
+    <ImageButton
+        android:id="@+id/btn_semester_options"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="36dp"
+        android:layout_height="64dp"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/cd_show_semester_options"
+        android:focusable="false"
+        android:paddingRight="8dp"
+        android:src="@drawable/overflow" />
+
+    <View
+        android:id="@+id/view_semester_item_divider_vertical"
+        android:layout_width="1dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/btn_semester_options"
+        android:background="?android:dividerVertical" />
 
     <TextView
-        android:id="@+id/tv_semester_label"
+        android:id="@+id/tv_semester_information_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/bg_tab"
-        android:paddingBottom="2dp"
-        android:paddingLeft="6dp"
-        android:paddingRight="8dp"
-        android:paddingTop="2dp"
-        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@id/view_semester_item_divider_vertical"
         android:textAllCaps="true"
-        android:textColor="@color/theme_secondary_color"
+        android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_semester_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tv_semester_label"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@id/tv_semester_information_label"
         android:fontFamily="sans-serif-light"
-        android:gravity="bottom"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/tv_semester_information_label"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_alignBottom="@id/tv_semester_information"
-        android:layout_alignTop="@id/tv_semester_information"
-        android:layout_marginRight="4dp"
-        android:layout_toLeftOf="@id/tv_semester_information"
-        android:gravity="bottom"
-        android:textAllCaps="true"
-        android:textColor="@android:color/tertiary_text_light"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 
 </RelativeLayout>

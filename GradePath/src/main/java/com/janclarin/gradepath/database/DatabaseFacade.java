@@ -986,6 +986,22 @@ public class DatabaseFacade {
     }
 
     /**
+     * Returns the upcoming task for a course if at least one exists.
+     *
+     * @param courseId
+     * @return
+     */
+    public Task getUpcomingTask(long courseId) {
+        List<Task> tasks = getTasksIncomplete(courseId);
+
+        if (tasks.size() > 0) {
+            return tasks.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Returns a list of all incomplete tasks for a course.
      *
      * @param courseId

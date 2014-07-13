@@ -2,8 +2,6 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +24,6 @@ import com.janclarin.gradepath.model.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Course list fragment.
@@ -70,6 +67,7 @@ public class ListCourseFragment extends BaseListFragment<Course> {
     @Override
     protected void initAdapter() {
         mAdapter = new BaseAdapter() {
+
             @Override
             public int getCount() {
                 return mListItems.size();
@@ -90,20 +88,6 @@ public class ListCourseFragment extends BaseListFragment<Course> {
 
                 Course course = mListItems.get(position);
 
-                // List of incomplete tasks.
-                List<Task> incompleteTasks = mDatabase.getTasksIncomplete(course.getId());
-
-                String upcomingTaskText;
-                if (incompleteTasks.isEmpty()) {
-                    upcomingTaskText = mContext.getString(R.string.task_due_date_none);
-                } else {
-                    // Sort tasks by due date.
-                    Collections.sort(incompleteTasks);
-                    Task upcomingTask = incompleteTasks.get(0);
-                    upcomingTaskText = upcomingTask.getDueDate(mContext) + " " +
-                            mContext.getString(R.string.bullet) + " " + upcomingTask.getName();
-                }
-
                 ViewHolder viewHolder;
 
                 if (convertView == null) {
@@ -123,7 +107,22 @@ public class ListCourseFragment extends BaseListFragment<Course> {
                     viewHolder = (ViewHolder) convertView.getTag();
                 }
 
-                viewHolder.vCourseColor.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+                Task upcomingTask = mDatabase.getUpcomingTask(course.getId());
+
+                String upcomingTaskText;
+                int urgencyColorId;
+                if (upcomingTask == null) {
+                    upcomingTaskText = mContext.getString(R.string.task_due_date_none);
+
+                    urgencyColorId = R.color.course_urgency_3;
+                } else {
+                    upcomingTaskText = upcomingTask.getDueDate(mContext) + " " +
+                            mContext.getString(R.string.bullet) + " " + upcomingTask.getName();
+
+                    urgencyColorId = upcomingTask.getUrgencyColor(mContext);
+                }
+
+                viewHolder.vCourseColor.setBackgroundResource(urgencyColorId);
                 viewHolder.tvCourseName.setText(course.getName());
                 viewHolder.tvNextDueDate.setText(upcomingTaskText);
 

@@ -27,7 +27,9 @@ import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.NavigationDrawerFragment;
 import com.janclarin.gradepath.fragment.SlidingTabFragment;
 import com.janclarin.gradepath.model.Course;
+import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Semester;
+import com.janclarin.gradepath.model.Task;
 
 
 /**
@@ -47,11 +49,15 @@ public class MainActivity extends Activity
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String NEW_SEMESTER_TAG = "NewSemesterDialog";
-    private static final String UPDATE_SEMESTER_TAG = "UpdateSemesterDialog";
+    private static final String EDIT_SEMESTER_TAG = "EditSemesterDialog";
     private static final String NEW_GRADE_TAG = "NewGradeDialog";
+    private static final String EDIT_GRADE_TAG = "EditGradeDialog";
     private static final String NEW_TASK_TAG = "NewTaskDialog";
+    private static final String EDIT_TASK_TAG = "EditTaskDialog";
     public static final String SEMESTER_KEY = "Semester";
     public static final String COURSE_KEY = "Course";
+    public static final String GRADE_KEY = "Grade";
+    public static final String TASK_KEY = "Task";
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
     public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
 
@@ -262,8 +268,8 @@ public class MainActivity extends Activity
     public void onListSemesterEdit(Semester semester) {
         // show update semester dialog
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_update_semester_dialog), semester);
-        semesterDialog.show(getFragmentManager(), UPDATE_SEMESTER_TAG);
+                getString(R.string.title_edit_semester_dialog), semester);
+        semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
     }
 
     /**
@@ -391,6 +397,21 @@ public class MainActivity extends Activity
         gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
+    @Override
+    public void onListGradeEdit(Grade grade) {
+        // Show edit grade dialog.
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_edit_grade_dialog), grade);
+        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
+    }
+
+    @Override
+    public void onListTaskEdit(Task task) {
+        // Show edit task dialog.
+        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
+                getString(R.string.title_edit_task_dialog), task);
+        taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
+    }
 
     @Override
     public void onSemesterSaved(boolean isNew) {
@@ -413,7 +434,6 @@ public class MainActivity extends Activity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        refreshListCourse();
         refreshListGrade();
     }
 

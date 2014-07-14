@@ -28,7 +28,7 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
         this.name = name;
     }
 
-    public long getCategoryId() {
+    public long getComponentId() {
         return categoryId;
     }
 
@@ -44,7 +44,7 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
         this.courseId = courseId;
     }
 
-    public double getPointsEarned() {
+    public double getPointsReceived() {
         return pointsEarned;
     }
 

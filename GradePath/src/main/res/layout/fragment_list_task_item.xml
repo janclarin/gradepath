@@ -39,6 +39,7 @@
         android:layout_below="@id/tv_task_name"
         android:layout_toLeftOf="@id/cb_task_completed"
         android:singleLine="true"
+        android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />
 
 </RelativeLayout>

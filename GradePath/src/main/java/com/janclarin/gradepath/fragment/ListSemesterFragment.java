@@ -44,13 +44,18 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
         mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_semester_empty);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_semester);
 
-        updateList();
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        updateListItems();
         initAdapter();
         setUpListView();
 
         showEmptyStateView(mListItems.isEmpty());
-
-        return rootView;
     }
 
     @Override
@@ -137,7 +142,7 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
     }
 
     @Override
-    protected void updateList() {
+    protected void updateListItems() {
         // List of semesters.
         mListItems = mDatabase.getSemesters();
         if (mAdapter != null) mAdapter.notifyDataSetChanged();
@@ -147,7 +152,8 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-
+        if (mListener != null)
+            mListener.onListSemesterEdit((Semester) mAdapter.getItem(selectedPosition));
     }
 
     @Override

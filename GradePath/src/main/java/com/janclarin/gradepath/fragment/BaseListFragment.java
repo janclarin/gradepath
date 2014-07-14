@@ -38,7 +38,7 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
     /**
      * Updates the list view within the fragment.
      */
-    abstract protected void updateList();
+    abstract protected void updateListItems();
 
     /**
      * Edit select item under contextual action bar.

@@ -51,7 +51,14 @@ public class ListCourseFragment extends BaseListFragment<Course> {
         mListView = (ListView) rootView.findViewById(R.id.lv_list_course);
         mSemesterTextView = (TextView) rootView.findViewById(R.id.tv_list_course_semester);
 
-        updateList();
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        updateListItems();
         initAdapter();
         setUpListView();
 
@@ -64,7 +71,6 @@ public class ListCourseFragment extends BaseListFragment<Course> {
             }
         });
 
-        return rootView;
     }
 
     @Override
@@ -119,8 +125,9 @@ public class ListCourseFragment extends BaseListFragment<Course> {
 
                     urgencyColorId = R.color.course_urgency_3;
                 } else {
-                    upcomingTaskText = upcomingTask.getDueDate(mContext) + " " +
-                            mContext.getString(R.string.bullet) + " " + upcomingTask.getName();
+                    upcomingTaskText = upcomingTask.getName() + " "
+                            + mContext.getString(R.string.bullet) + " "
+                            + upcomingTask.getDueDate(mContext);
 
                     urgencyColorId = upcomingTask.getUrgencyColor(mContext);
                 }
@@ -175,10 +182,11 @@ public class ListCourseFragment extends BaseListFragment<Course> {
     }
 
     @Override
-    protected void updateList() {
+    protected void updateListItems() {
         Semester currentSemester = mDatabase.getCurrentSemester();
 
         if (currentSemester != null) {
+            mEmptyTextView.setText(mContext.getString(R.string.tv_list_course_empty));
             mSemesterTextView.setText(currentSemester.toString());
 
             mListItems = mDatabase.getCourses(currentSemester.getId());

@@ -1,5 +1,6 @@
 package com.janclarin.gradepath.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,8 @@ public class DetailCourseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_course);
+
+        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mDatabase = DatabaseFacade.getInstance(getApplicationContext());
         mDatabase.open();

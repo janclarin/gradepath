@@ -64,15 +64,16 @@
     <string name="hint_dialog_semester_gpa">GPA for this semester</string>
     <string name="toast_semester_saved">Semester saved</string>
     <string name="toast_semester_updated">Semester updated</string>
-    <string name="title_update_semester_dialog">Update semester</string>
+    <string name="title_edit_semester_dialog">Edit semester</string>
 
     <!-- Task Dialog -->
     <string name="title_task_dialog">Task</string>
     <string name="title_new_task_dialog">New task</string>
+    <string name="title_edit_task_dialog">Edit task</string>
     <string name="title_date_picker_due_date">Set due date</string>
     <string name="tv_dialog_task_name">Task name</string>
     <string name="tv_dialog_task_type">Type</string>
-    <string name="cb_graded">To be graded</string>
+    <string name="cb_graded">Will be graded</string>
     <string name="tv_dialog_task_due_date">Due Date</string>
     <string name="btn_date_picker_positive">Set</string>
     <string name="btn_date_picker_neutral">Tomorrow</string>
@@ -84,6 +85,7 @@
     <!-- Grade Dialog -->
     <string name="title_grade_dialog">Grade</string>
     <string name="title_new_grade_dialog">New grade</string>
+    <string name="title_edit_grade_dialog">Edit grade</string>
     <string name="tv_dialog_grade_component">Component</string>
     <string name="tv_dialog_grade">Grade</string>
     <string name="tv_dialog_grade_name">Grade name</string>
@@ -155,12 +157,12 @@
     <string name="title_fragment_list_tasks">Tasks</string>
     <string name="tv_list_grade_empty">No grades</string>
     <string name="tv_list_task_empty">No tasks</string>
-    <string name="added">Added</string>
+    <string name="added">added</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="on">on</string>
     <string name="selected">selected</string>
-    <string name="due">Due</string>
+    <string name="due">due</string>
     <string name="cd_show_semester_options">Show semester options</string>
     <string name="list_semester_set_to_current">Set to current</string>
 

@@ -89,6 +89,15 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         return fragment;
     }
 
+    public static TaskDialogFragment newInstance(String title, Task task) {
+        TaskDialogFragment fragment = new TaskDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(DIALOG_TITLE, title);
+        args.putSerializable(MainActivity.TASK_KEY, task);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +114,9 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
 
         // Set boolean to indicate it was opened from course fragment and not home.
         mOpenedFromCourse = getArguments().containsKey(MainActivity.COURSE_KEY);
+
+        // Get task to update if it exists.
+        mTaskToUpdate = (Task) getArguments().getSerializable(MainActivity.TASK_KEY);
     }
 
     @Override
@@ -119,10 +131,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         mCheckBoxGraded = (CheckBox) rootView.findViewById(R.id.cb_graded);
         mDueDateButton = (Button) rootView.findViewById(R.id.btn_dialog_due_date);
 
-        // Get course object from arguments.
-        Course course = (Course) getArguments().getSerializable(MainActivity.COURSE_KEY);
-
-        // Get all recent list_course. Set up course spinner.
+        // Get all recent courses. Set up course spinner.
         List<Course> courses = mDatabase.getCurrentCourses();
         Collections.sort(courses);
         ArrayAdapter<Course> courseAdapter = new ArrayAdapter<Course>(mContext,
@@ -131,7 +140,27 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         mCourseSpinner.setAdapter(courseAdapter);
 
         // Select course from course fragment if adding grade from a course fragment.
-        if (mOpenedFromCourse) mCourseSpinner.setSelection(courseAdapter.getPosition(course));
+        if (mOpenedFromCourse) {
+            // Get course object from arguments.
+            Course course = (Course) getArguments().getSerializable(MainActivity.COURSE_KEY);
+            mCourseSpinner.setSelection(courseAdapter.getPosition(course));
+        }
+
+        // If updating a task.
+        if (mTaskToUpdate != null) {
+            mTaskName.setText(mTaskToUpdate.getName());
+
+            // Set course to task's course.
+            Course taskCourse = new Course();
+            taskCourse.setId(mTaskToUpdate.getCourseId());
+            mCourseSpinner.setSelection(courseAdapter.getPosition(taskCourse));
+
+            // Set due date calendar to task's due date.
+            mDueDateCalendar = mTaskToUpdate.getDueDate();
+
+            // Set graded checkbox.
+            mCheckBoxGraded.setChecked(mTaskToUpdate.isGraded());
+        }
 
         // Date picker dialog instance.
         final DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
@@ -230,13 +259,19 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
                 if (!name.isEmpty()) {
                     long courseId = ((Course) mCourseSpinner.getSelectedItem()).getId();
                     boolean isGraded = mCheckBoxGraded.isChecked();
-                    // Insert task into mDatabase. false because it isn't completed yet.
-                    mDatabase.insertTask(courseId, name, isGraded, false,
-                            mDueDateCalendar.get(Calendar.YEAR),
-                            mDueDateCalendar.get(Calendar.MONTH),
-                            mDueDateCalendar.get(Calendar.DAY_OF_MONTH));
+
+                    if (mTaskToUpdate == null) {
+                        // Insert task into mDatabase. false because it isn't completed yet.
+                        mDatabase.insertTask(courseId, name, isGraded, false, mDueDateCalendar);
+                        if (mListener != null) mListener.onTaskSaved(true);
+                    } else {
+                        // Update task.
+                        mDatabase.updateTask(mTaskToUpdate.getId(), courseId, name, isGraded,
+                                mTaskToUpdate.isCompleted(), mDueDateCalendar);
+                        if (mListener != null) mListener.onTaskSaved(false);
+                    }
+
                     // Notify listeners that a task was saved.
-                    if (mListener != null) mListener.onTaskSaved(mTaskToUpdate == null);
                     alertDialog.dismiss();
                 } else {
                     // Display warning message. No name.

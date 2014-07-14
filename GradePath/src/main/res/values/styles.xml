@@ -32,7 +32,6 @@
 
     <!-- Check box -->
     <style name="checkBoxDialog">
-        <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>

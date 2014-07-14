@@ -25,6 +25,7 @@ public class SlidingTabFragment extends Fragment {
 
     private ViewPager mViewPager;
     private TabPagerAdapter mAdapter;
+    private int mCurrentPage;
 
     public SlidingTabFragment() {
     }
@@ -48,17 +49,10 @@ public class SlidingTabFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mAdapter = new TabPagerAdapter(getFragmentManager());
-        // Get the ViewPager and set its PagerAdapter so that it can display items.
+        final ImageButton btnAdd = (ImageButton) view.findViewById(R.id.btn_sliding_tabs_add);
+        final SlidingTabLayout slidingTabLayout =
+                (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        mViewPager.setAdapter(mAdapter);
-
-        // Set SlidingTabLayout's ViewPager.
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        slidingTabLayout.setViewPager(mViewPager);
-        mViewPager.setCurrentItem(1);
-
-        ImageButton btnAdd = (ImageButton) view.findViewById(R.id.btn_sliding_tabs_add);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,34 +72,58 @@ public class SlidingTabFragment extends Fragment {
                 }
             }
         });
+
+        // Get the ViewPager and set its PagerAdapter so that it can display items.
+        mAdapter = new TabPagerAdapter(getFragmentManager());
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(1);
+
+        // Set SlidingTabLayout's ViewPager.
+        slidingTabLayout.setViewPager(mViewPager);
     }
 
     /**
      * Updates the semester list within its tab.
      */
     public void updateSemesterList() {
-        ((BaseListFragment) mAdapter.getTab(0)).updateList();
+        try {
+            ((BaseListFragment) mAdapter.getTab(0)).updateListItems();
+        } catch (NullPointerException e) {
+            mAdapter.getItem(0);
+        }
     }
 
     /**
      * Updates the course list within its tab.
      */
     public void updateCourseList() {
-        ((BaseListFragment) mAdapter.getTab(1)).updateList();
+        try {
+            ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
+        } catch (NullPointerException e) {
+            mAdapter.getItem(1);
+        }
     }
 
     /**
      * Updates the grade list within its tab.
      */
     public void updateGradeList() {
-        ((BaseListFragment) mAdapter.getTab(2)).updateList();
+        try {
+            ((BaseListFragment) mAdapter.getTab(2)).updateListItems();
+        } catch (NullPointerException e) {
+            mAdapter.getItem(2);
+        }
     }
 
     /**
      * Updates the task list within its tab.
      */
     public void updateTaskList() {
-        ((BaseListFragment) mAdapter.getTab(3)).updateList();
+        try {
+            ((BaseListFragment) mAdapter.getTab(3)).updateListItems();
+        } catch (NullPointerException e) {
+            mAdapter.getItem(3);
+        }
     }
 
     @Override

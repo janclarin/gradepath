@@ -44,13 +44,18 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
         mEmptyTextView = (TextView) convertView.findViewById(R.id.tv_list_grade_empty);
         mListView = (ListView) convertView.findViewById(R.id.lv_list_grade);
 
-        mListItems = new ArrayList<DatabaseItem>();
+        return convertView;
+    }
 
-        updateList();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        updateListItems();
         initAdapter();
         setUpListView();
 
-        return convertView;
+        showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
@@ -104,7 +109,7 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
                     } else {
                         convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_grade_item, null);
                         viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
-                        viewHolder.tvAddDate = (TextView) convertView.findViewById(R.id.tv_grade_add_date);
+                        viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
                         viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
                     }
 
@@ -118,7 +123,11 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
                 } else {
                     Grade grade = (Grade) mListItems.get(position);
                     viewHolder.tvName.setText(grade.getName());
-                    viewHolder.tvAddDate.setText(grade.getAddDate(mContext));
+                    viewHolder.tvSubtitle.setText(
+                            mDatabase.getGradeComponent(grade.getComponentId()).getName() + " "
+                                    + getString(R.string.bullet) + " "
+                                    + grade.getAddDate(mContext)
+                    );
                     viewHolder.tvGrade.setText(grade.getGradePercentage());
                 }
 
@@ -127,7 +136,7 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
             class ViewHolder {
                 TextView tvName;
-                TextView tvAddDate;
+                TextView tvSubtitle;
                 TextView tvGrade;
             }
         };
@@ -135,12 +144,18 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void updateList() {
+    protected void updateListItems() {
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
 
         // Reset list items and populate the list.
-        mListItems.clear();
+        try {
+            mListItems.clear();
+        } catch (NullPointerException e) {
+            // Ignore since list hasn't been initialized yet.
+            mListItems = new ArrayList<DatabaseItem>();
+        }
+
         for (Course course : courses) {
             List<Grade> grades = mDatabase.getGrades(course.getId());
 
@@ -157,7 +172,8 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-
+        if (mListener != null)
+            mListener.onListGradeEdit((Grade) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -169,7 +185,7 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
                 mListItems.remove(selectedGrade);
             }
         }
-        updateList();
+        updateListItems();
     }
 
     @Override
@@ -191,5 +207,9 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
     public interface FragmentListGradeListener {
 
+        /**
+         * Called when a grade is going to be updated.
+         */
+        public void onListGradeEdit(Grade grade);
     }
 }

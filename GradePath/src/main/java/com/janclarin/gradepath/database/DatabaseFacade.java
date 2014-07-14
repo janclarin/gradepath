@@ -443,6 +443,25 @@ public class DatabaseFacade {
     }
 
     /**
+     * Get a course from {@code Course} id.
+     */
+    public Course getCourse(long courseId) {
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES, COURSE_COLUMNS,
+                DatabaseHelper.COLUMN_ID + " ='" + courseId + "'", null, null, null, null);
+
+        Course course;
+        if (cursor.moveToFirst()) {
+            course = cursorToCourse(cursor);
+        } else {
+            course = null;
+        }
+
+        cursor.close();
+        return course;
+    }
+
+    /**
      * Gets a list of all {@code Course}.
      *
      * @return
@@ -610,6 +629,23 @@ public class DatabaseFacade {
     }
 
     /**
+     * Get a course from {@code Course} id.
+     */
+    public GradeComponent getGradeComponent(long componentId) {
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COMPONENTS, COMPONENT_COLUMNS,
+                DatabaseHelper.COLUMN_ID + " ='" + componentId + "'", null, null, null, null);
+
+        GradeComponent gradeComponent;
+
+        cursor.moveToFirst();
+        gradeComponent = cursorToGradeComponent(cursor);
+        cursor.close();
+
+        return gradeComponent;
+    }
+
+    /**
      * Gets a list of all grade components for a course.
      *
      * @param courseId
@@ -687,9 +723,9 @@ public class DatabaseFacade {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, grade.getCourseId());
-        values.put(DatabaseHelper.COLUMN_COMPONENT_ID, grade.getCategoryId());
+        values.put(DatabaseHelper.COLUMN_COMPONENT_ID, grade.getComponentId());
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, grade.getName());
-        values.put(DatabaseHelper.COLUMN_POINTS_EARNED, grade.getPointsEarned());
+        values.put(DatabaseHelper.COLUMN_POINTS_EARNED, grade.getPointsReceived());
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, grade.getPointsPossible());
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_ADDED, addDate.get(Calendar.MONTH));
@@ -704,27 +740,22 @@ public class DatabaseFacade {
      *
      * @param gradeId
      * @param courseId
-     * @param categoryId
+     * @param componentId
      * @param name
      * @param pointsEarned
      * @param pointsPossible
      * @return
      */
-    public int updateGrade(long gradeId, long courseId, long categoryId, String name,
+    public int updateGrade(long gradeId, long courseId, long componentId, String name,
                            double pointsEarned, double pointsPossible) {
         // Calendar instance of year and day of year columns.
-        // TODO: Take in added calendar from grade.
-        Calendar calendar = Calendar.getInstance();
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
-        values.put(DatabaseHelper.COLUMN_COMPONENT_ID, categoryId);
+        values.put(DatabaseHelper.COLUMN_COMPONENT_ID, componentId);
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, name);
         values.put(DatabaseHelper.COLUMN_POINTS_EARNED, pointsEarned);
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, pointsPossible);
-        values.put(DatabaseHelper.COLUMN_YEAR_ADDED, calendar.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_MONTH_ADDED, calendar.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_DAY_ADDED, calendar.get(Calendar.DAY_OF_MONTH));
 
         return mDatabase.update(DatabaseHelper.TABLE_GRADES, values,
                 DatabaseHelper.COLUMN_ID + " = '" + gradeId + "'", null);
@@ -838,13 +869,11 @@ public class DatabaseFacade {
      * @param name
      * @param isGraded
      * @param isCompleted
-     * @param yearDue
-     * @param monthDue
-     * @param dayDue
+     * @param dueDate
      * @return
      */
     public Task insertTask(long courseId, String name, boolean isGraded, boolean isCompleted,
-                           int yearDue, int monthDue, int dayDue) {
+                           Calendar dueDate) {
 
         // Calendar instance for day added to mDatabase.
         Calendar addDate = Calendar.getInstance();
@@ -857,9 +886,9 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_ADDED, addDate.get(Calendar.MONTH));
         values.put(DatabaseHelper.COLUMN_DAY_ADDED, addDate.get(Calendar.DAY_OF_MONTH));
-        values.put(DatabaseHelper.COLUMN_YEAR_DUE, yearDue);
-        values.put(DatabaseHelper.COLUMN_MONTH_DUE, monthDue);
-        values.put(DatabaseHelper.COLUMN_DAY_DUE, dayDue);
+        values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
+        values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
+        values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
 
         long taskId = mDatabase.insert(DatabaseHelper.TABLE_TASKS, null, values);
 
@@ -908,22 +937,20 @@ public class DatabaseFacade {
      * @param name
      * @param isGraded
      * @param isCompleted
-     * @param yearDue
-     * @param monthDue
-     * @param dayDue
+     * @param dueDate
      * @return
      */
     public int updateTask(long taskId, long courseId, String name, boolean isGraded,
-                          boolean isCompleted, int yearDue, int monthDue, int dayDue) {
+                          boolean isCompleted, Calendar dueDate) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_TASK_NAME, name);
         values.put(DatabaseHelper.COLUMN_IS_GRADED, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_YEAR_DUE, yearDue);
-        values.put(DatabaseHelper.COLUMN_MONTH_DUE, monthDue);
-        values.put(DatabaseHelper.COLUMN_DAY_DUE, dayDue);
+        values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
+        values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
+        values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
 
         return mDatabase.update(DatabaseHelper.TABLE_TASKS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + taskId + "'", null);

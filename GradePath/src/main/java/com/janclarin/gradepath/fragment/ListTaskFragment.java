@@ -48,13 +48,17 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         mEmptyTextView = (TextView) convertView.findViewById(R.id.tv_list_task_empty);
         mListView = (ListView) convertView.findViewById(R.id.lv_list_task);
 
-        mListItems = new ArrayList<DatabaseItem>();
+        return convertView;
+    }
 
-        updateList();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        updateListItems();
         initAdapter();
         setUpListView();
 
-        return convertView;
     }
 
     @Override
@@ -155,12 +159,18 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void updateList() {
+    protected void updateListItems() {
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
 
         // Reset list items and populate the list.
-        mListItems.clear();
+        try {
+            mListItems.clear();
+        } catch (NullPointerException e) {
+            // Initialize list.yy
+            mListItems = new ArrayList<DatabaseItem>();
+        }
+
         for (Course course : courses) {
             List<Task> tasks = mDatabase.getTasks(course.getId());
 
@@ -176,7 +186,7 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-
+        if (mListener != null) mListener.onListTaskEdit((Task) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -188,7 +198,7 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
                 mListItems.remove(selectedTask);
             }
         }
-        updateList();
+        updateListItems();
     }
 
     @Override
@@ -210,5 +220,9 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
 
     public interface FragmentListTaskListener {
 
+        /**
+         * Called when a task is going to be edited.
+         */
+        public void onListTaskEdit(Task task);
     }
 }

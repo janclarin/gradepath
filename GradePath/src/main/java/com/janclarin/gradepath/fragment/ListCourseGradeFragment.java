@@ -270,7 +270,7 @@ public class ListCourseGradeFragment extends Fragment {
 
             // Calculate average for grade component.
             for (Grade grade : gradesForComponent) {
-                average += (grade.getPointsEarned() / grade.getPointsPossible()) * weightPerItem;
+                average += (grade.getPointsReceived() / grade.getPointsPossible()) * weightPerItem;
             }
 
             // Set grade component's average
@@ -330,13 +330,13 @@ public class ListCourseGradeFragment extends Fragment {
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
             // Raw grade value * 100 for percentage.
-            double rawGrade = 100 * (grade.getPointsEarned() / grade.getPointsPossible());
+            double rawGrade = 100 * (grade.getPointsReceived() / grade.getPointsPossible());
 
             // Get string value for grade percentage.
             String gradePercentage = decimalFormat.format(rawGrade) + "%";
 
             // String values for grade fraction.
-            String gradeFraction = decimalFormat.format(grade.getPointsEarned())
+            String gradeFraction = decimalFormat.format(grade.getPointsReceived())
                     + "/" + decimalFormat.format(grade.getPointsPossible());
 
             // Inflate view if it doesn't already exist.

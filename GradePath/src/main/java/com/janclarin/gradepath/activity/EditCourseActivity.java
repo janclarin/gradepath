@@ -85,7 +85,7 @@ public class EditCourseActivity extends Activity {
             mNameEditText.setText(mCourseToUpdate.getName());
 
             // Check if there was a final grade for this course.
-            if (mCourseToUpdate.getFinalGradeValue() > 0) {
+            if (mCourseToUpdate.isCompleted()) {
                 // Check the yes radio button.
                 mCompletedRadioGroup.check(R.id.rb_new_course_complete_yes);
 

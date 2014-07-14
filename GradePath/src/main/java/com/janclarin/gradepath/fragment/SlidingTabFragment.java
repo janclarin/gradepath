@@ -24,6 +24,9 @@ public class SlidingTabFragment extends Fragment {
     private FragmentSlidingTabCallbacks mListener;
 
     private ViewPager mViewPager;
+    private ImageButton mAddButton;
+    private SlidingTabLayout mSlidingTabLayout;
+
     private TabPagerAdapter mAdapter;
     private int mCurrentPage;
 
@@ -44,17 +47,20 @@ public class SlidingTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sliding_tabs, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sliding_tabs, container, false);
+
+        mViewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+        mAddButton = (ImageButton) rootView.findViewById(R.id.btn_sliding_tabs_add);
+        mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
+
+        return rootView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        final ImageButton btnAdd = (ImageButton) view.findViewById(R.id.btn_sliding_tabs_add);
-        final SlidingTabLayout slidingTabLayout =
-                (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (mViewPager.getCurrentItem()) {
@@ -73,13 +79,33 @@ public class SlidingTabFragment extends Fragment {
             }
         });
 
+        // TODO: Fix. Doesn't work.
+        // Page change listener to change the add button drawable.
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 0:
+                        mAddButton.setImageResource(R.drawable.list_semester_add);
+                        break;
+                    case 1:
+                        mAddButton.setImageResource(R.drawable.list_course_add);
+                        break;
+                    case 2:
+                    case 3:
+                        mAddButton.setImageResource(R.drawable.list_grade_task_add);
+                }
+            }
+        });
+
         // Get the ViewPager and set its PagerAdapter so that it can display items.
         mAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(1);
 
         // Set SlidingTabLayout's ViewPager.
-        slidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     /**

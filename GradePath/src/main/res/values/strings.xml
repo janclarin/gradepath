@@ -59,7 +59,7 @@
 
     <!-- Semester dialog -->
     <string name="title_new_semester_dialog">New semester</string>
-    <string name="cb_current_semester">Current</string>
+    <string name="cb_current_semester">Set as current</string>
     <string name="tv_dialog_semester_last_day">Last day</string>
     <string name="hint_dialog_semester_gpa">GPA for this semester</string>
     <string name="toast_semester_saved">Semester saved</string>

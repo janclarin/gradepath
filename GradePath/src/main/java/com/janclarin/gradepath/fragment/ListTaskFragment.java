@@ -22,19 +22,25 @@ import java.util.List;
 
 public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
 
+    private static final int TITLE_ID = R.string.title_fragment_list_tasks;
     private static final int ITEM_VIEW_TYPE_COURSE = 0;
     private static final int ITEM_VIEW_TYPE_TASK = 1;
     private static final int NUM_ITEM_VIEW_TYPES = 2;
 
     private FragmentListTaskListener mListener;
 
+    public static ListTaskFragment newInstance() {
+        return new ListTaskFragment();
+    }
+
     public ListTaskFragment() {
-        // Required empty constructor.
+        // Required empty public constructor.
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment.
         View convertView = inflater.inflate(R.layout.fragment_list_task, container, false);
 
@@ -169,9 +175,14 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
+    protected void editSelectedItem(int selectedPosition) {
+
+    }
+
+    @Override
+    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
         for (int i = 0; i < mListItems.size(); i++) {
-            if (selectedPositions.get(i, false)) {
+            if (possibleSelectedPositions.get(i, false)) {
                 Task selectedTask = (Task) mAdapter.getItem(i);
                 mDatabase.deleteTask(selectedTask);
                 mListItems.remove(selectedTask);

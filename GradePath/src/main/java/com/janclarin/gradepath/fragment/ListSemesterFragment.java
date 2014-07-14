@@ -26,13 +26,18 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
 
     private FragmentListSemesterListener mListener;
 
+    public static ListSemesterFragment newInstance() {
+        return new ListSemesterFragment();
+    }
+
     public ListSemesterFragment() {
-        // Required empty constructor.
+        // Required empty public constructor.
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_list_semester, container, false);
 
@@ -141,12 +146,17 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
     }
 
     @Override
-    protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
+    protected void editSelectedItem(int selectedPosition) {
+
+    }
+
+    @Override
+    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
         for (int i = 0; i < mListItems.size(); i++) {
-            if (selectedPositions.get(i, false)) {
+            if (possibleSelectedPositions.get(i, false)) {
                 Semester selectedSemester = (Semester) mAdapter.getItem(i);
-                mDatabase.deleteSemester(selectedSemester);
-                mListItems.remove(selectedSemester);
+                if (mListener != null)
+                    mListItems.remove(selectedSemester);
             }
         }
         mAdapter.notifyDataSetChanged();

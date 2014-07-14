@@ -30,12 +30,15 @@ import java.util.Collections;
  */
 public class ListCourseFragment extends BaseListFragment<Course> {
 
-    static final String LOG_TAG = ListCourseFragment.class.getSimpleName();
     private FragmentListCourseListener mListener;
     private TextView mSemesterTextView;
 
+    public static ListCourseFragment newInstance() {
+        return new ListCourseFragment();
+    }
+
     public ListCourseFragment() {
-        // Required empty constructor.
+        // Required empty public constructor.
     }
 
     @Override
@@ -193,17 +196,21 @@ public class ListCourseFragment extends BaseListFragment<Course> {
     }
 
     @Override
+    protected void editSelectedItem(int selectedPosition) {
+        if (mListener != null) {
+            mListener.onListCourseEdit((Course) mAdapter.getItem(selectedPosition));
+        }
+    }
+
+    @Override
     protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
         for (int i = 0; i < mListItems.size(); i++) {
             if (selectedPositions.get(i, false)) {
                 Course selectedCourse = (Course) mAdapter.getItem(i);
-                if (mListener != null) {
-                    mListener.onListCourseDelete(selectedCourse);
-                }
+                if (mListener != null) mListener.onListCourseDelete(selectedCourse);
                 mListItems.remove(selectedCourse);
             }
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override

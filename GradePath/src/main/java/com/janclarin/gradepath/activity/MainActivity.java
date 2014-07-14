@@ -45,15 +45,15 @@ public class MainActivity extends Activity
         GradeDialogFragment.DialogGradeCallbacks,
         TaskDialogFragment.DialogTaskCallbacks {
 
-    public static final String SEMESTER_KEY = "Semester";
-    public static final String COURSE_KEY = "Course";
-    public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
-    public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String NEW_SEMESTER_TAG = "NewSemesterDialog";
     private static final String UPDATE_SEMESTER_TAG = "UpdateSemesterDialog";
     private static final String NEW_GRADE_TAG = "NewGradeDialog";
     private static final String NEW_TASK_TAG = "NewTaskDialog";
+    public static final String SEMESTER_KEY = "Semester";
+    public static final String COURSE_KEY = "Course";
+    public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
+    public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
 
     private DatabaseFacade mDatabase;
 
@@ -101,17 +101,15 @@ public class MainActivity extends Activity
         if (resultCode == RESULT_OK) {
             String toastMessage = "";
 
-            // Check if request code matches.
-            if (requestCode == REQUEST_LIST_COURSE_NEW_COURSE) {
-                // Refresh course list view.
-                refreshListCourse();
-
-                toastMessage = getString(R.string.course_saved_new);
-            } else if (requestCode == REQUEST_LIST_COURSE_EDIT_COURSE) {
-                // Refresh course list view.
-                refreshListCourse();
-
-                toastMessage = getString(R.string.course_saved_update);
+            switch (requestCode) {
+                case REQUEST_LIST_COURSE_NEW_COURSE:
+                    refreshListCourse();
+                    toastMessage = getString(R.string.course_saved_new);
+                    break;
+                case REQUEST_LIST_COURSE_EDIT_COURSE:
+                    refreshListCourse();
+                    toastMessage = getString(R.string.course_saved_update);
+                    break;
             }
 
             // Display toast.
@@ -176,18 +174,6 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mDatabase.open();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mDatabase.close();
     }
 
     /**

@@ -53,15 +53,16 @@ public final class R {
         public static final int ic_grade_component_add=0x7f020014;
         public static final int ic_grade_component_remove=0x7f020015;
         public static final int ic_launcher=0x7f020016;
-        public static final int overflow=0x7f020017;
-        public static final int rectangle_border=0x7f020018;
-        public static final int row_selector=0x7f020019;
+        public static final int ic_launcher_action_bar=0x7f020017;
+        public static final int overflow=0x7f020018;
+        public static final int rectangle_border=0x7f020019;
+        public static final int row_selector=0x7f02001a;
     }
     public static final class id {
         public static final int action_list_course_sort=0x7f0a0059;
         public static final int action_list_course_sort_alphabet_ascending=0x7f0a005a;
         public static final int action_list_course_sort_alphabet_descending=0x7f0a005b;
-        public static final int action_list_semester_sort=0x7f0a005d;
+        public static final int action_list_semester_sort=0x7f0a005e;
         public static final int actionbar_cancel=0x7f0a0000;
         public static final int actionbar_done=0x7f0a0001;
         public static final int btn_add_first_grade=0x7f0a0018;
@@ -97,13 +98,14 @@ public final class R {
         public static final int lv_list_grade=0x7f0a003d;
         public static final int lv_list_semester=0x7f0a0042;
         public static final int lv_list_task=0x7f0a0049;
-        public static final int menu_contextual_delete=0x7f0a005c;
+        public static final int menu_contextual_delete=0x7f0a005d;
+        public static final int menu_contextual_edit=0x7f0a005c;
         public static final int navigation_drawer=0x7f0a0017;
         public static final int rb_new_course_complete_no=0x7f0a000a;
         public static final int rb_new_course_complete_yes=0x7f0a000b;
         public static final int rg_completed=0x7f0a0009;
         public static final int seek_letter_grade=0x7f0a000d;
-        public static final int set_semester_to_current=0x7f0a005e;
+        public static final int set_semester_to_current=0x7f0a005f;
         public static final int sliding_tabs=0x7f0a0051;
         public static final int spn_dialog_grade_components=0x7f0a0023;
         public static final int spn_dialog_grade_courses=0x7f0a0021;
@@ -188,11 +190,12 @@ public final class R {
         public static final int detail_course=0x7f090000;
         public static final int global=0x7f090001;
         public static final int list_course=0x7f090002;
-        public static final int list_item_selected=0x7f090003;
-        public static final int list_semester=0x7f090004;
-        public static final int list_semester_options=0x7f090005;
-        public static final int main=0x7f090006;
-        public static final int new_course=0x7f090007;
+        public static final int list_item_one_selected=0x7f090003;
+        public static final int list_item_selected=0x7f090004;
+        public static final int list_semester=0x7f090005;
+        public static final int list_semester_options=0x7f090006;
+        public static final int main=0x7f090007;
+        public static final int new_course=0x7f090008;
     }
     public static final class string {
         public static final int action_list_sort_alphabet_ascending=0x7f070000;
@@ -324,6 +327,7 @@ public final class R {
         public static final int dialogPrompt=0x7f080005;
         public static final int emptyListTextView=0x7f080006;
         public static final int headerTextView=0x7f080007;
-        public static final int spinnerButton=0x7f080008;
+        public static final int listItemButton=0x7f080008;
+        public static final int spinnerButton=0x7f080009;
     }
 }

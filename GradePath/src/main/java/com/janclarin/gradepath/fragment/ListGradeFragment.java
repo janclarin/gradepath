@@ -26,13 +26,18 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
     private FragmentListGradeListener mListener;
 
+    public static ListGradeFragment newInstance() {
+        return new ListGradeFragment();
+    }
+
     public ListGradeFragment() {
-        // Required empty constructor.
+        // Required empty public constructor.
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment.
         View convertView = inflater.inflate(R.layout.fragment_list_grade, container, false);
 
@@ -151,9 +156,14 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
+    protected void editSelectedItem(int selectedPosition) {
+
+    }
+
+    @Override
+    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
         for (int i = 0; i < mListItems.size(); i++) {
-            if (selectedPositions.get(i, false)) {
+            if (possibleSelectedPositions.get(i, false)) {
                 Grade selectedGrade = (Grade) mAdapter.getItem(i);
                 mDatabase.deleteGrade(selectedGrade);
                 mListItems.remove(selectedGrade);

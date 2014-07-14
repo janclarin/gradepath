@@ -27,7 +27,7 @@ public class ListSettingFragment extends PreferenceFragment {
     }
 
     public ListSettingFragment() {
-        // Required empty public constructor
+        // Required empty public constructor.
     }
 
     @Override

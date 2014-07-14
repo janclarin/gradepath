@@ -43,7 +43,7 @@ public class ListCourseGradeFragment extends Fragment {
     private Button mAddFirstGradeButton;
 
     public ListCourseGradeFragment() {
-        // Required empty public constructor
+        // Required empty public constructor.
     }
 
     /**

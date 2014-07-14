@@ -19,13 +19,9 @@
 
     <ImageButton
         android:id="@+id/btn_semester_options"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="36dp"
-        android:layout_height="64dp"
+        style="@style/listItemButton"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/cd_show_semester_options"
-        android:focusable="false"
-        android:paddingRight="8dp"
         android:src="@drawable/overflow" />
 
     <View

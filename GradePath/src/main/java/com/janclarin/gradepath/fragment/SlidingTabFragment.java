@@ -3,9 +3,11 @@ package com.janclarin.gradepath.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,38 +20,24 @@ public class SlidingTabFragment extends Fragment {
 
     private static final String LOG_TAG = SlidingTabFragment.class.getSimpleName();
 
+    private Context mContext;
     private FragmentSlidingTabCallbacks mListener;
 
     private ViewPager mViewPager;
-    private TabItem[] mListTabItems;
-    private TabItem mTabSemesters;
-    private TabItem mTabCourses;
-    private TabItem mTabGrades;
-    private TabItem mTabTasks;
+    private TabPagerAdapter mAdapter;
 
     public SlidingTabFragment() {
     }
 
     public static SlidingTabFragment newInstance() {
-        SlidingTabFragment fragment = new SlidingTabFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new SlidingTabFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTabSemesters = new TabItem(getString(R.string.title_fragment_list_semesters), new ListSemesterFragment());
-
-        mTabCourses = new TabItem(getString(R.string.title_fragment_list_courses), new ListCourseFragment());
-
-        mTabGrades = new TabItem(getString(R.string.title_fragment_list_grades), new ListGradeFragment());
-
-        mTabTasks = new TabItem(getString(R.string.title_fragment_list_tasks), new ListTaskFragment());
-
-        mListTabItems = new TabItem[]{mTabSemesters, mTabCourses, mTabGrades, mTabTasks};
+        mContext = getActivity();
     }
 
     @Override
@@ -60,10 +48,10 @@ public class SlidingTabFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        mAdapter = new TabPagerAdapter(getFragmentManager());
         // Get the ViewPager and set its PagerAdapter so that it can display items.
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new TabPagerAdapter(getFragmentManager()));
+        mViewPager.setAdapter(mAdapter);
 
         // Set SlidingTabLayout's ViewPager.
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
@@ -87,7 +75,6 @@ public class SlidingTabFragment extends Fragment {
                         break;
                     case 3:
                         if (mListener != null) mListener.onSlidingTabAddTask();
-                        break;
                 }
             }
         });
@@ -97,28 +84,28 @@ public class SlidingTabFragment extends Fragment {
      * Updates the semester list within its tab.
      */
     public void updateSemesterList() {
-        ((ListSemesterFragment) mTabSemesters.getFragment()).updateList();
+        ((BaseListFragment) mAdapter.getTab(0)).updateList();
     }
 
     /**
      * Updates the course list within its tab.
      */
     public void updateCourseList() {
-        ((ListCourseFragment) mTabCourses.getFragment()).updateList();
+        ((BaseListFragment) mAdapter.getTab(1)).updateList();
     }
 
     /**
      * Updates the grade list within its tab.
      */
     public void updateGradeList() {
-        ((ListGradeFragment) mTabGrades.getFragment()).updateList();
+        ((BaseListFragment) mAdapter.getTab(2)).updateList();
     }
 
     /**
      * Updates the task list within its tab.
      */
     public void updateTaskList() {
-        ((ListTaskFragment) mTabTasks.getFragment()).updateList();
+        ((BaseListFragment) mAdapter.getTab(3)).updateList();
     }
 
     @Override
@@ -161,29 +148,10 @@ public class SlidingTabFragment extends Fragment {
         void onSlidingTabAddTask();
     }
 
-    /**
-     * Tab item.
-     */
-    private class TabItem {
-
-        private final String title;
-        private final Fragment fragment;
-
-        public TabItem(String title, Fragment fragment) {
-            this.title = title;
-            this.fragment = fragment;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public Fragment getFragment() {
-            return fragment;
-        }
-    }
-
     private class TabPagerAdapter extends FragmentPagerAdapter {
+
+        private final int NUM_PAGES = 4;
+        private final SparseArray<Fragment> REGISTERED_FRAGMENTS = new SparseArray<Fragment>();
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -191,24 +159,57 @@ public class SlidingTabFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return mListTabItems.length;
+            return NUM_PAGES;
         }
 
         @Override
-        public Fragment getItem(int index) {
+        public Fragment getItem(int position) {
 
-            // Returns a fragment
-            return mListTabItems[index].getFragment();
+            switch (position) {
+                case 0:
+                    return ListSemesterFragment.newInstance();
+                case 1:
+                    return ListCourseFragment.newInstance();
+                case 2:
+                    return ListGradeFragment.newInstance();
+                case 3:
+                    return ListTaskFragment.newInstance();
+                default:
+                    return null;
+            }
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return mListTabItems[position].getTitle();
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            REGISTERED_FRAGMENTS.put(position, fragment);
+            return fragment;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            REGISTERED_FRAGMENTS.remove(position);
             super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return mContext.getString(R.string.title_fragment_list_semesters);
+                case 1:
+                    return mContext.getString(R.string.title_fragment_list_courses);
+                case 2:
+                    return mContext.getString(R.string.title_fragment_list_grades);
+                case 3:
+                    return mContext.getString(R.string.title_fragment_list_tasks);
+                default:
+                    return null;
+            }
+        }
+
+        protected Fragment getTab(int position) {
+            return REGISTERED_FRAGMENTS.get(position);
         }
     }
 }

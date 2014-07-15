@@ -59,7 +59,7 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
     }
 
     @Override
-    protected void updateListItems() {
+    public void updateListItems() {
         // List of semesters.
         mListItems = mDatabase.getSemesters();
         if (mAdapter != null) mAdapter.notifyDataSetChanged();

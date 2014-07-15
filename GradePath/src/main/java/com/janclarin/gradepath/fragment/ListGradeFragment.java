@@ -60,7 +60,7 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void updateListItems() {
+    public void updateListItems() {
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
 

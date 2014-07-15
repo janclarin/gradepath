@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:fontFamily="sans-serif-thin"
+        android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
         android:textSize="24sp" />
@@ -39,6 +39,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
         android:layout_toLeftOf="@id/view_semester_item_divider_vertical"
+        android:fontFamily="sans-serif-light"
         android:textAllCaps="true"
         android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />

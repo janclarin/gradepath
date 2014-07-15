@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.GradeComponent;
 import com.janclarin.gradepath.model.Semester;
@@ -33,14 +31,13 @@ import com.janclarin.gradepath.model.Semester;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditCourseActivity extends Activity {
+public class EditCourseActivity extends BaseActivity {
 
     // Tags used to check state of a button.
     public static final String ADD_TAG = "Add";
     public static final String REMOVE_TAG = "Remove";
     public static final String LOG_TAG = EditCourseActivity.class.getSimpleName();
 
-    private DatabaseFacade mDatabase;
     private Spinner mSemesterSpinner;
     private EditText mNameEditText;
     private RadioGroup mCompletedRadioGroup;
@@ -61,16 +58,11 @@ public class EditCourseActivity extends Activity {
         // Set up content view.
         setContentView(R.layout.activity_edit_course);
 
-        // Start mDatabase for course.
-        mDatabase = DatabaseFacade.getInstance(getApplicationContext());
-        mDatabase.open();
-
         // Set up the views.
         setUp();
 
         // Arguments from activity.
         mCourseToUpdate = (Course) getIntent().getSerializableExtra(MainActivity.COURSE_KEY);
-
 
         // Set up grade category list view.
         mNewGradeComponents = new ArrayList<GradeComponent>();

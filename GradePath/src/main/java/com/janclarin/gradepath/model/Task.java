@@ -98,7 +98,7 @@ public class Task extends DatabaseItem implements Comparable<Task> {
             due += context.getString(R.string.task_due_date_on) + " "
                     + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         } else {
-            due += new SimpleDateFormat("E, MMM d").format(dueDate.getTime());
+            due += new SimpleDateFormat("MMMM d").format(dueDate.getTime());
         }
 
         return due;
@@ -125,6 +125,7 @@ public class Task extends DatabaseItem implements Comparable<Task> {
 
     /**
      * Compares the due dates of two tasks for sorting.
+     * Incomplete tasks first.
      * Most recent tasks are at the beginning of the list.
      *
      * @param another
@@ -132,6 +133,20 @@ public class Task extends DatabaseItem implements Comparable<Task> {
      */
     @Override
     public int compareTo(Task another) {
-        return this.dueDate.compareTo(another.dueDate);
+        if (this.isCompleted()) {
+            if (another.isCompleted()) {
+                // If both are complete, sort by due date. More recent first.
+                return -this.dueDate.compareTo(another.dueDate);
+            } else {
+                return 1;
+            }
+        } else {
+            if (another.isCompleted()) {
+                return -1;
+            } else {
+                // If both are not completed sort by due date. More recent last.
+                return this.dueDate.compareTo(another.dueDate);
+            }
+        }
     }
 }

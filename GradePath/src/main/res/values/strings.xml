@@ -34,7 +34,6 @@
     <string name="rb_final_grade_yes">Yes</string>
     <string name="tv_completed">Completed</string>
     <string name="prompt_enter_course_name">Enter course name</string>
-
     <string name="season_fall">Fall</string>
     <string name="season_winter">Winter</string>
     <string name="season_spring">Spring</string>
@@ -157,16 +156,19 @@
     <string name="title_fragment_list_tasks">Tasks</string>
     <string name="tv_list_grade_empty">No grades</string>
     <string name="tv_list_task_empty">No tasks</string>
-    <string name="added">added</string>
+    <string name="added">Added</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="on">on</string>
     <string name="selected">selected</string>
-    <string name="due">due</string>
+    <string name="due">Due</string>
     <string name="cd_show_semester_options">Show semester options</string>
     <string name="list_semester_set_to_current">Set to current</string>
     <string name="tv_list_course_grades_empty">No grades for this course</string>
-    <string name="title_fragment_overview">Overview</string>
-
+    <string name="title_fragment_details">Details</string>
+    <string name="list_task_incomplete">Incomplete</string>
+    <string name="list_task_complete">Completed</string>
+    <string name="tv_list_course_task_empty">No tasks for this course</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

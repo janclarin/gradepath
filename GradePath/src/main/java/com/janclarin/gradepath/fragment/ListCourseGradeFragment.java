@@ -2,7 +2,6 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +22,6 @@ import com.janclarin.gradepath.model.GradeComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Course fragment to display course information, grades, etc.
- */
 public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
 
     private static final int ITEM_VIEW_TYPE_COMPONENT = 0;
@@ -86,7 +82,7 @@ public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
     }
 
     @Override
-    protected void updateListItems() {
+    public void updateListItems() {
         // Get list of grade components for a course.
         List<GradeComponent> components = mDatabase.getGradeComponents(mCourse.getId());
 
@@ -113,12 +109,20 @@ public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-
+        if (mListener != null)
+            mListener.onListCourseGradeEdit((Grade) mAdapter.getItem(selectedPosition));
     }
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-
+        for (int i = 0; i < mListItems.size(); i++) {
+            if (possibleSelectedPositions.get(i, false)) {
+                Grade selectedGrade = (Grade) mAdapter.getItem(i);
+                mDatabase.deleteGrade(selectedGrade);
+                mListItems.remove(selectedGrade);
+            }
+        }
+        updateListItems();
     }
 
     @Override
@@ -218,6 +222,14 @@ public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
      */
     public static interface FragmentListCourseGradeListener {
 
+        /**
+         * Called when a grade is going to be added.
+         */
         public void onListCourseGradeAdd(Course course);
+
+        /**
+         * Called when a grade is going to be updated.
+         */
+        public void onListCourseGradeEdit(Grade grade);
     }
 }

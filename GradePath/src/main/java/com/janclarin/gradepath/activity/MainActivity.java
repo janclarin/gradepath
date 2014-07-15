@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -19,12 +18,11 @@ import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.dialog.TaskDialogFragment;
 import com.janclarin.gradepath.fragment.ListCourseFragment;
-import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
-import com.janclarin.gradepath.fragment.SettingFragment;
 import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.NavigationDrawerFragment;
+import com.janclarin.gradepath.fragment.SettingFragment;
 import com.janclarin.gradepath.fragment.SlidingTabFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
@@ -35,33 +33,20 @@ import com.janclarin.gradepath.model.Task;
 /**
  * Main activity that contains the navigation drawer.
  */
-public class MainActivity extends Activity
+public class MainActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerListener,
         SlidingTabFragment.FragmentSlidingTabCallbacks,
         ListSemesterFragment.FragmentListSemesterListener,
         ListCourseFragment.FragmentListCourseListener,
         ListGradeFragment.FragmentListGradeListener,
         ListTaskFragment.FragmentListTaskListener,
-        ListCourseGradeFragment.FragmentListCourseGradeListener,
         SemesterDialogFragment.DialogSemesterCallbacks,
         GradeDialogFragment.DialogGradeCallbacks,
         TaskDialogFragment.DialogTaskCallbacks {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String NEW_SEMESTER_TAG = "NewSemesterDialog";
-    private static final String EDIT_SEMESTER_TAG = "EditSemesterDialog";
-    private static final String NEW_GRADE_TAG = "NewGradeDialog";
-    private static final String EDIT_GRADE_TAG = "EditGradeDialog";
-    private static final String NEW_TASK_TAG = "NewTaskDialog";
-    private static final String EDIT_TASK_TAG = "EditTaskDialog";
-    public static final String SEMESTER_KEY = "Semester";
-    public static final String COURSE_KEY = "Course";
-    public static final String GRADE_KEY = "Grade";
-    public static final String TASK_KEY = "Task";
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
     public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
-
-    private DatabaseFacade mDatabase;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -95,10 +80,6 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        // Initialize database.
-        mDatabase = DatabaseFacade.getInstance(getApplicationContext());
-        mDatabase.open();
     }
 
     @Override
@@ -265,6 +246,7 @@ public class MainActivity extends Activity
     /**
      * Callback from ListSemesterFragment to edit a semester.
      */
+    @Override
     public void onListSemesterEdit(Semester semester) {
         // show update semester dialog
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
@@ -275,6 +257,7 @@ public class MainActivity extends Activity
     /**
      * Callback from ListSemesterFragment to delete a semester.
      */
+    @Override
     public void onListSemesterDelete(final Semester semester) {
         // Title contains arguments.
         final String title = String.format(getString(R.string.title_delete_semester_dialog), semester.toString());
@@ -387,14 +370,6 @@ public class MainActivity extends Activity
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void onListCourseGradeAdd(Course course) {
-        // Show new grade dialog.
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog), course);
-        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override

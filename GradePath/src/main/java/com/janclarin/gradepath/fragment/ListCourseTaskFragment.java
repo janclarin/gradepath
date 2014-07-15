@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -12,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.activity.MainActivity;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Task;
@@ -19,35 +23,51 @@ import com.janclarin.gradepath.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
+public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
 
-    private static final int TITLE_ID = R.string.title_fragment_list_tasks;
-    private static final int ITEM_VIEW_TYPE_COURSE = 0;
+    private static final int ITEM_VIEW_TYPE_HEADER = 0;
     private static final int ITEM_VIEW_TYPE_TASK = 1;
     private static final int NUM_ITEM_VIEW_TYPES = 2;
 
-    private FragmentListTaskListener mListener;
+    private FragmentListCourseTaskListener mListener;
 
-    public static ListTaskFragment newInstance() {
-        return new ListTaskFragment();
+    // Selected Course object.
+    private Course mCourse;
+
+    public ListCourseTaskFragment() {
+        // Required empty public constructor.
     }
 
-    public ListTaskFragment() {
-        // Required empty public constructor.
+    /**
+     * Creates a new instance of this fragment.
+     *
+     * @return A new instance of fragment CourseDetailsFragment.
+     */
+    public static ListCourseTaskFragment newInstance(Course course) {
+        ListCourseTaskFragment fragment = new ListCourseTaskFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(MainActivity.COURSE_KEY, course);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mCourse = (Course) getArguments().getSerializable(MainActivity.COURSE_KEY);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_list_course_tasks, container, false);
 
-        // Inflate the layout for this fragment.
-        View convertView = inflater.inflate(R.layout.fragment_list_task, container, false);
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_task_empty);
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_course_task);
 
-        // Find views.
-        mEmptyTextView = (TextView) convertView.findViewById(R.id.tv_list_task_empty);
-        mListView = (ListView) convertView.findViewById(R.id.lv_list_task);
-
-        return convertView;
+        return rootView;
     }
 
     @Override
@@ -55,41 +75,47 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         super.onActivityCreated(savedInstanceState);
 
         updateListItems();
-
         mAdapter = new ListAdapter();
         setUpListView();
-
-    }
-
-    @Override
-    public void updateListItems() {
-        // Get list of current courses.
-        List<Course> courses = mDatabase.getCurrentCourses();
-
-        // Reset list items and populate the list.
-        try {
-            mListItems.clear();
-        } catch (NullPointerException e) {
-            // Initialize list.
-            mListItems = new ArrayList<DatabaseItem>();
-        }
-
-        for (Course course : courses) {
-            List<Task> tasks = mDatabase.getTasks(course.getId());
-
-            if (tasks.size() > 0) {
-                mListItems.add(course);
-                mListItems.addAll(tasks);
-            }
-        }
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
 
         showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
+    public void updateListItems() {
+        long courseId = mCourse.getId();
+        List<Task> incompleteTasks = mDatabase.getIncompleteTasks(courseId);
+        List<Task> completedTasks = mDatabase.getCompletedTasks(courseId);
+
+        // Reset list items and populate the list.
+        try {
+            mListItems.clear();
+        } catch (NullPointerException e) {
+            mListItems = new ArrayList<DatabaseItem>();
+        }
+
+        // Add incomplete task header and tasks.
+        if (incompleteTasks.size() > 0) {
+            mListItems.add(new Header(mContext.getString(R.string.list_task_incomplete)));
+            mListItems.addAll(incompleteTasks);
+        }
+
+        // Add complete task header and tasks.
+        if (completedTasks.size() > 0) {
+            mListItems.add(new Header(mContext.getString(R.string.list_task_complete)));
+            mListItems.addAll(completedTasks);
+        }
+
+        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+
+        // Determine list view state.
+        showEmptyStateView(mListItems.isEmpty());
+    }
+
+    @Override
     protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null) mListener.onListTaskEdit((Task) mAdapter.getItem(selectedPosition));
+        if (mListener != null)
+            mListener.onListCourseTaskEdit((Task) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -108,10 +134,10 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListTaskListener) activity;
+            mListener = (FragmentListCourseTaskListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement FragmentListTaskListener");
+                    + " must implement FragmentListCourseTaskListener");
         }
     }
 
@@ -121,12 +147,17 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         mListener = null;
     }
 
-    public interface FragmentListTaskListener {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate options menu.
+        inflater.inflate(R.menu.list_course, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-        /**
-         * Called when a task is going to be edited.
-         */
-        public void onListTaskEdit(Task task);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -137,13 +168,13 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
 
         @Override
         public int getItemViewType(int position) {
-            return (mListItems.get(position) instanceof Course) ?
-                    ITEM_VIEW_TYPE_COURSE : ITEM_VIEW_TYPE_TASK;
+            return (mListItems.get(position) instanceof Header) ?
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_TASK;
         }
 
         @Override
         public boolean isEnabled(int position) {
-            // Only enable tasks.
+            // Only enable grades.
             return getItemViewType(position) == ITEM_VIEW_TYPE_TASK;
         }
 
@@ -157,7 +188,7 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                if (type == ITEM_VIEW_TYPE_COURSE) {
+                if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_header, null);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
@@ -172,13 +203,12 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if (type == ITEM_VIEW_TYPE_COURSE) {
-                viewHolder.tvName.setText(((Course) mListItems.get(position)).getName());
+            if (type == ITEM_VIEW_TYPE_HEADER) {
+                viewHolder.tvName.setText(((Header) mListItems.get(position)).getName());
             } else {
                 Task task = (Task) mListItems.get(position);
                 viewHolder.tvName.setText(task.getName());
                 viewHolder.tvDueDate.setText(task.getDueDate(mContext));
-                viewHolder.tvDueDate.setTextColor(task.getUrgencyColor(mContext));
                 viewHolder.cbCompleted.setChecked(task.isCompleted());
                 viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
             }
@@ -206,5 +236,37 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
                 mDatabase.updateTask(task);
             }
         }
+    }
+
+    /**
+     * Listeners.
+     */
+    public static interface FragmentListCourseTaskListener {
+
+        /**
+         * Called when a task is going to be added.
+         */
+        public void onListCourseTaskAdd(Course course);
+
+        /**
+         * Called when a task is going to be updated.
+         */
+        public void onListCourseTaskEdit(Task task);
+    }
+
+    /**
+     * Header for tasks.
+     */
+    private class Header extends DatabaseItem {
+        private final String name;
+
+        public Header(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
     }
 }

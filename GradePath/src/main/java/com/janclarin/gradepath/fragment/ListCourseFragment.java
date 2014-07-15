@@ -73,7 +73,7 @@ public class ListCourseFragment extends BaseListFragment<Course> {
     }
 
     @Override
-    protected void updateListItems() {
+    public void updateListItems() {
         Semester currentSemester = mDatabase.getCurrentSemester();
 
         if (currentSemester != null) {
@@ -212,9 +212,9 @@ public class ListCourseFragment extends BaseListFragment<Course> {
 
                 urgencyColorId = R.color.course_urgency_3;
             } else {
-                upcomingTaskText = upcomingTask.getName() + " "
+                upcomingTaskText = upcomingTask.getDueDate(mContext) + " "
                         + mContext.getString(R.string.bullet) + " "
-                        + upcomingTask.getDueDate(mContext);
+                        + upcomingTask.getName();
 
                 urgencyColorId = upcomingTask.getUrgencyColor(mContext);
             }

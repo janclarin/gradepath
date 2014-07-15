@@ -22,7 +22,7 @@ import com.janclarin.gradepath.model.DatabaseItem;
 import java.util.List;
 
 // TODO: Popup Menu for items
-public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment {
+abstract public class BaseListFragment<T extends DatabaseItem> extends Fragment {
 
     protected Context mContext;
     protected DatabaseFacade mDatabase;
@@ -34,7 +34,7 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
     /**
      * Updates the list view within the fragment.
      */
-    abstract protected void updateListItems();
+    abstract public void updateListItems();
 
     /**
      * Edit select item under contextual action bar.
@@ -78,8 +78,10 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
                         }
                     }
                 } else {
-                    mNumSelected--;
-                    selectedPositions.put(position, false);
+                    if (mNumSelected > 0) {
+                        mNumSelected--;
+                        selectedPositions.put(position, false);
+                    }
 
                     // Change menu when only one is left selected.
                     if (mNumSelected == 1) {
@@ -133,11 +135,9 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
         });
     }
 
-
     /**
      * Changes list state based on whether or not the list of items is empty.
      */
-
     protected void showEmptyStateView(boolean isEmpty) {
         if (isEmpty) {
             mEmptyTextView.setVisibility(View.VISIBLE);

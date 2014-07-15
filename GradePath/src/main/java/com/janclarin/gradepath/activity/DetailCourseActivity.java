@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,30 +9,39 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.database.DatabaseFacade;
+import com.janclarin.gradepath.dialog.GradeDialogFragment;
+import com.janclarin.gradepath.dialog.TaskDialogFragment;
+import com.janclarin.gradepath.fragment.BaseListFragment;
+import com.janclarin.gradepath.fragment.DetailCourseFragment;
 import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
+import com.janclarin.gradepath.fragment.ListCourseTaskFragment;
 import com.janclarin.gradepath.model.Course;
+import com.janclarin.gradepath.model.Grade;
+import com.janclarin.gradepath.model.Task;
 
-public class DetailCourseActivity extends Activity
-        implements ListCourseGradeFragment.FragmentListCourseGradeListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class DetailCourseActivity extends BaseActivity
+        implements ListCourseGradeFragment.FragmentListCourseGradeListener,
+        ListCourseTaskFragment.FragmentListCourseTaskListener,
+        GradeDialogFragment.DialogGradeCallbacks,
+        TaskDialogFragment.DialogTaskCallbacks {
 
     private static final String LOG_TAG = DetailCourseActivity.class.getSimpleName();
     private static final int NUM_TABS = 3;
 
+    private TabPagerAdapter mAdapter;
     private ViewPager mViewPager;
-
-    private DatabaseFacade mDatabase;
     private Course mCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_course);
-
-        mDatabase = DatabaseFacade.getInstance(getApplicationContext());
-        mDatabase.open();
 
         mCourse = (Course) getIntent().getSerializableExtra(MainActivity.COURSE_KEY);
 
@@ -42,9 +50,12 @@ public class DetailCourseActivity extends Activity
         // Set action bar navigation to tabs.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getFragmentManager());
+        // Set action bar title to course name.
+        actionBar.setTitle(mCourse.getName());
+
+        mAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mViewPager.setAdapter(tabPagerAdapter);
+        mViewPager.setAdapter(mAdapter);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -76,7 +87,7 @@ public class DetailCourseActivity extends Activity
         for (int i = 0; i < NUM_TABS; i++) {
             actionBar.addTab(
                     actionBar.newTab()
-                            .setText(tabPagerAdapter.getPageTitle(i))
+                            .setText(mAdapter.getPageTitle(i))
                             .setTabListener(tabListener)
             );
         }
@@ -101,10 +112,57 @@ public class DetailCourseActivity extends Activity
 
     @Override
     public void onListCourseGradeAdd(Course course) {
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_new_grade_dialog), course);
+        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
+    }
 
+    @Override
+    public void onListCourseGradeEdit(Grade grade) {
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_edit_grade_dialog), grade);
+        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
+    }
+
+    @Override
+    public void onListCourseTaskAdd(Course course) {
+        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
+                getString(R.string.title_new_task_dialog), course);
+        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
+    }
+
+    @Override
+    public void onListCourseTaskEdit(Task task) {
+        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
+                getString(R.string.title_edit_task_dialog, task));
+        taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
+    }
+
+    @Override
+    public void onGradeSaved(boolean isNew) {
+        // String is set to "grade saved" if grade is new, if updating "grade updated."
+        String toastMessage = isNew ? getString(R.string.toast_grade_saved) :
+                getString(R.string.toast_grade_updated);
+
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+        ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
+    }
+
+    @Override
+    public void onTaskSaved(boolean isNew) {
+        // String set to "task saved" if task is new, if updating "task updated."
+        String toastMessage = isNew ? getString(R.string.toast_task_saved) :
+                getString(R.string.toast_task_updated);
+
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+        ((BaseListFragment) mAdapter.getTab(2)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentPagerAdapter {
+
+        List<Fragment> mTabs = new ArrayList<Fragment>();
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -112,12 +170,23 @@ public class DetailCourseActivity extends Activity
 
         @Override
         public Fragment getItem(int position) {
+            Fragment fragment;
             switch (position) {
+                case 0:
+                    fragment = DetailCourseFragment.newInstance(mCourse);
+                    break;
                 case 1:
-                    return ListCourseGradeFragment.newInstance(mCourse);
+                    fragment = ListCourseGradeFragment.newInstance(mCourse);
+                    break;
+                case 2:
+                    fragment = ListCourseTaskFragment.newInstance(mCourse);
+                    break;
                 default:
-                    return new Fragment();
+                    fragment = new Fragment();
             }
+
+            mTabs.add(position, fragment);
+            return fragment;
         }
 
         @Override
@@ -129,13 +198,22 @@ public class DetailCourseActivity extends Activity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.title_fragment_overview);
+                    return getString(R.string.title_fragment_details);
                 case 1:
                     return getString(R.string.title_fragment_list_grades);
                 case 2:
                     return getString(R.string.title_fragment_list_tasks);
                 default:
                     return null;
+            }
+        }
+
+        public Fragment getTab(int position) {
+            Fragment fragment = mTabs.get(position);
+            if (fragment != null) {
+                return fragment;
+            } else {
+                return getItem(position);
             }
         }
     }

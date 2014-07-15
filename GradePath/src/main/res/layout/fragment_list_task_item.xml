@@ -8,16 +8,16 @@
     android:minHeight="48dp"
     android:paddingBottom="4dp"
     android:paddingLeft="16dp"
-    android:paddingRight="8dp"
     android:paddingTop="4dp">
 
     <CheckBox
         android:id="@+id/cb_task_completed"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
+        android:paddingRight="8dp"
         android:textColor="@android:color/primary_text_light" />
 
     <TextView
@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/cb_task_completed"
-        android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
         android:textSize="16sp" />
@@ -38,6 +37,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/tv_task_name"
         android:layout_toLeftOf="@id/cb_task_completed"
+        android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />

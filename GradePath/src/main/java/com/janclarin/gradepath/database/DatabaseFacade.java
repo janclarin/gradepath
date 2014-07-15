@@ -1019,7 +1019,7 @@ public class DatabaseFacade {
      * @return
      */
     public Task getUpcomingTask(long courseId) {
-        List<Task> tasks = getTasksIncomplete(courseId);
+        List<Task> tasks = getIncompleteTasks(courseId);
 
         if (tasks.size() > 0) {
             return tasks.get(0);
@@ -1033,13 +1033,38 @@ public class DatabaseFacade {
      *
      * @param courseId
      */
-    public List<Task> getTasksIncomplete(long courseId) {
+    public List<Task> getIncompleteTasks(long courseId) {
 
         List<Task> tasks = new ArrayList<Task>();
 
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
-                        DatabaseHelper.COLUMN_IS_COMPLETED + " = '" + 0 + "'", null, null, null, null
+                        DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
+        );
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            tasks.add(cursorToTask(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        // Sort the tasks by due date.
+        Collections.sort(tasks);
+
+        return tasks;
+    }
+
+    /**
+     * Returns a list of all complete tasks for a course.
+     */
+    public List<Task> getCompletedTasks(long courseId) {
+
+        List<Task> tasks = new ArrayList<Task>();
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
+                        DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null
         );
 
         cursor.moveToFirst();

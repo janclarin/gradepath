@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -28,12 +29,7 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
     protected List<T> mListItems;
     protected TextView mEmptyTextView;
     protected ListView mListView;
-    protected BaseAdapter mAdapter;
-
-    /**
-     * Initializes the adapter.
-     */
-    abstract protected void initAdapter();
+    protected BaseListAdapter mAdapter;
 
     /**
      * Updates the list view within the fragment.
@@ -168,5 +164,24 @@ public abstract class BaseListFragment<T extends DatabaseItem> extends Fragment 
 
         // Indicate that this fragment has its own menu options.
         setHasOptionsMenu(true);
+    }
+
+    abstract protected class BaseListAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return mListItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mListItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        abstract public View getView(int position, View convertView, ViewGroup parent);
     }
 }

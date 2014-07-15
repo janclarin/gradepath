@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -59,7 +58,8 @@ public class ListCourseFragment extends BaseListFragment<Course> {
         super.onActivityCreated(savedInstanceState);
 
         updateListItems();
-        initAdapter();
+
+        mAdapter = new ListAdapter();
         setUpListView();
 
         // Set on item click listener to display course info.
@@ -70,115 +70,6 @@ public class ListCourseFragment extends BaseListFragment<Course> {
                 if (mListener != null) mListener.onListCourseViewDetails(course);
             }
         });
-
-    }
-
-    @Override
-    protected void initAdapter() {
-        mAdapter = new BaseAdapter() {
-
-            @Override
-            public int getCount() {
-                return mListItems.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mListItems.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                Course course = mListItems.get(position);
-
-                ViewHolder viewHolder;
-
-                if (convertView == null) {
-                    viewHolder = new ViewHolder();
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_course_item, null);
-
-                    viewHolder.vCourseColor = convertView.findViewById(R.id.view_course_color);
-                    viewHolder.tvCourseName = (TextView) convertView.findViewById(R.id.tv_course_name);
-                    viewHolder.tvNextDueDate = (TextView) convertView.findViewById(R.id.tv_next_due_date);
-                    viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_course_show_button_bar);
-                    viewHolder.llButtonBar = (LinearLayout) convertView.findViewById(R.id.ll_button_bar);
-                    viewHolder.btnAddGrade = (Button) convertView.findViewById(R.id.btn_bar_add_grade);
-                    viewHolder.btnAddTask = (Button) convertView.findViewById(R.id.btn_bar_add_task);
-
-                    convertView.setTag(viewHolder);
-                } else {
-                    viewHolder = (ViewHolder) convertView.getTag();
-                }
-
-                Task upcomingTask = mDatabase.getUpcomingTask(course.getId());
-
-                String upcomingTaskText;
-                int urgencyColorId;
-                if (upcomingTask == null) {
-                    upcomingTaskText = mContext.getString(R.string.task_due_date_none);
-
-                    urgencyColorId = R.color.course_urgency_3;
-                } else {
-                    upcomingTaskText = upcomingTask.getName() + " "
-                            + mContext.getString(R.string.bullet) + " "
-                            + upcomingTask.getDueDate(mContext);
-
-                    urgencyColorId = upcomingTask.getUrgencyColor(mContext);
-                }
-
-                viewHolder.vCourseColor.setBackgroundResource(urgencyColorId);
-                viewHolder.tvCourseName.setText(course.getName());
-                viewHolder.tvNextDueDate.setText(upcomingTaskText);
-
-                // Set on click listeners.
-                viewHolder.btnShowButtonBar
-                        .setOnClickListener(new OnShowButtonBarClickListener(viewHolder.llButtonBar));
-                viewHolder.btnAddGrade.setOnClickListener(new OnAddGradeClickListener(course));
-                viewHolder.btnAddTask.setOnClickListener(new OnAddTaskClickListener(course));
-
-                return convertView;
-            }
-
-            /**
-             * View holder class for course item layout.
-             */
-            class ViewHolder {
-                View vCourseColor;
-                TextView tvCourseName;
-                TextView tvNextDueDate;
-                ImageButton btnShowButtonBar;
-                LinearLayout llButtonBar;
-                Button btnAddGrade;
-                Button btnAddTask;
-            }
-
-            /**
-             * Implements OnClickListener for course color button. Notifies listener to open
-             * Course detail activity.
-             */
-            class OnShowButtonBarClickListener implements View.OnClickListener {
-
-                LinearLayout buttonBarLayout;
-
-                public OnShowButtonBarClickListener(LinearLayout buttonBarLayout) {
-                    this.buttonBarLayout = buttonBarLayout;
-                }
-
-                public void onClick(View view) {
-                    if (this.buttonBarLayout.getVisibility() == View.GONE) {
-                        this.buttonBarLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        this.buttonBarLayout.setVisibility(View.GONE);
-                    }
-                }
-            }
-        };
     }
 
     @Override
@@ -285,6 +176,95 @@ public class ListCourseFragment extends BaseListFragment<Course> {
          * Called when the contextual action bar delete button is clicked.
          */
         void onListCourseDelete(Course course);
+    }
+
+    private class ListAdapter extends BaseListAdapter {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            Course course = mListItems.get(position);
+
+            ViewHolder viewHolder;
+
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_course_item, null);
+
+                viewHolder.vCourseColor = convertView.findViewById(R.id.view_course_color);
+                viewHolder.tvCourseName = (TextView) convertView.findViewById(R.id.tv_course_name);
+                viewHolder.tvNextDueDate = (TextView) convertView.findViewById(R.id.tv_next_due_date);
+                viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_course_show_button_bar);
+                viewHolder.llButtonBar = (LinearLayout) convertView.findViewById(R.id.ll_button_bar);
+                viewHolder.btnAddGrade = (Button) convertView.findViewById(R.id.btn_bar_add_grade);
+                viewHolder.btnAddTask = (Button) convertView.findViewById(R.id.btn_bar_add_task);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            Task upcomingTask = mDatabase.getUpcomingTask(course.getId());
+
+            String upcomingTaskText;
+            int urgencyColorId;
+            if (upcomingTask == null) {
+                upcomingTaskText = mContext.getString(R.string.task_due_date_none);
+
+                urgencyColorId = R.color.course_urgency_3;
+            } else {
+                upcomingTaskText = upcomingTask.getName() + " "
+                        + mContext.getString(R.string.bullet) + " "
+                        + upcomingTask.getDueDate(mContext);
+
+                urgencyColorId = upcomingTask.getUrgencyColor(mContext);
+            }
+
+            viewHolder.vCourseColor.setBackgroundResource(urgencyColorId);
+            viewHolder.tvCourseName.setText(course.getName());
+            viewHolder.tvNextDueDate.setText(upcomingTaskText);
+
+            // Set on click listeners.
+            viewHolder.btnShowButtonBar
+                    .setOnClickListener(new OnShowButtonBarClickListener(viewHolder.llButtonBar));
+            viewHolder.btnAddGrade.setOnClickListener(new OnAddGradeClickListener(course));
+            viewHolder.btnAddTask.setOnClickListener(new OnAddTaskClickListener(course));
+
+            return convertView;
+        }
+
+        /**
+         * View holder class for course item layout.
+         */
+        private class ViewHolder {
+            View vCourseColor;
+            TextView tvCourseName;
+            TextView tvNextDueDate;
+            ImageButton btnShowButtonBar;
+            LinearLayout llButtonBar;
+            Button btnAddGrade;
+            Button btnAddTask;
+        }
+
+        /**
+         * Implements OnClickListener for course color button. Notifies listener to open
+         * Course detail activity.
+         */
+        private class OnShowButtonBarClickListener implements View.OnClickListener {
+
+            LinearLayout buttonBarLayout;
+
+            public OnShowButtonBarClickListener(LinearLayout buttonBarLayout) {
+                this.buttonBarLayout = buttonBarLayout;
+            }
+
+            public void onClick(View view) {
+                if (this.buttonBarLayout.getVisibility() == View.GONE) {
+                    this.buttonBarLayout.setVisibility(View.VISIBLE);
+                } else {
+                    this.buttonBarLayout.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     /**

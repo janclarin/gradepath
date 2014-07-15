@@ -10,12 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView android:id="@+id/tv_list_semester_empty"
+    <TextView
+        android:id="@+id/tv_list_semester_empty"
         style="@style/emptyListTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/tv_list_semester_empty"
-        android:visibility="gone" />
+        android:text="@string/tv_list_semester_empty" />
 
 </FrameLayout>

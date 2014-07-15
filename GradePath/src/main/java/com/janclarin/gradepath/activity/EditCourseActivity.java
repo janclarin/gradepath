@@ -377,7 +377,7 @@ public class EditCourseActivity extends Activity {
         viewHolder.etName.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewHolder.gradeComponent.setName(s.toString());
+                viewHolder.gradeComponent.setName(s.toString().trim());
             }
 
             @Override

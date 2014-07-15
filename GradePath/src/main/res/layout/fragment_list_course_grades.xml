@@ -1,36 +1,20 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
-    tools:context=".fragments.CourseFragment">
+    tools:context=".fragments.ListCourseGradeFragment">
 
-    <Button
-        android:id="@+id/btn_add_first_grade"
-        style="?android:borderlessButtonStyle"
+    <ListView
+        android:id="@+id/lv_list_course_grade"
+        style="@style/cardListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
-        android:textColor="@android:color/secondary_text_light_nodisable"
-        android:textSize="24sp"
-        android:visibility="gone" />
+        android:dividerHeight="2dp"
+        android:paddingTop="0dp" />
 
     <TextView
-        android:id="@+id/tv_grades_header"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_course_fragment_grades" />
+        android:id="@+id/tv_list_course_grade_empty"
+        style="@style/emptyListTextView"
+        android:text="@string/tv_list_course_grades_empty" />
 
-    <ExpandableListView
-        android:id="@+id/elv_course_fragment_grades"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:dividerHeight="4dp"
-        android:scrollbarStyle="outsideOverlay" />
-
-</LinearLayout>
+</FrameLayout>

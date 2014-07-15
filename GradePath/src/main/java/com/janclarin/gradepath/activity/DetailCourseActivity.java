@@ -113,11 +113,10 @@ public class DetailCourseActivity extends Activity
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
                 case 1:
-                case 2:
-                default:
                     return ListCourseGradeFragment.newInstance(mCourse);
+                default:
+                    return new Fragment();
             }
         }
 
@@ -130,10 +129,13 @@ public class DetailCourseActivity extends Activity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
+                    return getString(R.string.title_fragment_overview);
                 case 1:
+                    return getString(R.string.title_fragment_list_grades);
                 case 2:
+                    return getString(R.string.title_fragment_list_tasks);
                 default:
-                    return getString(R.string.title_fragment_list_course_grades);
+                    return null;
             }
         }
     }

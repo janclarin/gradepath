@@ -6,7 +6,6 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -56,106 +55,10 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         super.onActivityCreated(savedInstanceState);
 
         updateListItems();
-        initAdapter();
+
+        mAdapter = new ListAdapter();
         setUpListView();
 
-    }
-
-    @Override
-    protected void initAdapter() {
-        mAdapter = new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return mListItems.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mListItems.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public int getViewTypeCount() {
-                return NUM_ITEM_VIEW_TYPES;
-            }
-
-            @Override
-            public int getItemViewType(int position) {
-                return (mListItems.get(position) instanceof Course) ?
-                        ITEM_VIEW_TYPE_COURSE : ITEM_VIEW_TYPE_TASK;
-            }
-
-            @Override
-            public boolean isEnabled(int position) {
-                // Only enable tasks.
-                return getItemViewType(position) == ITEM_VIEW_TYPE_TASK;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                final int type = getItemViewType(position);
-
-                ViewHolder viewHolder;
-
-                if (convertView == null) {
-                    viewHolder = new ViewHolder();
-
-                    if (type == ITEM_VIEW_TYPE_COURSE) {
-                        convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_header_course, null);
-                        viewHolder.tvName = (TextView) convertView;
-                    } else {
-                        convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_task_item, null);
-                        viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
-                        viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
-                        viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);
-                    }
-
-                    convertView.setTag(viewHolder);
-                } else {
-                    viewHolder = (ViewHolder) convertView.getTag();
-                }
-
-                if (type == ITEM_VIEW_TYPE_COURSE) {
-                    viewHolder.tvName.setText(((Course) mListItems.get(position)).getName());
-                } else {
-                    Task task = (Task) mListItems.get(position);
-                    viewHolder.tvName.setText(task.getName());
-                    viewHolder.tvDueDate.setText(task.getDueDate(mContext));
-                    viewHolder.tvDueDate.setTextColor(task.getUrgencyColor(mContext));
-                    viewHolder.cbCompleted.setChecked(task.isCompleted());
-                    viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
-                }
-
-                return convertView;
-            }
-
-            class ViewHolder {
-                TextView tvName;
-                TextView tvDueDate;
-                CheckBox cbCompleted;
-            }
-
-            class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
-
-                private Task task;
-
-                public OnCompletedChangeListener(Task task) {
-                    this.task = task;
-                }
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    task.setCompleted(isChecked);
-                    mDatabase.updateTask(task);
-                }
-            }
-        };
     }
 
     @Override
@@ -167,7 +70,7 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         try {
             mListItems.clear();
         } catch (NullPointerException e) {
-            // Initialize list.yy
+            // Initialize list.
             mListItems = new ArrayList<DatabaseItem>();
         }
 
@@ -224,5 +127,84 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
          * Called when a task is going to be edited.
          */
         public void onListTaskEdit(Task task);
+    }
+
+    private class ListAdapter extends BaseListAdapter {
+        @Override
+        public int getViewTypeCount() {
+            return NUM_ITEM_VIEW_TYPES;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return (mListItems.get(position) instanceof Course) ?
+                    ITEM_VIEW_TYPE_COURSE : ITEM_VIEW_TYPE_TASK;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            // Only enable tasks.
+            return getItemViewType(position) == ITEM_VIEW_TYPE_TASK;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            final int type = getItemViewType(position);
+
+            ViewHolder viewHolder;
+
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+
+                if (type == ITEM_VIEW_TYPE_COURSE) {
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_header, null);
+                    viewHolder.tvName = (TextView) convertView;
+                } else {
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_task_item, null);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
+                    viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
+                    viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);
+                }
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            if (type == ITEM_VIEW_TYPE_COURSE) {
+                viewHolder.tvName.setText(((Course) mListItems.get(position)).getName());
+            } else {
+                Task task = (Task) mListItems.get(position);
+                viewHolder.tvName.setText(task.getName());
+                viewHolder.tvDueDate.setText(task.getDueDate(mContext));
+                viewHolder.tvDueDate.setTextColor(task.getUrgencyColor(mContext));
+                viewHolder.cbCompleted.setChecked(task.isCompleted());
+                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
+            }
+
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView tvName;
+            TextView tvDueDate;
+            CheckBox cbCompleted;
+        }
+
+        private class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
+
+            private Task task;
+
+            public OnCompletedChangeListener(Task task) {
+                this.task = task;
+            }
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                task.setCompleted(isChecked);
+                mDatabase.updateTask(task);
+            }
+        }
     }
 }

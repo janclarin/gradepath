@@ -22,7 +22,7 @@ import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
-import com.janclarin.gradepath.fragment.ListSettingFragment;
+import com.janclarin.gradepath.fragment.SettingFragment;
 import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.NavigationDrawerFragment;
 import com.janclarin.gradepath.fragment.SlidingTabFragment;
@@ -204,7 +204,7 @@ public class MainActivity extends Activity
                 break;
             case SETTINGS:
                 // TODO: Settings fragment.
-                mFragment = ListSettingFragment.newInstance();
+                mFragment = SettingFragment.newInstance();
 
                 // Replace fragment with manage list_course fragment.
                 fragmentTransaction.replace(R.id.container, mFragment);

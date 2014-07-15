@@ -42,7 +42,7 @@ public class MainActivity extends Activity
         ListCourseFragment.FragmentListCourseListener,
         ListGradeFragment.FragmentListGradeListener,
         ListTaskFragment.FragmentListTaskListener,
-        ListCourseGradeFragment.FragmentListCourseGradeCallbacks,
+        ListCourseGradeFragment.FragmentListCourseGradeListener,
         SemesterDialogFragment.DialogSemesterCallbacks,
         GradeDialogFragment.DialogGradeCallbacks,
         TaskDialogFragment.DialogTaskCallbacks {
@@ -88,7 +88,8 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+
+        mTitle = getString(R.string.title_fragment_home);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -183,9 +184,8 @@ public class MainActivity extends Activity
     }
 
     /**
-     * Listener methods
+     * Listener methods.
      */
-
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerFragment.DRAWER_OPTION drawerIndex) {
 
@@ -390,7 +390,7 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onListCourseGradeAddGrade(Course course) {
+    public void onListCourseGradeAdd(Course course) {
         // Show new grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_new_grade_dialog), course);

@@ -2,6 +2,7 @@
 <resources>
     <color name="theme_primary_color">#00B893</color>
     <color name="theme_secondary_color">#009376</color>
+    <color name="actionbar_divider">#d6d6d6</color>
 
     <color name="card_fill">#fff</color>
     <color name="card_shadow">#ccc</color>

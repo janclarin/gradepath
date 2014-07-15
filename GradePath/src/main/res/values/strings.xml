@@ -165,6 +165,7 @@
     <string name="due">due</string>
     <string name="cd_show_semester_options">Show semester options</string>
     <string name="list_semester_set_to_current">Set to current</string>
+    <string name="title_fragment_list_course_grades">Grades</string>
 
 
 </resources>

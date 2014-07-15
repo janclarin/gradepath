@@ -11,6 +11,13 @@
     <style name="CustomActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:background">@color/theme_primary_color</item>
+        <item name="android:backgroundStacked">@android:color/transparent</item>
+
+    </style>
+
+    <!-- ActionBar tabs text style -->
+    <style name="CustomActionBarTabText" parent="android:Widget.Holo.Light.ActionBar.TabText">
+        <item name="android:textColor">@android:color/primary_text_light</item>
     </style>
 
     <!-- Borderless button for empty view for list fragments -->

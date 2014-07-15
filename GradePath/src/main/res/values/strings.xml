@@ -131,7 +131,7 @@
     <string name="course_saved_new">New course saved</string>
     <string name="course_saved_update">Course updated</string>
     <string name="tv_course_grades_current_average">Current average:</string>
-    <string name="task_due_date_two_days">in 2 days</string>
+    <string name="task_due_date_two_days">in two days</string>
     <string name="task_due_date_on">on</string>
     <string name="task_due_date_late">Late</string>
     <string name="task_due_date_today">today</string>
@@ -170,5 +170,8 @@
     <string name="list_task_complete">Completed</string>
     <string name="tv_list_course_task_empty">No tasks for this course</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="was_due">Was due</string>
+    <string name="completed">Completed</string>
+    <string name="days_ago">days ago</string>
 
 </resources>

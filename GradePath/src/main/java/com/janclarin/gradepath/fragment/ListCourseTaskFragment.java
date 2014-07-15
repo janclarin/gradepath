@@ -1,6 +1,7 @@
 package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -62,7 +63,7 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_course_tasks, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_detail_course_list_task, container, false);
 
         mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_task_empty);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_course_task);
@@ -120,7 +121,8 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        for (int i = 0; i < mListItems.size(); i++) {
+        int numItems = mListItems.size();
+        for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Task selectedTask = (Task) mAdapter.getItem(i);
                 mDatabase.deleteTask(selectedTask);
@@ -208,6 +210,10 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
             } else {
                 Task task = (Task) mListItems.get(position);
                 viewHolder.tvName.setText(task.getName());
+                if (task.isCompleted()) {
+                    viewHolder.tvName.setPaintFlags(
+                            viewHolder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
                 viewHolder.tvDueDate.setText(task.getDueDate(mContext));
                 viewHolder.cbCompleted.setChecked(task.isCompleted());
                 viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));

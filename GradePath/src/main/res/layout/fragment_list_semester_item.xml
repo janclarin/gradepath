@@ -41,7 +41,7 @@
         android:layout_toLeftOf="@id/view_semester_item_divider_vertical"
         android:fontFamily="sans-serif-light"
         android:textAllCaps="true"
-        android:textColor="@android:color/tertiary_text_light"
+        android:textColor="@color/theme_primary_color_dark"
         android:textSize="12sp" />
 
     <TextView

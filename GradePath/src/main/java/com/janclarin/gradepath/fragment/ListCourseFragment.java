@@ -103,7 +103,8 @@ public class ListCourseFragment extends BaseListFragment<Course> {
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
-        for (int i = 0; i < mListItems.size(); i++) {
+        int numItems = mListItems.size();
+        for (int i = numItems - 1; i >= 0; i--) {
             if (selectedPositions.get(i, false)) {
                 Course selectedCourse = (Course) mAdapter.getItem(i);
                 if (mListener != null) mListener.onListCourseDelete(selectedCourse);
@@ -210,7 +211,7 @@ public class ListCourseFragment extends BaseListFragment<Course> {
             if (upcomingTask == null) {
                 upcomingTaskText = mContext.getString(R.string.task_due_date_none);
 
-                urgencyColorId = R.color.course_urgency_3;
+                urgencyColorId = R.color.course_urgency_0;
             } else {
                 upcomingTaskText = upcomingTask.getDueDate(mContext) + " "
                         + mContext.getString(R.string.bullet) + " "
@@ -222,6 +223,7 @@ public class ListCourseFragment extends BaseListFragment<Course> {
             viewHolder.vCourseColor.setBackgroundResource(urgencyColorId);
             viewHolder.tvCourseName.setText(course.getName());
             viewHolder.tvNextDueDate.setText(upcomingTaskText);
+            viewHolder.tvNextDueDate.setTextColor(getResources().getColor(urgencyColorId));
 
             // Set on click listeners.
             viewHolder.btnShowButtonBar

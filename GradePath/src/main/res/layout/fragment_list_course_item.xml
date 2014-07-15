@@ -54,7 +54,7 @@
         android:layout_below="@id/tv_course_name"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
-        android:textColor="@android:color/tertiary_text_light"
+        android:textColor="@android:color/darker_gray"
         android:textSize="14sp" />
 
     <View
@@ -87,7 +87,7 @@
             android:focusable="false"
             android:text="@string/btn_fragment_home_add_grade"
             android:textAllCaps="true"
-            android:textColor="@color/theme_secondary_color"
+            android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
 
         <Button
@@ -99,7 +99,7 @@
             android:focusable="false"
             android:text="@string/btn_fragment_home_add_task"
             android:textAllCaps="true"
-            android:textColor="@color/theme_secondary_color"
+            android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
     </LinearLayout>
 

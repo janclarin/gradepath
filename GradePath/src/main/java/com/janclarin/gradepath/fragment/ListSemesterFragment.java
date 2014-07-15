@@ -75,7 +75,8 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        for (int i = 0; i < mListItems.size(); i++) {
+        int numItems = mListItems.size();
+        for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Semester selectedSemester = (Semester) mAdapter.getItem(i);
                 if (mListener != null)

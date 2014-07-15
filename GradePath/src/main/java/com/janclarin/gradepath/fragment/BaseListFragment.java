@@ -43,6 +43,7 @@ abstract public class BaseListFragment<T extends DatabaseItem> extends Fragment 
 
     /**
      * Delete selected items under contextual action bar.
+     * Deletes items starting with right side of the list.
      *
      * @param possibleSelectedPositions
      */

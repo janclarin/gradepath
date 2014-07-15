@@ -5,7 +5,7 @@
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_secondary_color" />
+            <solid android:color="@color/theme_primary_color_dark" />
         </shape>
     </item>
     <item
@@ -15,7 +15,7 @@
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_secondary_color"/>
+            <solid android:color="@color/theme_primary_color_dark"/>
         </shape>
     </item>
 </layer-list>

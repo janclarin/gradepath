@@ -77,28 +77,39 @@ public class Task extends DatabaseItem implements Comparable<Task> {
         Calendar today = Calendar.getInstance();
 
         // Add one because it rounds down.
-        long daysLeftBeforeDue = super.getDayDifference(dueDate, today) + 1;
+        long daysLeftBeforeDue = super.getDayDifference(dueDate, today);
 
-        String due = context.getString(R.string.due) + " ";
+        String due;
 
-        // Late.
-        if (daysLeftBeforeDue == -1) {
-            due = context.getString(R.string.task_due_date_late);
-        } else if (daysLeftBeforeDue == 0) {
-            // Today.
-            due += context.getString(R.string.task_due_date_today);
-        } else if (daysLeftBeforeDue == 1) {
-            // Tomorrow.
-            due += context.getString(R.string.task_due_date_tomorrow);
-        } else if (daysLeftBeforeDue <= 2) {
-            // 2 days.
-            due += context.getString(R.string.task_due_date_two_days);
-        } else if (daysLeftBeforeDue < 7) {
-            // This week.
-            due += context.getString(R.string.task_due_date_on) + " "
-                    + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        // Check if completed.
+        if (isCompleted()) {
+            due = context.getString(R.string.completed);
         } else {
-            due += new SimpleDateFormat("MMMM d").format(dueDate.getTime());
+            due = context.getString(R.string.due) + " ";
+
+            if (daysLeftBeforeDue < 0) {
+                if (daysLeftBeforeDue == -1) {
+                    due += context.getString(R.string.yesterday);
+                } else {
+                    due += Long.toString(Math.abs(daysLeftBeforeDue)) + " "
+                            + context.getString(R.string.days_ago);
+                }
+            } else if (daysLeftBeforeDue == 0) {
+                // Today.
+                due += context.getString(R.string.task_due_date_today);
+            } else if (daysLeftBeforeDue == 1) {
+                // Tomorrow.
+                due += context.getString(R.string.task_due_date_tomorrow);
+            } else if (daysLeftBeforeDue <= 3) {
+                // 2 days.
+                due += context.getString(R.string.task_due_date_two_days);
+            } else if (daysLeftBeforeDue < 7) {
+                // This week.
+                due += context.getString(R.string.task_due_date_on) + " "
+                        + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+            } else {
+                due += new SimpleDateFormat("MMMM d").format(dueDate.getTime());
+            }
         }
 
         return due;
@@ -112,14 +123,14 @@ public class Task extends DatabaseItem implements Comparable<Task> {
     public int getUrgencyColor(Context context) {
         Calendar today = Calendar.getInstance();
 
-        long daysLeftBeforeDue = super.getDayDifference(dueDate, today) + 1;
+        long daysLeftBeforeDue = super.getDayDifference(dueDate, today);
 
-        if (daysLeftBeforeDue < 3) {
-            return R.color.course_urgency_1;
-        } else if (daysLeftBeforeDue < 14) {
+        if (isCompleted() || daysLeftBeforeDue > 14) {
+            return R.color.course_urgency_0;
+        } else if (daysLeftBeforeDue < 2) {
             return R.color.course_urgency_2;
         } else {
-            return R.color.course_urgency_3;
+            return R.color.course_urgency_1;
         }
     }
 

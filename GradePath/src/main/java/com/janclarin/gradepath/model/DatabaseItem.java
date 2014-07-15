@@ -27,12 +27,7 @@ public abstract class DatabaseItem implements Serializable {
             return 0;
         } else {
             long timeDifference = one.getTimeInMillis() - two.getTimeInMillis();
-
-            if (timeDifference < 0) {
-                return -1;
-            } else {
-                return TimeUnit.DAYS.convert(timeDifference, TimeUnit.MILLISECONDS);
-            }
+            return TimeUnit.DAYS.convert(timeDifference, TimeUnit.MILLISECONDS);
         }
     }
 }

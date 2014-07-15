@@ -62,7 +62,7 @@ public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_course_grades, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_detail_course_list_grade, container, false);
 
         mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_grade_empty);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_course_grade);
@@ -115,7 +115,8 @@ public class ListCourseGradeFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        for (int i = 0; i < mListItems.size(); i++) {
+        int numItems = mListItems.size();
+        for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Grade selectedGrade = (Grade) mAdapter.getItem(i);
                 mDatabase.deleteGrade(selectedGrade);

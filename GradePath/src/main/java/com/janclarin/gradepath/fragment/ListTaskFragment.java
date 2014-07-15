@@ -1,6 +1,7 @@
 package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -94,7 +95,8 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        for (int i = 0; i < mListItems.size(); i++) {
+        int numItems = mListItems.size();
+        for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Task selectedTask = (Task) mAdapter.getItem(i);
                 mDatabase.deleteTask(selectedTask);
@@ -177,10 +179,15 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
             } else {
                 Task task = (Task) mListItems.get(position);
                 viewHolder.tvName.setText(task.getName());
+                if (task.isCompleted()) {
+                    viewHolder.tvName.setPaintFlags(
+                            viewHolder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
                 viewHolder.tvDueDate.setText(task.getDueDate(mContext));
-                viewHolder.tvDueDate.setTextColor(task.getUrgencyColor(mContext));
+                viewHolder.tvDueDate.setTextColor(getResources().getColor(task.getUrgencyColor(mContext)));
                 viewHolder.cbCompleted.setChecked(task.isCompleted());
-                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
+                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task,
+                        viewHolder.tvName));
             }
 
             return convertView;
@@ -195,15 +202,19 @@ public class ListTaskFragment extends BaseListFragment<DatabaseItem> {
         private class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
             private Task task;
+            private TextView textView;
 
-            public OnCompletedChangeListener(Task task) {
+            public OnCompletedChangeListener(Task task, TextView textView) {
                 this.task = task;
+                this.textView = textView;
             }
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 task.setCompleted(isChecked);
                 mDatabase.updateTask(task);
+                textView.setPaintFlags(isChecked ? textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                        : textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
         }
     }

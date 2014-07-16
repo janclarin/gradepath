@@ -186,13 +186,13 @@ public final class R {
         public static final int fragment_list_header_semester=0x7f030011;
         public static final int fragment_list_semester=0x7f030012;
         public static final int fragment_list_semester_item=0x7f030013;
-        public static final int fragment_list_settings=0x7f030014;
-        public static final int fragment_list_task=0x7f030015;
-        public static final int fragment_list_task_item=0x7f030016;
-        public static final int fragment_main=0x7f030017;
-        public static final int fragment_navigation_drawer=0x7f030018;
-        public static final int fragment_navigation_drawer_header=0x7f030019;
-        public static final int fragment_navigation_drawer_item=0x7f03001a;
+        public static final int fragment_list_task=0x7f030014;
+        public static final int fragment_list_task_item=0x7f030015;
+        public static final int fragment_main=0x7f030016;
+        public static final int fragment_navigation_drawer=0x7f030017;
+        public static final int fragment_navigation_drawer_header=0x7f030018;
+        public static final int fragment_navigation_drawer_item=0x7f030019;
+        public static final int fragment_settings=0x7f03001a;
         public static final int fragment_sliding_tabs=0x7f03001b;
     }
     public static final class menu {

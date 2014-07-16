@@ -52,9 +52,17 @@ public class MainActivity extends BaseActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     /**
+     * Sliding tab fragment.
+     */
+    private SlidingTabFragment mSlidingTabFragment;
+    /**
+     * Settings fragment.
+     */
+    private SettingsFragment mSettingsFragment;
+    /**
      * Keeps track of current fragment.
      */
-    private Fragment mFragment;
+    private Fragment mCurrentFragment;
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -135,28 +143,28 @@ public class MainActivity extends BaseActivity
      * Refresh semester list.
      */
     private void refreshListSemester() {
-        ((SlidingTabFragment) mFragment).updateSemesterList();
+        ((SlidingTabFragment) mCurrentFragment).updateSemesterList();
     }
 
     /**
      * Refresh course list.
      */
     private void refreshListCourse() {
-        ((SlidingTabFragment) mFragment).updateCourseList();
+        ((SlidingTabFragment) mCurrentFragment).updateCourseList();
     }
 
     /**
      * Refresh grade list.
      */
     private void refreshListGrade() {
-        ((SlidingTabFragment) mFragment).updateGradeList();
+        ((SlidingTabFragment) mCurrentFragment).updateGradeList();
     }
 
     /**
      * Refresh task list.
      */
     private void refreshListTask() {
-        ((SlidingTabFragment) mFragment).updateTaskList();
+        ((SlidingTabFragment) mCurrentFragment).updateTaskList();
     }
 
     /**
@@ -173,32 +181,35 @@ public class MainActivity extends BaseActivity
 
         switch (drawerIndex) {
             case HOME:
-                if (mFragment instanceof SlidingTabFragment) {
+                if (mCurrentFragment instanceof SlidingTabFragment) {
                     return;
-                } else if (mFragment != null) {
-                    fragmentTransaction.remove(mFragment);
+                } else if (mCurrentFragment != null) {
+                    // There is a current fragment that isn't a sliding tab fragment.
+                    fragmentTransaction.remove(mCurrentFragment);
+                    mCurrentFragment = mSlidingTabFragment;
+                    fragmentTransaction.show(mCurrentFragment);
                 } else {
-
-                    mFragment = SlidingTabFragment.newInstance();
+                    // First time opening sliding tab fragment.
+                    mCurrentFragment = mSlidingTabFragment = SlidingTabFragment.newInstance();
                     mTitle = getString(R.string.title_fragment_home);
 
                     // Replace fragment with manage list_course fragment.
-                    fragmentTransaction.replace(R.id.container, mFragment);
+                    fragmentTransaction.replace(R.id.container, mCurrentFragment);
                 }
-
                 break;
             case SETTINGS:
-                if (mFragment instanceof SettingsFragment) {
+                if (mCurrentFragment instanceof SettingsFragment) {
                     return;
-                } else if (mFragment instanceof SlidingTabFragment) {
+                } else if (mCurrentFragment != null) {
                     // Hide previous instance of SlidingTabFragment.
-                    fragmentTransaction.hide(mFragment);
+                    fragmentTransaction.hide(mCurrentFragment);
                 }
 
-                mFragment = SettingsFragment.newInstance();
+                mCurrentFragment = mSettingsFragment = SettingsFragment.newInstance();
                 mTitle = getString(R.string.title_fragment_settings);
 
-                fragmentTransaction.add(mFragment, "settings_fragment");
+                fragmentTransaction.add(R.id.container, mCurrentFragment);
+                fragmentTransaction.show(mCurrentFragment);
                 break;
         }
 

@@ -20,15 +20,18 @@ public class SlidingTabFragment extends Fragment {
 
     private static final String LOG_TAG = SlidingTabFragment.class.getSimpleName();
 
+    private static final String STATE_SELECTED_POSITION = "selected_sliding_tab_position";
+
     private Context mContext;
     private FragmentSlidingTabCallbacks mListener;
 
-    private ViewPager mViewPager;
-    private ImageButton mAddButton;
-    private SlidingTabLayout mSlidingTabLayout;
 
     private TabPagerAdapter mAdapter;
-    private int mCurrentPage;
+    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPager mViewPager;
+    private ImageButton mAddButton;
+
+    private int mCurrentSelectedPosition = 1;
 
     public SlidingTabFragment() {
     }
@@ -42,6 +45,10 @@ public class SlidingTabFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+
+        if (savedInstanceState != null) {
+            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+        }
     }
 
     @Override
@@ -52,13 +59,6 @@ public class SlidingTabFragment extends Fragment {
         mViewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         mAddButton = (ImageButton) rootView.findViewById(R.id.btn_sliding_tabs_add);
         mSlidingTabLayout = (SlidingTabLayout) rootView.findViewById(R.id.sliding_tabs);
-
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +102,40 @@ public class SlidingTabFragment extends Fragment {
         // Get the ViewPager and set its PagerAdapter so that it can display items.
         mAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(mCurrentSelectedPosition);
 
         // Set SlidingTabLayout's ViewPager.
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (FragmentSlidingTabCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement FragmentSlidingTabCallbacks");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * Save position.
+     *
+     * @param outState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
     /**
@@ -150,23 +180,6 @@ public class SlidingTabFragment extends Fragment {
         } catch (NullPointerException e) {
             mAdapter.getItem(3);
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (FragmentSlidingTabCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement FragmentSlidingTabCallbacks");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public interface FragmentSlidingTabCallbacks {

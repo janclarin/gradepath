@@ -14,14 +14,9 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Grade;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
-
-    private static final int ITEM_VIEW_TYPE_COURSE = 0;
-    private static final int ITEM_VIEW_TYPE_GRADE = 1;
-    private static final int NUM_ITEM_VIEW_TYPES = 2;
+public class ListGradeFragment extends BaseListFragment {
 
     private FragmentListGradeListener mListener;
 
@@ -61,15 +56,10 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     public void updateListItems() {
+        clearListItems();
+
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
-
-        // Reset list items and populate the list.
-        try {
-            mListItems.clear();
-        } catch (NullPointerException e) {
-            mListItems = new ArrayList<DatabaseItem>();
-        }
 
         for (Course course : courses) {
             List<Grade> grades = mDatabase.getGrades(course.getId());
@@ -79,7 +69,8 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
                 mListItems.addAll(grades);
             }
         }
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+
+        notifyAdapter();
 
         // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
@@ -123,25 +114,15 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
 
     private class ListAdapter extends BaseListAdapter {
         @Override
-        public int getViewTypeCount() {
-            return NUM_ITEM_VIEW_TYPES;
-        }
-
-        @Override
         public int getItemViewType(int position) {
             return (mListItems.get(position) instanceof Course) ?
-                    ITEM_VIEW_TYPE_COURSE : ITEM_VIEW_TYPE_GRADE;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            // Only enable grades.
-            return getItemViewType(position) == ITEM_VIEW_TYPE_GRADE;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            final DatabaseItem listItem = mListItems.get(position);
             final int type = getItemViewType(position);
 
             ViewHolder viewHolder;
@@ -149,11 +130,13 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                if (type == ITEM_VIEW_TYPE_COURSE) {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_header, null);
+                if (type == ITEM_VIEW_TYPE_HEADER) {
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_header, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_grade_item, null);
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_grade_item, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
@@ -164,15 +147,15 @@ public class ListGradeFragment extends BaseListFragment<DatabaseItem> {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if (type == ITEM_VIEW_TYPE_COURSE) {
-                viewHolder.tvName.setText(((Course) mListItems.get(position)).getName());
+            if (type == ITEM_VIEW_TYPE_HEADER) {
+                viewHolder.tvName.setText(((Course) listItem).getName());
             } else {
-                Grade grade = (Grade) mListItems.get(position);
+                Grade grade = (Grade) listItem;
                 viewHolder.tvName.setText(grade.getName());
                 viewHolder.tvSubtitle.setText(
-                        mDatabase.getGradeComponent(grade.getComponentId()).getName() + " "
+                        grade.getAddDate(mContext) + " "
                                 + getString(R.string.bullet) + " "
-                                + grade.getAddDate(mContext)
+                                + mDatabase.getGradeComponent(grade.getComponentId()).getName()
                 );
                 viewHolder.tvGrade.setText(grade.getGradePercentage());
             }

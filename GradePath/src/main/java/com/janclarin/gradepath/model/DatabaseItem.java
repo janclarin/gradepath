@@ -27,7 +27,23 @@ public abstract class DatabaseItem implements Serializable {
             return 0;
         } else {
             long timeDifference = one.getTimeInMillis() - two.getTimeInMillis();
-            return TimeUnit.DAYS.convert(timeDifference, TimeUnit.MILLISECONDS);
+            long dayDifference = TimeUnit.DAYS.convert(timeDifference, TimeUnit.MILLISECONDS);
+
+            // Determine if the day is actually the same day, yesterday or tomorrow since
+            // TimeUnit.DAYS.convert rounds the day difference.
+            // 0 indicates today, -1 indicates yesterday, 1 indicates tomorrow.
+            if (dayDifference == 0) {
+                int dateCheck = one.compareTo(two);
+                if (dateCheck == -1) {
+                    return -1;
+                } else if (dateCheck == 1) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return dayDifference;
+            }
         }
     }
 }

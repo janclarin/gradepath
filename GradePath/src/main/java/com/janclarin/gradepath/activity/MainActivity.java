@@ -21,7 +21,7 @@ import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.NavigationDrawerFragment;
-import com.janclarin.gradepath.fragment.SettingFragment;
+import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.fragment.SlidingTabFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
@@ -175,24 +175,33 @@ public class MainActivity extends BaseActivity
             case HOME:
                 if (mFragment instanceof SlidingTabFragment) {
                     return;
+                } else if (mFragment != null) {
+                    fragmentTransaction.remove(mFragment);
+                } else {
+
+                    mFragment = SlidingTabFragment.newInstance();
+                    mTitle = getString(R.string.title_fragment_home);
+
+                    // Replace fragment with manage list_course fragment.
+                    fragmentTransaction.replace(R.id.container, mFragment);
                 }
-                mFragment = SlidingTabFragment.newInstance();
-                mTitle = getString(R.string.title_fragment_home);
+
                 break;
             case SETTINGS:
-                if (mFragment instanceof SettingFragment) {
+                if (mFragment instanceof SettingsFragment) {
                     return;
+                } else if (mFragment instanceof SlidingTabFragment) {
+                    // Hide previous instance of SlidingTabFragment.
+                    fragmentTransaction.hide(mFragment);
                 }
-                mFragment = SettingFragment.newInstance();
+
+                mFragment = SettingsFragment.newInstance();
                 mTitle = getString(R.string.title_fragment_settings);
+
+                fragmentTransaction.add(mFragment, "settings_fragment");
                 break;
         }
 
-        // Replace fragment with manage list_course fragment.
-        fragmentTransaction.replace(R.id.container, mFragment);
-
-        // Add fragment to back stack.
-        fragmentTransaction.addToBackStack(null);
 
         // Commit the transaction.
         fragmentTransaction.commit();

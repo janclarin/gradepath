@@ -19,14 +19,19 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.DatabaseItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Popup Menu for items
-abstract public class BaseListFragment<T extends DatabaseItem> extends Fragment {
+abstract public class BaseListFragment extends Fragment {
+
+    protected static final int ITEM_VIEW_TYPE_HEADER = 0;
+    protected static final int ITEM_VIEW_TYPE_DATABASE_ITEM = 1;
+    protected static final int NUM_ITEM_VIEW_TYPES = 2;
 
     protected Context mContext;
     protected DatabaseFacade mDatabase;
-    protected List<T> mListItems;
+    protected List<DatabaseItem> mListItems;
     protected TextView mEmptyTextView;
     protected ListView mListView;
     protected BaseListAdapter mAdapter;
@@ -48,6 +53,24 @@ abstract public class BaseListFragment<T extends DatabaseItem> extends Fragment 
      * @param possibleSelectedPositions
      */
     abstract protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions);
+
+    /**
+     * Clear items from list.
+     */
+    protected void clearListItems() {
+        try {
+            mListItems.clear();
+        } catch (NullPointerException e) {
+            mListItems = new ArrayList<DatabaseItem>();
+        }
+    }
+
+    /**
+     * Notify adapter of database set changed.
+     */
+    protected void notifyAdapter() {
+        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+    }
 
     /**
      * Sets up the list view.
@@ -183,6 +206,35 @@ abstract public class BaseListFragment<T extends DatabaseItem> extends Fragment 
             return position;
         }
 
+        @Override
+        public int getViewTypeCount() {
+            return NUM_ITEM_VIEW_TYPES;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return getItemViewType(position) == ITEM_VIEW_TYPE_DATABASE_ITEM;
+        }
+
+        @Override
+        abstract public int getItemViewType(int position);
+
+        @Override
         abstract public View getView(int position, View convertView, ViewGroup parent);
+    }
+
+    /**
+     * Header for tasks.
+     */
+    protected class Header extends DatabaseItem {
+        private final String name;
+
+        public Header(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

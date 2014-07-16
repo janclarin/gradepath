@@ -11,10 +11,9 @@
         android:layout_width="4dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="0.5dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_blue_dark"
         android:focusable="false" />
 
     <ImageButton
@@ -62,17 +61,15 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/view_course_color"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="0.6dp"
-        android:layout_marginRight="0.6dp"
         android:background="?android:dividerHorizontal"
-        android:focusable="false" />
+        android:focusable="false"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_button_bar"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_below="@id/view_course_item_divider_horizontal"
         android:focusable="false"
         android:orientation="horizontal"

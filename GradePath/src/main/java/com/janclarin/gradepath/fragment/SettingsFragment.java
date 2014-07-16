@@ -12,21 +12,21 @@ import com.janclarin.gradepath.R;
 /**
  * Settings fragment to control settings.
  */
-public class SettingFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment {
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * @return A new instance of fragment SettingsFragment.
      */
-    public static SettingFragment newInstance() {
-        SettingFragment fragment = new SettingFragment();
+    public static SettingsFragment newInstance() {
+        SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public SettingFragment() {
+    public SettingsFragment() {
         // Required empty public constructor.
     }
 

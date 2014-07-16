@@ -316,7 +316,7 @@ public class EditCourseActivity extends BaseActivity {
 
         // Inflate first grade component.
         viewHolder.layout = (RelativeLayout) LayoutInflater.from(this)
-                .inflate(R.layout.activity_edit_course_component, null);
+                .inflate(R.layout.activity_edit_course_component, mComponentList, false);
 
         // Initialize grade component and views.
         viewHolder.gradeComponent = gradeComponent;

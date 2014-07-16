@@ -8,9 +8,7 @@
         android:id="@+id/lv_list_grade"
         style="@style/cardListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="2dp"
-        android:paddingTop="0dp" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/tv_list_grade_empty"

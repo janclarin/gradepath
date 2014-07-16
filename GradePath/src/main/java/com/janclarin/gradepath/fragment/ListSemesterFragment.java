@@ -15,12 +15,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Semester;
+
+import java.util.List;
 
 /**
  * Fragment with list of list_course that allows for editing and sets option for a new course.
  */
-public class ListSemesterFragment extends BaseListFragment<Semester>
+public class ListSemesterFragment extends BaseListFragment
         implements PopupMenu.OnMenuItemClickListener {
 
     private FragmentListSemesterListener mListener;
@@ -51,7 +54,6 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
         super.onActivityCreated(savedInstanceState);
 
         updateListItems();
-
         mAdapter = new ListAdapter();
         setUpListView();
 
@@ -60,9 +62,27 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
 
     @Override
     public void updateListItems() {
-        // List of semesters.
-        mListItems = mDatabase.getSemesters();
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+        clearListItems();
+
+        List<Semester> semesters = mDatabase.getSemesters();
+        Semester currentSemester = mDatabase.getCurrentSemester();
+
+        // Add current semester header and semester into list if they exist.
+        if (currentSemester != null) {
+            mListItems.add(new Header(getString(R.string.semester_current)));
+            mListItems.add(currentSemester);
+
+            // Remove current semester from list of all semesters.
+            semesters.remove(currentSemester);
+        }
+
+        // Add all other semesters under "Past" header.
+        if (semesters.size() > 0) {
+            mListItems.add(new Header(getString(R.string.semester_past)));
+            mListItems.addAll(semesters);
+        }
+
+        notifyAdapter();
 
         showEmptyStateView(mListItems.isEmpty());
     }
@@ -79,8 +99,10 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
         for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Semester selectedSemester = (Semester) mAdapter.getItem(i);
-                if (mListener != null)
-                    mListItems.remove(selectedSemester);
+                if (mListener != null) {
+                    mListener.onListSemesterDelete(selectedSemester);
+                }
+                mListItems.remove(selectedSemester);
             }
         }
         mAdapter.notifyDataSetChanged();
@@ -153,63 +175,76 @@ public class ListSemesterFragment extends BaseListFragment<Semester>
 
     private class ListAdapter extends BaseListAdapter {
         @Override
+        public int getItemViewType(int position) {
+            return (mListItems.get(position) instanceof Header) ?
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            Semester semester = mListItems.get(position);
-
+            final DatabaseItem listItem = mListItems.get(position);
+            final int type = getItemViewType(position);
             final ViewHolder viewHolder;
 
             if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_semester_item, null);
-
-                viewHolder.tvSemesterName = (TextView) convertView.findViewById(R.id.tv_semester_name);
-//                    viewHolder.tvSemesterLabel = (TextView) convertView.findViewById(R.id.tv_semester_label);
-                viewHolder.tvInformation =
-                        (TextView) convertView.findViewById(R.id.tv_semester_information);
-                viewHolder.tvInformationLabel =
-                        (TextView) convertView.findViewById(R.id.tv_semester_information_label);
-                viewHolder.btnSemesterOptions =
-                        (ImageButton) convertView.findViewById(R.id.btn_semester_options);
+                if (type == ITEM_VIEW_TYPE_HEADER) {
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_header_semester, parent, false);
+                    viewHolder.tvName = (TextView) convertView;
+                } else {
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_semester_item, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_semester_name);
+                    viewHolder.tvInformation =
+                            (TextView) convertView.findViewById(R.id.tv_semester_information);
+                    viewHolder.tvInformationLabel =
+                            (TextView) convertView.findViewById(R.id.tv_semester_information_label);
+                    viewHolder.btnSemesterOptions =
+                            (ImageButton) convertView.findViewById(R.id.btn_semester_options);
+                }
 
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.tvSemesterName.setText(semester.toString());
-
-            // Set semester label to current or completed based on semester value.
-            if (semester.isCurrent()) {
-//                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_current));
-                viewHolder.tvInformation.setText(semester.getDaysLeft());
-                viewHolder.tvInformationLabel.setText(mContext.getString(R.string.semester_days_left));
+            if (type == ITEM_VIEW_TYPE_HEADER) {
+                viewHolder.tvName.setText(((Header) listItem).getName());
             } else {
-                double gpa = semester.getGpa();
-                // Otherwise set label to completed and information to gpa.
-//                    viewHolder.tvSemesterLabel.setText(mContext.getString(R.string.semester_past));
+                Semester semester = (Semester) listItem;
+                viewHolder.tvName.setText(semester.toString());
 
-                // Set gpa if it exists.
-                viewHolder.tvInformation.setText(gpa > -1 ? Double.toString(semester.getGpa()) :
-                                mContext.getString(R.string.tv_not_set)
-                );
-                viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
-            }
+                // Set semester label to current or completed based on semester value.
+                if (semester.isCurrent()) {
+                    viewHolder.tvInformation.setText(semester.getDaysLeft());
+                    viewHolder.tvInformationLabel.setText(mContext.getString(R.string.semester_days_left));
+                } else {
+                    // Otherwise set label to completed and information to gpa.
+                    double gpa = semester.getGpa();
 
-            viewHolder.btnSemesterOptions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showPopupMenu(viewHolder.btnSemesterOptions);
+                    // Set gpa if it exists.
+                    viewHolder.tvInformation.setText(gpa > -1 ? Double.toString(semester.getGpa()) :
+                                    mContext.getString(R.string.tv_not_set)
+                    );
+                    viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
                 }
-            });
+
+                viewHolder.btnSemesterOptions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopupMenu(viewHolder.btnSemesterOptions);
+                    }
+                });
+            }
 
             return convertView;
         }
 
         private class ViewHolder {
-            TextView tvSemesterName;
-            TextView tvSemesterLabel;
+            TextView tvName;
             TextView tvInformation;
             TextView tvInformationLabel;
             ImageButton btnSemesterOptions;

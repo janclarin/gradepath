@@ -76,10 +76,9 @@
     <style name="cardListView">
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">72dp</item>
         <item name="android:divider">@null</item>
-        <item name="android:dividerHeight">8dp</item>
+        <item name="android:dividerHeight">0dp</item>
         <item name="android:clipToPadding">false</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
         <item name="android:drawSelectorOnTop">true</item>
@@ -87,7 +86,6 @@
 
     <style name="cardView">
         <item name="android:background">@drawable/bg_card</item>
-        <item name="android:paddingBottom">2dp</item>
     </style>
 
 </resources>

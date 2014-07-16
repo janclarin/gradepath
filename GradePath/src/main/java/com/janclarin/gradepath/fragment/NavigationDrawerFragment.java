@@ -92,20 +92,8 @@ public class NavigationDrawerFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
-
         });
 
-        updateList();
-        mAdapter = new ListAdapter();
-        mListView.setAdapter(mAdapter);
-
-        return mListView;
-    }
-
-    /**
-     * Gets list of drawer items and initializes list view.
-     */
-    protected void updateList() {
         // List of navigation drawer items.
         mDrawerItems = new ArrayList<DrawerItem>();
 
@@ -114,6 +102,11 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerItems.add(
                     new DrawerItem(getString(drawerOption.getTitleId()), drawerOption.getIconId()));
         }
+
+        mAdapter = new ListAdapter();
+        mListView.setAdapter(mAdapter);
+
+        return mListView;
     }
 
     public boolean isDrawerOpen() {

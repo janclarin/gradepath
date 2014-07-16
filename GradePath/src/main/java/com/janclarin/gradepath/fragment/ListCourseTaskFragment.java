@@ -21,14 +21,9 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
-
-    private static final int ITEM_VIEW_TYPE_HEADER = 0;
-    private static final int ITEM_VIEW_TYPE_TASK = 1;
-    private static final int NUM_ITEM_VIEW_TYPES = 2;
+public class ListCourseTaskFragment extends BaseListFragment {
 
     private FragmentListCourseTaskListener mListener;
 
@@ -84,16 +79,11 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
 
     @Override
     public void updateListItems() {
+        clearListItems();
+
         long courseId = mCourse.getId();
         List<Task> incompleteTasks = mDatabase.getIncompleteTasks(courseId);
         List<Task> completedTasks = mDatabase.getCompletedTasks(courseId);
-
-        // Reset list items and populate the list.
-        try {
-            mListItems.clear();
-        } catch (NullPointerException e) {
-            mListItems = new ArrayList<DatabaseItem>();
-        }
 
         // Add incomplete task header and tasks.
         if (incompleteTasks.size() > 0) {
@@ -107,7 +97,7 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
             mListItems.addAll(completedTasks);
         }
 
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+        notifyAdapter();
 
         // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
@@ -164,25 +154,15 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
 
     private class ListAdapter extends BaseListAdapter {
         @Override
-        public int getViewTypeCount() {
-            return NUM_ITEM_VIEW_TYPES;
-        }
-
-        @Override
         public int getItemViewType(int position) {
             return (mListItems.get(position) instanceof Header) ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_TASK;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            // Only enable grades.
-            return getItemViewType(position) == ITEM_VIEW_TYPE_TASK;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            final DatabaseItem listItem = mListItems.get(position);
             final int type = getItemViewType(position);
 
             ViewHolder viewHolder;
@@ -191,10 +171,12 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
                 viewHolder = new ViewHolder();
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_header, null);
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_header, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
-                    convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_list_task_item, null);
+                    convertView = LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_task_item, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
                     viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
                     viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);
@@ -206,9 +188,9 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Header) mListItems.get(position)).getName());
+                viewHolder.tvName.setText(((Header) listItem).getName());
             } else {
-                Task task = (Task) mListItems.get(position);
+                Task task = (Task) listItem;
                 viewHolder.tvName.setText(task.getName());
                 if (task.isCompleted()) {
                     viewHolder.tvName.setPaintFlags(
@@ -258,21 +240,5 @@ public class ListCourseTaskFragment extends BaseListFragment<DatabaseItem> {
          * Called when a task is going to be updated.
          */
         public void onListCourseTaskEdit(Task task);
-    }
-
-    /**
-     * Header for tasks.
-     */
-    private class Header extends DatabaseItem {
-        private final String name;
-
-        public Header(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
     }
 }

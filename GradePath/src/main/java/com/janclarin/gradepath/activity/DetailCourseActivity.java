@@ -15,7 +15,6 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.TaskDialogFragment;
 import com.janclarin.gradepath.fragment.BaseListFragment;
-import com.janclarin.gradepath.fragment.DetailCourseFragment;
 import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
 import com.janclarin.gradepath.fragment.ListCourseTaskFragment;
 import com.janclarin.gradepath.model.Course;
@@ -32,7 +31,7 @@ public class DetailCourseActivity extends BaseActivity
         TaskDialogFragment.DialogTaskCallbacks {
 
     private static final String LOG_TAG = DetailCourseActivity.class.getSimpleName();
-    private static final int NUM_TABS = 3;
+    private static final int NUM_TABS = 2;
 
     private TabPagerAdapter mAdapter;
     private ViewPager mViewPager;
@@ -75,12 +74,10 @@ public class DetailCourseActivity extends BaseActivity
 
             @Override
             public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
             }
 
             @Override
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
             }
         };
 
@@ -92,7 +89,6 @@ public class DetailCourseActivity extends BaseActivity
             );
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,12 +169,9 @@ public class DetailCourseActivity extends BaseActivity
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment = DetailCourseFragment.newInstance(mCourse);
-                    break;
-                case 1:
                     fragment = ListCourseGradeFragment.newInstance(mCourse);
                     break;
-                case 2:
+                case 1:
                     fragment = ListCourseTaskFragment.newInstance(mCourse);
                     break;
                 default:
@@ -198,10 +191,8 @@ public class DetailCourseActivity extends BaseActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.title_fragment_details);
-                case 1:
                     return getString(R.string.title_fragment_list_grades);
-                case 2:
+                case 1:
                     return getString(R.string.title_fragment_list_tasks);
                 default:
                     return null;

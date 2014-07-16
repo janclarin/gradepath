@@ -52,10 +52,10 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private List<DrawerItem> mDrawerItems;
-    private ListView mListView;
-    private BaseAdapter mAdapter;
     private Context mContext;
+    private List<DrawerItem> mDrawerItems;
+    private BaseAdapter mAdapter;
+    private ListView mListView;
 
     public NavigationDrawerFragment() {
     }
@@ -68,16 +68,15 @@ public class NavigationDrawerFragment extends Fragment {
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        // Set to true to prevent navigation drawer from showing up constantly.
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, true);
+        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            // Select previous item.
+            selectItem(mCurrentSelectedPosition);
+        } else {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
-
-        // Select previous item.
-        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -91,75 +90,16 @@ public class NavigationDrawerFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCurrentSelectedPosition = position;
                 selectItem(position);
             }
 
         });
 
         updateList();
-        initAdapter();
+        mAdapter = new ListAdapter();
         mListView.setAdapter(mAdapter);
 
         return mListView;
-    }
-
-    protected void initAdapter() {
-        mAdapter = new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return mDrawerItems.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mDrawerItems.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                // Selected item.
-                DrawerItem selectedItem = (DrawerItem) getItem(position);
-
-                // View holder.
-                ViewHolder viewHolder;
-
-                // Inflate item view if it doesn't exist already depending on item type.
-                if (convertView == null) {
-                    viewHolder = new ViewHolder();
-                    convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_navigation_drawer_item, parent, false);
-
-                    viewHolder.tvSectionName = (TextView) convertView.findViewById(R.id.tv_drawer_list_item);
-
-                    convertView.setTag(viewHolder);
-                } else {
-                    viewHolder = (ViewHolder) convertView.getTag();
-                }
-
-                // Set text view to title.
-                viewHolder.tvSectionName.setText(selectedItem.getTitle());
-
-                // If item has an icon, apply it to text view. Remove default padding left.
-                int iconId = selectedItem.getIcon();
-                if (iconId != 0) {
-                    viewHolder.tvSectionName.setCompoundDrawablePadding(8);
-                    viewHolder.tvSectionName.setPadding(0, 0, 0, 0);
-                    viewHolder.tvSectionName.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
-                }
-
-                return convertView;
-            }
-
-            class ViewHolder {
-                TextView tvSectionName;
-            }
-        };
     }
 
     /**
@@ -224,6 +164,9 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
+                // Change title to app title and default navigation.
+                showGlobalContextActionBar();
+
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -268,6 +211,7 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
+
         if (mListener != null) {
             mListener.onNavigationDrawerItemSelected(DRAWER_OPTION.values()[position]);
         }
@@ -335,6 +279,65 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
+    }
+
+    /**
+     * List adapter for drawer.
+     */
+    private class ListAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return mDrawerItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mDrawerItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Selected item.
+            DrawerItem selectedItem = (DrawerItem) getItem(position);
+
+            // View holder.
+            ViewHolder viewHolder;
+
+            // Inflate item view if it doesn't exist already depending on item type.
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.fragment_navigation_drawer_item, parent, false);
+
+                viewHolder.tvSectionName = (TextView) convertView.findViewById(R.id.tv_drawer_list_item);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            // Set text view to title.
+            viewHolder.tvSectionName.setText(selectedItem.getTitle());
+
+            // If item has an icon, apply it to text view. Remove default padding left.
+            int iconId = selectedItem.getIcon();
+            if (iconId != 0) {
+                viewHolder.tvSectionName.setCompoundDrawablePadding(8);
+                viewHolder.tvSectionName.setPadding(0, 0, 0, 0);
+                viewHolder.tvSectionName.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
+            }
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView tvSectionName;
+        }
     }
 
     /**

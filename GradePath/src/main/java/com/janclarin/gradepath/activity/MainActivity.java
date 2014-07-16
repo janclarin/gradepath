@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.dialog.TaskDialogFragment;
@@ -53,22 +52,18 @@ public class MainActivity extends BaseActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-    /**
      * Keeps track of current fragment.
      */
     private Fragment mFragment;
-
     /**
-     * Sliding tab fragment.
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private SlidingTabFragment mSlidingTabFragment;
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -105,34 +100,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * Refresh semester list.
-     */
-    private void refreshListSemester() {
-        mSlidingTabFragment.updateSemesterList();
-    }
-
-    /**
-     * Refresh course list.
-     */
-    private void refreshListCourse() {
-        mSlidingTabFragment.updateCourseList();
-    }
-
-    /**
-     * Refresh grade list.
-     */
-    private void refreshListGrade() {
-        mSlidingTabFragment.updateGradeList();
-    }
-
-    /**
-     * Refresh task list.
-     */
-    private void refreshListTask() {
-        mSlidingTabFragment.updateTaskList();
-    }
-
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -165,7 +132,38 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * Listener methods.
+     * Refresh semester list.
+     */
+    private void refreshListSemester() {
+        ((SlidingTabFragment) mFragment).updateSemesterList();
+    }
+
+    /**
+     * Refresh course list.
+     */
+    private void refreshListCourse() {
+        ((SlidingTabFragment) mFragment).updateCourseList();
+    }
+
+    /**
+     * Refresh grade list.
+     */
+    private void refreshListGrade() {
+        ((SlidingTabFragment) mFragment).updateGradeList();
+    }
+
+    /**
+     * Refresh task list.
+     */
+    private void refreshListTask() {
+        ((SlidingTabFragment) mFragment).updateTaskList();
+    }
+
+    /**
+     * Opens fragments based on navigation drawer selections.
+     * Only opens them if they're not the current fragment.
+     *
+     * @param drawerIndex
      */
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerFragment.DRAWER_OPTION drawerIndex) {
@@ -175,28 +173,26 @@ public class MainActivity extends BaseActivity
 
         switch (drawerIndex) {
             case HOME:
-                mSlidingTabFragment = SlidingTabFragment.newInstance();
-
-                // Replace fragment with manage list_course fragment.
-                fragmentTransaction.replace(R.id.container, mSlidingTabFragment);
-
-                // Set title.
+                if (mFragment instanceof SlidingTabFragment) {
+                    return;
+                }
+                mFragment = SlidingTabFragment.newInstance();
                 mTitle = getString(R.string.title_fragment_home);
                 break;
             case SETTINGS:
-                // TODO: Settings fragment.
+                if (mFragment instanceof SettingFragment) {
+                    return;
+                }
                 mFragment = SettingFragment.newInstance();
-
-                // Replace fragment with manage list_course fragment.
-                fragmentTransaction.replace(R.id.container, mFragment);
-
-                // Add sliding tabs fragment to back stack.
-                fragmentTransaction.addToBackStack(null);
-
-                // Set title.
                 mTitle = getString(R.string.title_fragment_settings);
                 break;
         }
+
+        // Replace fragment with manage list_course fragment.
+        fragmentTransaction.replace(R.id.container, mFragment);
+
+        // Add fragment to back stack.
+        fragmentTransaction.addToBackStack(null);
 
         // Commit the transaction.
         fragmentTransaction.commit();

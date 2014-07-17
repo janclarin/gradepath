@@ -1,6 +1,5 @@
 <!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -21,11 +20,18 @@
          android:layout_gravity="left" instead. -->
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->
-    <fragment android:id="@+id/navigation_drawer"
+    <ListView
+        android:id="@+id/lv_navigation_drawer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:name="com.janclarin.gradepath.fragment.NavigationDrawerFragment"
-        tools:layout="@layout/fragment_navigation_drawer" />
+        android:background="@android:color/white"
+        android:choiceMode="singleChoice"
+        android:clipToPadding="false"
+        android:divider="#ccc"
+        android:dividerHeight="0.1dp"
+        android:listSelector="@drawable/row_selector"
+        android:scrollbarStyle="outsideOverlay"
+        tools:context=".NavigationDrawerFragment" />
 
 </android.support.v4.widget.DrawerLayout>

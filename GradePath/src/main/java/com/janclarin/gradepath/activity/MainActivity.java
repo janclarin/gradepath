@@ -6,10 +6,21 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
@@ -20,7 +31,6 @@ import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.ListTaskFragment;
-import com.janclarin.gradepath.fragment.NavigationDrawerFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.fragment.SlidingTabFragment;
 import com.janclarin.gradepath.model.Course;
@@ -28,13 +38,15 @@ import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Semester;
 import com.janclarin.gradepath.model.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Main activity that contains the navigation drawer.
  */
 public class MainActivity extends BaseActivity
-        implements NavigationDrawerFragment.NavigationDrawerListener,
-        SlidingTabFragment.FragmentSlidingTabCallbacks,
+        implements SlidingTabFragment.FragmentSlidingTabCallbacks,
         ListSemesterFragment.FragmentListSemesterListener,
         ListCourseFragment.FragmentListCourseListener,
         ListGradeFragment.FragmentListGradeListener,
@@ -43,30 +55,36 @@ public class MainActivity extends BaseActivity
         GradeDialogFragment.DialogGradeCallbacks,
         TaskDialogFragment.DialogTaskCallbacks {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
     public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
-
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     * Remember the position of the selected item.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     /**
-     * Sliding tab fragment.
+     * Per the design guidelines, you should show the drawer on launch until the user manually
+     * expands it. This shared preference tracks this.
      */
-    private SlidingTabFragment mSlidingTabFragment;
-    /**
-     * Settings fragment.
-     */
-    private SettingsFragment mSettingsFragment;
-    /**
-     * Keeps track of current fragment.
-     */
-    private Fragment mCurrentFragment;
+    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    /**
+     * Helper component that ties the action bar to the navigation drawer.
+     */
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private int mCurrentSelectedPosition = 0;
+    private boolean mFromSavedInstanceState;
+    private boolean mUserLearnedDrawer;
+    private List<DrawerItem> mDrawerItems;
+    private ListView mDrawerListView;
+
+    private SlidingTabFragment mSlidingTabFragment;
+    private SettingsFragment mSettingsFragment;
+    private Fragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,41 +92,42 @@ public class MainActivity extends BaseActivity
 
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-
         mTitle = getString(R.string.title_fragment_home);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
+        setUpNavigationDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Read in the flag indicating whether or not the user has demonstrated awareness of the
+        // drawer. See PREF_USER_LEARNED_DRAWER for details.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        // Check if request was successful.
-        if (resultCode == RESULT_OK) {
-            String toastMessage = "";
-
-            switch (requestCode) {
-                case REQUEST_LIST_COURSE_NEW_COURSE:
-                    refreshListCourse();
-                    toastMessage = getString(R.string.course_saved_new);
-                    break;
-                case REQUEST_LIST_COURSE_EDIT_COURSE:
-                    refreshListCourse();
-                    toastMessage = getString(R.string.course_saved_update);
-                    break;
-            }
-
-            // Display toast.
-            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+        if (savedInstanceState == null) {
+            // Select previous item.
+            selectItem(mCurrentSelectedPosition);
+        } else {
+            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mFromSavedInstanceState = true;
         }
     }
 
-    public void restoreActionBar() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    /**
+     * Per the navigation drawer design guidelines, updates the action bar to show the global app
+     * name rather than just what's in the current screen.
+     */
+    private void showGlobalActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setTitle(R.string.app_name);
+    }
+
+    private void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -117,7 +136,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
@@ -125,16 +144,190 @@ public class MainActivity extends BaseActivity
             restoreActionBar();
             return true;
         }
+
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            getMenuInflater().inflate(R.menu.global, menu);
+            showGlobalActionBar();
+            return true;
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Sets up the navigation drawer.
+     *
+     * @param drawerLayout
+     */
+    private void setUpNavigationDrawer(DrawerLayout drawerLayout) {
+        /* Set up list view first. */
+        // Find list view.
+        mDrawerListView = (ListView) findViewById(R.id.lv_navigation_drawer);
+
+        // List of navigation drawer items.
+        mDrawerItems = new ArrayList<DrawerItem>();
+
+        // Add drawer options.
+        mDrawerItems.add(new DrawerItem(getString(R.string.title_fragment_home), 0));
+        mDrawerItems.add(new DrawerItem(getString(R.string.title_fragment_settings), 0));
+
+        BaseAdapter adapter = new ListAdapter();
+        mDrawerListView.setAdapter(adapter);
+
+        // Set on click listener for items in list view.
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+        });
+
+        /* Set up drawer now. */
+        mDrawerLayout = drawerLayout;
+
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                             /* host Activity */
+                mDrawerLayout,                    /* DrawerLayout object */
+                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                restoreActionBar();
+                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // Change title to app title and default navigation.
+                showGlobalActionBar();
+
+                if (!mUserLearnedDrawer) {
+                    // The user manually opened the drawer; store this flag to prevent auto-showing
+                    // the navigation drawer automatically in the future.
+                    mUserLearnedDrawer = true;
+                    SharedPreferences sp = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+                }
+                invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+        };
+
+        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
+        // per the navigation drawer design guidelines.
+        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+            mDrawerLayout.openDrawer(mDrawerListView);
+        }
+
+        // Defer code dependent on restoration of previous instance state.
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass configuration changes to drawer toggle.
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * Checks if the drawer is open.
+     *
+     * @return
+     */
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerListView);
+    }
+
+    /**
+     * Select item from navigation drawer.
+     *
+     * @param position
+     */
+    private void selectItem(int position) {
+        mCurrentSelectedPosition = position;
+
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(position, true);
+        }
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mDrawerListView);
+        }
+
+        // Get fragment transaction object.
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        switch (position) {
+            case 0:
+                if (mCurrentFragment instanceof SlidingTabFragment) {
+                    return;
+                } else if (mCurrentFragment != null) {
+                    // There is a current fragment that isn't a sliding tab fragment.
+                    fragmentTransaction.remove(mCurrentFragment);
+                    mCurrentFragment = mSlidingTabFragment;
+                    fragmentTransaction.show(mCurrentFragment);
+                } else {
+                    // First time opening sliding tab fragment.
+                    mCurrentFragment = mSlidingTabFragment = SlidingTabFragment.newInstance();
+                    mTitle = getString(R.string.title_fragment_home);
+
+                    // Replace fragment with manage list_course fragment.
+                    fragmentTransaction.replace(R.id.container, mCurrentFragment);
+                }
+                break;
+            case 1:
+                if (mCurrentFragment instanceof SettingsFragment) {
+                    return;
+                } else if (mCurrentFragment != null) {
+                    // Hide previous instance of SlidingTabFragment.
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
+
+                mCurrentFragment = mSettingsFragment = SettingsFragment.newInstance();
+                mTitle = getString(R.string.title_fragment_settings);
+
+                fragmentTransaction.add(R.id.container, mCurrentFragment);
+                fragmentTransaction.show(mCurrentFragment);
+                break;
+        }
+
+        // Commit the transaction.
+        fragmentTransaction.commit();
     }
 
     /**
@@ -165,54 +358,26 @@ public class MainActivity extends BaseActivity
         ((SlidingTabFragment) mCurrentFragment).updateTaskList();
     }
 
-    /**
-     * Opens fragments based on navigation drawer selections.
-     * Only opens them if they're not the current fragment.
-     *
-     * @param drawerIndex
-     */
     @Override
-    public void onNavigationDrawerItemSelected(NavigationDrawerFragment.DRAWER_OPTION drawerIndex) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check if request was successful.
+        if (resultCode == RESULT_OK) {
+            String toastMessage = "";
 
-        // Get fragment transaction object.
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            switch (requestCode) {
+                case REQUEST_LIST_COURSE_NEW_COURSE:
+                    refreshListCourse();
+                    toastMessage = getString(R.string.course_saved_new);
+                    break;
+                case REQUEST_LIST_COURSE_EDIT_COURSE:
+                    refreshListCourse();
+                    toastMessage = getString(R.string.course_saved_update);
+                    break;
+            }
 
-        switch (drawerIndex) {
-            case HOME:
-                if (mCurrentFragment instanceof SlidingTabFragment) {
-                    return;
-                } else if (mCurrentFragment != null) {
-                    // There is a current fragment that isn't a sliding tab fragment.
-                    fragmentTransaction.remove(mCurrentFragment);
-                    mCurrentFragment = mSlidingTabFragment;
-                    fragmentTransaction.show(mCurrentFragment);
-                } else {
-                    // First time opening sliding tab fragment.
-                    mCurrentFragment = mSlidingTabFragment = SlidingTabFragment.newInstance();
-                    mTitle = getString(R.string.title_fragment_home);
-
-                    // Replace fragment with manage list_course fragment.
-                    fragmentTransaction.replace(R.id.container, mCurrentFragment);
-                }
-                break;
-            case SETTINGS:
-                if (mCurrentFragment instanceof SettingsFragment) {
-                    return;
-                } else if (mCurrentFragment != null) {
-                    // Hide previous instance of SlidingTabFragment.
-                    fragmentTransaction.hide(mCurrentFragment);
-                }
-
-                mCurrentFragment = mSettingsFragment = SettingsFragment.newInstance();
-                mTitle = getString(R.string.title_fragment_settings);
-
-                fragmentTransaction.add(R.id.container, mCurrentFragment);
-                fragmentTransaction.show(mCurrentFragment);
-                break;
+            // Display toast.
+            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
         }
-
-        // Commit the transaction.
-        fragmentTransaction.commit();
     }
 
     /**
@@ -435,5 +600,86 @@ public class MainActivity extends BaseActivity
 
         refreshListCourse();
         refreshListTask();
+    }
+
+    /**
+     * List adapter for drawer.
+     */
+    private class ListAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return mDrawerItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mDrawerItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Selected item.
+            DrawerItem selectedItem = (DrawerItem) getItem(position);
+
+            // View holder.
+            ViewHolder viewHolder;
+
+            // Inflate item view if it doesn't exist already depending on item type.
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+                convertView = getLayoutInflater()
+                        .inflate(R.layout.fragment_navigation_drawer_item, parent, false);
+
+                viewHolder.tvSectionName = (TextView) convertView.findViewById(R.id.tv_drawer_list_item);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            // Set text view to title.
+            viewHolder.tvSectionName.setText(selectedItem.getTitle());
+
+            // If item has an icon, apply it to text view. Remove default padding left.
+            int iconId = selectedItem.getIcon();
+            if (iconId != 0) {
+                viewHolder.tvSectionName.setCompoundDrawablePadding(8);
+                viewHolder.tvSectionName.setPadding(0, 0, 0, 0);
+                viewHolder.tvSectionName.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
+            }
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView tvSectionName;
+        }
+    }
+
+    /**
+     * Navigation drawer item.
+     */
+    private class DrawerItem {
+        private final String title;
+        private final int icon;
+
+        public DrawerItem(String title, int icon) {
+            this.title = title;
+            this.icon = icon;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public int getIcon() {
+            return icon;
+        }
+
     }
 }

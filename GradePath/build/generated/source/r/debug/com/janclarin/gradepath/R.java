@@ -73,10 +73,10 @@ public final class R {
         public static final int tab_unselected_pressed_example=0x7f020026;
     }
     public static final class id {
-        public static final int action_list_course_sort=0x7f0a0054;
-        public static final int action_list_course_sort_alphabet_ascending=0x7f0a0055;
-        public static final int action_list_course_sort_alphabet_descending=0x7f0a0056;
-        public static final int action_list_semester_sort=0x7f0a0059;
+        public static final int action_list_course_sort=0x7f0a0053;
+        public static final int action_list_course_sort_alphabet_ascending=0x7f0a0054;
+        public static final int action_list_course_sort_alphabet_descending=0x7f0a0055;
+        public static final int action_list_semester_sort=0x7f0a0058;
         public static final int actionbar_cancel=0x7f0a0000;
         public static final int actionbar_done=0x7f0a0001;
         public static final int btn_bar_add_grade=0x7f0a003c;
@@ -86,7 +86,7 @@ public final class R {
         public static final int btn_dialog_semester_last_day=0x7f0a002c;
         public static final int btn_grade_component=0x7f0a0011;
         public static final int btn_semester_options=0x7f0a0046;
-        public static final int btn_sliding_tabs_add=0x7f0a0053;
+        public static final int btn_sliding_tabs_add=0x7f0a0052;
         public static final int cb_dialog_semester_current=0x7f0a0029;
         public static final int cb_graded=0x7f0a0032;
         public static final int cb_task_completed=0x7f0a004c;
@@ -105,22 +105,21 @@ public final class R {
         public static final int ll_button_bar=0x7f0a003b;
         public static final int ll_grade=0x7f0a001f;
         public static final int ll_grade_components=0x7f0a0010;
-        public static final int lv_drawer_courses=0x7f0a004f;
         public static final int lv_list_course=0x7f0a0033;
         public static final int lv_list_course_grade=0x7f0a0019;
         public static final int lv_list_course_task=0x7f0a001b;
         public static final int lv_list_grade=0x7f0a003e;
         public static final int lv_list_semester=0x7f0a0043;
         public static final int lv_list_task=0x7f0a004a;
-        public static final int menu_contextual_delete=0x7f0a0058;
-        public static final int menu_contextual_edit=0x7f0a0057;
-        public static final int navigation_drawer=0x7f0a0018;
+        public static final int lv_navigation_drawer=0x7f0a0018;
+        public static final int menu_contextual_delete=0x7f0a0057;
+        public static final int menu_contextual_edit=0x7f0a0056;
         public static final int rb_new_course_complete_no=0x7f0a000b;
         public static final int rb_new_course_complete_yes=0x7f0a000c;
         public static final int rg_completed=0x7f0a000a;
         public static final int seek_letter_grade=0x7f0a000e;
-        public static final int set_semester_to_current=0x7f0a005a;
-        public static final int sliding_tabs=0x7f0a0052;
+        public static final int set_semester_to_current=0x7f0a0059;
+        public static final int sliding_tabs=0x7f0a0051;
         public static final int spn_dialog_grade_components=0x7f0a0025;
         public static final int spn_dialog_grade_courses=0x7f0a0023;
         public static final int spn_dialog_semester_season=0x7f0a0028;
@@ -137,8 +136,8 @@ public final class R {
         public static final int tv_dialog_semester_last_day_header=0x7f0a002b;
         public static final int tv_dialog_semester_name_header=0x7f0a0026;
         public static final int tv_dialog_task_course_header=0x7f0a002e;
-        public static final int tv_drawer_list_header=0x7f0a0050;
-        public static final int tv_drawer_list_item=0x7f0a0051;
+        public static final int tv_drawer_list_header=0x7f0a004f;
+        public static final int tv_drawer_list_item=0x7f0a0050;
         public static final int tv_edit_course_completed_header=0x7f0a0008;
         public static final int tv_grade=0x7f0a0040;
         public static final int tv_grade_components=0x7f0a000f;
@@ -189,11 +188,10 @@ public final class R {
         public static final int fragment_list_task=0x7f030014;
         public static final int fragment_list_task_item=0x7f030015;
         public static final int fragment_main=0x7f030016;
-        public static final int fragment_navigation_drawer=0x7f030017;
-        public static final int fragment_navigation_drawer_header=0x7f030018;
-        public static final int fragment_navigation_drawer_item=0x7f030019;
-        public static final int fragment_settings=0x7f03001a;
-        public static final int fragment_sliding_tabs=0x7f03001b;
+        public static final int fragment_navigation_drawer_header=0x7f030017;
+        public static final int fragment_navigation_drawer_item=0x7f030018;
+        public static final int fragment_settings=0x7f030019;
+        public static final int fragment_sliding_tabs=0x7f03001a;
     }
     public static final class menu {
         public static final int detail_course=0x7f090000;

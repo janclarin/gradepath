@@ -10,8 +10,7 @@
         style="@style/cardListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="4dp"
-        android:paddingTop="4dp" />
+        android:dividerHeight="4dp" />
 
     <TextView
         android:id="@+id/tv_list_semester_empty"

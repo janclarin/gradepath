@@ -50,11 +50,11 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
     private int mCurrentSelectedPosition = 0;
+    private boolean isDrawerOpen = false;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private Context mContext;
     private List<DrawerItem> mDrawerItems;
-    private BaseAdapter mAdapter;
     private ListView mListView;
 
     public NavigationDrawerFragment() {
@@ -103,11 +103,32 @@ public class NavigationDrawerFragment extends Fragment {
                     new DrawerItem(getString(drawerOption.getTitleId()), drawerOption.getIconId()));
         }
 
-        mAdapter = new ListAdapter();
-        mListView.setAdapter(mAdapter);
+        BaseAdapter adapter = new ListAdapter();
+        mListView.setAdapter(adapter);
 
         return mListView;
     }
+
+    /**
+     * Select item from navigation drawer.
+     *
+     * @param position
+     */
+    private void selectItem(int position) {
+        mCurrentSelectedPosition = position;
+
+        if (mListView != null) {
+            mListView.setItemChecked(position, true);
+        }
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+
+        if (mListener != null) {
+            mListener.onNavigationDrawerItemSelected(DRAWER_OPTION.values()[position]);
+        }
+    }
+
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -125,11 +146,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -171,6 +187,18 @@ public class NavigationDrawerFragment extends Fragment {
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            /* Creates a smoother animation for drawer title change. */
+                if (slideOffset > .55 && !isDrawerOpen) {
+                    onDrawerOpened(drawerView);
+                    isDrawerOpen = true;
+                } else if (slideOffset < .45 && isDrawerOpen) {
+                    onDrawerClosed(drawerView);
+                    isDrawerOpen = false;
+                }
+            }
         };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
@@ -188,26 +216,9 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
 
-    /**
-     * Select item from navigation drawer.
-     *
-     * @param position
-     */
-    private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
-
-        if (mListView != null) {
-            mListView.setItemChecked(position, true);
-        }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-
-        if (mListener != null) {
-            mListener.onNavigationDrawerItemSelected(DRAWER_OPTION.values()[position]);
-        }
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -263,6 +274,7 @@ public class NavigationDrawerFragment extends Fragment {
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'mContext', rather than just what's in the current screen.
      */
+
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);

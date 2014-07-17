@@ -110,11 +110,9 @@ public class MainActivity extends BaseActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(mTitle);
-        }
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
     }
 
     @Override
@@ -212,7 +210,6 @@ public class MainActivity extends BaseActivity
                 fragmentTransaction.show(mCurrentFragment);
                 break;
         }
-
 
         // Commit the transaction.
         fragmentTransaction.commit();

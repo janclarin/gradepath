@@ -22,6 +22,8 @@ import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Semester;
 import com.janclarin.gradepath.model.Task;
 
+import java.util.List;
+
 /**
  * Course list fragment.
  */
@@ -77,9 +79,12 @@ public class ListCourseFragment extends BaseListFragment {
 
         // If there is a current semester.
         if (currentSemester != null) {
-            // Add all current courses.
-            mListItems.add(currentSemester);
-            mListItems.addAll(mDatabase.getCourses(currentSemester.getId()));
+            List<Course> courses = mDatabase.getCourses(currentSemester.getId());
+            if (courses.size() > 0) {
+                // Add all current courses.
+                mListItems.add(currentSemester);
+                mListItems.addAll(mDatabase.getCourses(currentSemester.getId()));
+            }
         }
 
         notifyAdapter();
@@ -241,7 +246,8 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.btnShowButtonBar
                         .setOnClickListener(
                                 new OnShowButtonBarClickListener(viewHolder.llButtonBar,
-                                        viewHolder.vHorizontalDivider));
+                                        viewHolder.vHorizontalDivider)
+                        );
                 viewHolder.btnAddGrade.setOnClickListener(new OnAddGradeClickListener(course));
                 viewHolder.btnAddTask.setOnClickListener(new OnAddTaskClickListener(course));
             }

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ListTaskFragment extends BaseListFragment {
 
-    private FragmentListTaskListener mListener;
+    private OnFragmentListTaskListener mListener;
 
     public static ListTaskFragment newInstance() {
         return new ListTaskFragment();
@@ -97,7 +97,7 @@ public class ListTaskFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListTaskListener) activity;
+            mListener = (OnFragmentListTaskListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentListTaskListener");
@@ -110,7 +110,7 @@ public class ListTaskFragment extends BaseListFragment {
         mListener = null;
     }
 
-    public interface FragmentListTaskListener {
+    public interface OnFragmentListTaskListener {
 
         /**
          * Called when a task is going to be edited.

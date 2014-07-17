@@ -34,7 +34,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
 
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM d, y");
 
-    private DialogSemesterCallbacks mListener;
+    private OnDialogSemesterCallbacks mListener;
 
     private Context mContext;
 
@@ -275,7 +275,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (DialogSemesterCallbacks) activity;
+            mListener = (OnDialogSemesterCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement DialogSemesterCallbacks");
@@ -302,7 +302,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
     /**
      * Listener interface.
      */
-    public interface DialogSemesterCallbacks {
+    public interface OnDialogSemesterCallbacks {
 
         /**
          * Called when a semester is saved.

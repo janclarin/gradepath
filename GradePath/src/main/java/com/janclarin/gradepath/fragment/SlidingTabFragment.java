@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.view.SlidingTabLayout;
 
+import java.lang.ref.WeakReference;
+
 public class SlidingTabFragment extends Fragment {
 
     private static final String LOG_TAG = SlidingTabFragment.class.getSimpleName();
@@ -23,7 +25,7 @@ public class SlidingTabFragment extends Fragment {
     private static final String STATE_SELECTED_POSITION = "selected_sliding_tab_position";
 
     private Context mContext;
-    private FragmentSlidingTabCallbacks mListener;
+    private OnFragmentSlidingTabsListener mListener;
 
 
     private TabPagerAdapter mAdapter;
@@ -100,8 +102,9 @@ public class SlidingTabFragment extends Fragment {
         });
 
         // Get the ViewPager and set its PagerAdapter so that it can display items.
-        mAdapter = new TabPagerAdapter(getFragmentManager());
+        mAdapter = new TabPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(TabPagerAdapter.NUM_PAGES - 1);
         mViewPager.setCurrentItem(mCurrentSelectedPosition);
 
         // Set SlidingTabLayout's ViewPager.
@@ -114,7 +117,7 @@ public class SlidingTabFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentSlidingTabCallbacks) activity;
+            mListener = (OnFragmentSlidingTabsListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentSlidingTabCallbacks");
@@ -143,7 +146,7 @@ public class SlidingTabFragment extends Fragment {
      */
     public void updateSemesterList() {
         try {
-            ((BaseListFragment) mAdapter.getTab(0)).updateListItems();
+            ((BaseListFragment) mAdapter.getTabFragment(0)).updateListItems();
         } catch (NullPointerException e) {
             mAdapter.getItem(0);
         }
@@ -154,7 +157,7 @@ public class SlidingTabFragment extends Fragment {
      */
     public void updateCourseList() {
         try {
-            ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
+            ((BaseListFragment) mAdapter.getTabFragment(1)).updateListItems();
         } catch (NullPointerException e) {
             mAdapter.getItem(1);
         }
@@ -165,7 +168,7 @@ public class SlidingTabFragment extends Fragment {
      */
     public void updateGradeList() {
         try {
-            ((BaseListFragment) mAdapter.getTab(2)).updateListItems();
+            ((BaseListFragment) mAdapter.getTabFragment(2)).updateListItems();
         } catch (NullPointerException e) {
             mAdapter.getItem(2);
         }
@@ -176,13 +179,13 @@ public class SlidingTabFragment extends Fragment {
      */
     public void updateTaskList() {
         try {
-            ((BaseListFragment) mAdapter.getTab(3)).updateListItems();
+            ((BaseListFragment) mAdapter.getTabFragment(3)).updateListItems();
         } catch (NullPointerException e) {
             mAdapter.getItem(3);
         }
     }
 
-    public interface FragmentSlidingTabCallbacks {
+    public interface OnFragmentSlidingTabsListener {
 
         /**
          * Called when the add button is pressed while the semester list fragment focused.
@@ -207,8 +210,9 @@ public class SlidingTabFragment extends Fragment {
 
     private class TabPagerAdapter extends FragmentPagerAdapter {
 
-        private final int NUM_PAGES = 4;
-        private final SparseArray<Fragment> REGISTERED_FRAGMENTS = new SparseArray<Fragment>();
+        public static final int NUM_PAGES = 4;
+        private final SparseArray<WeakReference<Fragment>> REGISTERED_FRAGMENTS
+                = new SparseArray<WeakReference<Fragment>>(4);
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -221,32 +225,27 @@ public class SlidingTabFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            Fragment fragment;
 
             switch (position) {
                 case 0:
-                    return ListSemesterFragment.newInstance();
+                    fragment = ListSemesterFragment.newInstance();
+                    break;
                 case 1:
-                    return ListCourseFragment.newInstance();
+                    fragment = ListCourseFragment.newInstance();
+                    break;
                 case 2:
-                    return ListGradeFragment.newInstance();
+                    fragment = ListGradeFragment.newInstance();
+                    break;
                 case 3:
-                    return ListTaskFragment.newInstance();
+                    fragment = ListTaskFragment.newInstance();
+                    break;
                 default:
                     return null;
             }
-        }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            REGISTERED_FRAGMENTS.put(position, fragment);
+            REGISTERED_FRAGMENTS.put(position, new WeakReference<Fragment>(fragment));
             return fragment;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            REGISTERED_FRAGMENTS.remove(position);
-            super.destroyItem(container, position, object);
         }
 
         @Override
@@ -265,8 +264,12 @@ public class SlidingTabFragment extends Fragment {
             }
         }
 
-        protected Fragment getTab(int position) {
-            return REGISTERED_FRAGMENTS.get(position);
+        /**
+         * @return the fragment tab at position parameter.
+         */
+        public Fragment getTabFragment(int position) {
+            WeakReference<Fragment> reference = REGISTERED_FRAGMENTS.get(position);
+            return reference == null ? null : reference.get();
         }
     }
 }

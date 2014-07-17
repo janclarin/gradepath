@@ -35,7 +35,7 @@ public class GradeDialogFragment extends DialogFragment {
     public static final String DIALOG_TITLE = "Title";
     private static final String LOG_TAG = GradeDialogFragment.class.getSimpleName();
 
-    private DialogGradeCallbacks mListener;
+    private OnDialogGradeListener mListener;
 
     private Context mContext;
     private DatabaseFacade mDatabase;
@@ -266,7 +266,7 @@ public class GradeDialogFragment extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (DialogGradeCallbacks) activity;
+            mListener = (OnDialogGradeListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement DialogGradeCallbacks");
@@ -282,7 +282,7 @@ public class GradeDialogFragment extends DialogFragment {
     /**
      * Interface for listeners.
      */
-    public static interface DialogGradeCallbacks {
+    public static interface OnDialogGradeListener {
 
         /**
          * Called when a grade is saved.

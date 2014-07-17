@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class ListCourseFragment extends BaseListFragment {
 
-    private FragmentListCourseListener mListener;
+    private OnFragmentListCourseListener mListener;
     private TextView mSemesterTextView;
 
     public static ListCourseFragment newInstance() {
@@ -115,7 +115,7 @@ public class ListCourseFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListCourseListener) activity;
+            mListener = (OnFragmentListCourseListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentListCourseCallbacks");
@@ -149,7 +149,7 @@ public class ListCourseFragment extends BaseListFragment {
     /**
      * Interface to be implemented by all listener classes.
      */
-    public interface FragmentListCourseListener {
+    public interface OnFragmentListCourseListener {
 
         /**
          * Called when the add grade button is clicked under a course.

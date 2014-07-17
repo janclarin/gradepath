@@ -24,7 +24,9 @@ public final class R {
         public static final int course_urgency_2=0x7f050007;
         public static final int theme_primary_color=0x7f050008;
         public static final int theme_primary_color_dark=0x7f050009;
-        public static final int theme_primary_color_light=0x7f05000a;
+        public static final int theme_primary_color_dark_see_through=0x7f05000a;
+        public static final int theme_primary_color_light=0x7f05000b;
+        public static final int theme_primary_color_see_through=0x7f05000c;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f060000;
@@ -55,22 +57,12 @@ public final class R {
         public static final int ic_grade_component_add=0x7f020014;
         public static final int ic_grade_component_remove=0x7f020015;
         public static final int ic_launcher=0x7f020016;
-        public static final int ic_launcher_action_bar=0x7f020017;
-        public static final int ic_launcher_in_app=0x7f020018;
-        public static final int list_course_add=0x7f020019;
-        public static final int list_grade_add=0x7f02001a;
-        public static final int list_grade_task_add=0x7f02001b;
-        public static final int list_semester_add=0x7f02001c;
-        public static final int list_task_add=0x7f02001d;
-        public static final int overflow=0x7f02001e;
-        public static final int rectangle_border=0x7f02001f;
-        public static final int row_selector=0x7f020020;
-        public static final int tab_selected_example=0x7f020021;
-        public static final int tab_selected_focused_example=0x7f020022;
-        public static final int tab_selected_pressed_example=0x7f020023;
-        public static final int tab_unselected_example=0x7f020024;
-        public static final int tab_unselected_focused_example=0x7f020025;
-        public static final int tab_unselected_pressed_example=0x7f020026;
+        public static final int list_course_add=0x7f020017;
+        public static final int list_grade_task_add=0x7f020018;
+        public static final int list_semester_add=0x7f020019;
+        public static final int overflow=0x7f02001a;
+        public static final int rectangle_border=0x7f02001b;
+        public static final int row_selector=0x7f02001c;
     }
     public static final class id {
         public static final int action_list_course_sort=0x7f0a0053;

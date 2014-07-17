@@ -26,7 +26,7 @@ import java.util.List;
 public class ListSemesterFragment extends BaseListFragment
         implements PopupMenu.OnMenuItemClickListener {
 
-    private FragmentListSemesterListener mListener;
+    private OnFragmentListSemesterListener mListener;
 
     public static ListSemesterFragment newInstance() {
         return new ListSemesterFragment();
@@ -132,7 +132,7 @@ public class ListSemesterFragment extends BaseListFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListSemesterListener) activity;
+            mListener = (OnFragmentListSemesterListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentListSemesterCallbacks");
@@ -160,7 +160,7 @@ public class ListSemesterFragment extends BaseListFragment
     /**
      * Provides an interface to alert listeners.
      */
-    public interface FragmentListSemesterListener {
+    public interface OnFragmentListSemesterListener {
 
         /**
          * Called when contextual action bar edit button is clicked.

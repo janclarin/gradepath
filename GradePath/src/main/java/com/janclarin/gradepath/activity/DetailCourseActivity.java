@@ -27,8 +27,8 @@ import java.util.List;
 public class DetailCourseActivity extends BaseActivity
         implements ListCourseGradeFragment.FragmentListCourseGradeListener,
         ListCourseTaskFragment.FragmentListCourseTaskListener,
-        GradeDialogFragment.DialogGradeCallbacks,
-        TaskDialogFragment.DialogTaskCallbacks {
+        GradeDialogFragment.OnDialogGradeListener,
+        TaskDialogFragment.OnDialogTaskListener {
 
     private static final String LOG_TAG = DetailCourseActivity.class.getSimpleName();
     private static final int NUM_TABS = 2;

@@ -42,7 +42,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
      */
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E, MMMM d, y");
 
-    private DialogTaskCallbacks mListener;
+    private OnDialogTaskListener mListener;
 
     private Context mContext;
 
@@ -288,7 +288,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (DialogTaskCallbacks) activity;
+            mListener = (OnDialogTaskListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement DialogTaskCallbacks");
@@ -315,7 +315,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
     /**
      *
      */
-    public interface DialogTaskCallbacks {
+    public interface OnDialogTaskListener {
 
         /**
          * Called when a grade is saved.

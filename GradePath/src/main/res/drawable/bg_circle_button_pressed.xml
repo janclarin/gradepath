@@ -5,17 +5,17 @@
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_primary_color_dark" />
+            <solid android:color="@color/theme_primary_color_dark_see_through" />
         </shape>
     </item>
     <item
-        android:bottom="2dp"
+        android:bottom="1dp"
         android:left="0.5dp"
         android:right="0.5dp">
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_primary_color_dark"/>
+            <solid android:color="@color/theme_primary_color_dark_see_through" />
         </shape>
     </item>
 </layer-list>

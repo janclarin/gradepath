@@ -1,6 +1,5 @@
 package com.janclarin.gradepath.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -46,14 +45,15 @@ import java.util.List;
  * Main activity that contains the navigation drawer.
  */
 public class MainActivity extends BaseActivity
-        implements SlidingTabFragment.FragmentSlidingTabCallbacks,
-        ListSemesterFragment.FragmentListSemesterListener,
-        ListCourseFragment.FragmentListCourseListener,
-        ListGradeFragment.FragmentListGradeListener,
-        ListTaskFragment.FragmentListTaskListener,
-        SemesterDialogFragment.DialogSemesterCallbacks,
-        GradeDialogFragment.DialogGradeCallbacks,
-        TaskDialogFragment.DialogTaskCallbacks {
+        implements SlidingTabFragment.OnFragmentSlidingTabsListener,
+        ListSemesterFragment.OnFragmentListSemesterListener,
+        ListCourseFragment.OnFragmentListCourseListener,
+        ListGradeFragment.OnFragmentListGradeListener,
+        ListTaskFragment.OnFragmentListTaskListener,
+        SemesterDialogFragment.OnDialogSemesterCallbacks,
+        GradeDialogFragment.OnDialogGradeListener,
+        TaskDialogFragment.OnDialogTaskListener,
+        SettingsFragment.OnFragmentSettingsListener {
 
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
     public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     * Used to store the last screen title.
      */
     private CharSequence mTitle;
     /**
@@ -76,12 +76,11 @@ public class MainActivity extends BaseActivity
      */
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private List<DrawerItem> mDrawerItems;
     private ListView mDrawerListView;
-
     private SlidingTabFragment mSlidingTabFragment;
     private SettingsFragment mSettingsFragment;
     private Fragment mCurrentFragment;
@@ -101,13 +100,12 @@ public class MainActivity extends BaseActivity
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState == null) {
-            // Select previous item.
-            selectItem(mCurrentSelectedPosition);
-        } else {
+        if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+
+        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -116,38 +114,10 @@ public class MainActivity extends BaseActivity
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * name rather than just what's in the current screen.
-     */
-    private void showGlobalActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-    }
-
-    private void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerListView)) {
             getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.global, menu);
-            showGlobalActionBar();
             return true;
         }
 
@@ -170,7 +140,6 @@ public class MainActivity extends BaseActivity
      */
     private void setUpNavigationDrawer(DrawerLayout drawerLayout) {
         /* Set up list view first. */
-        // Find list view.
         mDrawerListView = (ListView) findViewById(R.id.lv_navigation_drawer);
 
         // List of navigation drawer items.
@@ -209,15 +178,13 @@ public class MainActivity extends BaseActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                restoreActionBar();
+                getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // Change title to app title and default navigation.
-                showGlobalActionBar();
 
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
@@ -227,6 +194,8 @@ public class MainActivity extends BaseActivity
                             .getDefaultSharedPreferences(getApplicationContext());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
+
+                getActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
@@ -236,14 +205,6 @@ public class MainActivity extends BaseActivity
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mDrawerListView);
         }
-
-        // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
@@ -266,20 +227,55 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * Checks if the drawer is open.
-     *
-     * @return
-     */
-    public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerListView);
-    }
-
-    /**
      * Select item from navigation drawer.
      *
      * @param position
      */
     private void selectItem(int position) {
+        FragmentTransaction fragmentTransaction;
+
+        switch (position) {
+            case 0:
+                mTitle = getString(R.string.app_name);
+                if (mCurrentFragment instanceof SlidingTabFragment) {
+                    break;
+                }
+                fragmentTransaction = getFragmentManager().beginTransaction();
+
+                // If necessary, instantiate the SlidingTabFragment and display it.
+                // Otherwise, remove the previous fragment and show the existing SlidingTabFragment.
+                if (mSlidingTabFragment == null) {
+                    mSlidingTabFragment = SlidingTabFragment.newInstance();
+                    fragmentTransaction.replace(R.id.container, mSlidingTabFragment).commit();
+                } else {
+                    fragmentTransaction.remove(mCurrentFragment);
+                    fragmentTransaction.show(mSlidingTabFragment).commit();
+                }
+
+                mCurrentFragment = mSlidingTabFragment;
+                break;
+            case 1:
+                mTitle = getString(R.string.title_fragment_settings);
+                if (mCurrentFragment instanceof SettingsFragment) {
+                    break;
+                }
+                fragmentTransaction = getFragmentManager().beginTransaction();
+
+                if (mCurrentFragment instanceof SlidingTabFragment) {
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
+
+                if (mSettingsFragment == null) {
+                    mSettingsFragment = SettingsFragment.newInstance();
+                }
+
+                fragmentTransaction.add(R.id.container, mSettingsFragment);
+                fragmentTransaction.show(mSettingsFragment).commit();
+
+                mCurrentFragment = mSettingsFragment;
+                break;
+        }
+
         mCurrentSelectedPosition = position;
 
         if (mDrawerListView != null) {
@@ -289,45 +285,7 @@ public class MainActivity extends BaseActivity
             mDrawerLayout.closeDrawer(mDrawerListView);
         }
 
-        // Get fragment transaction object.
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        switch (position) {
-            case 0:
-                if (mCurrentFragment instanceof SlidingTabFragment) {
-                    return;
-                } else if (mCurrentFragment != null) {
-                    // There is a current fragment that isn't a sliding tab fragment.
-                    fragmentTransaction.remove(mCurrentFragment);
-                    mCurrentFragment = mSlidingTabFragment;
-                    fragmentTransaction.show(mCurrentFragment);
-                } else {
-                    // First time opening sliding tab fragment.
-                    mCurrentFragment = mSlidingTabFragment = SlidingTabFragment.newInstance();
-                    mTitle = getString(R.string.title_fragment_home);
-
-                    // Replace fragment with manage list_course fragment.
-                    fragmentTransaction.replace(R.id.container, mCurrentFragment);
-                }
-                break;
-            case 1:
-                if (mCurrentFragment instanceof SettingsFragment) {
-                    return;
-                } else if (mCurrentFragment != null) {
-                    // Hide previous instance of SlidingTabFragment.
-                    fragmentTransaction.hide(mCurrentFragment);
-                }
-
-                mCurrentFragment = mSettingsFragment = SettingsFragment.newInstance();
-                mTitle = getString(R.string.title_fragment_settings);
-
-                fragmentTransaction.add(R.id.container, mCurrentFragment);
-                fragmentTransaction.show(mCurrentFragment);
-                break;
-        }
-
-        // Commit the transaction.
-        fragmentTransaction.commit();
     }
 
     /**

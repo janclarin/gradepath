@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ListGradeFragment extends BaseListFragment {
 
-    private FragmentListGradeListener mListener;
+    private OnFragmentListGradeListener mListener;
 
     public static ListGradeFragment newInstance() {
         return new ListGradeFragment();
@@ -99,7 +99,7 @@ public class ListGradeFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListGradeListener) activity;
+            mListener = (OnFragmentListGradeListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentListGradeListener");
@@ -170,7 +170,7 @@ public class ListGradeFragment extends BaseListFragment {
         }
     }
 
-    public interface FragmentListGradeListener {
+    public interface OnFragmentListGradeListener {
 
         /**
          * Called when a grade is going to be updated.

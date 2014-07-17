@@ -19,14 +19,16 @@
 
     <ImageButton
         android:id="@+id/btn_sliding_tabs_add"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
+        android:padding="16dp"
+        android:scaleType="fitXY"
         android:src="@drawable/list_course_add" />
 
 </RelativeLayout>

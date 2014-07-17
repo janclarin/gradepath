@@ -14,7 +14,7 @@ import com.janclarin.gradepath.R;
  */
 public class SettingsFragment extends PreferenceFragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentSettingsListener mListener;
 
     /**
      * @return A new instance of fragment SettingsFragment.
@@ -33,8 +33,6 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -47,12 +45,12 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (OnFragmentSettingsListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -71,7 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentSettingsListener {
     }
 
 }

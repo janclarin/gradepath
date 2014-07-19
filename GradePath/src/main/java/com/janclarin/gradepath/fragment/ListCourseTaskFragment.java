@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -52,18 +51,6 @@ public class ListCourseTaskFragment extends BaseListFragment {
         super.onCreate(savedInstanceState);
 
         mCourse = (Course) getArguments().getSerializable(MainActivity.COURSE_KEY);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_detail_course_list_task, container, false);
-
-        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_task_empty);
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_course_task);
-
-        return rootView;
     }
 
     @Override
@@ -176,7 +163,7 @@ public class ListCourseTaskFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_task_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_task, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
                     viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
                     viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);

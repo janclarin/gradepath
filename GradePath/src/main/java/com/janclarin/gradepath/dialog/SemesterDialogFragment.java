@@ -178,17 +178,21 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
 
                 boolean isCurrent = mCurrentCheckBox.isChecked();
 
+                Semester semester;
                 // Insert semester if it's not being updated.
                 if (mSemesterToUpdate == null) {
-                    mDatabase.insertSemester(season, year, gpa, isCurrent, mLastDayCalendar);
+                    semester = mDatabase.insertSemester(season, year, gpa, isCurrent, mLastDayCalendar);
                 } else {
                     // Update the semester.
                     mDatabase.updateSemester(mSemesterToUpdate.getId(), season, year, gpa, isCurrent,
                             mLastDayCalendar);
+                    semester = null;
                 }
 
                 // Notify listener that semester is saved.
-                if (mListener != null) mListener.onSemesterSaved(mSemesterToUpdate == null);
+                if (mListener != null) {
+                    mListener.onSemesterSaved(mSemesterToUpdate == null, semester);
+                }
                 alertDialog.dismiss();
             }
         });
@@ -307,7 +311,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         /**
          * Called when a semester is saved.
          */
-        public void onSemesterSaved(boolean isNew);
+        public void onSemesterSaved(boolean isNew, Semester semester);
     }
 
 }

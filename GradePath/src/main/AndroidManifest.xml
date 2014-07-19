@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.EditCourseActivity"
+            android:name=".activity.CourseEditActivity"
             android:label="@string/title_activity_edit_course">
 
         </activity>
         <activity
-            android:name=".activity.DetailCourseActivity"
+            android:name=".activity.CourseDetailActivity"
             android:label="@string/title_activity_detail_course"
             android:parentActivityName=".activity.MainActivity">
             <meta-data

@@ -45,7 +45,7 @@ public abstract class DatabaseItem implements Serializable {
 
                     // Check months for edge cases like the 31st and 1st of two months.
                     if (monthOne == monthTwo) {
-                        return dayOne < dayTwo ? 1 : -1;
+                        return dayOne < dayTwo ? -1 : 1;
 
                         // Check for new years.
                     } else if (monthOne == 11 && monthTwo == 1) {
@@ -53,7 +53,7 @@ public abstract class DatabaseItem implements Serializable {
                     } else if (monthOne == 0 && monthTwo == 11) {
                         return -1;
                     } else {
-                        return monthOne < monthTwo ? 1 : -1;
+                        return monthOne < monthTwo ? -1 : 1;
                     }
                 }
             } else {

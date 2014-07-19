@@ -153,7 +153,7 @@
     <!-- Settings Fragment -->
     <string name="title_fragment_settings">Settings</string>
     <string name="title_fragment_list_grades">Grades</string>
-    <string name="title_fragment_list_tasks">Tasks</string>
+    <string name="title_fragment_list_tasks">Reminders</string>
     <string name="tv_list_grade_empty">No grades</string>
     <string name="tv_list_task_empty">No tasks</string>
     <string name="added">Added</string>
@@ -173,5 +173,8 @@
     <string name="was_due">Was due</string>
     <string name="completed">Completed</string>
     <string name="days_ago">days ago</string>
+    <string name="final_grade">Final grade</string>
+    <string name="new_semester">New semester</string>
+    <string name="pick_semester">Pick a semester</string>
 
 </resources>

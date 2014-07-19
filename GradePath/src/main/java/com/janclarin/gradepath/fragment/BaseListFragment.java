@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,7 +36,41 @@ abstract public class BaseListFragment extends Fragment {
     protected List<DatabaseItem> mListItems;
     protected TextView mEmptyTextView;
     protected ListView mListView;
+    protected ImageButton mAddItemButton;
     protected BaseListAdapter mAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+
+        mContext = getActivity();
+
+        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
+        mDatabase.open();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_list_general, container, false);
+
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mAddItemButton = (ImageButton) rootView.findViewById(R.id.btn_add_item);
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Indicate that this fragment has its own menu options.
+        setHasOptionsMenu(true);
+    }
 
     /**
      * Updates the list view within the fragment.
@@ -170,24 +206,6 @@ abstract public class BaseListFragment extends Fragment {
             mEmptyTextView.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mContext = getActivity();
-
-        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
-        mDatabase.open();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Indicate that this fragment has its own menu options.
-        setHasOptionsMenu(true);
     }
 
     abstract protected class BaseListAdapter extends BaseAdapter {

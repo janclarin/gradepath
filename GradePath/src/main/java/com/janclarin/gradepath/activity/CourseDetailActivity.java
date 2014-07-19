@@ -24,13 +24,13 @@ import com.janclarin.gradepath.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailCourseActivity extends BaseActivity
+public class CourseDetailActivity extends BaseActivity
         implements ListCourseGradeFragment.FragmentListCourseGradeListener,
         ListCourseTaskFragment.FragmentListCourseTaskListener,
         GradeDialogFragment.OnDialogGradeListener,
         TaskDialogFragment.OnDialogTaskListener {
 
-    private static final String LOG_TAG = DetailCourseActivity.class.getSimpleName();
+    private static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
     private static final int NUM_TABS = 2;
 
     private TabPagerAdapter mAdapter;

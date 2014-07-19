@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class Semester extends DatabaseItem implements Comparable<Semester> {
 
     public static final Season[] seasons = {Season.FALL, Season.WINTER, Season.SPRING, Season.SUMMER};
+    private String name;
     private Season season;
     private int year;
     private double gpa;
@@ -31,7 +32,7 @@ public class Semester extends DatabaseItem implements Comparable<Semester> {
             this.season = Season.WINTER;
         } else if (seasonName.equals(seasons[2].toString())) {
             this.season = Season.SPRING;
-        } else {
+        } else if (seasonName.equals(seasons[3].toString())) {
             this.season = Season.SUMMER;
         }
     }

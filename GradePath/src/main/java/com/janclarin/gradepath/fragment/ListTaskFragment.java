@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -32,22 +31,16 @@ public class ListTaskFragment extends BaseListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment.
-        View convertView = inflater.inflate(R.layout.fragment_list_task, container, false);
-
-        // Find views.
-        mEmptyTextView = (TextView) convertView.findViewById(R.id.tv_list_task_empty);
-        mListView = (ListView) convertView.findViewById(R.id.lv_list_task);
-
-        return convertView;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmptyTextView.setText(R.string.tv_list_task_empty);
+        mAddItemButton.setImageResource(R.drawable.list_grade_task_add);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListTaskNew();
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -112,9 +105,10 @@ public class ListTaskFragment extends BaseListFragment {
 
     public interface OnFragmentListTaskListener {
 
-        /**
-         * Called when a task is going to be edited.
-         */
+        /* Called when the add item button is clicked. */
+        public void onListTaskNew();
+
+        /* Called when a task is going to be edited. */
         public void onListTaskEdit(Task task);
     }
 
@@ -143,7 +137,7 @@ public class ListTaskFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_task_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_task, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
                     viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
                     viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);

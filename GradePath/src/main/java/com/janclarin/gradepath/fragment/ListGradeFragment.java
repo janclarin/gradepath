@@ -6,7 +6,6 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -29,29 +28,20 @@ public class ListGradeFragment extends BaseListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment.
-        View convertView = inflater.inflate(R.layout.fragment_list_grade, container, false);
-
-        mEmptyTextView = (TextView) convertView.findViewById(R.id.tv_list_grade_empty);
-        mListView = (ListView) convertView.findViewById(R.id.lv_list_grade);
-
-        return convertView;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmptyTextView.setText(R.string.tv_list_grade_empty);
+        mAddItemButton.setImageResource(R.drawable.list_grade_task_add);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListGradeNew();
+            }
+        });
 
         updateListItems();
-
         mAdapter = new ListAdapter();
         setUpListView();
-
-        showEmptyStateView(mListItems.isEmpty());
-
     }
 
     @Override
@@ -136,7 +126,7 @@ public class ListGradeFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_grade_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_grade, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
@@ -172,9 +162,10 @@ public class ListGradeFragment extends BaseListFragment {
 
     public interface OnFragmentListGradeListener {
 
-        /**
-         * Called when a grade is going to be updated.
-         */
+        /* Called when add item button is clicked. */
+        public void onListGradeNew();
+
+        /* Called when a grade is selected for edit in contextual action bar */
         public void onListGradeEdit(Grade grade);
     }
 }

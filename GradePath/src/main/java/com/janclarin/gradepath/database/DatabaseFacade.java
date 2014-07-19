@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
@@ -116,9 +115,6 @@ public class DatabaseFacade {
 
             long semesterId = mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
 
-            if (semesterId > -1)
-                Log.i(LOG_TAG, "Semester " + season + " " + year + " inserted properly into mDatabase");
-
             cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
                     DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null, null, null, null);
 
@@ -142,8 +138,6 @@ public class DatabaseFacade {
      * @return
      */
     public int updateSemester(Semester semester) {
-
-        Log.i(LOG_TAG, semester.toString() + " updated");
 
         // Set all other semesters as not current if this semester is.
         if (semester.isCurrent()) setOtherSemestersToNotCurrent();
@@ -176,8 +170,6 @@ public class DatabaseFacade {
     public int updateSemester(long semesterId, String season, int year, double gpa,
                               boolean isCurrent, Calendar endDate) {
 
-        Log.i(LOG_TAG, season + " " + year + " updated");
-
         // Set all other semesters as not current if this semester is.
         if (isCurrent) setOtherSemestersToNotCurrent();
 
@@ -201,8 +193,6 @@ public class DatabaseFacade {
      */
     public void deleteSemester(Semester semester) {
         long semesterId = semester.getId();
-
-        Log.i(LOG_TAG, semester.toString() + " deleted");
 
         // Deletes semester from mDatabase.
         mDatabase.delete(DatabaseHelper.TABLE_SEMESTERS,
@@ -374,7 +364,6 @@ public class DatabaseFacade {
      */
     public int updateCourse(Course course) {
         long courseId = course.getId();
-        Log.i(LOG_TAG, "Course: " + course.getName() + " updated");
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, course.getSemesterId());
@@ -399,8 +388,6 @@ public class DatabaseFacade {
     public int updateCourse(long courseId, long semesterId, String courseName, int letterGradeValue,
                             boolean isCompleted) {
 
-        Log.i(LOG_TAG, "Course: " + courseId + " updated");
-
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, courseName);
@@ -418,7 +405,6 @@ public class DatabaseFacade {
      */
     public void deleteCourse(Course course) {
         long courseId = course.getId();
-        Log.i(LOG_TAG, "Course: " + course.getName() + " deleted");
         mDatabase.delete(DatabaseHelper.TABLE_COURSES,
                 DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
         mDatabase.delete(DatabaseHelper.TABLE_COMPONENTS,
@@ -433,7 +419,6 @@ public class DatabaseFacade {
      * @param courseId
      */
     public void deleteCourse(long courseId) {
-        Log.i(LOG_TAG, "Course: " + courseId + " deleted");
         mDatabase.delete(DatabaseHelper.TABLE_COURSES,
                 DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
         mDatabase.delete(DatabaseHelper.TABLE_COMPONENTS,
@@ -769,8 +754,6 @@ public class DatabaseFacade {
     public void deleteGrade(Grade grade) {
         long gradeId = grade.getId();
 
-        Log.i(LOG_TAG, grade.getName() + " deleted from mDatabase.");
-
         mDatabase.delete(DatabaseHelper.TABLE_GRADES,
                 DatabaseHelper.COLUMN_ID + " = '" + gradeId + "'", null);
     }
@@ -899,8 +882,6 @@ public class DatabaseFacade {
 
         Task task = cursorToTask(cursor);
 
-        Log.i(LOG_TAG, "Task inserted: " + task.getName());
-
         cursor.close();
 
         return task;
@@ -962,8 +943,6 @@ public class DatabaseFacade {
      * @param task
      */
     public void deleteTask(Task task) {
-
-        Log.i(LOG_TAG, task.getName() + " deleted from mDatabase");
 
         mDatabase.delete(DatabaseHelper.TABLE_TASKS,
                 DatabaseHelper.COLUMN_ID + " = '" + task.getId() + "'", null);

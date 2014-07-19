@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -30,7 +29,6 @@ import java.util.List;
 public class ListCourseFragment extends BaseListFragment {
 
     private OnFragmentListCourseListener mListener;
-    private TextView mSemesterTextView;
 
     public static ListCourseFragment newInstance() {
         return new ListCourseFragment();
@@ -41,20 +39,16 @@ public class ListCourseFragment extends BaseListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_course, container, false);
-
-        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_empty);
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_course);
-
-        return rootView;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmptyTextView.setText(R.string.tv_list_course_empty);
+        mAddItemButton.setImageResource(R.drawable.list_course_add);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListCourseNew();
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -68,22 +62,23 @@ public class ListCourseFragment extends BaseListFragment {
                 if (mListener != null) mListener.onListCourseViewDetails(course);
             }
         });
+
+
     }
 
     @Override
     public void updateListItems() {
         clearListItems();
 
-        // Get current semester.
-        Semester currentSemester = mDatabase.getCurrentSemester();
+        // Get list of Semesters.
+        List<Semester> semesters = mDatabase.getSemesters();
 
-        // If there is a current semester.
-        if (currentSemester != null) {
-            List<Course> courses = mDatabase.getCourses(currentSemester.getId());
+        // For all semesters that contain Courses, add the Semester and Courses to the list.
+        for (Semester semester : semesters) {
+            List<Course> courses = mDatabase.getCourses(semester.getId());
             if (courses.size() > 0) {
-                // Add all current courses.
-                mListItems.add(currentSemester);
-                mListItems.addAll(mDatabase.getCourses(currentSemester.getId()));
+                mListItems.add(semester);
+                mListItems.addAll(mDatabase.getCourses(semester.getId()));
             }
         }
 
@@ -151,30 +146,23 @@ public class ListCourseFragment extends BaseListFragment {
      */
     public interface OnFragmentListCourseListener {
 
-        /**
-         * Called when the add grade button is clicked under a course.
-         */
-        void onListCourseAddGrade(Course course);
+        /* Called when the add item button is clicked. */
+        public void onListCourseNew();
 
-        /**
-         * Called when the add task button is clicked under a course.
-         */
-        void onListCourseAddTask(Course course);
+        /* Called when the add grade button is clicked under a course. */
+        public void onListCourseNewGrade(Course course);
 
-        /**
-         * Called when the course item is clicked. Opens course detail fragment.
-         */
-        void onListCourseViewDetails(Course course);
+        /* Called when the add task button is clicked under a course. */
+        public void onListCourseNewTask(Course course);
 
-        /**
-         * Called when the contextual action bar edit button is clicked.
-         */
-        void onListCourseEdit(Course course);
+        /* Called when the course item is clicked. Opens course detail fragment. */
+        public void onListCourseViewDetails(Course course);
 
-        /**
-         * Called when the contextual action bar delete button is clicked.
-         */
-        void onListCourseDelete(Course course);
+        /* Called when the contextual action bar edit button is clicked. */
+        public void onListCourseEdit(Course course);
+
+        /* Called when the contextual action bar delete button is clicked. */
+        public void onListCourseDelete(Course course);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -197,11 +185,11 @@ public class ListCourseFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_semester, parent, false);
+                            .inflate(R.layout.fragment_list_header, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_course_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_course, parent, false);
                     viewHolder.vCourseColor = convertView.findViewById(R.id.view_course_color);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_course_name);
                     viewHolder.tvNextDueDate = (TextView) convertView.findViewById(R.id.tv_next_due_date);
@@ -307,7 +295,7 @@ public class ListCourseFragment extends BaseListFragment {
         }
 
         public void onClick(View view) {
-            if (mListener != null) mListener.onListCourseAddGrade(course);
+            if (mListener != null) mListener.onListCourseNewGrade(course);
         }
 
     }
@@ -324,7 +312,7 @@ public class ListCourseFragment extends BaseListFragment {
         }
 
         public void onClick(View view) {
-            if (mListener != null) mListener.onListCourseAddTask(course);
+            if (mListener != null) mListener.onListCourseNewTask(course);
         }
     }
 }

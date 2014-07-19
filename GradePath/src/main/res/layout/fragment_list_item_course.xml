@@ -69,7 +69,7 @@
         android:id="@+id/ll_button_bar"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_below="@id/view_course_item_divider_horizontal"
         android:focusable="false"
         android:orientation="horizontal"
@@ -84,7 +84,7 @@
             android:focusable="false"
             android:text="@string/btn_fragment_home_add_grade"
             android:textAllCaps="true"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/tertiary_text_light"
             android:textSize="14sp" />
 
         <Button
@@ -96,7 +96,7 @@
             android:focusable="false"
             android:text="@string/btn_fragment_home_add_task"
             android:textAllCaps="true"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/tertiary_text_light"
             android:textSize="14sp" />
     </LinearLayout>
 

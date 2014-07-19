@@ -171,7 +171,7 @@ public class ListCourseGradeFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_grade_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_grade, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);

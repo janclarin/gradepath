@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -37,27 +36,20 @@ public class ListSemesterFragment extends BaseListFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_semester, container, false);
-
-        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_semester_empty);
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_semester);
-
-        return rootView;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmptyTextView.setText(R.string.tv_list_semester_empty);
+        mAddItemButton.setImageResource(R.drawable.list_semester_add);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListSemesterNew();
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
-
-        showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
@@ -162,15 +154,14 @@ public class ListSemesterFragment extends BaseListFragment
      */
     public interface OnFragmentListSemesterListener {
 
-        /**
-         * Called when contextual action bar edit button is clicked.
-         */
-        void onListSemesterEdit(Semester semester);
+        /* Called when add item button is clicked. */
+        public void onListSemesterNew();
 
-        /**
-         * Called when contextual action bar delete button is clicked.
-         */
-        void onListSemesterDelete(Semester semester);
+        /* Called when contextual action bar edit button is clicked. */
+        public void onListSemesterEdit(Semester semester);
+
+        /* Called when contextual action bar delete button is clicked. */
+        public void onListSemesterDelete(Semester semester);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -192,11 +183,11 @@ public class ListSemesterFragment extends BaseListFragment
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_semester, parent, false);
+                            .inflate(R.layout.fragment_list_header, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_semester_item, parent, false);
+                            .inflate(R.layout.fragment_list_item_semester, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_semester_name);
                     viewHolder.tvInformation =
                             (TextView) convertView.findViewById(R.id.tv_semester_information);

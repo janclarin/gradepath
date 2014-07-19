@@ -31,22 +31,19 @@ import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
-import com.janclarin.gradepath.fragment.SlidingTabFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Semester;
 import com.janclarin.gradepath.model.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.ref.WeakReference;
 
 
 /**
  * Main activity that contains the navigation drawer.
  */
 public class MainActivity extends BaseActivity
-        implements SlidingTabFragment.OnFragmentSlidingTabsListener,
-        ListSemesterFragment.OnFragmentListSemesterListener,
+        implements ListSemesterFragment.OnFragmentListSemesterListener,
         ListCourseFragment.OnFragmentListCourseListener,
         ListGradeFragment.OnFragmentListGradeListener,
         ListTaskFragment.OnFragmentListTaskListener,
@@ -68,9 +65,13 @@ public class MainActivity extends BaseActivity
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     /**
-     * Used to store the last screen title.
+     * Used to store the last screen mTitle.
      */
     private CharSequence mTitle;
+    /**
+     * List of drawer items.
+     */
+    private DrawerItem[] mDrawerItems;
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
@@ -79,10 +80,7 @@ public class MainActivity extends BaseActivity
     private int mCurrentSelectedPosition;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private List<DrawerItem> mDrawerItems;
     private ListView mDrawerListView;
-    private SlidingTabFragment mSlidingTabFragment;
-    private SettingsFragment mSettingsFragment;
     private Fragment mCurrentFragment;
 
     @Override
@@ -90,8 +88,6 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        mTitle = getString(R.string.title_fragment_home);
 
         setUpNavigationDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
 
@@ -105,6 +101,11 @@ public class MainActivity extends BaseActivity
             mFromSavedInstanceState = true;
         }
 
+        // Set action bar title.
+        mTitle = getString(mDrawerItems[mCurrentSelectedPosition].getTitle());
+        getActionBar().setTitle(mTitle);
+
+        // Select item from navigation drawer.
         selectItem(mCurrentSelectedPosition);
     }
 
@@ -120,7 +121,6 @@ public class MainActivity extends BaseActivity
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -129,8 +129,17 @@ public class MainActivity extends BaseActivity
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    /* Go back to home. If on home and back is pressed, leave app */
+    @Override
+    public void onBackPressed() {
+        if (mCurrentFragment instanceof ListCourseFragment) {
+            super.onBackPressed();
+        } else {
+            selectItem(0);
+        }
     }
 
     /**
@@ -142,12 +151,14 @@ public class MainActivity extends BaseActivity
         /* Set up list view first. */
         mDrawerListView = (ListView) findViewById(R.id.lv_navigation_drawer);
 
-        // List of navigation drawer items.
-        mDrawerItems = new ArrayList<DrawerItem>();
-
-        // Add drawer options.
-        mDrawerItems.add(new DrawerItem(getString(R.string.title_fragment_home), 0));
-        mDrawerItems.add(new DrawerItem(getString(R.string.title_fragment_settings), 0));
+        // Drawer items.
+        mDrawerItems = new DrawerItem[]{
+                new DrawerItem(R.string.title_fragment_list_courses, 0),
+                new DrawerItem(R.string.title_fragment_list_grades, 0),
+                new DrawerItem(R.string.title_fragment_list_tasks, 0),
+                new DrawerItem(R.string.title_fragment_list_semesters, 0),
+                new DrawerItem(R.string.title_fragment_settings, 0)
+        };
 
         BaseAdapter adapter = new ListAdapter();
         mDrawerListView.setAdapter(adapter);
@@ -167,7 +178,7 @@ public class MainActivity extends BaseActivity
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
+        // between the navigation drawer and the action bar app mIcon.
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                             /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
@@ -232,49 +243,41 @@ public class MainActivity extends BaseActivity
      * @param position
      */
     private void selectItem(int position) {
-        FragmentTransaction fragmentTransaction;
 
-        switch (position) {
-            case 0:
-                mTitle = getString(R.string.app_name);
-                if (mCurrentFragment instanceof SlidingTabFragment) {
+        // Selected drawer item.
+        DrawerItem drawerItem = mDrawerItems[position];
+
+        // Set mTitle to drawer item.
+        mTitle = getString(drawerItem.getTitle());
+
+        // Get drawer item's fragment.
+        mCurrentFragment = drawerItem.getFragment();
+
+        if (mCurrentFragment == null) {
+            switch (position) {
+                case 0:
+                    mCurrentFragment = ListCourseFragment.newInstance();
                     break;
-                }
-                fragmentTransaction = getFragmentManager().beginTransaction();
-
-                // If necessary, instantiate the SlidingTabFragment and display it.
-                // Otherwise, remove the previous fragment and show the existing SlidingTabFragment.
-                if (mSlidingTabFragment == null) {
-                    mSlidingTabFragment = SlidingTabFragment.newInstance();
-                    fragmentTransaction.replace(R.id.container, mSlidingTabFragment).commit();
-                } else {
-                    fragmentTransaction.remove(mCurrentFragment);
-                    fragmentTransaction.show(mSlidingTabFragment).commit();
-                }
-
-                mCurrentFragment = mSlidingTabFragment;
-                break;
-            case 1:
-                mTitle = getString(R.string.title_fragment_settings);
-                if (mCurrentFragment instanceof SettingsFragment) {
+                case 1:
+                    mCurrentFragment = ListGradeFragment.newInstance();
                     break;
-                }
-                fragmentTransaction = getFragmentManager().beginTransaction();
-
-                if (mCurrentFragment instanceof SlidingTabFragment) {
-                    fragmentTransaction.hide(mCurrentFragment);
-                }
-
-                if (mSettingsFragment == null) {
-                    mSettingsFragment = SettingsFragment.newInstance();
-                }
-
-                fragmentTransaction.add(R.id.container, mSettingsFragment);
-                fragmentTransaction.show(mSettingsFragment).commit();
-
-                mCurrentFragment = mSettingsFragment;
-                break;
+                case 2:
+                    mCurrentFragment = ListTaskFragment.newInstance();
+                    break;
+                case 3:
+                    mCurrentFragment = ListSemesterFragment.newInstance();
+                    break;
+                case 4:
+                    mCurrentFragment = SettingsFragment.newInstance();
+                    break;
+                default:
+                    mCurrentFragment = new Fragment();
+            }
+            drawerItem.setFragment(mCurrentFragment);
         }
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
 
         mCurrentSelectedPosition = position;
 
@@ -284,36 +287,42 @@ public class MainActivity extends BaseActivity
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mDrawerListView);
         }
-
-
     }
 
     /**
      * Refresh semester list.
      */
     private void refreshListSemester() {
-        ((SlidingTabFragment) mCurrentFragment).updateSemesterList();
+        ((ListSemesterFragment) mCurrentFragment).updateListItems();
     }
 
     /**
      * Refresh course list.
      */
     private void refreshListCourse() {
-        ((SlidingTabFragment) mCurrentFragment).updateCourseList();
+        ((ListCourseFragment) mCurrentFragment).updateListItems();
     }
 
     /**
      * Refresh grade list.
      */
     private void refreshListGrade() {
-        ((SlidingTabFragment) mCurrentFragment).updateGradeList();
+        if (mCurrentFragment instanceof ListCourseFragment) {
+            ((ListCourseFragment) mCurrentFragment).updateListItems();
+        } else {
+            ((ListGradeFragment) mCurrentFragment).updateListItems();
+        }
     }
 
     /**
      * Refresh task list.
      */
     private void refreshListTask() {
-        ((SlidingTabFragment) mCurrentFragment).updateTaskList();
+        if (mCurrentFragment instanceof ListCourseFragment) {
+            ((ListCourseFragment) mCurrentFragment).updateListItems();
+        } else {
+            ((ListTaskFragment) mCurrentFragment).updateListItems();
+        }
     }
 
     @Override
@@ -338,50 +347,14 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * Callback from SlidingTabFragment when add button is pressed.
-     */
     @Override
-    public void onSlidingTabAddSemester() {
+    public void onListSemesterNew() {
         // Show new semester dialog.
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_new_semester_dialog));
         semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
     }
 
-    /**
-     * Callback from ListCourseFragment to add a new course.
-     */
-    @Override
-    public void onSlidingTabAddCourse() {
-        // Check if there are any semesters. If not, display message.
-        if (mDatabase.semestersExist()) {
-            Intent intent = new Intent(this, EditCourseActivity.class);
-            startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.warning_no_semesters), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onSlidingTabAddGrade() {
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog));
-        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
-    }
-
-    @Override
-    public void onSlidingTabAddTask() {
-        // Show new task dialog.
-        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
-                getString(R.string.title_new_task_dialog));
-        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
-    }
-
-    /**
-     * Callback from ListSemesterFragment to edit a semester.
-     */
     @Override
     public void onListSemesterEdit(Semester semester) {
         // show update semester dialog
@@ -390,12 +363,8 @@ public class MainActivity extends BaseActivity
         semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
     }
 
-    /**
-     * Callback from ListSemesterFragment to delete a semester.
-     */
     @Override
     public void onListSemesterDelete(final Semester semester) {
-        // Title contains arguments.
         final String title = String.format(getString(R.string.title_delete_semester_dialog), semester.toString());
         final String positiveMessage =
                 String.format(getString(R.string.toast_alert_delete_confirmation), semester.toString());
@@ -412,7 +381,6 @@ public class MainActivity extends BaseActivity
                         Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
                         // Refresh lists.
                         refreshListSemester();
-                        refreshListCourse();
                     }
                 })
                 .setNegativeButton(R.string.btn_alert_delete_negative, new DialogInterface.OnClickListener() {
@@ -424,64 +392,46 @@ public class MainActivity extends BaseActivity
                 .show();
     }
 
-    /**
-     * Callback from ListCourseFragment to add a grade.
-     *
-     * @param course
-     */
+    /* ListCourseFragment listeners */
     @Override
-    public void onListCourseAddGrade(Course course) {
+    public void onListCourseNew() {
+        // Check if there are any semesters. If not, display message.
+        Intent intent = new Intent(this, CourseEditActivity.class);
+        startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
+    }
+
+    @Override
+    public void onListCourseNewGrade(Course course) {
         // Show new grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_new_grade_dialog), course);
         gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
-    /**
-     * Callback from ListCourseFragment to add a task.
-     *
-     * @param course
-     */
     @Override
-    public void onListCourseAddTask(Course course) {
+    public void onListCourseNewTask(Course course) {
         // Show new task dialog.
         TaskDialogFragment taskDialog = TaskDialogFragment
                 .newInstance(getString(R.string.title_new_task_dialog), course);
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
-    /**
-     * Callback from ListCourseFragment to view course detail.
-     *
-     * @param course
-     */
     @Override
     public void onListCourseViewDetails(Course course) {
-        Intent intent = new Intent(this, DetailCourseActivity.class);
+        Intent intent = new Intent(this, CourseDetailActivity.class);
         intent.putExtra(COURSE_KEY, course);
         startActivity(intent);
     }
 
-    /**
-     * Callback from ListCourseFragment to edit a course.
-     *
-     * @param course
-     */
     @Override
     public void onListCourseEdit(Course course) {
-        Intent intent = new Intent(this, EditCourseActivity.class);
+        Intent intent = new Intent(this, CourseEditActivity.class);
         intent.putExtra(COURSE_KEY, course);
         startActivityForResult(intent, REQUEST_LIST_COURSE_EDIT_COURSE);
     }
 
-    /**
-     * Callback from ListCourseFragment to delete a course.
-     *
-     * @param course
-     */
     @Override
     public void onListCourseDelete(final Course course) {
-        // Title contains arguments.
         final String title = String.format(getString(R.string.title_delete_course_dialog), course.getName());
         final String positiveMessage =
                 String.format(getString(R.string.toast_alert_delete_confirmation), course.getName());
@@ -508,12 +458,28 @@ public class MainActivity extends BaseActivity
                 .show();
     }
 
+    /* ListGradeFragment listeners */
+    @Override
+    public void onListGradeNew() {
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_new_grade_dialog));
+        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
+    }
+
     @Override
     public void onListGradeEdit(Grade grade) {
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
+    }
+
+    @Override
+    public void onListTaskNew() {
+        // Show new task dialog.
+        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
+                getString(R.string.title_new_task_dialog));
+        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
     @Override
@@ -524,8 +490,9 @@ public class MainActivity extends BaseActivity
         taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
     }
 
+    /* Dialog listeners */
     @Override
-    public void onSemesterSaved(boolean isNew) {
+    public void onSemesterSaved(boolean isNew, Semester semester) {
         // String is set to "semester saved" if grade is new, if updating "semester updated."
         String toastMessage = isNew ? getString(R.string.toast_semester_saved) :
                 getString(R.string.toast_semester_updated);
@@ -534,7 +501,6 @@ public class MainActivity extends BaseActivity
 
         // Refresh the semester list.
         refreshListSemester();
-        refreshListCourse();
     }
 
     @Override
@@ -556,7 +522,6 @@ public class MainActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        refreshListCourse();
         refreshListTask();
     }
 
@@ -566,12 +531,12 @@ public class MainActivity extends BaseActivity
     private class ListAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return mDrawerItems.size();
+            return mDrawerItems.length;
         }
 
         @Override
         public Object getItem(int position) {
-            return mDrawerItems.get(position);
+            return mDrawerItems[position];
         }
 
         @Override
@@ -600,10 +565,10 @@ public class MainActivity extends BaseActivity
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            // Set text view to title.
+            // Set text view to mTitle.
             viewHolder.tvSectionName.setText(selectedItem.getTitle());
 
-            // If item has an icon, apply it to text view. Remove default padding left.
+            // If item has an mIcon, apply it to text view. Remove default padding left.
             int iconId = selectedItem.getIcon();
             if (iconId != 0) {
                 viewHolder.tvSectionName.setCompoundDrawablePadding(8);
@@ -623,21 +588,29 @@ public class MainActivity extends BaseActivity
      * Navigation drawer item.
      */
     private class DrawerItem {
-        private final String title;
-        private final int icon;
+        private final int mTitle;
+        private final int mIcon;
+        private WeakReference<Fragment> mFragmentReference;
 
-        public DrawerItem(String title, int icon) {
-            this.title = title;
-            this.icon = icon;
+        public DrawerItem(int title, int icon) {
+            mTitle = title;
+            mIcon = icon;
         }
 
-        public String getTitle() {
-            return title;
+        public int getTitle() {
+            return mTitle;
         }
 
         public int getIcon() {
-            return icon;
+            return mIcon;
         }
 
+        public Fragment getFragment() {
+            return mFragmentReference == null ? null : mFragmentReference.get();
+        }
+
+        public void setFragment(Fragment fragment) {
+            this.mFragmentReference = new WeakReference<Fragment>(fragment);
+        }
     }
 }

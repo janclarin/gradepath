@@ -9,6 +9,7 @@
 
     <!-- ActionBar style -->
     <style name="CustomActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:height">48dp</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:background">@color/theme_primary_color</item>
         <item name="android:backgroundStacked">@android:color/transparent</item>
@@ -16,7 +17,7 @@
 
     <!-- ActionBar tabs text style -->
     <style name="CustomActionBarTabText" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 
     <!-- Borderless button for empty view for list fragments -->
@@ -34,7 +35,7 @@
 
     <!-- Borderless button for list items -->
     <style name="listItemButton" parent="@android:style/Widget.Holo.Button.Borderless">
-        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">64dp</item>
         <item name="android:focusable">false</item>
         <item name="android:scaleType">fitCenter</item>
@@ -78,7 +79,7 @@
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingBottom">72dp</item>
         <item name="android:divider">@null</item>
-        <item name="android:dividerHeight">0dp</item>
+        <item name="android:dividerHeight">8dp</item>
         <item name="android:clipToPadding">false</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
         <item name="android:drawSelectorOnTop">true</item>

@@ -87,6 +87,14 @@ public class ListCourseGradeFragment extends BaseListFragment {
             List<Grade> componentGrades = mDatabase.getComponentGrades(component.getId());
 
             if (componentGrades.size() > 0) {
+                // Calculate current grade for component and set the value.
+                double componentAverage = 0;
+                double componentWeight = component.getWeight() / component.getNumberOfItems();
+                for (Grade grade : componentGrades) {
+                    componentAverage +=
+                            (grade.getPointsPossible() / grade.getPointsReceived()) * componentWeight;
+                }
+                component.setComponentAverage(componentAverage);
                 mListItems.add(component);
                 mListItems.addAll(componentGrades);
             }
@@ -167,8 +175,9 @@ public class ListCourseGradeFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
+                            .inflate(R.layout.fragment_list_course_grades_header, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_component_name_header);
+                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_component_grade_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_grade, parent, false);
@@ -183,7 +192,9 @@ public class ListCourseGradeFragment extends BaseListFragment {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((GradeComponent) listItem).getName());
+                GradeComponent gradeComponent = (GradeComponent) listItem;
+                viewHolder.tvName.setText(gradeComponent.getName());
+                viewHolder.tvGrade.setText(gradeComponent.getComponentAverageString());
             } else {
                 Grade grade = (Grade) listItem;
                 viewHolder.tvName.setText(grade.getName());

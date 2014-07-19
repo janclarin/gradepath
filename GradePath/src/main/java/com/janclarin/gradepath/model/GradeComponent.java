@@ -52,6 +52,13 @@ public class GradeComponent extends DatabaseItem {
         this.componentAverage = componentAverage;
     }
 
+    /**
+     * @return component average as a String representation.
+     */
+    public String getComponentAverageString() {
+        return Double.toString(componentAverage) + "/" + Double.toString(weight);
+    }
+
     @Override
     public String toString() {
         return name;

@@ -6,9 +6,7 @@
 
     <ListView
         android:id="@+id/lv_list_items"
-        style="@style/cardListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        style="@style/cardListView" />
 
     <TextView
         android:id="@+id/tv_list_empty"
@@ -24,6 +22,7 @@
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
         android:padding="16dp"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@drawable/add_list_item" />
 
 </FrameLayout>

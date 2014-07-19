@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +31,7 @@ public class CourseDetailActivity extends BaseActivity
         TaskDialogFragment.OnDialogTaskListener {
 
     private static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
-    private static final int NUM_TABS = 2;
+    private static final int NUM_TABS = 3;
 
     private TabPagerAdapter mAdapter;
     private ViewPager mViewPager;
@@ -55,6 +55,7 @@ public class CourseDetailActivity extends BaseActivity
         mAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(NUM_TABS - 1);
         mViewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -156,7 +157,7 @@ public class CourseDetailActivity extends BaseActivity
         ((BaseListFragment) mAdapter.getTab(2)).updateListItems();
     }
 
-    private class TabPagerAdapter extends FragmentPagerAdapter {
+    private class TabPagerAdapter extends FragmentStatePagerAdapter {
 
         List<Fragment> mTabs = new ArrayList<Fragment>();
 
@@ -174,6 +175,8 @@ public class CourseDetailActivity extends BaseActivity
                 case 1:
                     fragment = ListCourseTaskFragment.newInstance(mCourse);
                     break;
+                case 2:
+                    fragment = new Fragment();
                 default:
                     fragment = new Fragment();
             }
@@ -194,6 +197,8 @@ public class CourseDetailActivity extends BaseActivity
                     return getString(R.string.title_fragment_list_grades);
                 case 1:
                     return getString(R.string.title_fragment_list_tasks);
+                case 2:
+                    return getString(R.string.title_fragment_details);
                 default:
                     return null;
             }

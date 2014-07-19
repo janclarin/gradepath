@@ -508,29 +508,6 @@ public class DatabaseFacade {
     }
 
     /**
-     * Checks mDatabase to see if there are any courses in the mDatabase.
-     *
-     * @return
-     */
-    public boolean coursesExist() {
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES,
-                new String[]{DatabaseHelper.COLUMN_ID}, null, null, null, null, null);
-
-        // Move cursor to first course.
-        cursor.moveToFirst();
-
-        // If it is already past the end, then there was no course to begin with.
-        if (cursor.isAfterLast()) {
-            cursor.close();
-            return false;
-        } else {
-            cursor.close();
-            return true;
-        }
-    }
-
-    /**
      * Inserts a new grade component into the mDatabase.
      *
      * @param courseId

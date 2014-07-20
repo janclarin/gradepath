@@ -121,7 +121,7 @@ public class ListGradeFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_general_header, parent, false);
+                            .inflate(R.layout.fragment_list_header_general, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)

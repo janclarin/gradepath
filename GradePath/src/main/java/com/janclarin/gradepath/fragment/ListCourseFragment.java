@@ -19,7 +19,6 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Semester;
-import com.janclarin.gradepath.model.Task;
 
 import java.util.List;
 
@@ -184,14 +183,13 @@ public class ListCourseFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_general_header, parent, false);
+                            .inflate(R.layout.fragment_list_header_general, parent, false);
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_course, parent, false);
                     viewHolder.vCourseColor = convertView.findViewById(R.id.view_course_color);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_course_name);
-                    viewHolder.tvNextDueDate = (TextView) convertView.findViewById(R.id.tv_next_due_date);
                     viewHolder.vHorizontalDivider = convertView.findViewById(R.id.view_course_item_divider_horizontal);
                     viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_course_show_button_bar);
                     viewHolder.llButtonBar = (LinearLayout) convertView.findViewById(R.id.ll_button_bar);
@@ -208,26 +206,8 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.tvName.setText(((Semester) listItem).toString());
             } else {
                 Course course = (Course) listItem;
-                Task upcomingTask = mDatabase.getUpcomingTask(course.getId());
 
-                String upcomingTaskText;
-                int urgencyColorId;
-                if (upcomingTask == null) {
-                    upcomingTaskText = mContext.getString(R.string.task_due_date_none);
-
-                    urgencyColorId = R.color.course_urgency_0;
-                } else {
-                    upcomingTaskText = upcomingTask.getDueDate(mContext) + " "
-                            + mContext.getString(R.string.bullet) + " "
-                            + upcomingTask.getName();
-
-                    urgencyColorId = upcomingTask.getUrgencyColor(mContext);
-                }
-
-                viewHolder.vCourseColor.setBackgroundResource(urgencyColorId);
                 viewHolder.tvName.setText(course.getName());
-                viewHolder.tvNextDueDate.setText(upcomingTaskText);
-                viewHolder.tvNextDueDate.setTextColor(getResources().getColor(urgencyColorId));
 
                 // Set on click listeners.
                 viewHolder.btnShowButtonBar
@@ -248,7 +228,6 @@ public class ListCourseFragment extends BaseListFragment {
         private class ViewHolder {
             View vCourseColor;
             TextView tvName;
-            TextView tvNextDueDate;
             ImageButton btnShowButtonBar;
             View vHorizontalDivider;
             LinearLayout llButtonBar;

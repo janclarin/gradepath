@@ -1,5 +1,7 @@
 package com.janclarin.gradepath.model;
 
+import java.text.DecimalFormat;
+
 public class GradeComponent extends DatabaseItem {
 
     private long courseId;
@@ -56,7 +58,7 @@ public class GradeComponent extends DatabaseItem {
      * @return component average as a String representation.
      */
     public String getComponentAverageString() {
-        return Double.toString(componentAverage) + "/" + Double.toString(weight);
+        return new DecimalFormat("#.##").format(componentAverage) + "/" + Double.toString(weight);
     }
 
     @Override

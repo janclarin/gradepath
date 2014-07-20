@@ -6,7 +6,6 @@
 
     <ListView
         android:id="@+id/lv_list_course_grade"
-        style="@style/cardListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

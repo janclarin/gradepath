@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/cardView"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="56dp"
     android:descendantFocusability="blocksDescendants"
     android:paddingLeft="16dp">
 
@@ -26,7 +26,7 @@
     <View
         android:id="@+id/view_semester_item_divider_vertical"
         android:layout_width="1dp"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/btn_semester_options"
         android:background="?android:dividerVertical" />

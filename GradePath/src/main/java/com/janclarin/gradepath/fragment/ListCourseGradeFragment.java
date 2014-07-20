@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -54,20 +53,9 @@ public class ListCourseGradeFragment extends BaseListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_detail_course_list_grade, container, false);
-
-        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_course_grade_empty);
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_course_grade);
-
-        return rootView;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmptyTextView.setText(R.string.tv_list_course_grades_empty);
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -175,7 +163,7 @@ public class ListCourseGradeFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_course_grades_header, parent, false);
+                            .inflate(R.layout.fragment_list_header_course_grades, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_component_name_header);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_component_grade_header);
                 } else {

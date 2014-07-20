@@ -6,7 +6,16 @@
 
     <ListView
         android:id="@+id/lv_list_items"
-        style="@style/cardListView" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="16dp"
+        android:divider="@null"
+        android:dividerHeight="8dp"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:drawSelectorOnTop="true" />
 
     <TextView
         android:id="@+id/tv_list_empty"

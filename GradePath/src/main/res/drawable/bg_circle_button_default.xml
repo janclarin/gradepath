@@ -9,7 +9,7 @@
         </shape>
     </item>
     <item
-        android:bottom="1dp"
+        android:bottom="1.5dp"
         android:left="0.5dp"
         android:right="0.5dp">
         <shape

@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -48,9 +49,9 @@ public class CourseEditActivity extends BaseActivity
         }
     };
 
-    private Spinner mSemesterSpinner;
     private EditText mNameEditText;
-    private RadioGroup mCompletedRadioGroup;
+    private Spinner mSemesterSpinner;
+    private CheckBox mCompletedCheckBox;
     private TextView mGradeHeader;
     private TextView mGradeTextView;
     private SeekBar mGradeSeeker;
@@ -88,24 +89,20 @@ public class CourseEditActivity extends BaseActivity
             // Set edit text fields to course data.
             mNameEditText.setText(mCourseToUpdate.getName());
 
+            boolean isCompleted = mCourseToUpdate.isCompleted();
+            mCompletedCheckBox.setChecked(isCompleted);
             // Check if there was a final grade for this course.
-            if (mCourseToUpdate.isCompleted()) {
-                // Check the yes radio button.
-                mCompletedRadioGroup.check(R.id.rb_new_course_complete_yes);
-
+            if (isCompleted) {
                 // Set seek bar to saved grade.
-                try {
-                    mGradeSeeker.setProgress(mCourseToUpdate.getFinalGradeValue());
-                } catch (NullPointerException e) {
-                    // If view is set to gone, this isn't possible.
-                }
+                mGradeSeeker.setProgress(mCourseToUpdate.getFinalGradeValue());
             }
 
             // Get semester.
             Semester courseSemester = mDatabase.getSemester(mCourseToUpdate.getSemesterId());
 
             // Set spinners to proper season and year.
-            setSpinnerToValue(mSemesterSpinner, courseSemester);
+            ArrayAdapter adapter = (ArrayAdapter) mSemesterSpinner.getAdapter();
+            mSemesterSpinner.setSelection(adapter.getPosition(courseSemester));
 
             // Checks if there are any grade components.
             if (mOldGradeComponents.size() == 0) {
@@ -117,9 +114,6 @@ public class CourseEditActivity extends BaseActivity
                     addGradeComponent(gradeComponent, true);
             }
         } else {
-            // Set final grade to no by default.
-            mCompletedRadioGroup.check(R.id.rb_new_course_complete_no);
-
             // Add first grade component by default if none exist.
             addGradeComponent(new GradeComponent(), false);
         }
@@ -154,14 +148,21 @@ public class CourseEditActivity extends BaseActivity
      */
     private void setUpView() {
         // Find views.
-        mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
         mNameEditText = (EditText) findViewById(R.id.et_course_name);
-        mCompletedRadioGroup = (RadioGroup) findViewById(R.id.rg_completed);
+        mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
+        mCompletedCheckBox = (CheckBox) findViewById(R.id.cb_course_completed);
         mGradeHeader = (TextView) findViewById(R.id.tv_final_grade_header);
         mGradeTextView = (TextView) findViewById(R.id.tv_letter_grade);
         mGradeSeeker = (SeekBar) findViewById(R.id.seek_letter_grade);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
         mComponentListHeader = (TextView) findViewById(R.id.tv_grade_components_header);
+
+        if (!mCompletedCheckBox.isChecked()) {
+            // Set visibility of final grade seek bar to gone.
+            mGradeHeader.setVisibility(View.GONE);
+            mGradeTextView.setVisibility(View.GONE);
+            mGradeSeeker.setVisibility(View.GONE);
+        }
 
         // Set up semester spinner.
         List<Semester> semesters = mDatabase.getSemesters();
@@ -212,43 +213,33 @@ public class CourseEditActivity extends BaseActivity
         });
 
         // Set radio group listener.
-        mCompletedRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_new_course_complete_no:
-                        // Set visibility of final grade seek bar to gone.
-                        mGradeHeader.setVisibility(View.GONE);
-                        mGradeTextView.setVisibility(View.GONE);
-                        mGradeSeeker.setVisibility(View.GONE);
-                        mComponentListHeader.setVisibility(View.VISIBLE);
-                        mComponentList.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.rb_new_course_complete_yes:
-                        // Set visibility of final grade seek bar to visible.
-                        mGradeHeader.setVisibility(View.VISIBLE);
-                        mGradeTextView.setVisibility(View.VISIBLE);
-                        mGradeSeeker.setVisibility(View.VISIBLE);
-                        mComponentListHeader.setVisibility(View.INVISIBLE);
-                        mComponentList.setVisibility(View.INVISIBLE);
-                        break;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Set visibility of final grade seek bar to visible.
+                    mGradeHeader.setVisibility(View.VISIBLE);
+                    mGradeTextView.setVisibility(View.VISIBLE);
+                    mGradeSeeker.setVisibility(View.VISIBLE);
+                    mComponentListHeader.setVisibility(View.INVISIBLE);
+                    mComponentList.setVisibility(View.INVISIBLE);
+                } else {
+                    // Set visibility of final grade seek bar to gone.
+                    mGradeHeader.setVisibility(View.GONE);
+                    mGradeTextView.setVisibility(View.GONE);
+                    mGradeSeeker.setVisibility(View.GONE);
+                    mComponentListHeader.setVisibility(View.VISIBLE);
+                    mComponentList.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        // Set radio group to default no.
-        mCompletedRadioGroup.check(R.id.rb_new_course_complete_no);
-
         // Set up grade seeker.
         // Set max value to the number of possible letter grades values.
         mGradeSeeker.setMax(Course.LetterGrade.values().length - 1);
-
-        // Increment seek bar by 1.
         mGradeSeeker.setKeyProgressIncrement(1);
-
-        // Show middle seek bar value and text view.
-        mGradeTextView.setText(Course.LetterGrade.values()[6].toString());
         mGradeSeeker.setProgress(6);
+        mGradeTextView.setText(Course.LetterGrade.values()[6].toString());
 
         // Set seek bar change listener.
         mGradeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -279,7 +270,7 @@ public class CourseEditActivity extends BaseActivity
         // Check if there is a course name. Prompt for one if there isn't one.
         if (courseName.length() > 0) {
 
-            // Insert semester into mDatabase to get id. Checks if semester already exists.
+            // Insert semester into Database to get id. Checks if semester already exists.
             Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
 
             // Check if this is a proper semester.
@@ -290,32 +281,19 @@ public class CourseEditActivity extends BaseActivity
 
             // Course id.
             long courseId;
+            // Set grade value to -1 if the course is not completed.
+            int gradeValue = mCompletedCheckBox.isChecked() ? mGradeSeeker.getProgress() : -1;
 
-            // Check if there is a course to update. If not, create a new course.
-            if (mCourseToUpdate != null) {
-                // Set values to update values.
+            if (mCourseToUpdate == null) {
+                // Course is a new one not found in Database.
+                courseId = mDatabase.insertCourse(semester.getId(), courseName, gradeValue,
+                        mCompletedCheckBox.isChecked());
+            } else {
+                // Set values to updated values and update the Course.
                 mCourseToUpdate.setSemesterId(semester.getId());
                 mCourseToUpdate.setName(courseName);
-
-                // Attempt, but will fail if the view is gone.
-                try {
-                    mCourseToUpdate.setFinalGradeValue(mGradeSeeker.getProgress());
-                } catch (Exception e) {
-                    // If mGradeSeeker is View.GONE, there is no grade yet, so set to 0.
-                    mCourseToUpdate.setFinalGradeValue(0);
-                }
-
-                // Determine whether the course is completed.
-                switch (mCompletedRadioGroup.getCheckedRadioButtonId()) {
-                    case R.id.rb_new_course_complete_no:
-                        mCourseToUpdate.setCompleted(false);
-                        break;
-                    case R.id.rb_new_course_complete_yes:
-                        mCourseToUpdate.setCompleted(true);
-                        break;
-                }
-
-                // Update course.
+                mCourseToUpdate.setCompleted(mCompletedCheckBox.isChecked());
+                mCourseToUpdate.setFinalGradeValue(gradeValue);
                 mDatabase.updateCourse(mCourseToUpdate);
 
                 // Update all grade components.
@@ -330,21 +308,8 @@ public class CourseEditActivity extends BaseActivity
                         mDatabase.updateGradeComponent(gradeComponent);
                     }
                 }
-
                 // Set course id.
                 courseId = mCourseToUpdate.getId();
-
-                // Course is a new one not found in mDatabase.
-            } else {
-                // Letter grade value.
-                int gradeValue = mGradeSeeker.getProgress();
-
-                // Determine whether the course is completed.
-                boolean isCompleted = mCompletedRadioGroup.getCheckedRadioButtonId() ==
-                        R.id.rb_new_course_complete_yes;
-
-                // Course object for new course.
-                courseId = mDatabase.insertCourse(semester.getId(), courseName, gradeValue, isCompleted);
             }
 
             // Add new grade components.
@@ -562,15 +527,11 @@ public class CourseEditActivity extends BaseActivity
      * @param spinner
      * @param semester
      */
-    private void setSpinnerToValue(Spinner spinner, Semester semester) {
-        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
-        spinner.setSelection(adapter.getPosition(semester));
-    }
 
     /**
      * View holder class for grade components.
      */
-    class ViewHolder {
+    private class ViewHolder {
         GradeComponent gradeComponent;
         RelativeLayout layout;
         EditText etName;

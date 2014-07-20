@@ -59,7 +59,7 @@
     </style>
 
     <!-- Check box -->
-    <style name="checkBoxDialog">
+    <style name="checkBox">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>

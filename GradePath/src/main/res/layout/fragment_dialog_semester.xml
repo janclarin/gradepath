@@ -33,7 +33,7 @@
 
     <CheckBox
         android:id="@+id/cb_dialog_semester_current"
-        style="@style/checkBoxDialog"
+        style="@style/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spn_dialog_semester_year"

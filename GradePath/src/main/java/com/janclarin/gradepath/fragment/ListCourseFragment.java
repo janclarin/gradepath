@@ -188,10 +188,9 @@ public class ListCourseFragment extends BaseListFragment {
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_course, parent, false);
-                    viewHolder.vCourseColor = convertView.findViewById(R.id.view_course_color);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_course_name);
-                    viewHolder.vHorizontalDivider = convertView.findViewById(R.id.view_course_item_divider_horizontal);
                     viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_course_show_button_bar);
+                    viewHolder.vHorizontalDivider = convertView.findViewById(R.id.view_course_item_divider_horizontal);
                     viewHolder.llButtonBar = (LinearLayout) convertView.findViewById(R.id.ll_button_bar);
                     viewHolder.btnAddGrade = (Button) convertView.findViewById(R.id.btn_bar_add_grade);
                     viewHolder.btnAddTask = (Button) convertView.findViewById(R.id.btn_bar_add_task);
@@ -226,7 +225,6 @@ public class ListCourseFragment extends BaseListFragment {
          * View holder class for course item layout.
          */
         private class ViewHolder {
-            View vCourseColor;
             TextView tvName;
             ImageButton btnShowButtonBar;
             View vHorizontalDivider;

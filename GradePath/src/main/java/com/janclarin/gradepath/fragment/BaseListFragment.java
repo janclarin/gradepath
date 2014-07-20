@@ -64,14 +64,6 @@ abstract public class BaseListFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Indicate that this fragment has its own menu options.
-        setHasOptionsMenu(true);
-    }
-
     /**
      * Updates the list view within the fragment.
      */

@@ -23,12 +23,17 @@
     <!-- Edit Course Activity -->
     <string name="title_activity_edit_course">Edit course</string>
     <string name="hint_course_name">Course name</string>
+    <string name="hint_instructor">Instructor</string>
+    <string name="hint_email_address">Email address</string>
     <string name="grade_components">Grade components</string>
+    <string name="final_grade">Final grade</string>
+    <string name="new_semester">New semester</string>
     <string name="et_grade_component">Component name</string>
     <string name="et_grade_component_weight">% weight</string>
     <string name="cd_btn_grade_component">Add/remove grade component</string>
     <string name="et_grade_component_number_of_items"># of items</string>
     <string name="tv_course_information">Course information</string>
+    <string name="prompt_pick_semester">Pick a semester</string>
     <string name="prompt_enter_course_name">Enter course name</string>
     <string name="season_fall">Fall</string>
     <string name="season_winter">Winter</string>
@@ -62,23 +67,20 @@
     <string name="title_edit_semester_dialog">Edit semester</string>
 
     <!-- Task Dialog -->
-    <string name="title_task_dialog">Task</string>
-    <string name="title_new_task_dialog">New task</string>
-    <string name="title_edit_task_dialog">Edit task</string>
+    <string name="title_new_task_dialog">New reminder</string>
+    <string name="title_edit_task_dialog">Edit render</string>
     <string name="title_date_picker_due_date">Set due date</string>
-    <string name="tv_dialog_task_name">Task name</string>
-    <string name="tv_dialog_task_type">Type</string>
-    <string name="cb_graded">Will be graded</string>
+    <string name="tv_dialog_task_name">Reminder</string>
+    <string name="cb_graded">Grade reminder</string>
     <string name="tv_dialog_task_due_date">Due Date</string>
     <string name="btn_date_picker_positive">Set</string>
     <string name="btn_date_picker_neutral">Tomorrow</string>
     <string name="btn_date_picker_negative">Cancel</string>
     <string name="task_name_missing">No name</string>
-    <string name="toast_task_updated">Task updated</string>
-    <string name="toast_task_saved">Task saved</string>
+    <string name="toast_task_updated">Reminder updated</string>
+    <string name="toast_task_saved">Reminder saved</string>
 
     <!-- Grade Dialog -->
-    <string name="title_grade_dialog">Grade</string>
     <string name="title_new_grade_dialog">New grade</string>
     <string name="title_edit_grade_dialog">Edit grade</string>
     <string name="tv_dialog_grade_component">Component</string>
@@ -146,7 +148,7 @@
     <string name="title_fragment_list_grades">Grades</string>
     <string name="title_fragment_list_tasks">Reminders</string>
     <string name="tv_list_grade_empty">No grades yet</string>
-    <string name="tv_list_task_empty">No tasks yet</string>
+    <string name="tv_list_task_empty">No reminders yet</string>
     <string name="added">Added</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
@@ -158,14 +160,10 @@
     <string name="title_fragment_details">Details</string>
     <string name="list_task_incomplete">Incomplete</string>
     <string name="list_task_complete">Completed</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="was_due">Was due</string>
     <string name="completed">Completed</string>
     <string name="days_ago">days ago</string>
-    <string name="final_grade">Final grade</string>
-    <string name="new_semester">New semester</string>
-    <string name="pick_semester">Pick a semester</string>
-    <string name="hint_instructor">Instructor</string>
-    <string name="hint_email_address">Email address</string>
+    <string name="grade">Grade</string>
+    <string name="reminder">Reminder</string>
 
 </resources>

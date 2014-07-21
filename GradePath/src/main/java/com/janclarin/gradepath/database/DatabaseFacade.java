@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.GradeComponent;
+import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
-import com.janclarin.gradepath.model.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,7 +48,7 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_MONTH_ADDED, DatabaseHelper.COLUMN_DAY_ADDED};
 
     private static final String[] TASK_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_TASK_NAME,
+            DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_REMINDER_NAME,
             DatabaseHelper.COLUMN_IS_GRADED, DatabaseHelper.COLUMN_IS_COMPLETED,
             DatabaseHelper.COLUMN_YEAR_ADDED, DatabaseHelper.COLUMN_MONTH_ADDED,
             DatabaseHelper.COLUMN_DAY_ADDED, DatabaseHelper.COLUMN_YEAR_DUE,
@@ -824,7 +824,7 @@ public class DatabaseFacade {
      * @param dueDate
      * @return
      */
-    public Task insertTask(long courseId, String name, boolean isGraded, boolean isCompleted,
+    public Reminder insertTask(long courseId, String name, boolean isGraded, boolean isCompleted,
                            Calendar dueDate) {
 
         // Calendar instance for day added to mDatabase.
@@ -832,7 +832,7 @@ public class DatabaseFacade {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
-        values.put(DatabaseHelper.COLUMN_TASK_NAME, name);
+        values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
         values.put(DatabaseHelper.COLUMN_IS_GRADED, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
@@ -842,41 +842,41 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
         values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
 
-        long taskId = mDatabase.insert(DatabaseHelper.TABLE_TASKS, null, values);
+        long taskId = mDatabase.insert(DatabaseHelper.TABLE_REMINDERS, null, values);
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
                 DatabaseHelper.COLUMN_ID + " = '" + taskId + "'", null, null, null, null);
 
         cursor.moveToFirst();
 
-        Task task = cursorToTask(cursor);
+        Reminder reminder = cursorToTask(cursor);
 
         cursor.close();
 
-        return task;
+        return reminder;
     }
 
     /**
      * Update task with Task object.
      *
-     * @param task
+     * @param reminder
      * @return
      */
-    public int updateTask(Task task) {
+    public int updateTask(Reminder reminder) {
 
-        Calendar dueDate = task.getDueDate();
+        Calendar dueDate = reminder.getDueDate();
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_COURSE_ID, task.getCourseId());
-        values.put(DatabaseHelper.COLUMN_TASK_NAME, task.getName());
-        values.put(DatabaseHelper.COLUMN_IS_GRADED, task.isGraded() ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, task.isCompleted() ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_COURSE_ID, reminder.getCourseId());
+        values.put(DatabaseHelper.COLUMN_REMINDER_NAME, reminder.getName());
+        values.put(DatabaseHelper.COLUMN_IS_GRADED, reminder.isGraded() ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, reminder.isCompleted() ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
         values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
 
-        return mDatabase.update(DatabaseHelper.TABLE_TASKS, values,
-                DatabaseHelper.COLUMN_ID + " = '" + task.getId() + "'", null);
+        return mDatabase.update(DatabaseHelper.TABLE_REMINDERS, values,
+                DatabaseHelper.COLUMN_ID + " = '" + reminder.getId() + "'", null);
     }
 
     /**
@@ -895,45 +895,45 @@ public class DatabaseFacade {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
-        values.put(DatabaseHelper.COLUMN_TASK_NAME, name);
+        values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
         values.put(DatabaseHelper.COLUMN_IS_GRADED, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
         values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
 
-        return mDatabase.update(DatabaseHelper.TABLE_TASKS, values,
+        return mDatabase.update(DatabaseHelper.TABLE_REMINDERS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + taskId + "'", null);
     }
 
     /**
      * Deletes a task from mDatabase.
      *
-     * @param task
+     * @param reminder
      */
-    public void deleteTask(Task task) {
+    public void deleteTask(Reminder reminder) {
 
-        mDatabase.delete(DatabaseHelper.TABLE_TASKS,
-                DatabaseHelper.COLUMN_ID + " = '" + task.getId() + "'", null);
+        mDatabase.delete(DatabaseHelper.TABLE_REMINDERS,
+                DatabaseHelper.COLUMN_ID + " = '" + reminder.getId() + "'", null);
     }
 
     /**
      * Returns a list of all tasks.
      */
-    public List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<Task>();
+    public List<Reminder> getTasks() {
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
                 null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            tasks.add(cursorToTask(cursor));
+            reminders.add(cursorToTask(cursor));
             cursor.moveToNext();
         }
         cursor.close();
 
-        return tasks;
+        return reminders;
     }
 
     /**
@@ -941,23 +941,23 @@ public class DatabaseFacade {
      *
      * @param courseId
      */
-    public List<Task> getTasks(long courseId) {
-        List<Task> tasks = new ArrayList<Task>();
+    public List<Reminder> getTasks(long courseId) {
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            tasks.add(cursorToTask(cursor));
+            reminders.add(cursorToTask(cursor));
             cursor.moveToNext();
         }
         cursor.close();
 
         // Sort the tasks by due date.
-        Collections.sort(tasks);
+        Collections.sort(reminders);
 
-        return tasks;
+        return reminders;
     }
 
     /**
@@ -966,11 +966,11 @@ public class DatabaseFacade {
      * @param courseId
      * @return
      */
-    public Task getUpcomingTask(long courseId) {
-        List<Task> tasks = getIncompleteTasks(courseId);
+    public Reminder getUpcomingTask(long courseId) {
+        List<Reminder> reminders = getIncompleteReminders(courseId);
 
-        if (tasks.size() > 0) {
-            return tasks.get(0);
+        if (reminders.size() > 0) {
+            return reminders.get(0);
         } else {
             return null;
         }
@@ -981,51 +981,51 @@ public class DatabaseFacade {
      *
      * @param courseId
      */
-    public List<Task> getIncompleteTasks(long courseId) {
+    public List<Reminder> getIncompleteReminders(long courseId) {
 
-        List<Task> tasks = new ArrayList<Task>();
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
                         DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
         );
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            tasks.add(cursorToTask(cursor));
+            reminders.add(cursorToTask(cursor));
             cursor.moveToNext();
         }
         cursor.close();
 
         // Sort the tasks by due date.
-        Collections.sort(tasks);
+        Collections.sort(reminders);
 
-        return tasks;
+        return reminders;
     }
 
     /**
      * Returns a list of all complete tasks for a course.
      */
-    public List<Task> getCompletedTasks(long courseId) {
+    public List<Reminder> getCompletedReminders(long courseId) {
 
-        List<Task> tasks = new ArrayList<Task>();
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_TASKS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
                         DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null
         );
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            tasks.add(cursorToTask(cursor));
+            reminders.add(cursorToTask(cursor));
             cursor.moveToNext();
         }
         cursor.close();
 
         // Sort the tasks by due date.
-        Collections.sort(tasks);
+        Collections.sort(reminders);
 
-        return tasks;
+        return reminders;
     }
 
     /**
@@ -1129,21 +1129,21 @@ public class DatabaseFacade {
      * @param cursor
      * @return
      */
-    private Task cursorToTask(Cursor cursor) {
-        Task task = new Task();
+    private Reminder cursorToTask(Cursor cursor) {
+        Reminder reminder = new Reminder();
 
         try {
-            task.setId(cursor.getLong(0));
+            reminder.setId(cursor.getLong(0));
         } catch (CursorIndexOutOfBoundsException e) {
             return null;
         }
 
-        task.setCourseId(cursor.getLong(1));
-        task.setName(cursor.getString(2));
-        task.setGraded((cursor.getInt(3) == 1));
-        task.setCompleted((cursor.getInt(4) == 1));
-        task.setAddDate(new GregorianCalendar(cursor.getInt(5), cursor.getInt(6), cursor.getInt(7)));
-        task.setDueDate(new GregorianCalendar(cursor.getInt(8), cursor.getInt(9), cursor.getInt(10)));
-        return task;
+        reminder.setCourseId(cursor.getLong(1));
+        reminder.setName(cursor.getString(2));
+        reminder.setGraded((cursor.getInt(3) == 1));
+        reminder.setCompleted((cursor.getInt(4) == 1));
+        reminder.setAddDate(new GregorianCalendar(cursor.getInt(5), cursor.getInt(6), cursor.getInt(7)));
+        reminder.setDueDate(new GregorianCalendar(cursor.getInt(8), cursor.getInt(9), cursor.getInt(10)));
+        return reminder;
     }
 }

@@ -102,19 +102,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ");";
 
     /**
-     * Task table.
+     * Reminder table.
      * Includes course id, year added, day of year added.
      */
-    public static final String TABLE_TASKS = "tasks";
-    public static final String COLUMN_TASK_NAME = "task_name";
+    public static final String TABLE_REMINDERS = "reminders";
+    public static final String COLUMN_REMINDER_NAME = "reminder_name";
     public static final String COLUMN_IS_GRADED = "is_graded";
     public static final String COLUMN_YEAR_DUE = "year_due";
     public static final String COLUMN_MONTH_DUE = "month_due";
     public static final String COLUMN_DAY_DUE = "day_due";
     private static final String CREATE_TABLE_TASKS = "CREATE TABLE "
-            + TABLE_TASKS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TABLE_REMINDERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
-            + COLUMN_TASK_NAME + " TEXT NOT NULL, "
+            + COLUMN_REMINDER_NAME + " TEXT NOT NULL, "
             + COLUMN_IS_GRADED + " INTEGER NOT NULL, "
             + COLUMN_IS_COMPLETED + " INTEGER NOT NULL, "
             + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static DatabaseHelper sInstance;
 
     /**
@@ -166,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPONENTS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_GRADES);
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDERS);
         onCreate(database);
     }
 }

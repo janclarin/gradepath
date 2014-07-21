@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Task extends DatabaseItem implements Comparable<Task> {
+public class Reminder extends DatabaseItem implements Comparable<Reminder> {
 
     private long courseId;
     private String name;
@@ -17,7 +17,7 @@ public class Task extends DatabaseItem implements Comparable<Task> {
     private Calendar addDate;
     private Calendar dueDate;
 
-    public Task() {
+    public Reminder() {
     }
 
     public String getName() {
@@ -143,7 +143,7 @@ public class Task extends DatabaseItem implements Comparable<Task> {
      * @return
      */
     @Override
-    public int compareTo(Task another) {
+    public int compareTo(Reminder another) {
         if (this.isCompleted()) {
             if (another.isCompleted()) {
                 // If both are complete, sort by due date. More recent first.

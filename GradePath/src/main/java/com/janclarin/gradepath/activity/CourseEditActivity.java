@@ -286,7 +286,7 @@ public class CourseEditActivity extends BaseActivity
 
         // Check if this is a proper semester.
         if (semester.toString().equals(getString(R.string.new_semester))) {
-            Toast.makeText(this, R.string.pick_semester, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.prompt_pick_semester, Toast.LENGTH_SHORT).show();
             return;
         }
 

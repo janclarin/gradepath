@@ -21,7 +21,7 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
 import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.Course;
-import com.janclarin.gradepath.model.Task;
+import com.janclarin.gradepath.model.Reminder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,11 +31,11 @@ import java.util.List;
 /**
  * Dialog for adding and updating tasks.
  */
-public class TaskDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class ReminderDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     static final String DIALOG_TITLE = "Title";
 
-    private static final String LOG_TAG = TaskDialogFragment.class.getSimpleName();
+    private static final String LOG_TAG = ReminderDialogFragment.class.getSimpleName();
 
     /**
      * Date formatter for the due date.
@@ -48,7 +48,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
 
     private DatabaseFacade mDatabase;
 
-    private Task mTaskToUpdate;
+    private Reminder mReminderToUpdate;
 
     private boolean mOpenedFromCourse;
 
@@ -63,7 +63,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
     // Calendar to keep track of due date.
     private Calendar mDueDateCalendar;
 
-    public TaskDialogFragment() {
+    public ReminderDialogFragment() {
     }
 
     /**
@@ -72,16 +72,16 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
      * @param title
      * @return
      */
-    public static TaskDialogFragment newInstance(String title) {
-        TaskDialogFragment fragment = new TaskDialogFragment();
+    public static ReminderDialogFragment newInstance(String title) {
+        ReminderDialogFragment fragment = new ReminderDialogFragment();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static TaskDialogFragment newInstance(String title, Course course) {
-        TaskDialogFragment fragment = new TaskDialogFragment();
+    public static ReminderDialogFragment newInstance(String title, Course course) {
+        ReminderDialogFragment fragment = new ReminderDialogFragment();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(MainActivity.COURSE_KEY, course);
@@ -89,11 +89,11 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         return fragment;
     }
 
-    public static TaskDialogFragment newInstance(String title, Task task) {
-        TaskDialogFragment fragment = new TaskDialogFragment();
+    public static ReminderDialogFragment newInstance(String title, Reminder reminder) {
+        ReminderDialogFragment fragment = new ReminderDialogFragment();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
-        args.putSerializable(MainActivity.TASK_KEY, task);
+        args.putSerializable(MainActivity.TASK_KEY, reminder);
         fragment.setArguments(args);
         return fragment;
     }
@@ -116,7 +116,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         mOpenedFromCourse = getArguments().containsKey(MainActivity.COURSE_KEY);
 
         // Get task to update if it exists.
-        mTaskToUpdate = (Task) getArguments().getSerializable(MainActivity.TASK_KEY);
+        mReminderToUpdate = (Reminder) getArguments().getSerializable(MainActivity.TASK_KEY);
     }
 
     @Override
@@ -147,24 +147,24 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         }
 
         // If updating a task.
-        if (mTaskToUpdate != null) {
-            mTaskName.setText(mTaskToUpdate.getName());
+        if (mReminderToUpdate != null) {
+            mTaskName.setText(mReminderToUpdate.getName());
 
             // Set course to task's course.
             Course taskCourse = new Course();
-            taskCourse.setId(mTaskToUpdate.getCourseId());
+            taskCourse.setId(mReminderToUpdate.getCourseId());
             mCourseSpinner.setSelection(courseAdapter.getPosition(taskCourse));
 
             // Set due date calendar to task's due date.
-            mDueDateCalendar = mTaskToUpdate.getDueDate();
+            mDueDateCalendar = mReminderToUpdate.getDueDate();
 
             // Set graded checkbox.
-            mCheckBoxGraded.setChecked(mTaskToUpdate.isGraded());
+            mCheckBoxGraded.setChecked(mReminderToUpdate.isGraded());
         }
 
         // Date picker dialog instance.
         final DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
-                DatePickerDialog.THEME_HOLO_LIGHT, TaskDialogFragment.this,
+                DatePickerDialog.THEME_HOLO_LIGHT, ReminderDialogFragment.this,
                 mDueDateCalendar.get(Calendar.YEAR), mDueDateCalendar.get(Calendar.MONTH),
                 mDueDateCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -232,7 +232,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         });
 
         // Set positive button to "Update" if updating, "Save" if not.
-        String positiveButton = (mTaskToUpdate != null) ? mContext.getString(R.string.dialog_update) : mContext.getString(R.string.dialog_save);
+        String positiveButton = (mReminderToUpdate != null) ? mContext.getString(R.string.dialog_update) : mContext.getString(R.string.dialog_save);
 
         // Return new dialog. Gets title from arguments.
         final AlertDialog alertDialog = new AlertDialog.Builder(mContext)
@@ -260,15 +260,15 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
                     long courseId = ((Course) mCourseSpinner.getSelectedItem()).getId();
                     boolean isGraded = mCheckBoxGraded.isChecked();
 
-                    if (mTaskToUpdate == null) {
+                    if (mReminderToUpdate == null) {
                         // Insert task into mDatabase. false because it isn't completed yet.
                         mDatabase.insertTask(courseId, name, isGraded, false, mDueDateCalendar);
-                        if (mListener != null) mListener.onTaskSaved(true);
+                        if (mListener != null) mListener.onReminderSaved(true);
                     } else {
                         // Update task.
-                        mDatabase.updateTask(mTaskToUpdate.getId(), courseId, name, isGraded,
-                                mTaskToUpdate.isCompleted(), mDueDateCalendar);
-                        if (mListener != null) mListener.onTaskSaved(false);
+                        mDatabase.updateTask(mReminderToUpdate.getId(), courseId, name, isGraded,
+                                mReminderToUpdate.isCompleted(), mDueDateCalendar);
+                        if (mListener != null) mListener.onReminderSaved(false);
                     }
 
                     // Notify listeners that a task was saved.
@@ -320,7 +320,7 @@ public class TaskDialogFragment extends DialogFragment implements DatePickerDial
         /**
          * Called when a grade is saved.
          */
-        public void onTaskSaved(boolean isNew);
+        public void onReminderSaved(boolean isNew);
     }
 
     /**

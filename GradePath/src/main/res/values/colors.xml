@@ -7,6 +7,7 @@
     <color name="theme_primary_color_dark_see_through">#cc327f7f</color>
     <color name="white_60_opacity">#99ffffff</color>
     <color name="actionbar_divider">#d6d6d6</color>
+    <color name="circle_button_shadow">@color/theme_primary_color_dark</color>
 
     <color name="card_fill">#fff</color>
     <color name="card_shadow">#ccc</color>

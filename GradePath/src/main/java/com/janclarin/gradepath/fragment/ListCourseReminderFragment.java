@@ -18,18 +18,18 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
-import com.janclarin.gradepath.model.Task;
+import com.janclarin.gradepath.model.Reminder;
 
 import java.util.List;
 
-public class ListCourseTaskFragment extends BaseListFragment {
+public class ListCourseReminderFragment extends BaseListFragment {
 
     private FragmentListCourseTaskListener mListener;
 
     // Selected Course object.
     private Course mCourse;
 
-    public ListCourseTaskFragment() {
+    public ListCourseReminderFragment() {
         // Required empty public constructor.
     }
 
@@ -38,8 +38,8 @@ public class ListCourseTaskFragment extends BaseListFragment {
      *
      * @return A new instance of fragment CourseDetailsFragment.
      */
-    public static ListCourseTaskFragment newInstance(Course course) {
-        ListCourseTaskFragment fragment = new ListCourseTaskFragment();
+    public static ListCourseReminderFragment newInstance(Course course) {
+        ListCourseReminderFragment fragment = new ListCourseReminderFragment();
         Bundle args = new Bundle();
         args.putSerializable(MainActivity.COURSE_KEY, course);
         fragment.setArguments(args);
@@ -70,19 +70,19 @@ public class ListCourseTaskFragment extends BaseListFragment {
         clearListItems();
 
         long courseId = mCourse.getId();
-        List<Task> incompleteTasks = mDatabase.getIncompleteTasks(courseId);
-        List<Task> completedTasks = mDatabase.getCompletedTasks(courseId);
+        List<Reminder> incompleteReminders = mDatabase.getIncompleteReminders(courseId);
+        List<Reminder> completedReminders = mDatabase.getCompletedReminders(courseId);
 
         // Add incomplete task header and tasks.
-        if (incompleteTasks.size() > 0) {
+        if (incompleteReminders.size() > 0) {
             mListItems.add(new Header(mContext.getString(R.string.list_task_incomplete)));
-            mListItems.addAll(incompleteTasks);
+            mListItems.addAll(incompleteReminders);
         }
 
         // Add complete task header and tasks.
-        if (completedTasks.size() > 0) {
+        if (completedReminders.size() > 0) {
             mListItems.add(new Header(mContext.getString(R.string.list_task_complete)));
-            mListItems.addAll(completedTasks);
+            mListItems.addAll(completedReminders);
         }
 
         notifyAdapter();
@@ -94,7 +94,7 @@ public class ListCourseTaskFragment extends BaseListFragment {
     @Override
     protected void editSelectedItem(int selectedPosition) {
         if (mListener != null)
-            mListener.onListCourseTaskEdit((Task) mAdapter.getItem(selectedPosition));
+            mListener.onListCourseReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -102,9 +102,9 @@ public class ListCourseTaskFragment extends BaseListFragment {
         int numItems = mListItems.size();
         for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
-                Task selectedTask = (Task) mAdapter.getItem(i);
-                mDatabase.deleteTask(selectedTask);
-                mListItems.remove(selectedTask);
+                Reminder selectedReminder = (Reminder) mAdapter.getItem(i);
+                mDatabase.deleteTask(selectedReminder);
+                mListItems.remove(selectedReminder);
             }
         }
         updateListItems();
@@ -178,15 +178,15 @@ public class ListCourseTaskFragment extends BaseListFragment {
             if (type == ITEM_VIEW_TYPE_HEADER) {
                 viewHolder.tvName.setText(((Header) listItem).getName());
             } else {
-                Task task = (Task) listItem;
-                viewHolder.tvName.setText(task.getName());
-                if (task.isCompleted()) {
+                Reminder reminder = (Reminder) listItem;
+                viewHolder.tvName.setText(reminder.getName());
+                if (reminder.isCompleted()) {
                     viewHolder.tvName.setPaintFlags(
                             viewHolder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-                viewHolder.tvDueDate.setText(task.getDueDate(mContext));
-                viewHolder.cbCompleted.setChecked(task.isCompleted());
-                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task));
+                viewHolder.tvDueDate.setText(reminder.getDueDate(mContext));
+                viewHolder.cbCompleted.setChecked(reminder.isCompleted());
+                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(reminder));
             }
 
             return convertView;
@@ -200,16 +200,16 @@ public class ListCourseTaskFragment extends BaseListFragment {
 
         private class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
-            private Task task;
+            private Reminder reminder;
 
-            public OnCompletedChangeListener(Task task) {
-                this.task = task;
+            public OnCompletedChangeListener(Reminder reminder) {
+                this.reminder = reminder;
             }
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                task.setCompleted(isChecked);
-                mDatabase.updateTask(task);
+                reminder.setCompleted(isChecked);
+                mDatabase.updateTask(reminder);
             }
         }
     }
@@ -222,11 +222,11 @@ public class ListCourseTaskFragment extends BaseListFragment {
         /**
          * Called when a task is going to be added.
          */
-        public void onListCourseTaskAdd(Course course);
+        public void onListCourseReminderAdd(Course course);
 
         /**
          * Called when a task is going to be updated.
          */
-        public void onListCourseTaskEdit(Task task);
+        public void onListCourseReminderEdit(Reminder reminder);
     }
 }

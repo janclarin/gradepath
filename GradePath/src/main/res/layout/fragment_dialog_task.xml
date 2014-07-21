@@ -3,7 +3,7 @@
     style="@style/dialogPrompt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.janclarin.gradepath.dialog.TaskDialogFragment">
+    tools:context="com.janclarin.gradepath.dialog.ReminderDialogFragment">
 
     <!-- Task name -->
     <EditText

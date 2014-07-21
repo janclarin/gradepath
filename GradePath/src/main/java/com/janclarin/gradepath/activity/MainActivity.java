@@ -24,18 +24,18 @@ import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
+import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
-import com.janclarin.gradepath.dialog.TaskDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
 import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
+import com.janclarin.gradepath.fragment.ListReminderFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
-import com.janclarin.gradepath.fragment.ListTaskFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
+import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
-import com.janclarin.gradepath.model.Task;
 
 import java.lang.ref.WeakReference;
 
@@ -48,10 +48,10 @@ public class MainActivity extends BaseActivity
         ListSemesterFragment.OnFragmentListSemesterListener,
         ListCourseFragment.OnFragmentListCourseListener,
         ListGradeFragment.OnFragmentListGradeListener,
-        ListTaskFragment.OnFragmentListTaskListener,
+        ListReminderFragment.OnFragmentListTaskListener,
         SemesterDialogFragment.OnDialogSemesterCallbacks,
         GradeDialogFragment.OnDialogGradeListener,
-        TaskDialogFragment.OnDialogTaskListener,
+        ReminderDialogFragment.OnDialogTaskListener,
         SettingsFragment.OnFragmentSettingsListener {
 
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity
                     mCurrentFragment = ListGradeFragment.newInstance();
                     break;
                 case 3:
-                    mCurrentFragment = ListTaskFragment.newInstance();
+                    mCurrentFragment = ListReminderFragment.newInstance();
                     break;
                 case 4:
                     mCurrentFragment = ListSemesterFragment.newInstance();
@@ -318,8 +318,10 @@ public class MainActivity extends BaseActivity
     private void refreshListGrade() {
         if (mCurrentFragment instanceof ListCourseFragment) {
             ((ListCourseFragment) mCurrentFragment).updateListItems();
-        } else {
+        } else if (mCurrentFragment instanceof ListGradeFragment) {
             ((ListGradeFragment) mCurrentFragment).updateListItems();
+        } else if (mCurrentFragment instanceof HomeFragment) {
+            ((HomeFragment) mCurrentFragment).updateListItems(false, true);
         }
     }
 
@@ -329,8 +331,10 @@ public class MainActivity extends BaseActivity
     private void refreshListTask() {
         if (mCurrentFragment instanceof ListCourseFragment) {
             ((ListCourseFragment) mCurrentFragment).updateListItems();
-        } else {
-            ((ListTaskFragment) mCurrentFragment).updateListItems();
+        } else if (mCurrentFragment instanceof ListReminderFragment) {
+            ((ListReminderFragment) mCurrentFragment).updateListItems();
+        } else if (mCurrentFragment instanceof HomeFragment) {
+            ((HomeFragment) mCurrentFragment).updateListItems(true, false);
         }
     }
 
@@ -357,8 +361,21 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void onHomeNewGrade() {
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_new_grade_dialog));
+        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
+    }
+
+    @Override
+    public void onHomeNewReminder() {
+        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+                getString(R.string.title_new_task_dialog));
+        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
+    }
+
+    @Override
     public void onListSemesterNew() {
-        // Show new semester dialog.
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_new_semester_dialog));
         semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
@@ -366,7 +383,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onListSemesterEdit(Semester semester) {
-        // show update semester dialog
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_edit_semester_dialog), semester);
         semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
@@ -420,7 +436,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onListCourseNewTask(Course course) {
         // Show new task dialog.
-        TaskDialogFragment taskDialog = TaskDialogFragment
+        ReminderDialogFragment taskDialog = ReminderDialogFragment
                 .newInstance(getString(R.string.title_new_task_dialog), course);
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
@@ -484,18 +500,18 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onListTaskNew() {
+    public void onListReminderNew() {
         // Show new task dialog.
-        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
+        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_new_task_dialog));
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
     @Override
-    public void onListTaskEdit(Task task) {
+    public void onListReminderEdit(Reminder reminder) {
         // Show edit task dialog.
-        TaskDialogFragment taskDialog = TaskDialogFragment.newInstance(
-                getString(R.string.title_edit_task_dialog), task);
+        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+                getString(R.string.title_edit_task_dialog), reminder);
         taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
     }
 
@@ -524,7 +540,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onTaskSaved(boolean isNew) {
+    public void onReminderSaved(boolean isNew) {
         // String set to "task saved" if task is new, if updating "task updated."
         String toastMessage = isNew ? getString(R.string.toast_task_saved) :
                 getString(R.string.toast_task_updated);

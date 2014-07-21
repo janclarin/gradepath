@@ -14,19 +14,19 @@ import android.widget.TextView;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
-import com.janclarin.gradepath.model.Task;
+import com.janclarin.gradepath.model.Reminder;
 
 import java.util.List;
 
-public class ListTaskFragment extends BaseListFragment {
+public class ListReminderFragment extends BaseListFragment {
 
     private OnFragmentListTaskListener mListener;
 
-    public static ListTaskFragment newInstance() {
-        return new ListTaskFragment();
+    public static ListReminderFragment newInstance() {
+        return new ListReminderFragment();
     }
 
-    public ListTaskFragment() {
+    public ListReminderFragment() {
         // Required empty public constructor.
     }
 
@@ -37,7 +37,7 @@ public class ListTaskFragment extends BaseListFragment {
         mAddItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) mListener.onListTaskNew();
+                if (mListener != null) mListener.onListReminderNew();
             }
         });
 
@@ -54,11 +54,11 @@ public class ListTaskFragment extends BaseListFragment {
         List<Course> courses = mDatabase.getCurrentCourses();
 
         for (Course course : courses) {
-            List<Task> tasks = mDatabase.getTasks(course.getId());
+            List<Reminder> reminders = mDatabase.getTasks(course.getId());
 
-            if (tasks.size() > 0) {
+            if (reminders.size() > 0) {
                 mListItems.add(course);
-                mListItems.addAll(tasks);
+                mListItems.addAll(reminders);
             }
         }
 
@@ -69,7 +69,7 @@ public class ListTaskFragment extends BaseListFragment {
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null) mListener.onListTaskEdit((Task) mAdapter.getItem(selectedPosition));
+        if (mListener != null) mListener.onListReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -77,9 +77,9 @@ public class ListTaskFragment extends BaseListFragment {
         int numItems = mListItems.size();
         for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
-                Task selectedTask = (Task) mAdapter.getItem(i);
-                mDatabase.deleteTask(selectedTask);
-                mListItems.remove(selectedTask);
+                Reminder selectedReminder = (Reminder) mAdapter.getItem(i);
+                mDatabase.deleteTask(selectedReminder);
+                mListItems.remove(selectedReminder);
             }
         }
         updateListItems();
@@ -105,10 +105,10 @@ public class ListTaskFragment extends BaseListFragment {
     public interface OnFragmentListTaskListener {
 
         /* Called when the add item button is clicked. */
-        public void onListTaskNew();
+        public void onListReminderNew();
 
         /* Called when a task is going to be edited. */
-        public void onListTaskEdit(Task task);
+        public void onListReminderEdit(Reminder reminder);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -150,16 +150,16 @@ public class ListTaskFragment extends BaseListFragment {
             if (type == ITEM_VIEW_TYPE_HEADER) {
                 viewHolder.tvName.setText(((Course) listItem).getName());
             } else {
-                Task task = (Task) listItem;
-                viewHolder.tvName.setText(task.getName());
-                if (task.isCompleted()) {
+                Reminder reminder = (Reminder) listItem;
+                viewHolder.tvName.setText(reminder.getName());
+                if (reminder.isCompleted()) {
                     viewHolder.tvName.setPaintFlags(
                             viewHolder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-                viewHolder.tvDueDate.setText(task.getDueDate(mContext));
-                viewHolder.tvDueDate.setTextColor(getResources().getColor(task.getUrgencyColor(mContext)));
-                viewHolder.cbCompleted.setChecked(task.isCompleted());
-                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(task,
+                viewHolder.tvDueDate.setText(reminder.getDueDate(mContext));
+                viewHolder.tvDueDate.setTextColor(getResources().getColor(reminder.getUrgencyColor(mContext)));
+                viewHolder.cbCompleted.setChecked(reminder.isCompleted());
+                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(reminder,
                         viewHolder.tvName));
             }
 
@@ -174,18 +174,18 @@ public class ListTaskFragment extends BaseListFragment {
 
         private class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
-            private Task task;
+            private Reminder reminder;
             private TextView textView;
 
-            public OnCompletedChangeListener(Task task, TextView textView) {
-                this.task = task;
+            public OnCompletedChangeListener(Reminder reminder, TextView textView) {
+                this.reminder = reminder;
                 this.textView = textView;
             }
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                task.setCompleted(isChecked);
-                mDatabase.updateTask(task);
+                reminder.setCompleted(isChecked);
+                mDatabase.updateTask(reminder);
                 textView.setPaintFlags(isChecked ? textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
                         : textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }

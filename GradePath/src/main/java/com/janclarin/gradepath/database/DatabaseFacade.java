@@ -34,6 +34,7 @@ public class DatabaseFacade {
 
     private static final String[] COURSE_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_SEMESTER_ID, DatabaseHelper.COLUMN_COURSE_NAME,
+            DatabaseHelper.COLUMN_INSTRUCTOR_NAME, DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL,
             DatabaseHelper.COLUMN_FINAL_GRADE, DatabaseHelper.COLUMN_IS_COMPLETED};
 
     private static final String[] COMPONENT_COLUMNS = {DatabaseHelper.COLUMN_ID,
@@ -342,12 +343,14 @@ public class DatabaseFacade {
      * @param isCompleted
      * @return
      */
-    public long insertCourse(long semesterId, String courseName, int letterGradeValue,
-                             boolean isCompleted) {
+    public long insertCourse(long semesterId, String courseName, String instructorName,
+                             String instructorEmail, int letterGradeValue, boolean isCompleted) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, courseName);
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_NAME, instructorName);
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         // Booleans not supported in SQLite, 1 = true, 0 = false.
@@ -368,6 +371,8 @@ public class DatabaseFacade {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, course.getSemesterId());
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, course.getName());
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_NAME, course.getInstructorName());
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, course.getInstructorEmail());
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, course.getFinalGradeValue());
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, course.isCompleted() ? 1 : 0);
         // Booleans not supported in SQLite, 1 = true, 0 = false.
@@ -385,32 +390,19 @@ public class DatabaseFacade {
      * @param letterGradeValue
      * @return
      */
-    public int updateCourse(long courseId, long semesterId, String courseName, int letterGradeValue,
-                            boolean isCompleted) {
+    public int updateCourse(long courseId, long semesterId, String courseName, String instructorName,
+                            String instructorEmail, int letterGradeValue, boolean isCompleted) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, courseName);
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_NAME, instructorName);
+        values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
 
         return mDatabase.update(DatabaseHelper.TABLE_COURSES, values,
                 DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
-    }
-
-    /**
-     * Deletes a course and all related information using its Course object.
-     *
-     * @param course
-     */
-    public void deleteCourse(Course course) {
-        long courseId = course.getId();
-        mDatabase.delete(DatabaseHelper.TABLE_COURSES,
-                DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
-        mDatabase.delete(DatabaseHelper.TABLE_COMPONENTS,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null);
-        mDatabase.delete(DatabaseHelper.TABLE_GRADES,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null);
     }
 
     /**
@@ -1079,7 +1071,10 @@ public class DatabaseFacade {
 
         course.setSemesterId(cursor.getLong(1));
         course.setName(cursor.getString(2));
-        course.setFinalGradeValue(cursor.getInt(3));
+        course.setInstructorName(cursor.getString(3));
+        course.setInstructorEmail(cursor.getString(4));
+        course.setFinalGradeValue(cursor.getInt(5));
+        course.setCompleted(cursor.getInt(6) == 1);
 
         return course;
     }

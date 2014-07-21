@@ -49,10 +49,12 @@ public class CourseEditActivity extends BaseActivity
         }
     };
 
-    private EditText mNameEditText;
+    private EditText mCourseName;
+    private EditText mInstructorName;
+    private EditText mInstructorEmail;
     private Spinner mSemesterSpinner;
     private CheckBox mCompletedCheckBox;
-    private TextView mGradeHeader;
+    private TextView mSectionTwoHeader;
     private TextView mGradeTextView;
     private SeekBar mGradeSeeker;
     private LinearLayout mComponentList;
@@ -87,7 +89,9 @@ public class CourseEditActivity extends BaseActivity
             mOldGradeComponents = mDatabase.getGradeComponents(mCourseToUpdate.getId());
 
             // Set edit text fields to course data.
-            mNameEditText.setText(mCourseToUpdate.getName());
+            mCourseName.setText(mCourseToUpdate.getName());
+            mInstructorName.setText(mCourseToUpdate.getInstructorName());
+            mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
 
             boolean isCompleted = mCourseToUpdate.isCompleted();
             mCompletedCheckBox.setChecked(isCompleted);
@@ -148,18 +152,19 @@ public class CourseEditActivity extends BaseActivity
      */
     private void setUpView() {
         // Find views.
-        mNameEditText = (EditText) findViewById(R.id.et_course_name);
+        mCourseName = (EditText) findViewById(R.id.et_course_name);
+        mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
+        mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
         mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
         mCompletedCheckBox = (CheckBox) findViewById(R.id.cb_course_completed);
-        mGradeHeader = (TextView) findViewById(R.id.tv_final_grade_header);
+        mSectionTwoHeader = (TextView) findViewById(R.id.tv_section_two_header);
         mGradeTextView = (TextView) findViewById(R.id.tv_letter_grade);
         mGradeSeeker = (SeekBar) findViewById(R.id.seek_letter_grade);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
-        mComponentListHeader = (TextView) findViewById(R.id.tv_grade_components_header);
 
         if (!mCompletedCheckBox.isChecked()) {
             // Set visibility of final grade seek bar to gone.
-            mGradeHeader.setVisibility(View.GONE);
+            mSectionTwoHeader.setText(R.string.grade_components);
             mGradeTextView.setVisibility(View.GONE);
             mGradeSeeker.setVisibility(View.GONE);
         }
@@ -218,17 +223,16 @@ public class CourseEditActivity extends BaseActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // Set visibility of final grade seek bar to visible.
-                    mGradeHeader.setVisibility(View.VISIBLE);
+                    mSectionTwoHeader.setText(R.string.final_grade);
+                    mSectionTwoHeader.setVisibility(View.VISIBLE);
                     mGradeTextView.setVisibility(View.VISIBLE);
                     mGradeSeeker.setVisibility(View.VISIBLE);
-                    mComponentListHeader.setVisibility(View.INVISIBLE);
                     mComponentList.setVisibility(View.INVISIBLE);
                 } else {
-                    // Set visibility of final grade seek bar to gone.
-                    mGradeHeader.setVisibility(View.GONE);
+                    // Set visibility of final grade seek bar to gone. Set text for header.
+                    mSectionTwoHeader.setText(R.string.grade_components);
                     mGradeTextView.setVisibility(View.GONE);
                     mGradeSeeker.setVisibility(View.GONE);
-                    mComponentListHeader.setVisibility(View.VISIBLE);
                     mComponentList.setVisibility(View.VISIBLE);
                 }
             }
@@ -263,76 +267,72 @@ public class CourseEditActivity extends BaseActivity
      * Saves course with information from new course activity.
      */
     private void saveCourse() {
-        // TODO: Optimize the checks.
-        // Open mDatabase.
-        String courseName = mNameEditText.getText().toString();
+        String courseName = mCourseName.getText().toString().trim();
 
         // Check if there is a course name. Prompt for one if there isn't one.
-        if (courseName.length() > 0) {
+        if (courseName.isEmpty()) {
+            Toast toast = Toast.makeText(this, getString(R.string.prompt_enter_course_name),
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
 
-            // Insert semester into Database to get id. Checks if semester already exists.
-            Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
+        String instructorName = mInstructorName.getText().toString().trim();
+        String instructorEmail = mInstructorEmail.getText().toString().trim();
 
-            // Check if this is a proper semester.
-            if (semester.toString().equals(getString(R.string.new_semester))) {
-                Toast.makeText(this, R.string.pick_semester, Toast.LENGTH_SHORT).show();
-                return;
-            }
+        // Insert semester into Database to get id. Checks if semester already exists.
+        Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
 
-            // Course id.
-            long courseId;
-            // Set grade value to -1 if the course is not completed.
-            int gradeValue = mCompletedCheckBox.isChecked() ? mGradeSeeker.getProgress() : -1;
+        // Check if this is a proper semester.
+        if (semester.toString().equals(getString(R.string.new_semester))) {
+            Toast.makeText(this, R.string.pick_semester, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            if (mCourseToUpdate == null) {
-                // Course is a new one not found in Database.
-                courseId = mDatabase.insertCourse(semester.getId(), courseName, gradeValue,
-                        mCompletedCheckBox.isChecked());
-            } else {
-                // Set values to updated values and update the Course.
-                mCourseToUpdate.setSemesterId(semester.getId());
-                mCourseToUpdate.setName(courseName);
-                mCourseToUpdate.setCompleted(mCompletedCheckBox.isChecked());
-                mCourseToUpdate.setFinalGradeValue(gradeValue);
-                mDatabase.updateCourse(mCourseToUpdate);
+        // Set grade value to -1 if the course is not completed.
+        int gradeValue = mCompletedCheckBox.isChecked() ? mGradeSeeker.getProgress() : -1;
 
-                // Update all grade components.
-                for (GradeComponent gradeComponent : mOldGradeComponents) {
-                    // If update fails, component doesn't exist yet. Insert it instead.
-                    String name = gradeComponent.getName();
-                    double weight = gradeComponent.getWeight();
-                    int numOfItems = gradeComponent.getNumberOfItems();
+        long courseId;
+        if (mCourseToUpdate == null) {
+            // Course is a new one not found in Database.
+            courseId = mDatabase.insertCourse(semester.getId(), courseName, instructorName,
+                    instructorEmail, gradeValue, mCompletedCheckBox.isChecked());
+        } else {
+            // Update course.
+            mDatabase.updateCourse(mCourseToUpdate.getId(), semester.getId(), courseName,
+                    instructorName, instructorEmail, gradeValue, mCompletedCheckBox.isChecked());
 
-                    // Ensure that the grade component fields are valid.
-                    if (name != null && weight > 0 && numOfItems > 0) {
-                        mDatabase.updateGradeComponent(gradeComponent);
-                    }
-                }
-                // Set course id.
-                courseId = mCourseToUpdate.getId();
-            }
-
-            // Add new grade components.
-            for (GradeComponent gradeComponent : mNewGradeComponents) {
+            // Update all grade components.
+            for (GradeComponent gradeComponent : mOldGradeComponents) {
+                // If update fails, component doesn't exist yet. Insert it instead.
                 String name = gradeComponent.getName();
                 double weight = gradeComponent.getWeight();
                 int numOfItems = gradeComponent.getNumberOfItems();
 
                 // Ensure that the grade component fields are valid.
                 if (name != null && weight > 0 && numOfItems > 0) {
-                    mDatabase.insertGradeComponent(courseId, name, weight, numOfItems);
+                    mDatabase.updateGradeComponent(gradeComponent);
                 }
             }
-
-            setResult(RESULT_OK);
-            finish();
-        } else {
-            // Show toast to indicate a course name is missing.
-            Toast toast = Toast.makeText(this, getString(R.string.prompt_enter_course_name),
-                    Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            // Set course id.
+            courseId = mCourseToUpdate.getId();
         }
+
+        // Add new grade components.
+        for (GradeComponent gradeComponent : mNewGradeComponents) {
+            String name = gradeComponent.getName();
+            double weight = gradeComponent.getWeight();
+            int numOfItems = gradeComponent.getNumberOfItems();
+
+            // Ensure that the grade component fields are valid.
+            if (name != null && weight > 0 && numOfItems > 0) {
+                mDatabase.insertGradeComponent(courseId, name, weight, numOfItems);
+            }
+        }
+
+        setResult(RESULT_OK);
+        finish();
     }
 
     /**

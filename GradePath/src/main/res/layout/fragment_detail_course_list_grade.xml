@@ -12,6 +12,6 @@
     <TextView
         android:id="@+id/tv_list_course_grade_empty"
         style="@style/emptyListTextView"
-        android:text="@string/tv_list_course_grades_empty" />
+        android:text="@string/tv_list_grade_empty" />
 
 </FrameLayout>

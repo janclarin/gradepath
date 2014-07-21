@@ -1,6 +1,5 @@
 package com.janclarin.gradepath.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -19,38 +18,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.DatabaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Popup Menu for items
-abstract public class BaseListFragment extends Fragment {
+abstract public class BaseListFragment extends BaseFragment {
 
     protected static final int ITEM_VIEW_TYPE_HEADER = 0;
     protected static final int ITEM_VIEW_TYPE_DATABASE_ITEM = 1;
     protected static final int NUM_ITEM_VIEW_TYPES = 2;
 
-    protected Context mContext;
-    protected DatabaseFacade mDatabase;
     protected List<DatabaseItem> mListItems;
     protected TextView mEmptyTextView;
     protected ListView mListView;
     protected ImageButton mAddItemButton;
     protected BaseListAdapter mAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
-
-        mContext = getActivity();
-
-        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
-        mDatabase.open();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

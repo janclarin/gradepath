@@ -51,16 +51,15 @@
 
     <!-- Borderless button for list items -->
     <style name="listItemButton" parent="@android:style/Widget.Holo.Button.Borderless">
-        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
-        <item name="android:padding">12dp</item>
+        <item name="android:padding">16dp</item>
         <item name="android:focusable">false</item>
         <item name="android:scaleType">fitCenter</item>
     </style>
 
     <!-- Check box -->
     <style name="checkBox">
-        <item name="android:layout_marginTop">8dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>
         <item name="android:textSize">14sp</item>
@@ -92,6 +91,7 @@
 
     <style name="cardView">
         <item name="android:background">@drawable/bg_card</item>
+        <item name="android:paddingLeft">16dp</item>
     </style>
 
     <style name="listHeaderTextView">

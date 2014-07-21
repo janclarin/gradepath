@@ -6,7 +6,6 @@
     android:layout_height="56dp"
     android:descendantFocusability="blocksDescendants"
     android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
     android:paddingTop="8dp">
 
     <CheckBox

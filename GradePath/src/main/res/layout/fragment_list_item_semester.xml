@@ -4,8 +4,7 @@
     style="@style/cardView"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:descendantFocusability="blocksDescendants"
-    android:paddingLeft="8dp">
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/tv_semester_name"
@@ -14,7 +13,7 @@
         android:layout_centerVertical="true"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/btn_semester_options"
@@ -26,7 +25,7 @@
     <View
         android:id="@+id/view_semester_item_divider_vertical"
         android:layout_width="1dp"
-        android:layout_height="40dp"
+        android:layout_height="32dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/btn_semester_options"
         android:background="?android:dividerVertical" />

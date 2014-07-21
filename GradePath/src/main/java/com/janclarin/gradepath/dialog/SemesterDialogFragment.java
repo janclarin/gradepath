@@ -92,7 +92,6 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         // Initialize mDatabase.
         mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
         mDatabase.open();
-
     }
 
     @Override
@@ -108,12 +107,8 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         mGPA = (EditText) rootView.findViewById(R.id.et_dialog_semester_gpa);
         mLastDayHeader = (TextView) rootView.findViewById(R.id.tv_dialog_semester_last_day_header);
         mLastDayButton = (Button) rootView.findViewById(R.id.btn_dialog_semester_last_day);
-
-        // Initialize calendars.
+        // Initialize calendar.
         mLastDayCalendar = Calendar.getInstance();
-
-        // Set up spinners.
-        setUpSpinners();
 
         // Set on checked change listener.
         mCurrentCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -133,6 +128,12 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
                 }
             }
         });
+
+        // Set to current by default if there are no semesters.
+        mCurrentCheckBox.setChecked(!mDatabase.semestersExist());
+
+        // Set up spinners.
+        setUpSpinners();
 
         final String positiveButton;
         // Set positive button to "Update" if updating, "Save" if not.
@@ -257,7 +258,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         // Get range of years to display.
         List<Integer> years = new ArrayList<Integer>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = currentYear - 10; i < currentYear + 5; i++) years.add(i);
+        for (int i = currentYear - 8; i < currentYear + 4; i++) years.add(i);
 
         // Create array mAdapter for years and set mAdapter.
         ArrayAdapter<Integer> yearAdapter = new ArrayAdapter<Integer>(mContext,

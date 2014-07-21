@@ -10,9 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -56,12 +54,10 @@ public class ListCourseFragment extends BaseListFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Course course = (Course) parent.getAdapter().getItem(position);
+                Course course = (Course) mAdapter.getItem(position);
                 if (mListener != null) mListener.onListCourseViewDetails(course);
             }
         });
-
-
     }
 
     @Override
@@ -189,11 +185,8 @@ public class ListCourseFragment extends BaseListFragment {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_course, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_course_name);
-                    viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_course_show_button_bar);
-                    viewHolder.vHorizontalDivider = convertView.findViewById(R.id.view_course_item_divider_horizontal);
-                    viewHolder.llButtonBar = (LinearLayout) convertView.findViewById(R.id.ll_button_bar);
-                    viewHolder.btnAddGrade = (Button) convertView.findViewById(R.id.btn_bar_add_grade);
-                    viewHolder.btnAddTask = (Button) convertView.findViewById(R.id.btn_bar_add_task);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_instructor_name);
+                    viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_overflow);
                 }
 
                 convertView.setTag(viewHolder);
@@ -205,17 +198,8 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.tvName.setText(((Semester) listItem).toString());
             } else {
                 Course course = (Course) listItem;
-
                 viewHolder.tvName.setText(course.getName());
-
-                // Set on click listeners.
-                viewHolder.btnShowButtonBar
-                        .setOnClickListener(
-                                new OnShowButtonBarClickListener(viewHolder.llButtonBar,
-                                        viewHolder.vHorizontalDivider)
-                        );
-                viewHolder.btnAddGrade.setOnClickListener(new OnAddGradeClickListener(course));
-                viewHolder.btnAddTask.setOnClickListener(new OnAddTaskClickListener(course));
+                viewHolder.tvSubtitle.setText(course.getInstructorName());
             }
 
             return convertView;
@@ -226,36 +210,8 @@ public class ListCourseFragment extends BaseListFragment {
          */
         private class ViewHolder {
             TextView tvName;
+            TextView tvSubtitle;
             ImageButton btnShowButtonBar;
-            View vHorizontalDivider;
-            LinearLayout llButtonBar;
-            Button btnAddGrade;
-            Button btnAddTask;
-        }
-
-        /**
-         * Implements OnClickListener for course color button. Notifies listener to open
-         * Course detail activity.
-         */
-        private class OnShowButtonBarClickListener implements View.OnClickListener {
-
-            LinearLayout buttonBarLayout;
-            View viewDivider;
-
-            public OnShowButtonBarClickListener(LinearLayout buttonBarLayout, View viewDivider) {
-                this.buttonBarLayout = buttonBarLayout;
-                this.viewDivider = viewDivider;
-            }
-
-            public void onClick(View view) {
-                if (this.buttonBarLayout.getVisibility() == View.GONE) {
-                    this.buttonBarLayout.setVisibility(View.VISIBLE);
-                    this.viewDivider.setVisibility(View.VISIBLE);
-                } else {
-                    this.buttonBarLayout.setVisibility(View.GONE);
-                    this.viewDivider.setVisibility(View.GONE);
-                }
-            }
         }
     }
 

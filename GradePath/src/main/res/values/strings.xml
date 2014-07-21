@@ -22,17 +22,13 @@
 
     <!-- Edit Course Activity -->
     <string name="title_activity_edit_course">Edit course</string>
-    <string name="tv_semester">Semester</string>
     <string name="hint_course_name">Course name</string>
-    <string name="tv_grade_components">Grade components</string>
+    <string name="grade_components">Grade components</string>
     <string name="et_grade_component">Component name</string>
     <string name="et_grade_component_weight">% weight</string>
     <string name="cd_btn_grade_component">Add/remove grade component</string>
     <string name="et_grade_component_number_of_items"># of items</string>
     <string name="tv_course_information">Course information</string>
-    <string name="rb_final_grade_no">No</string>
-    <string name="rb_final_grade_yes">Yes</string>
-    <string name="tv_completed">Completed</string>
     <string name="prompt_enter_course_name">Enter course name</string>
     <string name="season_fall">Fall</string>
     <string name="season_winter">Winter</string>
@@ -58,9 +54,9 @@
 
     <!-- Semester dialog -->
     <string name="title_new_semester_dialog">New semester</string>
-    <string name="cb_current_semester">Set as current</string>
-    <string name="tv_dialog_semester_last_day">Last day</string>
-    <string name="hint_dialog_semester_gpa">GPA for this semester</string>
+    <string name="cb_current_semester">Current</string>
+    <string name="tv_dialog_semester_last_day">Last day (optional)</string>
+    <string name="hint_dialog_semester_gpa">Semester GPA</string>
     <string name="toast_semester_saved">Semester saved</string>
     <string name="toast_semester_updated">Semester updated</string>
     <string name="title_edit_semester_dialog">Edit semester</string>
@@ -110,7 +106,6 @@
     <string name="title_delete_course_dialog">Delete %1$s?</string>
     <string name="message_delete_course_dialog">You\'ll delete every grade and task related to this course!</string>
 
-    <!-- SLIDING TAB FRAGMENTS -->
     <string name="cd_add_button">Add button</string>
 
     <!-- Semesters fragment -->
@@ -125,7 +120,7 @@
     <!-- Course Fragment -->
     <string name="title_fragment_list_courses">Courses</string>
     <string name="tv_course_fragment_grades">Grades</string>
-    <string name="tv_list_course_empty">No courses</string>
+    <string name="tv_list_course_empty">No courses yet</string>
     <string name="tv_semesters">Semesters</string>
     <string name="of">of</string>
     <string name="course_saved_new">New course saved</string>
@@ -138,14 +133,10 @@
     <string name="task_due_date_tomorrow">tomorrow</string>
     <string name="task_due_date_none">No tasks</string>
     <string name="bullet">•</string>
-    <string name="cd_show_button_bar">Show button bar</string>
-    <string name="btn_fragment_home_add_grade">Grade</string>
-    <string name="btn_fragment_home_add_task">Task</string>
-    <string name="tv_list_course_set_current_course">Set a\ncurrent semester</string>
+    <string name="cd_show_overflow">Show overflow menu</string>
     <string name="action_list_sort_by">Sort by</string>
     <string name="action_list_sort_alphabet_ascending">Alphabetical ascending</string>
     <string name="action_list_sort_alphabet_descending">Alphabetical descending</string>
-    <string name="warning_no_semesters">You have no semesters yet, add one first</string>
 
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
@@ -154,8 +145,8 @@
     <string name="title_fragment_settings">Settings</string>
     <string name="title_fragment_list_grades">Grades</string>
     <string name="title_fragment_list_tasks">Reminders</string>
-    <string name="tv_list_grade_empty">No grades</string>
-    <string name="tv_list_task_empty">No tasks</string>
+    <string name="tv_list_grade_empty">No grades yet</string>
+    <string name="tv_list_task_empty">No tasks yet</string>
     <string name="added">Added</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
@@ -164,11 +155,9 @@
     <string name="due">Due</string>
     <string name="cd_show_semester_options">Show semester options</string>
     <string name="list_semester_set_to_current">Set to current</string>
-    <string name="tv_list_course_grades_empty">No grades for this course</string>
     <string name="title_fragment_details">Details</string>
     <string name="list_task_incomplete">Incomplete</string>
     <string name="list_task_complete">Completed</string>
-    <string name="tv_list_course_task_empty">No tasks for this course</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="was_due">Was due</string>
     <string name="completed">Completed</string>
@@ -176,5 +165,7 @@
     <string name="final_grade">Final grade</string>
     <string name="new_semester">New semester</string>
     <string name="pick_semester">Pick a semester</string>
+    <string name="hint_instructor">Instructor</string>
+    <string name="hint_email_address">Email address</string>
 
 </resources>

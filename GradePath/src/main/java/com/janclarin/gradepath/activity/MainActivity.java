@@ -26,6 +26,7 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.dialog.TaskDialogFragment;
+import com.janclarin.gradepath.fragment.HomeFragment;
 import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
@@ -43,7 +44,8 @@ import java.lang.ref.WeakReference;
  * Main activity that contains the navigation drawer.
  */
 public class MainActivity extends BaseActivity
-        implements ListSemesterFragment.OnFragmentListSemesterListener,
+        implements HomeFragment.FragmentHomeListener,
+        ListSemesterFragment.OnFragmentListSemesterListener,
         ListCourseFragment.OnFragmentListCourseListener,
         ListGradeFragment.OnFragmentListGradeListener,
         ListTaskFragment.OnFragmentListTaskListener,
@@ -135,10 +137,12 @@ public class MainActivity extends BaseActivity
     /* Go back to home. If on home and back is pressed, leave app */
     @Override
     public void onBackPressed() {
-        if (mCurrentFragment instanceof ListCourseFragment) {
+        if (mCurrentFragment instanceof HomeFragment) {
             super.onBackPressed();
         } else {
             selectItem(0);
+            mTitle = getString(R.string.title_fragment_home);
+            getActionBar().setTitle(mTitle);
         }
     }
 
@@ -153,6 +157,7 @@ public class MainActivity extends BaseActivity
 
         // Drawer items.
         mDrawerItems = new DrawerItem[]{
+                new DrawerItem(R.string.title_fragment_home, 0),
                 new DrawerItem(R.string.title_fragment_list_courses, 0),
                 new DrawerItem(R.string.title_fragment_list_grades, 0),
                 new DrawerItem(R.string.title_fragment_list_tasks, 0),
@@ -256,18 +261,21 @@ public class MainActivity extends BaseActivity
         if (mCurrentFragment == null) {
             switch (position) {
                 case 0:
-                    mCurrentFragment = ListCourseFragment.newInstance();
+                    mCurrentFragment = HomeFragment.newInstance();
                     break;
                 case 1:
-                    mCurrentFragment = ListGradeFragment.newInstance();
+                    mCurrentFragment = ListCourseFragment.newInstance();
                     break;
                 case 2:
-                    mCurrentFragment = ListTaskFragment.newInstance();
+                    mCurrentFragment = ListGradeFragment.newInstance();
                     break;
                 case 3:
-                    mCurrentFragment = ListSemesterFragment.newInstance();
+                    mCurrentFragment = ListTaskFragment.newInstance();
                     break;
                 case 4:
+                    mCurrentFragment = ListSemesterFragment.newInstance();
+                    break;
+                case 5:
                     mCurrentFragment = SettingsFragment.newInstance();
                     break;
                 default:
@@ -445,7 +453,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Delete course, display text, and refresh list.
-                        mDatabase.deleteCourse(course);
+                        mDatabase.deleteCourse(course.getId());
                         Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
                         refreshListCourse();
                     }
@@ -573,7 +581,6 @@ public class MainActivity extends BaseActivity
             int iconId = selectedItem.getIcon();
             if (iconId != 0) {
                 viewHolder.tvSectionName.setCompoundDrawablePadding(8);
-                viewHolder.tvSectionName.setPadding(0, 0, 0, 0);
                 viewHolder.tvSectionName.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
             }
 

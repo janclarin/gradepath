@@ -56,7 +56,7 @@ public class ListCourseTaskFragment extends BaseListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mEmptyTextView.setText(R.string.tv_list_course_task_empty);
+        mEmptyTextView.setText(R.string.tv_list_task_empty);
 
         updateListItems();
         mAdapter = new ListAdapter();

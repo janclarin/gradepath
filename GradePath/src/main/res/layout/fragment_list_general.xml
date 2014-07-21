@@ -8,14 +8,14 @@
         android:id="@+id/lv_list_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="true"
+        android:paddingBottom="16dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:paddingBottom="16dp"
-        android:divider="@null"
-        android:dividerHeight="8dp"
-        android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:drawSelectorOnTop="true" />
+        android:scrollbarStyle="outsideOverlay" />
 
     <TextView
         android:id="@+id/tv_list_empty"

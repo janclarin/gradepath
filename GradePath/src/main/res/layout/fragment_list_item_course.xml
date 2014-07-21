@@ -18,7 +18,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_toLeftOf="@id/btn_course_show_button_bar"
         android:gravity="center_vertical"
@@ -69,6 +69,5 @@
             android:textColor="@android:color/tertiary_text_light"
             android:textSize="14sp" />
     </LinearLayout>
-
 
 </RelativeLayout>

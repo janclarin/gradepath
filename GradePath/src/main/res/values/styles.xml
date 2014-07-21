@@ -51,9 +51,9 @@
 
     <!-- Borderless button for list items -->
     <style name="listItemButton" parent="@android:style/Widget.Holo.Button.Borderless">
-        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">56dp</item>
-        <item name="android:padding">8dp</item>
+        <item name="android:padding">12dp</item>
         <item name="android:focusable">false</item>
         <item name="android:scaleType">fitCenter</item>
     </style>
@@ -98,7 +98,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
         <item name="android:fontFamily">sans-serif-light</item>

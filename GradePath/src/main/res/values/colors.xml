@@ -11,7 +11,7 @@
     <color name="card_fill">#fff</color>
     <color name="card_shadow">#ccc</color>
     <color name="card_fill_pressed">#ccc</color>
-    <color name="card_shadow_pressed">#ccc</color>
+    <color name="card_shadow_pressed">#fff</color>
 
     <color name="course_urgency_0">#666</color>
     <color name="course_urgency_1">@color/theme_primary_color</color>

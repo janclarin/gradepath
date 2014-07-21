@@ -3,6 +3,7 @@ package com.janclarin.gradepath.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -151,6 +152,10 @@ abstract public class BaseListFragment extends Fragment {
                 mNumSelected = 0;
                 mCurrentSelectedPosition = 0;
                 selectedPositions = new SparseBooleanArray();
+
+                // Vibrate on open.
+                Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(300);
 
                 // Inflate the menu for the contextual action bar.
                 MenuInflater inflater = mode.getMenuInflater();

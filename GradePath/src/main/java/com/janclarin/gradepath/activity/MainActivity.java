@@ -283,6 +283,7 @@ public class MainActivity extends BaseActivity
 
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
+            mDrawerListView.setSelection(position);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mDrawerListView);

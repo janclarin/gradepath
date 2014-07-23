@@ -19,5 +19,7 @@ abstract public class BaseFragment extends Fragment {
 
         mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
         mDatabase.open();
+
+        setHasOptionsMenu(true);
     }
 }

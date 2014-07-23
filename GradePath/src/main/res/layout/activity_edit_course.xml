@@ -30,6 +30,7 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_course_information"
+            android:layout_marginTop="8dp"
             android:text="@string/completed" />
 
         <Spinner

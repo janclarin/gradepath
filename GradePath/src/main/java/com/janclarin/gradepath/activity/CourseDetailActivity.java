@@ -124,14 +124,14 @@ public class CourseDetailActivity extends BaseActivity
     @Override
     public void onListCourseReminderAdd(Course course) {
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_task_dialog), course);
+                getString(R.string.title_new_reminder_dialog), course);
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
     @Override
     public void onListCourseReminderEdit(Reminder reminder) {
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_task_dialog, reminder));
+                getString(R.string.title_edit_reminder_dialog, reminder));
         taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
     }
 
@@ -196,7 +196,7 @@ public class CourseDetailActivity extends BaseActivity
                 case 0:
                     return getString(R.string.title_fragment_list_grades);
                 case 1:
-                    return getString(R.string.title_fragment_list_tasks);
+                    return getString(R.string.title_fragment_list_reminders);
                 case 2:
                     return getString(R.string.title_fragment_details);
                 default:

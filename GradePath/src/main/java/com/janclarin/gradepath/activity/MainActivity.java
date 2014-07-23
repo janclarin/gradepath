@@ -27,9 +27,9 @@ import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
+import com.janclarin.gradepath.fragment.ListAllGradeFragment;
+import com.janclarin.gradepath.fragment.ListAllReminderFragment;
 import com.janclarin.gradepath.fragment.ListCourseFragment;
-import com.janclarin.gradepath.fragment.ListGradeFragment;
-import com.janclarin.gradepath.fragment.ListReminderFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
@@ -47,8 +47,8 @@ public class MainActivity extends BaseActivity
         implements HomeFragment.FragmentHomeListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
         ListCourseFragment.OnFragmentListCourseListener,
-        ListGradeFragment.OnFragmentListGradeListener,
-        ListReminderFragment.OnFragmentListTaskListener,
+        ListAllGradeFragment.OnFragmentListGradeListener,
+        ListAllReminderFragment.OnFragmentListTaskListener,
         SemesterDialogFragment.OnDialogSemesterCallbacks,
         GradeDialogFragment.OnDialogGradeListener,
         ReminderDialogFragment.OnDialogTaskListener,
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item) && mDrawerToggle.isDrawerIndicatorEnabled()) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -137,13 +137,9 @@ public class MainActivity extends BaseActivity
     /* Go back to home. If on home and back is pressed, leave app */
     @Override
     public void onBackPressed() {
-        if (mCurrentFragment instanceof HomeFragment) {
-            super.onBackPressed();
-        } else {
-            selectItem(0);
-            mTitle = getString(R.string.title_fragment_home);
-            getActionBar().setTitle(mTitle);
-        }
+        super.onBackPressed();
+        getActionBar().setTitle(mTitle);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
     }
 
     /**
@@ -159,8 +155,6 @@ public class MainActivity extends BaseActivity
         mDrawerItems = new DrawerItem[]{
                 new DrawerItem(R.string.title_fragment_home, 0),
                 new DrawerItem(R.string.title_fragment_list_courses, 0),
-                new DrawerItem(R.string.title_fragment_list_grades, 0),
-                new DrawerItem(R.string.title_fragment_list_tasks, 0),
                 new DrawerItem(R.string.title_fragment_list_semesters, 0),
                 new DrawerItem(R.string.title_fragment_settings, 0)
         };
@@ -258,6 +252,8 @@ public class MainActivity extends BaseActivity
         // Get drawer item's fragment.
         mCurrentFragment = drawerItem.getFragment();
 
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
         if (mCurrentFragment == null) {
             switch (position) {
                 case 0:
@@ -267,15 +263,9 @@ public class MainActivity extends BaseActivity
                     mCurrentFragment = ListCourseFragment.newInstance();
                     break;
                 case 2:
-                    mCurrentFragment = ListGradeFragment.newInstance();
-                    break;
-                case 3:
-                    mCurrentFragment = ListReminderFragment.newInstance();
-                    break;
-                case 4:
                     mCurrentFragment = ListSemesterFragment.newInstance();
                     break;
-                case 5:
+                case 3:
                     mCurrentFragment = SettingsFragment.newInstance();
                     break;
                 default:
@@ -284,7 +274,6 @@ public class MainActivity extends BaseActivity
             drawerItem.setFragment(mCurrentFragment);
         }
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
 
         mCurrentSelectedPosition = position;
@@ -318,8 +307,8 @@ public class MainActivity extends BaseActivity
     private void refreshListGrade() {
         if (mCurrentFragment instanceof ListCourseFragment) {
             ((ListCourseFragment) mCurrentFragment).updateListItems();
-        } else if (mCurrentFragment instanceof ListGradeFragment) {
-            ((ListGradeFragment) mCurrentFragment).updateListItems();
+        } else if (mCurrentFragment instanceof ListAllGradeFragment) {
+            ((ListAllGradeFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof HomeFragment) {
             ((HomeFragment) mCurrentFragment).updateListItems(false, true);
         }
@@ -331,8 +320,8 @@ public class MainActivity extends BaseActivity
     private void refreshListTask() {
         if (mCurrentFragment instanceof ListCourseFragment) {
             ((ListCourseFragment) mCurrentFragment).updateListItems();
-        } else if (mCurrentFragment instanceof ListReminderFragment) {
-            ((ListReminderFragment) mCurrentFragment).updateListItems();
+        } else if (mCurrentFragment instanceof ListAllReminderFragment) {
+            ((ListAllReminderFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof HomeFragment) {
             ((HomeFragment) mCurrentFragment).updateListItems(true, false);
         }
@@ -370,8 +359,32 @@ public class MainActivity extends BaseActivity
     @Override
     public void onHomeNewReminder() {
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_task_dialog));
+                getString(R.string.title_new_reminder_dialog));
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
+    }
+
+    @Override
+    public void onHomeAllGrades() {
+        // Go to grades fragment.
+        mCurrentFragment = ListAllGradeFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
+        getActionBar().setTitle(R.string.title_fragment_list_grades);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+    }
+
+    @Override
+    public void onHomeAllReminders() {
+        // Go to reminders fragment.
+        mCurrentFragment = ListAllReminderFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
+        getActionBar().setTitle(R.string.title_fragment_list_reminders);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
     }
 
     @Override
@@ -437,7 +450,7 @@ public class MainActivity extends BaseActivity
     public void onListCourseNewTask(Course course) {
         // Show new task dialog.
         ReminderDialogFragment taskDialog = ReminderDialogFragment
-                .newInstance(getString(R.string.title_new_task_dialog), course);
+                .newInstance(getString(R.string.title_new_reminder_dialog), course);
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
@@ -503,7 +516,7 @@ public class MainActivity extends BaseActivity
     public void onListReminderNew() {
         // Show new task dialog.
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_task_dialog));
+                getString(R.string.title_new_reminder_dialog));
         taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
@@ -511,7 +524,7 @@ public class MainActivity extends BaseActivity
     public void onListReminderEdit(Reminder reminder) {
         // Show edit task dialog.
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_task_dialog), reminder);
+                getString(R.string.title_edit_reminder_dialog), reminder);
         taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
     }
 
@@ -581,7 +594,7 @@ public class MainActivity extends BaseActivity
             if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = getLayoutInflater()
-                        .inflate(R.layout.fragment_navigation_drawer_item, parent, false);
+                        .inflate(R.layout.fragment_list_item_navigation_drawer, parent, false);
 
                 viewHolder.tvSectionName = (TextView) convertView.findViewById(R.id.tv_drawer_list_item);
 

@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp">
+    android:paddingRight="8dp">
 
     <TextView
-        android:id="@+id/tv_component_name_header"
+        android:id="@+id/tv_name_header"
         style="@style/listHeaderTextView"
         android:layout_alignParentLeft="true" />
 
     <TextView
-        android:id="@+id/tv_component_grade_header"
+        android:id="@+id/tv_name_sub_header"
         style="@style/listHeaderTextView"
         android:layout_alignParentRight="true" />
 

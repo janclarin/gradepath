@@ -2,8 +2,10 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.LongSparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,18 +15,38 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Grade;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ListGradeFragment extends BaseListFragment {
+public class ListAllGradeFragment extends BaseListFragment {
 
     private OnFragmentListGradeListener mListener;
+    private LongSparseArray<Course> mCoursesById;
 
-    public static ListGradeFragment newInstance() {
-        return new ListGradeFragment();
+    public static ListAllGradeFragment newInstance() {
+        return new ListAllGradeFragment();
     }
 
-    public ListGradeFragment() {
+    public ListAllGradeFragment() {
         // Required empty public constructor.
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -38,6 +60,7 @@ public class ListGradeFragment extends BaseListFragment {
             }
         });
 
+        mCoursesById = new LongSparseArray<Course>();
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
@@ -49,15 +72,16 @@ public class ListGradeFragment extends BaseListFragment {
 
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
+        List<Grade> grades = new ArrayList<Grade>();
 
         for (Course course : courses) {
-            List<Grade> grades = mDatabase.getGrades(course.getId());
-
-            if (grades.size() > 0) {
-                mListItems.add(course);
-                mListItems.addAll(grades);
-            }
+            grades.addAll(mDatabase.getGrades(course.getId()));
+            mCoursesById.put(course.getId(), course);
         }
+
+        Collections.sort(grades);
+
+        mListItems.addAll(grades);
 
         notifyAdapter();
 
@@ -103,9 +127,18 @@ public class ListGradeFragment extends BaseListFragment {
 
     private class ListAdapter extends BaseListAdapter {
         @Override
+        public int getViewTypeCount() {
+            return 1;
+        }
+
+        @Override
         public int getItemViewType(int position) {
-            return (mListItems.get(position) instanceof Course) ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
+            return 0;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
         }
 
         @Override
@@ -119,35 +152,21 @@ public class ListGradeFragment extends BaseListFragment {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                if (type == ITEM_VIEW_TYPE_HEADER) {
-                    convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
-                } else {
-                    convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_grade, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
-                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
-                }
+                convertView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.fragment_list_item_grade, parent, false);
+                viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
+                viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
+                viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
 
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Course) listItem).getName());
-            } else {
-                Grade grade = (Grade) listItem;
-                viewHolder.tvName.setText(grade.getName());
-                viewHolder.tvSubtitle.setText(
-                        grade.getAddDate(mContext) + " "
-                                + getString(R.string.bullet) + " "
-                                + mDatabase.getGradeComponent(grade.getComponentId()).getName()
-                );
-                viewHolder.tvGrade.setText(grade.getGradePercentage());
-            }
+            Grade grade = (Grade) listItem;
+            viewHolder.tvName.setText(grade.getName());
+            viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
+            viewHolder.tvGrade.setText(grade.getGradePercentage());
 
             return convertView;
         }

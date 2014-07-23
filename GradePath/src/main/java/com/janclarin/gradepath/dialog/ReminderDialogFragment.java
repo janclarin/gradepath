@@ -123,13 +123,13 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment.
-        View rootView = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_task, null);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_reminder, null);
 
         // Find views.
-        mCourseSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_task_courses);
-        mTaskName = (EditText) rootView.findViewById(R.id.et_task_name);
+        mCourseSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_reminder_courses);
+        mTaskName = (EditText) rootView.findViewById(R.id.et_reminder_name);
         mCheckBoxGraded = (CheckBox) rootView.findViewById(R.id.cb_graded);
-        mDueDateButton = (Button) rootView.findViewById(R.id.btn_dialog_due_date);
+        mDueDateButton = (Button) rootView.findViewById(R.id.btn_dialog_date);
 
         // Get all recent courses. Set up course spinner.
         List<Course> courses = mDatabase.getCurrentCourses();
@@ -262,11 +262,11 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
 
                     if (mReminderToUpdate == null) {
                         // Insert task into mDatabase. false because it isn't completed yet.
-                        mDatabase.insertTask(courseId, name, isGraded, false, mDueDateCalendar);
+                        mDatabase.insertReminder(courseId, name, isGraded, false, mDueDateCalendar);
                         if (mListener != null) mListener.onReminderSaved(true);
                     } else {
                         // Update task.
-                        mDatabase.updateTask(mReminderToUpdate.getId(), courseId, name, isGraded,
+                        mDatabase.updateReminder(mReminderToUpdate.getId(), courseId, name, isGraded,
                                 mReminderToUpdate.isCompleted(), mDueDateCalendar);
                         if (mListener != null) mListener.onReminderSaved(false);
                     }
@@ -275,7 +275,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
                     alertDialog.dismiss();
                 } else {
                     // Display warning message. No name.
-                    Toast.makeText(mContext, mContext.getString(R.string.task_name_missing),
+                    Toast.makeText(mContext, mContext.getString(R.string.title_missing),
                             Toast.LENGTH_SHORT).show();
                 }
             }

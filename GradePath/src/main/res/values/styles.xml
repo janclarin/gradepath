@@ -61,7 +61,7 @@
     <!-- Check box -->
     <style name="checkBox">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -70,7 +70,7 @@
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/secondary_text_light_nodisable</item>
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
     </style>
 
     <!-- Spinner-style button -->

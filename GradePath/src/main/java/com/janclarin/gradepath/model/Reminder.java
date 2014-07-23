@@ -85,30 +85,27 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         if (isCompleted()) {
             due = context.getString(R.string.completed);
         } else {
-            due = context.getString(R.string.due) + " ";
-
             if (daysLeftBeforeDue < 0) {
                 if (daysLeftBeforeDue == -1) {
-                    due += context.getString(R.string.yesterday);
+                    due = context.getString(R.string.yesterday);
                 } else {
-                    due += Long.toString(Math.abs(daysLeftBeforeDue)) + " "
+                    due = Long.toString(Math.abs(daysLeftBeforeDue)) + " "
                             + context.getString(R.string.days_ago);
                 }
             } else if (daysLeftBeforeDue == 0) {
                 // Today.
-                due += context.getString(R.string.task_due_date_today);
+                due = context.getString(R.string.task_due_date_today);
             } else if (daysLeftBeforeDue == 1) {
                 // Tomorrow.
-                due += context.getString(R.string.task_due_date_tomorrow);
+                due = context.getString(R.string.task_due_date_tomorrow);
             } else if (daysLeftBeforeDue <= 3) {
                 // 2 days.
-                due += context.getString(R.string.task_due_date_two_days);
+                due = context.getString(R.string.task_due_date_two_days);
             } else if (daysLeftBeforeDue < 7) {
                 // This week.
-                due += context.getString(R.string.task_due_date_on) + " "
-                        + dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+                due = dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
             } else {
-                due += new SimpleDateFormat("MMMM d").format(dueDate.getTime());
+                due = new SimpleDateFormat("MMMM d").format(dueDate.getTime());
             }
         }
 

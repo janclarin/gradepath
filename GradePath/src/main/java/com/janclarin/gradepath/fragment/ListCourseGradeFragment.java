@@ -163,9 +163,9 @@ public class ListCourseGradeFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_course_grades, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_component_name_header);
-                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_component_grade_header);
+                            .inflate(R.layout.fragment_list_header_course, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
+                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_grade, parent, false);

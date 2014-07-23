@@ -1,14 +1,13 @@
 package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
-import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.LongSparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -16,18 +15,39 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
-public class ListReminderFragment extends BaseListFragment {
+public class ListAllReminderFragment extends BaseListFragment {
 
     private OnFragmentListTaskListener mListener;
+    private LongSparseArray<Course> mCoursesById;
 
-    public static ListReminderFragment newInstance() {
-        return new ListReminderFragment();
+    public static ListAllReminderFragment newInstance() {
+        return new ListAllReminderFragment();
     }
 
-    public ListReminderFragment() {
+    public ListAllReminderFragment() {
         // Required empty public constructor.
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -41,6 +61,7 @@ public class ListReminderFragment extends BaseListFragment {
             }
         });
 
+        mCoursesById = new LongSparseArray<Course>();
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
@@ -52,15 +73,18 @@ public class ListReminderFragment extends BaseListFragment {
 
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
         for (Course course : courses) {
-            List<Reminder> reminders = mDatabase.getTasks(course.getId());
-
-            if (reminders.size() > 0) {
-                mListItems.add(course);
-                mListItems.addAll(reminders);
-            }
+            reminders.addAll(mDatabase.getReminders(course.getId()));
+            mCoursesById.put(course.getId(), course);
         }
+
+        Collections.sort(reminders);
+
+        Calendar today = Calendar.getInstance();
+
+        mListItems.addAll(reminders);
 
         notifyAdapter();
 
@@ -69,7 +93,8 @@ public class ListReminderFragment extends BaseListFragment {
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null) mListener.onListReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
+        if (mListener != null)
+            mListener.onListReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -78,7 +103,7 @@ public class ListReminderFragment extends BaseListFragment {
         for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
                 Reminder selectedReminder = (Reminder) mAdapter.getItem(i);
-                mDatabase.deleteTask(selectedReminder);
+                mDatabase.deleteReminder(selectedReminder);
                 mListItems.remove(selectedReminder);
             }
         }
@@ -115,7 +140,7 @@ public class ListReminderFragment extends BaseListFragment {
 
         @Override
         public int getItemViewType(int position) {
-            return (mListItems.get(position) instanceof Course) ?
+            return mListItems.get(position) instanceof Header ?
                     ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
         }
 
@@ -136,10 +161,10 @@ public class ListReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_task, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_task_name);
-                    viewHolder.tvDueDate = (TextView) convertView.findViewById(R.id.tv_task_due_date);
-                    viewHolder.cbCompleted = (CheckBox) convertView.findViewById(R.id.cb_task_completed);
+                            .inflate(R.layout.fragment_list_item_reminder, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_reminder_name);
+                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_reminder_date);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_reminder_subtitle);
                 }
 
                 convertView.setTag(viewHolder);
@@ -148,19 +173,12 @@ public class ListReminderFragment extends BaseListFragment {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Course) listItem).getName());
+                viewHolder.tvName.setText(((Header) listItem).getName());
             } else {
                 Reminder reminder = (Reminder) listItem;
                 viewHolder.tvName.setText(reminder.getName());
-                if (reminder.isCompleted()) {
-                    viewHolder.tvName.setPaintFlags(
-                            viewHolder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-                viewHolder.tvDueDate.setText(reminder.getDueDate(mContext));
-                viewHolder.tvDueDate.setTextColor(getResources().getColor(reminder.getUrgencyColor(mContext)));
-                viewHolder.cbCompleted.setChecked(reminder.isCompleted());
-                viewHolder.cbCompleted.setOnCheckedChangeListener(new OnCompletedChangeListener(reminder,
-                        viewHolder.tvName));
+                viewHolder.tvDate.setText(reminder.getDueDate(mContext));
+                viewHolder.tvSubtitle.setText(mDatabase.getCourse(reminder.getCourseId()).getName());
             }
 
             return convertView;
@@ -168,27 +186,8 @@ public class ListReminderFragment extends BaseListFragment {
 
         private class ViewHolder {
             TextView tvName;
-            TextView tvDueDate;
-            CheckBox cbCompleted;
-        }
-
-        private class OnCompletedChangeListener implements CompoundButton.OnCheckedChangeListener {
-
-            private Reminder reminder;
-            private TextView textView;
-
-            public OnCompletedChangeListener(Reminder reminder, TextView textView) {
-                this.reminder = reminder;
-                this.textView = textView;
-            }
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                reminder.setCompleted(isChecked);
-                mDatabase.updateTask(reminder);
-                textView.setPaintFlags(isChecked ? textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-                        : textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            }
+            TextView tvSubtitle;
+            TextView tvDate;
         }
     }
 }

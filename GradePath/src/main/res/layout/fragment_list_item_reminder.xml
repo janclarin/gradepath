@@ -10,36 +10,36 @@
     android:paddingTop="8dp">
 
     <TextView
-        android:id="@+id/tv_grade"
+        android:id="@+id/tv_reminder_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_grade_name"
+        android:id="@+id/tv_reminder_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/tv_grade"
+        android:layout_toLeftOf="@id/tv_reminder_date"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tv_grade_subtitle"
+        android:id="@+id/tv_reminder_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/tv_grade_name"
-        android:layout_toLeftOf="@id/tv_grade"
+        android:layout_below="@id/tv_reminder_name"
+        android:layout_toLeftOf="@id/tv_reminder_date"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />
-
 </RelativeLayout>

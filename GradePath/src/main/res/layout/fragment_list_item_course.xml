@@ -23,7 +23,8 @@
         android:layout_toLeftOf="@id/btn_overflow"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_instructor_name"
@@ -34,6 +35,7 @@
         android:layout_below="@id/tv_course_name"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
+        android:textColor="@android:color/tertiary_text_light"
         android:textSize="14sp" />
 
 </RelativeLayout>

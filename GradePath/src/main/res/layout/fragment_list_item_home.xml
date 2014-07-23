@@ -10,7 +10,7 @@
         android:id="@+id/tv_card_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:drawablePadding="8dp"
+        android:drawablePadding="4dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
@@ -38,7 +38,6 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="@string/see_all"
         android:textAllCaps="true"
         android:textColor="@color/theme_primary_color"
         android:textSize="14sp" />

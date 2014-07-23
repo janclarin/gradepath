@@ -143,7 +143,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
+        ((BaseListFragment) mAdapter.getTab(0)).updateListItems();
     }
 
     @Override
@@ -154,7 +154,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTab(2)).updateListItems();
+        ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {

@@ -140,6 +140,13 @@
 
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
+    <string name="welcome_message">Welcome to GradePath, try swiping from the left side of the
+        screen to open the navigation drawer.</string>
+    <string name="see_all">See all</string>
+    <string name="none_use_button">None</string>
+    <string name="none_click_to_add">None</string>
+    <string name="hello">Hello</string>
+    <string name="welcome_confirmation">Cool</string>
 
     <!-- Settings Fragment -->
     <string name="title_fragment_settings">Settings</string>
@@ -163,11 +170,7 @@
     <string name="days_ago">days ago</string>
     <string name="grade">Grade</string>
     <string name="reminder">Reminder</string>
-    <string name="see_all">See all</string>
     <string name="graded">Graded</string>
     <string name="not_graded">Not graded</string>
-    <string name="welcome_message">Welcome to GradePath, try clicking on the add button.</string>
-    <string name="hello">Hello</string>
-    <string name="welcome_confirmation">Okay, cool!</string>
 
 </resources>

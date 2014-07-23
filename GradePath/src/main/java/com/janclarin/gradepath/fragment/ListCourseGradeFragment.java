@@ -44,7 +44,6 @@ public class ListCourseGradeFragment extends BaseListFragment {
         return fragment;
     }
 
-    // TODO: Show average for each component.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +55,12 @@ public class ListCourseGradeFragment extends BaseListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_grade_empty);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListCourseGradeAdd(mCourse);
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();

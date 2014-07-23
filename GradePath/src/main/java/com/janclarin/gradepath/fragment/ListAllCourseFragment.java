@@ -18,21 +18,29 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Semester;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Course list fragment.
  */
-public class ListCourseFragment extends BaseListFragment {
+public class ListAllCourseFragment extends BaseListFragment {
 
     private OnFragmentListCourseListener mListener;
 
-    public static ListCourseFragment newInstance() {
-        return new ListCourseFragment();
+    public static ListAllCourseFragment newInstance() {
+        return new ListAllCourseFragment();
     }
 
-    public ListCourseFragment() {
+    public ListAllCourseFragment() {
         // Required empty public constructor.
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -72,6 +80,7 @@ public class ListCourseFragment extends BaseListFragment {
             List<Course> courses = mDatabase.getCourses(semester.getId());
             if (courses.size() > 0) {
                 mListItems.add(semester);
+                Collections.sort(courses);
                 mListItems.addAll(mDatabase.getCourses(semester.getId()));
             }
         }
@@ -128,6 +137,9 @@ public class ListCourseFragment extends BaseListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO: Handle menu options.
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.action_list_course_sort:
                 break;
             default:

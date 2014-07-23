@@ -60,7 +60,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         this.addDate = addDate;
     }
 
-    public Calendar getDueDate() {
+    public Calendar getDate() {
         return dueDate;
     }
 

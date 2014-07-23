@@ -27,9 +27,9 @@ import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
+import com.janclarin.gradepath.fragment.ListAllCourseFragment;
 import com.janclarin.gradepath.fragment.ListAllGradeFragment;
 import com.janclarin.gradepath.fragment.ListAllReminderFragment;
-import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
@@ -46,7 +46,7 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends BaseActivity
         implements HomeFragment.FragmentHomeListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
-        ListCourseFragment.OnFragmentListCourseListener,
+        ListAllCourseFragment.OnFragmentListCourseListener,
         ListAllGradeFragment.OnFragmentListGradeListener,
         ListAllReminderFragment.OnFragmentListTaskListener,
         SemesterDialogFragment.OnDialogSemesterCallbacks,
@@ -154,7 +154,6 @@ public class MainActivity extends BaseActivity
         // Drawer items.
         mDrawerItems = new DrawerItem[]{
                 new DrawerItem(R.string.title_fragment_home, 0),
-                new DrawerItem(R.string.title_fragment_list_courses, 0),
                 new DrawerItem(R.string.title_fragment_list_semesters, 0),
                 new DrawerItem(R.string.title_fragment_settings, 0)
         };
@@ -260,12 +259,9 @@ public class MainActivity extends BaseActivity
                     mCurrentFragment = HomeFragment.newInstance();
                     break;
                 case 1:
-                    mCurrentFragment = ListCourseFragment.newInstance();
-                    break;
-                case 2:
                     mCurrentFragment = ListSemesterFragment.newInstance();
                     break;
-                case 3:
+                case 2:
                     mCurrentFragment = SettingsFragment.newInstance();
                     break;
                 default:
@@ -298,19 +294,23 @@ public class MainActivity extends BaseActivity
      * Refresh course list.
      */
     private void refreshListCourse() {
-        ((ListCourseFragment) mCurrentFragment).updateListItems();
+        if (mCurrentFragment instanceof HomeFragment) {
+            ((HomeFragment) mCurrentFragment).updateListItems(false, false, true);
+        } else {
+            ((ListAllCourseFragment) mCurrentFragment).updateListItems();
+        }
     }
 
     /**
      * Refresh grade list.
      */
     private void refreshListGrade() {
-        if (mCurrentFragment instanceof ListCourseFragment) {
-            ((ListCourseFragment) mCurrentFragment).updateListItems();
+        if (mCurrentFragment instanceof ListAllCourseFragment) {
+            ((ListAllCourseFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof ListAllGradeFragment) {
             ((ListAllGradeFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(false, true);
+            ((HomeFragment) mCurrentFragment).updateListItems(false, true, false);
         }
     }
 
@@ -318,12 +318,12 @@ public class MainActivity extends BaseActivity
      * Refresh task list.
      */
     private void refreshListTask() {
-        if (mCurrentFragment instanceof ListCourseFragment) {
-            ((ListCourseFragment) mCurrentFragment).updateListItems();
+        if (mCurrentFragment instanceof ListAllCourseFragment) {
+            ((ListAllCourseFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof ListAllReminderFragment) {
             ((ListAllReminderFragment) mCurrentFragment).updateListItems();
         } else if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(true, false);
+            ((HomeFragment) mCurrentFragment).updateListItems(true, false, false);
         }
     }
 
@@ -364,6 +364,13 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void onHomeNewCourse() {
+        Intent intent = new Intent(this, CourseEditActivity.class);
+        startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
+
+    }
+
+    @Override
     public void onHomeAllGrades() {
         // Go to grades fragment.
         mCurrentFragment = ListAllGradeFragment.newInstance();
@@ -384,6 +391,18 @@ public class MainActivity extends BaseActivity
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
         getActionBar().setTitle(R.string.title_fragment_list_reminders);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+    }
+
+    @Override
+    public void onHomeAllCourses() {
+        // Go to courses fragment.
+        mCurrentFragment = ListAllCourseFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
+        getActionBar().setTitle(R.string.title_fragment_list_courses);
         mDrawerToggle.setDrawerIndicatorEnabled(false);
     }
 

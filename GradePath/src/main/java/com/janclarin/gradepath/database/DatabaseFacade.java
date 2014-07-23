@@ -889,7 +889,7 @@ public class DatabaseFacade {
      */
     public int updateReminder(Reminder reminder) {
 
-        Calendar dueDate = reminder.getDueDate();
+        Calendar dueDate = reminder.getDate();
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, reminder.getCourseId());

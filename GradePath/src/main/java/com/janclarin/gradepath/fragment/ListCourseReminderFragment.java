@@ -18,6 +18,8 @@ import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class ListCourseReminderFragment extends BaseListFragment {
@@ -55,6 +57,12 @@ public class ListCourseReminderFragment extends BaseListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_task_empty);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onListCourseReminderAdd(mCourse);
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -71,6 +79,18 @@ public class ListCourseReminderFragment extends BaseListFragment {
         List<Reminder> allReminders = mDatabase.getReminders(courseId);
         List<Reminder> currentReminders = new ArrayList<Reminder>();
         List<Reminder> pastReminders = new ArrayList<Reminder>();
+
+        Calendar today = Calendar.getInstance();
+        for (Reminder reminder : allReminders) {
+            if (reminder.getDate().before(today)) {
+                pastReminders.add(reminder);
+            } else {
+                currentReminders.add(reminder);
+            }
+        }
+
+        Collections.sort(pastReminders);
+        Collections.sort(currentReminders);
 
         // Add incomplete task header and tasks.
         if (pastReminders.size() > 0) {

@@ -13,7 +13,8 @@
         android:layout_centerVertical="true"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/btn_semester_options"
@@ -22,21 +23,12 @@
         android:contentDescription="@string/cd_show_semester_options"
         android:src="@drawable/overflow" />
 
-    <View
-        android:id="@+id/view_semester_item_divider_vertical"
-        android:layout_width="1dp"
-        android:layout_height="32dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/btn_semester_options"
-        android:background="?android:dividerVertical" />
-
     <TextView
         android:id="@+id/tv_semester_information_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@id/view_semester_item_divider_vertical"
+        android:layout_toLeftOf="@id/btn_semester_options"
         android:fontFamily="sans-serif-light"
         android:textAllCaps="true"
         android:textColor="@android:color/tertiary_text_light"

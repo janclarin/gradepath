@@ -37,12 +37,26 @@
             android:src="@drawable/add_list_item" />
 
         <ImageButton
-            android:id="@+id/btn_add_grade"
+            android:id="@+id/btn_add_reminder"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_above="@id/btn_show_add_options"
             android:layout_alignRight="@id/btn_show_add_options"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_circle_button"
+            android:contentDescription="@string/cd_add_button"
+            android:padding="14dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/list_add_reminder"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/btn_add_grade"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_above="@id/btn_add_reminder"
+            android:layout_alignRight="@id/btn_show_add_options"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
             android:padding="16dp"
@@ -51,17 +65,17 @@
             android:visibility="invisible" />
 
         <ImageButton
-            android:id="@+id/btn_add_reminder"
+            android:id="@+id/btn_add_course"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_above="@id/btn_add_grade"
             android:layout_alignRight="@id/btn_show_add_options"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
-            android:padding="14dp"
+            android:padding="16dp"
             android:scaleType="fitXY"
-            android:src="@drawable/list_add_reminder"
+            android:src="@drawable/list_add_course"
             android:visibility="invisible" />
     </RelativeLayout>
 

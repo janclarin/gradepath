@@ -156,7 +156,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
             mCourseSpinner.setSelection(courseAdapter.getPosition(taskCourse));
 
             // Set due date calendar to task's due date.
-            mDueDateCalendar = mReminderToUpdate.getDueDate();
+            mDueDateCalendar = mReminderToUpdate.getDate();
 
             // Set graded checkbox.
             mCheckBoxGraded.setChecked(mReminderToUpdate.isGraded());

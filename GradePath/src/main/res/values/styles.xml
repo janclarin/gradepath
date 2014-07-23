@@ -37,7 +37,7 @@
     </style>
 
     <!-- Borderless button for empty view for list fragments -->
-    <style name="emptyListTextView" parent="@android:style/Widget.Holo.Button.Borderless">
+    <style name="emptyListTextView">
         <item name="android:padding">8dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

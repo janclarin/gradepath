@@ -27,7 +27,7 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
 
     private static final String PREF_USER_HIDE_WELCOME = "show_welcome";
-    private static final int NUM_ITEMS_SHOWN = 4;
+    private static final int NUM_ITEMS_SHOWN = 3;
 
     private FragmentHomeListener mListener;
     private boolean mHideWelcome;
@@ -35,8 +35,9 @@ public class HomeFragment extends BaseFragment {
     private LongSparseArray<Course> mCoursesById;
 
     private ImageButton mShowAddButton;
-    private ImageButton mAddGradeButton;
     private ImageButton mAddReminderButton;
+    private ImageButton mAddGradeButton;
+    private ImageButton mAddCourseButton;
     private ListView mListView;
     private CardList[] mCardItems;
     private BaseAdapter mAdapter;
@@ -70,8 +71,9 @@ public class HomeFragment extends BaseFragment {
 
         // Find all views.
         mShowAddButton = (ImageButton) rootView.findViewById(R.id.btn_show_add_options);
-        mAddGradeButton = (ImageButton) rootView.findViewById(R.id.btn_add_grade);
         mAddReminderButton = (ImageButton) rootView.findViewById(R.id.btn_add_reminder);
+        mAddGradeButton = (ImageButton) rootView.findViewById(R.id.btn_add_grade);
+        mAddCourseButton = (ImageButton) rootView.findViewById(R.id.btn_add_course);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
 
         return rootView;
@@ -108,6 +110,14 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        mAddCourseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) mListener.onHomeNewCourse();
+                hideButtons();
+            }
+        });
+
         // Set up map for quick course name querying in lists.
         mCoursesById = new LongSparseArray<Course>();
         List<Course> courseList = mDatabase.getCourses();
@@ -117,7 +127,7 @@ public class HomeFragment extends BaseFragment {
         }
 
         if (mHideWelcome) {
-            mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES};
+            mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES, CardList.COURSES};
         } else {
             mCardItems = CardList.values();
         }
@@ -130,6 +140,7 @@ public class HomeFragment extends BaseFragment {
         mShowAddButton.setRotation(0f);
         mAddGradeButton.setVisibility(View.INVISIBLE);
         mAddReminderButton.setVisibility(View.INVISIBLE);
+        mAddCourseButton.setVisibility(View.INVISIBLE);
         mButtonsShown = false;
     }
 
@@ -137,11 +148,12 @@ public class HomeFragment extends BaseFragment {
         mShowAddButton.setRotation(45f);
         mAddGradeButton.setVisibility(View.VISIBLE);
         mAddReminderButton.setVisibility(View.VISIBLE);
+        mAddCourseButton.setVisibility(View.VISIBLE);
         mButtonsShown = true;
     }
 
 
-    public void updateListItems(boolean updateReminders, boolean updateGrades) {
+    public void updateListItems(boolean updateReminders, boolean updateGrades, boolean updateCourses) {
         // TODO: Fix updating.
         mAdapter.notifyDataSetChanged();
     }
@@ -224,7 +236,7 @@ public class HomeFragment extends BaseFragment {
                                         .getDefaultSharedPreferences(mContext.getApplicationContext());
                                 sp.edit().putBoolean(PREF_USER_HIDE_WELCOME, true).apply();
                                 mHideWelcome = true;
-                                mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES};
+                                mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES, CardList.COURSES};
                                 mAdapter = new ListAdapter();
                                 mListView.setAdapter(mAdapter);
                             }
@@ -254,13 +266,18 @@ public class HomeFragment extends BaseFragment {
                             viewHolder.llList.addView(layout);
                         }
 
-                        // Set button on click listener to open reminders fragment.
-                        viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (mListener != null) mListener.onHomeAllReminders();
-                            }
-                        });
+                        if (reminders.isEmpty()) {
+                            viewHolder.btnAll.setText(R.string.none_use_button);
+                        } else {
+                            viewHolder.btnAll.setText(R.string.see_all);
+                            // Set button on click listener to open reminders fragment.
+                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (mListener != null) mListener.onHomeAllReminders();
+                                }
+                            });
+                        }
                         break;
                     case GRADES:
                         List<Grade> grades = mDatabase.getGrades();
@@ -286,13 +303,47 @@ public class HomeFragment extends BaseFragment {
                             viewHolder.llList.addView(layout);
                         }
 
-                        // Set button on click listener to open grades fragment.
-                        viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (mListener != null) mListener.onHomeAllGrades();
-                            }
-                        });
+                        if (grades.isEmpty()) {
+                            viewHolder.btnAll.setText(R.string.none_use_button);
+                        } else {
+                            viewHolder.btnAll.setText(R.string.see_all);
+                            // Set button on click listener to open grades fragment.
+                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (mListener != null) mListener.onHomeAllGrades();
+                                }
+                            });
+                        }
+                        break;
+                    case COURSES:
+                        List<Course> courses = mDatabase.getCurrentCourses();
+                        Collections.sort(courses);
+
+                        for (Course course : courses) {
+                            RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
+                                    .inflate(R.layout.fragment_list_item_home_course, viewHolder.llList, false);
+                            TextView tvName = (TextView) layout.findViewById(R.id.tv_course_name);
+                            TextView tvInstructor = (TextView) layout.findViewById(R.id.tv_instructor_name);
+
+                            // Set text in views.
+                            tvName.setText(course.getName());
+                            tvInstructor.setText(course.getInstructorName());
+
+                            viewHolder.llList.addView(layout);
+                        }
+
+                        if (courses.isEmpty()) {
+                            viewHolder.btnAll.setText(R.string.none_click_to_add);
+                        } else {
+                            viewHolder.btnAll.setText(R.string.see_all);
+                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (mListener != null) mListener.onHomeAllCourses();
+                                }
+                            });
+                        }
                         break;
                 }
             }
@@ -309,7 +360,8 @@ public class HomeFragment extends BaseFragment {
     private enum CardList {
         WELCOME(R.string.hello, R.drawable.welcome),
         REMINDERS(R.string.title_fragment_list_reminders, R.drawable.reminder),
-        GRADES(R.string.title_fragment_list_grades, R.drawable.grade);
+        GRADES(R.string.title_fragment_list_grades, R.drawable.grade),
+        COURSES(R.string.title_fragment_list_courses, R.drawable.course);
 
         public final int titleId;
         public final int iconId;
@@ -328,11 +380,17 @@ public class HomeFragment extends BaseFragment {
         /* Calls new reminder dialog. */
         public void onHomeNewReminder();
 
+        /* Calls new course activity. */
+        public void onHomeNewCourse();
+
         /* Displays grades fragment. */
         public void onHomeAllGrades();
 
         /* Displays reminders fragment. */
         public void onHomeAllReminders();
+
+        /* Displays courses fragment. */
+        public void onHomeAllCourses();
     }
 
 }

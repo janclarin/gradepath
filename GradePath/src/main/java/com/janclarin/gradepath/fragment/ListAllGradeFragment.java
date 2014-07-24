@@ -33,13 +33,6 @@ public class ListAllGradeFragment extends BaseListFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -153,10 +146,10 @@ public class ListAllGradeFragment extends BaseListFragment {
                 viewHolder = new ViewHolder();
 
                 convertView = LayoutInflater.from(mContext)
-                        .inflate(R.layout.fragment_list_item_grade, parent, false);
-                viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
-                viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
-                viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
+                        .inflate(R.layout.fragment_list_item_general, parent, false);
+                viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_information);
 
                 convertView.setTag(viewHolder);
             } else {

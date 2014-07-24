@@ -123,8 +123,8 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
                     if (mDatePickerDialog == null) setUpDatePickers();
                 } else {
                     mGPA.setVisibility(View.VISIBLE);
-                    mLastDayHeader.setVisibility(View.GONE);
-                    mLastDayButton.setVisibility(View.GONE);
+                    mLastDayHeader.setVisibility(View.INVISIBLE);
+                    mLastDayButton.setVisibility(View.INVISIBLE);
                 }
             }
         });

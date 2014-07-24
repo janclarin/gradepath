@@ -39,8 +39,6 @@ public class ListAllCourseFragment extends BaseListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class ListAllCourseFragment extends BaseListFragment {
             if (courses.size() > 0) {
                 mListItems.add(semester);
                 Collections.sort(courses);
-                mListItems.addAll(mDatabase.getCourses(semester.getId()));
+                mListItems.addAll(courses);
             }
         }
 
@@ -159,7 +157,7 @@ public class ListAllCourseFragment extends BaseListFragment {
         public void onListCourseNewGrade(Course course);
 
         /* Called when the add task button is clicked under a course. */
-        public void onListCourseNewTask(Course course);
+        public void onListCourseNewReminder(Course course);
 
         /* Called when the course item is clicked. Opens course detail fragment. */
         public void onListCourseViewDetails(Course course);
@@ -224,39 +222,6 @@ public class ListAllCourseFragment extends BaseListFragment {
             TextView tvName;
             TextView tvSubtitle;
             ImageButton btnShowButtonBar;
-        }
-    }
-
-    /**
-     * Implements OnClickListener for add grade button. Notifies listener to add grade.
-     */
-    private class OnAddGradeClickListener implements View.OnClickListener {
-
-        private final Course course;
-
-        public OnAddGradeClickListener(Course course) {
-            this.course = course;
-        }
-
-        public void onClick(View view) {
-            if (mListener != null) mListener.onListCourseNewGrade(course);
-        }
-
-    }
-
-    /**
-     * Implements OnClickListener for add task button. Notifies listener to add task.
-     */
-    private class OnAddTaskClickListener implements View.OnClickListener {
-
-        private final Course course;
-
-        public OnAddTaskClickListener(Course course) {
-            this.course = course;
-        }
-
-        public void onClick(View view) {
-            if (mListener != null) mListener.onListCourseNewTask(course);
         }
     }
 }

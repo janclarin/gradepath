@@ -129,9 +129,7 @@ public class CourseEditActivity extends BaseActivity
     @Override
     public void onSemesterSaved(boolean isNew, Semester semester) {
         // Display toast to notify user that the semester is saved.
-        Toast toast = Toast.makeText(getApplicationContext(), R.string.toast_semester_saved, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        Toast.makeText(getApplicationContext(), R.string.toast_semester_saved, Toast.LENGTH_SHORT).show();
 
         // Remove new semester indicator. Add new semester, then re-add new semester indicator.
         mAdapter.remove(mNewSemesterIndicator);

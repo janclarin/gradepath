@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -17,14 +18,12 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 public class ListCourseReminderFragment extends BaseListFragment {
 
-    private FragmentListCourseTaskListener mListener;
+    private FragmentListCourseReminderListener mListener;
 
     // Selected Course object.
     private Course mCourse;
@@ -54,15 +53,20 @@ public class ListCourseReminderFragment extends BaseListFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_list_course_general, container, false);
+
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
+
+        return rootView;
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_task_empty);
-        mAddItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) mListener.onListCourseReminderAdd(mCourse);
-            }
-        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -76,32 +80,22 @@ public class ListCourseReminderFragment extends BaseListFragment {
         clearListItems();
 
         long courseId = mCourse.getId();
-        List<Reminder> allReminders = mDatabase.getReminders(courseId);
-        List<Reminder> currentReminders = new ArrayList<Reminder>();
-        List<Reminder> pastReminders = new ArrayList<Reminder>();
-
-        Calendar today = Calendar.getInstance();
-        for (Reminder reminder : allReminders) {
-            if (reminder.getDate().before(today)) {
-                pastReminders.add(reminder);
-            } else {
-                currentReminders.add(reminder);
-            }
-        }
+        List<Reminder> currentReminders = mDatabase.getCurrentReminders(courseId);
+        List<Reminder> pastReminders = mDatabase.getPastReminders(courseId);
 
         Collections.sort(pastReminders);
         Collections.sort(currentReminders);
 
-        // Add incomplete task header and tasks.
-        if (pastReminders.size() > 0) {
-            mListItems.add(new Header(mContext.getString(R.string.list_reminders_past)));
-            mListItems.addAll(pastReminders);
-        }
-
-        // Add complete task header and tasks.
+        // Add current reminders.
         if (currentReminders.size() > 0) {
             mListItems.add(new Header(mContext.getString(R.string.list_reminders_current)));
             mListItems.addAll(currentReminders);
+        }
+
+        // Add past reminders.
+        if (pastReminders.size() > 0) {
+            mListItems.add(new Header(mContext.getString(R.string.list_reminders_past)));
+            mListItems.addAll(pastReminders);
         }
 
         notifyAdapter();
@@ -133,7 +127,7 @@ public class ListCourseReminderFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListCourseTaskListener) activity;
+            mListener = (FragmentListCourseReminderListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement FragmentListCourseTaskListener");
@@ -183,10 +177,10 @@ public class ListCourseReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_reminder, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_reminder_name);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_reminder_subtitle);
-                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_reminder_date);
+                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_information);
                 }
 
                 convertView.setTag(viewHolder);
@@ -200,7 +194,7 @@ public class ListCourseReminderFragment extends BaseListFragment {
                 Reminder reminder = (Reminder) listItem;
                 viewHolder.tvName.setText(reminder.getName());
                 viewHolder.tvSubtitle.setText(reminder.isGraded() ? R.string.graded : R.string.not_graded);
-                viewHolder.tvDate.setText(reminder.getDueDate(mContext));
+                viewHolder.tvDate.setText(reminder.getDateString(mContext));
             }
 
             return convertView;
@@ -216,12 +210,7 @@ public class ListCourseReminderFragment extends BaseListFragment {
     /**
      * Listeners.
      */
-    public static interface FragmentListCourseTaskListener {
-
-        /**
-         * Called when a task is going to be added.
-         */
-        public void onListCourseReminderAdd(Course course);
+    public static interface FragmentListCourseReminderListener {
 
         /**
          * Called when a task is going to be updated.

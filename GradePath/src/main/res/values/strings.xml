@@ -13,8 +13,6 @@
     <string name="actionbar_save">Save</string>
     <string name="actionbar_update">Update</string>
 
-    <!-- Navigation Drawer Fragment -->
-    <string name="tv_drawer_current_courses">Current courses</string>
 
     <!-- Contextual action bar selected -->
     <string name="contextual_action_edit">Edit</string>
@@ -59,7 +57,7 @@
 
     <!-- Semester dialog -->
     <string name="title_new_semester_dialog">New semester</string>
-    <string name="cb_current_semester">Current</string>
+    <string name="cb_current_semester">This is my current semester</string>
     <string name="tv_dialog_semester_last_day">Last day (optional)</string>
     <string name="hint_dialog_semester_gpa">Semester GPA</string>
     <string name="toast_semester_saved">Semester saved</string>
@@ -106,7 +104,6 @@
     <!-- Delete course alert dialog -->
     <string name="title_delete_course_dialog">Delete %1$s?</string>
     <string name="message_delete_course_dialog">You\'ll delete every grade and task related to this course!</string>
-
     <string name="cd_add_button">Add button</string>
 
     <!-- Semesters fragment -->
@@ -142,11 +139,10 @@
     <string name="title_fragment_home">Home</string>
     <string name="welcome_message">Welcome to GradePath, try swiping from the left side of the
         screen to open the navigation drawer.</string>
-    <string name="see_all">See all</string>
+    <string name="show_all">Show all</string>
     <string name="none_use_button">None</string>
-    <string name="none_click_to_add">None</string>
     <string name="hello">Hello</string>
-    <string name="welcome_confirmation">Cool</string>
+    <string name="welcome_confirmation">Okay</string>
 
     <!-- Settings Fragment -->
     <string name="title_fragment_settings">Settings</string>

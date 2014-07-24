@@ -983,6 +983,58 @@ public class DatabaseFacade {
     }
 
     /**
+     * @return list of all current reminders.
+     */
+    public List<Reminder> getCurrentReminders() {
+        List<Reminder> reminders = new ArrayList<Reminder>();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+                null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Reminder reminder = cursorToReminder(cursor);
+
+            // Only add the reminder if it's current.
+            if (reminder.getDate().after(yesterday)) {
+                reminders.add(reminder);
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return reminders;
+    }
+
+    /**
+     * @return list of all current reminders.
+     */
+    public List<Reminder> getCurrentReminders(long courseId) {
+        List<Reminder> reminders = new ArrayList<Reminder>();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Reminder reminder = cursorToReminder(cursor);
+
+            // Only add the reminder if it's current.
+            if (reminder.getDate().after(yesterday)) {
+                reminders.add(reminder);
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return reminders;
+    }
+
+    /**
      * Returns a list of all incomplete tasks for a course.
      */
     public List<Reminder> getIncompleteReminders() {

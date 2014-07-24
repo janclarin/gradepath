@@ -42,7 +42,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
      */
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E, MMMM d, y");
 
-    private OnDialogTaskListener mListener;
+    private OnDialogReminderListener mListener;
 
     private Context mContext;
 
@@ -288,7 +288,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnDialogTaskListener) activity;
+            mListener = (OnDialogReminderListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement DialogTaskCallbacks");
@@ -315,7 +315,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
     /**
      *
      */
-    public interface OnDialogTaskListener {
+    public interface OnDialogReminderListener {
 
         /**
          * Called when a grade is saved.

@@ -73,7 +73,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
      *
      * @return
      */
-    public String getDueDate(Context context) {
+    public String getDateString(Context context) {
         Calendar today = Calendar.getInstance();
 
         // Add one because it rounds down.

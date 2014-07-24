@@ -58,7 +58,8 @@ public class GradeComponent extends DatabaseItem {
      * @return component average as a String representation.
      */
     public String getComponentAverageString() {
-        return new DecimalFormat("#.##").format(componentAverage) + "/" + Double.toString(weight);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        return decimalFormat.format(componentAverage) + "/" + decimalFormat.format(weight);
     }
 
     @Override

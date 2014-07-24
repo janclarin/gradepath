@@ -12,36 +12,35 @@
         android:divider="@null"
         android:dividerHeight="16dp"
         android:paddingBottom="40dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:paddingTop="16dp"
         android:scrollbarStyle="outsideOverlay" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        android:gravity="bottom|right">
+        android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/btn_show_add_options"
+            android:id="@+id/btn_add_course"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
             android:padding="16dp"
             android:scaleType="fitXY"
-            android:src="@drawable/add_list_item" />
+            android:src="@drawable/list_add_course"
+            android:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/btn_add_reminder"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_above="@id/btn_show_add_options"
-            android:layout_alignRight="@id/btn_show_add_options"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
@@ -54,8 +53,6 @@
             android:id="@+id/btn_add_grade"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_above="@id/btn_add_reminder"
-            android:layout_alignRight="@id/btn_show_add_options"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
@@ -65,18 +62,14 @@
             android:visibility="invisible" />
 
         <ImageButton
-            android:id="@+id/btn_add_course"
+            android:id="@+id/btn_show_add_options"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_above="@id/btn_add_grade"
-            android:layout_alignRight="@id/btn_show_add_options"
-            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_circle_button"
             android:contentDescription="@string/cd_add_button"
             android:padding="16dp"
             android:scaleType="fitXY"
-            android:src="@drawable/list_add_course"
-            android:visibility="invisible" />
-    </RelativeLayout>
+            android:src="@drawable/add_list_item" />
+    </LinearLayout>
 
 </FrameLayout>

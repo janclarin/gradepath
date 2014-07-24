@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,6 +33,7 @@ public class HomeFragment extends BaseFragment {
     private FragmentHomeListener mListener;
     private boolean mHideWelcome;
     private boolean mButtonsShown;
+    private boolean isUpdating;
     private LongSparseArray<Course> mCoursesById;
 
     private ImageButton mShowAddButton;
@@ -39,7 +41,11 @@ public class HomeFragment extends BaseFragment {
     private ImageButton mAddGradeButton;
     private ImageButton mAddCourseButton;
     private ListView mListView;
+
     private CardList[] mCardItems;
+    private List<Course> mCourses;
+    private List<Reminder> mReminders;
+    private List<Grade> mGrades;
     private BaseAdapter mAdapter;
 
     public static HomeFragment newInstance() {
@@ -127,10 +133,17 @@ public class HomeFragment extends BaseFragment {
         }
 
         if (mHideWelcome) {
-            mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES, CardList.COURSES};
+            mCardItems = new CardList[]{CardList.COURSES, CardList.REMINDERS, CardList.GRADES};
         } else {
             mCardItems = CardList.values();
         }
+
+        mCourses = mDatabase.getCurrentCourses();
+        mReminders = mDatabase.getCurrentReminders();
+        mGrades = mDatabase.getGrades();
+        Collections.sort(mCourses);
+        Collections.sort(mReminders);
+        Collections.sort(mGrades);
 
         mAdapter = new ListAdapter();
         mListView.setAdapter(mAdapter);
@@ -153,9 +166,40 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    public void updateListItems(boolean updateReminders, boolean updateGrades, boolean updateCourses) {
-        // TODO: Fix updating.
-        mAdapter.notifyDataSetChanged();
+    public void updateListItems(boolean updateCourses, boolean updateReminders, boolean updateGrades) {
+        isUpdating = true;
+
+        // Update lists based on parameters.
+        if (updateCourses) {
+            mCourses = mDatabase.getCurrentCourses();
+            Collections.sort(mCourses);
+            refreshCard(0);
+        }
+        if (updateReminders) {
+            mReminders = mDatabase.getCurrentReminders();
+            Collections.sort(mReminders);
+            refreshCard(1);
+        }
+        if (updateGrades) {
+            mGrades = mDatabase.getGrades();
+            Collections.sort(mGrades);
+            refreshCard(2);
+        }
+
+        isUpdating = false;
+    }
+
+    /**
+     * Refreshes a card in list view.
+     *
+     * @param position
+     */
+    private void refreshCard(int position) {
+        // Add one to position since welcome card item is at position 0.
+        if (!mHideWelcome) position++;
+
+        View view = mListView.getChildAt(position);
+        mListView.getAdapter().getView(position, view, mListView);
     }
 
     @Override
@@ -216,136 +260,141 @@ public class HomeFragment extends BaseFragment {
             viewHolder.tvTitle.setText(item.titleId);
             viewHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(item.iconId, 0, 0, 0);
 
+            // Only refresh the linear layout if updating or it hasn't been loaded yet.
+            if (!isUpdating && viewHolder.llList.getChildCount() > 0) {
+                return convertView;
+            } else {
+                // Clear list to prevent duplicates.
+                viewHolder.llList.removeAllViews();
+            }
+
             // Number of items to show.
             int numShow;
 
             // Check that the list is empty to prevent duplicates in list.
-            if (viewHolder.llList.getChildCount() == 0) {
-                switch (item) {
-                    case WELCOME:
-                        TextView tvMessage = (TextView) LayoutInflater.from(mContext)
-                                .inflate(R.layout.fragment_list_item_home_welcome, viewHolder.llList, false);
-                        viewHolder.llList.addView(tvMessage);
+            switch (item) {
+                case WELCOME:
+                    TextView tvMessage = (TextView) LayoutInflater.from(mContext)
+                            .inflate(R.layout.fragment_list_item_home_welcome, viewHolder.llList, false);
+                    viewHolder.llList.addView(tvMessage);
 
-                        // Set up custom button for welcome message.
-                        viewHolder.btnAll.setText(R.string.welcome_confirmation);
+                    // Set up custom button for welcome message.
+                    viewHolder.btnAll.setText(R.string.welcome_confirmation);
+                    viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences sp = PreferenceManager
+                                    .getDefaultSharedPreferences(mContext.getApplicationContext());
+                            sp.edit().putBoolean(PREF_USER_HIDE_WELCOME, true).apply();
+                            mHideWelcome = true;
+                            mCardItems = new CardList[]{CardList.COURSES, CardList.REMINDERS, CardList.GRADES};
+                            mAdapter = new ListAdapter();
+                            mListView.setAdapter(mAdapter);
+                        }
+                    });
+                    break;
+                case COURSES:
+                    for (final Course course : mCourses) {
+                        FrameLayout layout = (FrameLayout) LayoutInflater.from(mContext)
+                                .inflate(R.layout.fragment_list_item_home_course, viewHolder.llList, false);
+                        TextView tvName = (TextView) layout.findViewById(R.id.tv_course_name);
+                        TextView tvInstructor = (TextView) layout.findViewById(R.id.tv_instructor_name);
+                        Button btnViewCourse = (Button) layout.findViewById(R.id.btn_view_course);
+
+                        // Set text in views.
+                        tvName.setText(course.getName());
+                        tvInstructor.setText(course.getInstructorName());
+
+                        btnViewCourse.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null) mListener.onHomeViewCourse(course);
+                            }
+                        });
+
+                        viewHolder.llList.addView(layout);
+                    }
+
+                    if (mCourses.isEmpty()) {
+                        viewHolder.btnAll.setText(R.string.none_use_button);
+                    } else {
+                        viewHolder.btnAll.setText(R.string.show_all);
                         viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                SharedPreferences sp = PreferenceManager
-                                        .getDefaultSharedPreferences(mContext.getApplicationContext());
-                                sp.edit().putBoolean(PREF_USER_HIDE_WELCOME, true).apply();
-                                mHideWelcome = true;
-                                mCardItems = new CardList[]{CardList.REMINDERS, CardList.GRADES, CardList.COURSES};
-                                mAdapter = new ListAdapter();
-                                mListView.setAdapter(mAdapter);
+                                if (mListener != null) mListener.onHomeAllCourses();
                             }
                         });
-                        break;
-                    case REMINDERS:
-                        List<Reminder> reminders = mDatabase.getIncompleteReminders();
-                        Collections.sort(reminders);
+                    }
+                    break;
+                case REMINDERS:
+                    // Check if there are at least NUM_ITEM_SHOWN elements.
+                    numShow = mReminders.size() < NUM_ITEMS_SHOWN ? mReminders.size() : NUM_ITEMS_SHOWN;
 
-                        // Check if there are at least NUM_ITEM_SHOWN elements.
-                        numShow = reminders.size() < NUM_ITEMS_SHOWN ? reminders.size() : NUM_ITEMS_SHOWN;
+                    for (int i = 0; i < numShow; i++) {
+                        Reminder reminder = mReminders.get(i);
+                        RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
+                                .inflate(R.layout.fragment_list_item_home_general, viewHolder.llList, false);
+                        TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
+                        TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_subtitle);
+                        TextView tvDate = (TextView) layout.findViewById(R.id.tv_information);
 
-                        for (int i = 0; i < numShow; i++) {
-                            Reminder reminder = reminders.get(i);
-                            RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
-                                    .inflate(R.layout.fragment_list_item_home_reminder, viewHolder.llList, false);
-                            TextView tvName = (TextView) layout.findViewById(R.id.tv_reminder_name);
-                            TextView tvCourse = (TextView) layout.findViewById(R.id.tv_reminder_subtitle);
-                            TextView tvDate = (TextView) layout.findViewById(R.id.tv_reminder_date);
+                        // Set text in views.
+                        tvName.setText(reminder.getName());
+                        tvSubtitle.setText(mCoursesById.get(reminder.getCourseId()).getName());
+                        tvDate.setText(reminder.getDateString(mContext));
 
-                            // Set text in views.
-                            tvName.setText(reminder.getName());
-                            tvCourse.setText(mCoursesById.get(reminder.getCourseId()).getName());
-                            tvDate.setText(reminder.getDueDate(mContext));
+                        // Add layout to list.
+                        viewHolder.llList.addView(layout);
+                    }
 
-                            // Add layout to list.
-                            viewHolder.llList.addView(layout);
-                        }
+                    if (mReminders.isEmpty()) {
+                        viewHolder.btnAll.setText(R.string.none_use_button);
+                    } else {
+                        viewHolder.btnAll.setText(R.string.show_all);
+                        // Set button on click listener to open reminders fragment.
+                        viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null) mListener.onHomeAllReminders();
+                            }
+                        });
+                    }
+                    break;
+                case GRADES:
+                    // Check if there are at least NUM_ITEMS_SHOWN elements.
+                    numShow = mGrades.size() < NUM_ITEMS_SHOWN ? mGrades.size() : NUM_ITEMS_SHOWN;
 
-                        if (reminders.isEmpty()) {
-                            viewHolder.btnAll.setText(R.string.none_use_button);
-                        } else {
-                            viewHolder.btnAll.setText(R.string.see_all);
-                            // Set button on click listener to open reminders fragment.
-                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (mListener != null) mListener.onHomeAllReminders();
-                                }
-                            });
-                        }
-                        break;
-                    case GRADES:
-                        List<Grade> grades = mDatabase.getGrades();
-                        Collections.sort(grades);
+                    for (int i = 0; i < numShow; i++) {
+                        Grade grade = mGrades.get(i);
+                        RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
+                                .inflate(R.layout.fragment_list_item_home_general, viewHolder.llList, false);
+                        TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
+                        TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_subtitle);
+                        TextView tvGrade = (TextView) layout.findViewById(R.id.tv_information);
 
-                        // Check if there are at least NUM_ITEMS_SHOWN elements.
-                        numShow = grades.size() < NUM_ITEMS_SHOWN ? grades.size() : NUM_ITEMS_SHOWN;
+                        // Set text in views.
+                        tvName.setText(grade.getName());
+                        tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
+                        tvGrade.setText(grade.getGradePercentage());
 
-                        for (int i = 0; i < numShow; i++) {
-                            Grade grade = grades.get(i);
-                            RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
-                                    .inflate(R.layout.fragment_list_item_home_grade, viewHolder.llList, false);
-                            TextView tvName = (TextView) layout.findViewById(R.id.tv_grade_name);
-                            TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_grade_subtitle);
-                            TextView tvGrade = (TextView) layout.findViewById(R.id.tv_grade);
+                        // Add layout to list.
+                        viewHolder.llList.addView(layout);
+                    }
 
-                            // Set text in views.
-                            tvName.setText(grade.getName());
-                            tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
-                            tvGrade.setText(grade.getGradePercentage());
-
-                            // Add layout to list.
-                            viewHolder.llList.addView(layout);
-                        }
-
-                        if (grades.isEmpty()) {
-                            viewHolder.btnAll.setText(R.string.none_use_button);
-                        } else {
-                            viewHolder.btnAll.setText(R.string.see_all);
-                            // Set button on click listener to open grades fragment.
-                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (mListener != null) mListener.onHomeAllGrades();
-                                }
-                            });
-                        }
-                        break;
-                    case COURSES:
-                        List<Course> courses = mDatabase.getCurrentCourses();
-                        Collections.sort(courses);
-
-                        for (Course course : courses) {
-                            RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
-                                    .inflate(R.layout.fragment_list_item_home_course, viewHolder.llList, false);
-                            TextView tvName = (TextView) layout.findViewById(R.id.tv_course_name);
-                            TextView tvInstructor = (TextView) layout.findViewById(R.id.tv_instructor_name);
-
-                            // Set text in views.
-                            tvName.setText(course.getName());
-                            tvInstructor.setText(course.getInstructorName());
-
-                            viewHolder.llList.addView(layout);
-                        }
-
-                        if (courses.isEmpty()) {
-                            viewHolder.btnAll.setText(R.string.none_click_to_add);
-                        } else {
-                            viewHolder.btnAll.setText(R.string.see_all);
-                            viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (mListener != null) mListener.onHomeAllCourses();
-                                }
-                            });
-                        }
-                        break;
-                }
+                    if (mGrades.isEmpty()) {
+                        viewHolder.btnAll.setText(R.string.none_use_button);
+                    } else {
+                        viewHolder.btnAll.setText(R.string.show_all);
+                        // Set button on click listener to open grades fragment.
+                        viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null) mListener.onHomeAllGrades();
+                            }
+                        });
+                    }
+                    break;
             }
             return convertView;
         }
@@ -359,9 +408,9 @@ public class HomeFragment extends BaseFragment {
 
     private enum CardList {
         WELCOME(R.string.hello, R.drawable.welcome),
+        COURSES(R.string.title_fragment_list_courses, R.drawable.course),
         REMINDERS(R.string.title_fragment_list_reminders, R.drawable.reminder),
-        GRADES(R.string.title_fragment_list_grades, R.drawable.grade),
-        COURSES(R.string.title_fragment_list_courses, R.drawable.course);
+        GRADES(R.string.title_fragment_list_grades, R.drawable.grade);
 
         public final int titleId;
         public final int iconId;
@@ -391,6 +440,9 @@ public class HomeFragment extends BaseFragment {
 
         /* Displays courses fragment. */
         public void onHomeAllCourses();
+
+        /* Displays course detail fragment. */
+        public void onHomeViewCourse(Course course);
     }
 
 }

@@ -16,7 +16,6 @@ import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,13 +30,6 @@ public class ListAllReminderFragment extends BaseListFragment {
 
     public ListAllReminderFragment() {
         // Required empty public constructor.
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -81,8 +73,6 @@ public class ListAllReminderFragment extends BaseListFragment {
         }
 
         Collections.sort(reminders);
-
-        Calendar today = Calendar.getInstance();
 
         mListItems.addAll(reminders);
 
@@ -161,10 +151,10 @@ public class ListAllReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_reminder, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_reminder_name);
-                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_reminder_date);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_reminder_subtitle);
+                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_information);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                 }
 
                 convertView.setTag(viewHolder);
@@ -177,7 +167,7 @@ public class ListAllReminderFragment extends BaseListFragment {
             } else {
                 Reminder reminder = (Reminder) listItem;
                 viewHolder.tvName.setText(reminder.getName());
-                viewHolder.tvDate.setText(reminder.getDueDate(mContext));
+                viewHolder.tvDate.setText(reminder.getDateString(mContext));
                 viewHolder.tvSubtitle.setText(mDatabase.getCourse(reminder.getCourseId()).getName());
             }
 

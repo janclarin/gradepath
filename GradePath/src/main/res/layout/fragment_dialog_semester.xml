@@ -5,36 +5,37 @@
     android:layout_height="wrap_content"
     tools:context=".dialog.SemesterDialog">
 
-    <CheckBox
-        android:id="@+id/cb_dialog_semester_current"
-        style="@style/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:text="@string/cb_current_semester" />
-
     <Spinner
         android:id="@+id/spn_dialog_semester_year"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@id/cb_dialog_semester_current"
         android:paddingRight="8dp" />
 
     <Spinner
         android:id="@+id/spn_dialog_semester_season"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/spn_dialog_semester_year"
         android:paddingRight="8dp" />
 
+    <CheckBox
+        android:id="@+id/cb_dialog_semester_current"
+        style="@style/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_marginTop="8dp"
+        android:text="@string/cb_current_semester" />
+
     <EditText
         android:id="@+id/et_dialog_semester_gpa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_below="@id/cb_dialog_semester_current"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="8dp"
         android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
@@ -48,17 +49,17 @@
         style="@style/headerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_below="@id/cb_dialog_semester_current"
         android:layout_marginTop="8dp"
         android:text="@string/tv_dialog_semester_last_day"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btn_dialog_semester_last_day"
         style="@style/spinnerButton"
         android:layout_width="match_parent"
-        android:layout_below="@id/spn_dialog_semester_season"
+        android:layout_below="@id/cb_dialog_semester_current"
         android:layout_marginTop="20dp"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

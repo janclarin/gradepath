@@ -43,7 +43,7 @@
         android:layout_toLeftOf="@id/tv_semester_information_label"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
-        android:textColor="@color/theme_primary_color_dark"
+        android:textColor="@color/theme_primary_color"
         android:textSize="20sp" />
 
 </RelativeLayout>

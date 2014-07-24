@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -52,15 +50,20 @@ public class ListCourseGradeFragment extends BaseListFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_list_course_general, container, false);
+
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
+
+        return rootView;
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_grade_empty);
-        mAddItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) mListener.onListCourseGradeAdd(mCourse);
-            }
-        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -135,19 +138,6 @@ public class ListCourseGradeFragment extends BaseListFragment {
         mListener = null;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate options menu.
-        inflater.inflate(R.menu.list_course, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private class ListAdapter extends BaseListAdapter {
         @Override
         public int getItemViewType(int position) {
@@ -173,10 +163,10 @@ public class ListCourseGradeFragment extends BaseListFragment {
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_grade, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_grade_name);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_grade_subtitle);
-                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
+                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                    viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_information);
                 }
 
                 convertView.setTag(viewHolder);
@@ -209,12 +199,6 @@ public class ListCourseGradeFragment extends BaseListFragment {
      * Listeners.
      */
     public static interface FragmentListCourseGradeListener {
-
-        /**
-         * Called when a grade is going to be added.
-         */
-        public void onListCourseGradeAdd(Course course);
-
         /**
          * Called when a grade is going to be updated.
          */

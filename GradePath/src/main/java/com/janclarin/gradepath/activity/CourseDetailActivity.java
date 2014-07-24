@@ -4,17 +4,21 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.fragment.BaseListFragment;
+import com.janclarin.gradepath.fragment.CourseDetailFragment;
 import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
 import com.janclarin.gradepath.fragment.ListCourseReminderFragment;
 import com.janclarin.gradepath.model.Course;
@@ -26,9 +30,9 @@ import java.util.List;
 
 public class CourseDetailActivity extends BaseActivity
         implements ListCourseGradeFragment.FragmentListCourseGradeListener,
-        ListCourseReminderFragment.FragmentListCourseTaskListener,
+        ListCourseReminderFragment.FragmentListCourseReminderListener,
         GradeDialogFragment.OnDialogGradeListener,
-        ReminderDialogFragment.OnDialogTaskListener {
+        ReminderDialogFragment.OnDialogReminderListener {
 
     private static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
     private static final int NUM_TABS = 3;
@@ -52,6 +56,8 @@ public class CourseDetailActivity extends BaseActivity
         // Set action bar title to course name.
         actionBar.setTitle(mCourse.getName());
 
+        final ImageButton btnAddItem = (ImageButton) findViewById(R.id.btn_add_item);
+
         mAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPager.setAdapter(mAdapter);
@@ -61,9 +67,33 @@ public class CourseDetailActivity extends BaseActivity
                     @Override
                     public void onPageSelected(int position) {
                         actionBar.setSelectedNavigationItem(position);
+                        switch (position) {
+                            case 2:
+                                btnAddItem.setImageResource(R.drawable.edit);
+                                break;
+                            default:
+                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                        }
                     }
                 }
         );
+
+        btnAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mViewPager.getCurrentItem()) {
+                    case 0:
+                        onListCourseGradeAdd();
+                        break;
+                    case 1:
+                        onListCourseReminderAdd();
+                        break;
+                    case 2:
+                        onCourseEdit();
+                }
+
+            }
+        });
 
         // Create a tab listener that is called when the user changes tabs.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -108,10 +138,29 @@ public class CourseDetailActivity extends BaseActivity
     }
 
     @Override
-    public void onListCourseGradeAdd(Course course) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_LIST_COURSE_EDIT_COURSE) {
+            mAdapter.getItem(2);
+            Toast.makeText(this, R.string.course_saved_update, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onListCourseGradeAdd() {
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog), course);
+                getString(R.string.title_new_grade_dialog), mCourse);
         gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
+    }
+
+    public void onListCourseReminderAdd() {
+        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+                getString(R.string.title_new_reminder_dialog), mCourse);
+        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
+    }
+
+    public void onCourseEdit() {
+        Intent intent = new Intent(this, CourseEditActivity.class);
+        intent.putExtra(COURSE_KEY, mCourse);
+        startActivityForResult(intent, REQUEST_LIST_COURSE_EDIT_COURSE);
     }
 
     @Override
@@ -119,13 +168,6 @@ public class CourseDetailActivity extends BaseActivity
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
-    }
-
-    @Override
-    public void onListCourseReminderAdd(Course course) {
-        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_reminder_dialog), course);
-        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
     }
 
     @Override
@@ -176,7 +218,8 @@ public class CourseDetailActivity extends BaseActivity
                     fragment = ListCourseReminderFragment.newInstance(mCourse);
                     break;
                 case 2:
-                    fragment = new Fragment();
+                    fragment = CourseDetailFragment.newInstance(mCourse);
+                    break;
                 default:
                     fragment = new Fragment();
             }

@@ -120,7 +120,7 @@
         <item name="android:paddingLeft">16dp</item>
     </style>
 
-    <style name="headerTextView">
+    <style name="listHeaderTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
@@ -128,5 +128,12 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
         <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="headerTextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 </resources>

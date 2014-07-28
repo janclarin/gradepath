@@ -88,7 +88,7 @@ public class ListCourseReminderFragment extends BaseListFragment {
 
         // Add current reminders.
         if (currentReminders.size() > 0) {
-            mListItems.add(new Header(mContext.getString(R.string.list_reminders_current)));
+            mListItems.add(new Header(mContext.getString(R.string.list_reminders_upcoming)));
             mListItems.addAll(currentReminders);
         }
 

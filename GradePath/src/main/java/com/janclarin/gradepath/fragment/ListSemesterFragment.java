@@ -94,7 +94,6 @@ public class ListSemesterFragment extends BaseListFragment
                 if (mListener != null) {
                     mListener.onListSemesterDelete(selectedSemester);
                 }
-                mListItems.remove(selectedSemester);
             }
         }
         mAdapter.notifyDataSetChanged();

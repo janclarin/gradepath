@@ -68,7 +68,7 @@
     <string name="title_new_reminder_dialog">New reminder</string>
     <string name="title_edit_reminder_dialog">Edit reminder</string>
     <string name="tv_dialog_reminder_name">Title</string>
-    <string name="cb_graded">Grade reminder</string>
+    <string name="cb_exam">Exam</string>
     <string name="tv_dialog_reminder_date">Date</string>
     <string name="btn_date_picker_positive">Set</string>
     <string name="btn_date_picker_neutral">Tomorrow</string>
@@ -160,7 +160,7 @@
     <string name="list_semester_set_to_current">Set to current</string>
     <string name="title_fragment_details">Details</string>
     <string name="list_reminders_past">Past</string>
-    <string name="list_reminders_current">Current</string>
+    <string name="list_reminders_upcoming">Upcoming</string>
     <string name="was_due">Was due</string>
     <string name="completed">Completed</string>
     <string name="days_ago">days ago</string>

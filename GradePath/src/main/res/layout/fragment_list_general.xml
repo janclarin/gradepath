@@ -28,7 +28,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
-        android:padding="16dp"
+        android:padding="18dp"
         android:scaleType="fitXY"
         android:src="@drawable/add_list_item" />
 

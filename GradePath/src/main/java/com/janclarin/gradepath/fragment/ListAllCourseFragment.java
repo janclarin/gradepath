@@ -102,7 +102,6 @@ public class ListAllCourseFragment extends BaseListFragment {
             if (selectedPositions.get(i, false)) {
                 Course selectedCourse = (Course) mAdapter.getItem(i);
                 if (mListener != null) mListener.onListCourseDelete(selectedCourse);
-                mListItems.remove(selectedCourse);
             }
         }
     }

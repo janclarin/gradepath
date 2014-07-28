@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
-import com.janclarin.gradepath.fragment.BaseListFragment;
 import com.janclarin.gradepath.fragment.CourseDetailFragment;
 import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
 import com.janclarin.gradepath.fragment.ListCourseReminderFragment;
@@ -201,7 +200,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTabFragment(0)).updateListItems();
+        ((ListCourseGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
     }
 
     @Override
@@ -212,7 +211,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTabFragment(1)).updateListItems();
+        ((ListCourseReminderFragment) mAdapter.getTabFragment(1)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {

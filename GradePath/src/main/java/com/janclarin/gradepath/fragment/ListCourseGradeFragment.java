@@ -85,10 +85,10 @@ public class ListCourseGradeFragment extends BaseListFragment {
             if (componentGrades.size() > 0) {
                 // Calculate current grade for component and set the value.
                 double componentAverage = 0;
-                double componentWeight = component.getWeight() / component.getNumberOfItems();
+                double gradeWeight = component.getWeight() / component.getNumberOfItems();
                 for (Grade grade : componentGrades) {
                     componentAverage +=
-                            (grade.getPointsPossible() / grade.getPointsReceived()) * componentWeight;
+                            (grade.getPointsReceived() / grade.getPointsPossible()) * gradeWeight;
                 }
                 component.setComponentAverage(componentAverage);
                 mListItems.add(component);
@@ -158,12 +158,12 @@ public class ListCourseGradeFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_course, parent, false);
+                            .inflate(R.layout.fragment_list_header_general_two, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                            .inflate(R.layout.fragment_list_item_grade, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_information);
@@ -176,12 +176,13 @@ public class ListCourseGradeFragment extends BaseListFragment {
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
                 GradeComponent gradeComponent = (GradeComponent) listItem;
-                viewHolder.tvName.setText(gradeComponent.getName());
+                viewHolder.tvName.setText(gradeComponent.getName()
+                        + " (" + Integer.toString(gradeComponent.getNumberOfItems()) + ")");
                 viewHolder.tvGrade.setText(gradeComponent.getComponentAverageString());
             } else {
                 Grade grade = (Grade) listItem;
                 viewHolder.tvName.setText(grade.getName());
-                viewHolder.tvSubtitle.setText(grade.getAddDate(mContext));
+                viewHolder.tvSubtitle.setText(grade.toString());
                 viewHolder.tvGrade.setText(grade.getGradePercentage());
             }
 

@@ -194,8 +194,8 @@ public class ListAllCourseFragment extends BaseListFragment {
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_course, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_course_name);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_instructor_name);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_overflow);
                 }
 

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card_default"
-    android:orientation="vertical"
-    android:paddingBottom="4dp">
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/btn_all"
@@ -14,7 +13,7 @@
         android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:gravity="right|center_vertical"
-        android:paddingRight="16dp"
+        android:paddingRight="12dp"
         android:textAllCaps="true"
         android:textColor="@color/theme_primary_color"
         android:textSize="14sp" />

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -57,6 +58,17 @@ public class ListAllGradeFragment extends BaseListFragment {
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
+
+        // Set on item click listener to notify listener to open course detail activity into grades.
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Grade grade = (Grade) mAdapter.getItem(position);
+                if (mListener != null) {
+                    mListener.onListGradeClick(grade, mCoursesById.get(grade.getCourseId()));
+                }
+            }
+        });
     }
 
     @Override
@@ -178,5 +190,8 @@ public class ListAllGradeFragment extends BaseListFragment {
 
         /* Called when a grade is selected for edit in contextual action bar */
         public void onListGradeEdit(Grade grade);
+
+        /* Called when a grade is clicked in list. Opens course detail fragment. */
+        public void onListGradeClick(Grade grade, Course course);
     }
 }

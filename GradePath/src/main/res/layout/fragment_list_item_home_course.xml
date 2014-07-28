@@ -19,7 +19,7 @@
         android:paddingRight="16dp">
 
         <TextView
-            android:id="@+id/tv_course_name"
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -28,13 +28,13 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_instructor_name"
+            android:id="@+id/tv_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:singleLine="true"
             android:textColor="@android:color/tertiary_text_light"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
 </FrameLayout>

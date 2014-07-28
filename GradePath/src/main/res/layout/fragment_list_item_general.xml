@@ -14,10 +14,9 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
-        android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -43,6 +42,6 @@
             android:fontFamily="sans-serif-light"
             android:singleLine="true"
             android:textColor="@android:color/tertiary_text_light"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -11,9 +11,9 @@ import java.util.Calendar;
 public class Grade extends DatabaseItem implements Comparable<Grade> {
 
     private long courseId;
-    private long categoryId;
+    private long componentId;
     private String name;
-    private double pointsEarned;
+    private double pointsReceived;
     private double pointsPossible;
     private Calendar addDate;
 
@@ -29,11 +29,11 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
     }
 
     public long getComponentId() {
-        return categoryId;
+        return componentId;
     }
 
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
+    public void setComponentId(long componentId) {
+        this.componentId = componentId;
     }
 
     public long getCourseId() {
@@ -45,11 +45,11 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
     }
 
     public double getPointsReceived() {
-        return pointsEarned;
+        return pointsReceived;
     }
 
-    public void setPointsEarned(double pointsEarned) {
-        this.pointsEarned = pointsEarned;
+    public void setPointsReceived(double pointsReceived) {
+        this.pointsReceived = pointsReceived;
     }
 
     public double getPointsPossible() {
@@ -74,7 +74,7 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
      * @return
      */
     public String getGradePercentage() {
-        double grade = (pointsEarned / pointsPossible) * 100;
+        double grade = (pointsReceived / pointsPossible) * 100;
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format(grade) + "%";
     }
@@ -113,14 +113,12 @@ public class Grade extends DatabaseItem implements Comparable<Grade> {
     }
 
     /**
-     * Prints grade to two decimal places
-     *
-     * @return
+     * @return string representation of grade as a fraction.
      */
     @Override
     public String toString() {
         // Return grade to 2 decimal points.
         DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(pointsEarned / pointsPossible);
+        return df.format(pointsReceived) + "/" + df.format(pointsPossible);
     }
 }

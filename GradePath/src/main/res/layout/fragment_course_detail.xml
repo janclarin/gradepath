@@ -6,7 +6,7 @@
     tools:context="com.janclarin.gradepath.fragment.CourseDetailFragment">
 
     <TextView
-        android:id="@+id/tv_instructor_name"
+        android:id="@+id/tv_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp" />
@@ -15,7 +15,7 @@
         android:id="@+id/tv_instructor_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_instructor_name"
+        android:layout_below="@id/tv_subtitle"
         android:layout_marginTop="8dp"
         android:autoLink="email"
         android:textSize="20sp" />

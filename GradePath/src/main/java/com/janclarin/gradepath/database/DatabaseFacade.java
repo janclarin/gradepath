@@ -43,7 +43,7 @@ public class DatabaseFacade {
 
     private static final String[] GRADE_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_COMPONENT_ID,
-            DatabaseHelper.COLUMN_GRADE_NAME, DatabaseHelper.COLUMN_POINTS_EARNED,
+            DatabaseHelper.COLUMN_GRADE_NAME, DatabaseHelper.COLUMN_POINTS_RECEIVED,
             DatabaseHelper.COLUMN_POINTS_POSSIBLE, DatabaseHelper.COLUMN_YEAR_ADDED,
             DatabaseHelper.COLUMN_MONTH_ADDED, DatabaseHelper.COLUMN_DAY_ADDED};
 
@@ -312,11 +312,34 @@ public class DatabaseFacade {
     }
 
     /**
+     * Gets a list of all completed semesters.
+     */
+    public List<Semester> getPastSemestersWithGPA() {
+        List<Semester> semesters = new ArrayList<Semester>();
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
+                DatabaseHelper.COLUMN_IS_CURRENT + " = '0' AND "
+                        + DatabaseHelper.COLUMN_SEMESTER_GPA + " > '-1'", null, null, null, null);
+
+        cursor.moveToFirst();
+
+        // Read distinct semesters from mDatabase into a list.
+        while (!cursor.isAfterLast()) {
+            semesters.add(cursorToSemester(cursor));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return semesters;
+    }
+
+    /**
      * Checks mDatabase to see if there are any courses in the mDatabase.
      *
      * @return
      */
-    public boolean semestersExist() {
+    public boolean noSemesters() {
 
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS,
                 new String[]{DatabaseHelper.COLUMN_ID}, null, null, null, null, null);
@@ -327,10 +350,10 @@ public class DatabaseFacade {
         // If it is already past the end, then there was no course to begin with.
         if (cursor.isAfterLast()) {
             cursor.close();
-            return false;
+            return true;
         } else {
             cursor.close();
-            return true;
+            return false;
         }
     }
 
@@ -643,7 +666,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_COMPONENT_ID, componentId);
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, name);
-        values.put(DatabaseHelper.COLUMN_POINTS_EARNED, pointsEarned);
+        values.put(DatabaseHelper.COLUMN_POINTS_RECEIVED, pointsEarned);
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, pointsPossible);
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, calendar.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_ADDED, calendar.get(Calendar.MONTH));
@@ -679,7 +702,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_COURSE_ID, grade.getCourseId());
         values.put(DatabaseHelper.COLUMN_COMPONENT_ID, grade.getComponentId());
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, grade.getName());
-        values.put(DatabaseHelper.COLUMN_POINTS_EARNED, grade.getPointsReceived());
+        values.put(DatabaseHelper.COLUMN_POINTS_RECEIVED, grade.getPointsReceived());
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, grade.getPointsPossible());
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_ADDED, addDate.get(Calendar.MONTH));
@@ -708,7 +731,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_COMPONENT_ID, componentId);
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, name);
-        values.put(DatabaseHelper.COLUMN_POINTS_EARNED, pointsEarned);
+        values.put(DatabaseHelper.COLUMN_POINTS_RECEIVED, pointsEarned);
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, pointsPossible);
 
         return mDatabase.update(DatabaseHelper.TABLE_GRADES, values,
@@ -807,35 +830,48 @@ public class DatabaseFacade {
     /**
      * Gets cumulative gpa by querying all completed list_course for final grade
      *
-     * @return
+     * @return cumulative gpa of all completed courses. -1 if there are no completed courses.
      */
     public double getCumulativeGPA() {
 
+        List<Semester> completedSemesters = getPastSemestersWithGPA();
+
         double gpa = 0;
-        int numCompletedCourses = 0;
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES,
-                new String[]{DatabaseHelper.COLUMN_FINAL_GRADE, DatabaseHelper.COLUMN_IS_COMPLETED},
-                DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null);
+        if (completedSemesters.isEmpty()) {
+            // Gets gpa from completed courses.
+            int numCompletedCourses = 0;
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            // Course final grade is integer of position of LetterGrade enum.
-            int letterGradeIndex = cursor.getInt(0);
-            gpa += Course.LetterGrade.values()[letterGradeIndex].getGpaEquivalent();
-            numCompletedCourses++;
-            cursor.moveToNext();
-        }
-        cursor.close();
+            Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES,
+                    new String[]{DatabaseHelper.COLUMN_FINAL_GRADE, DatabaseHelper.COLUMN_IS_COMPLETED},
+                    DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null);
 
-        // Divide GPA by number of list_course.
-        gpa = gpa / numCompletedCourses;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                // Course final grade is integer of position of LetterGrade enum.
+                int letterGradeIndex = cursor.getInt(0);
+                gpa += Course.LetterGrade.values()[letterGradeIndex].getGpaEquivalent();
+                numCompletedCourses++;
+                cursor.moveToNext();
+            }
+            cursor.close();
 
-        // If there are not completed list_course, return -1.
-        if (numCompletedCourses == 0) {
-            return -1;
+            // Divide GPA by number of list_course.
+            gpa = gpa / numCompletedCourses;
+
+            // If there are not completed list_course, return -1.
+            if (numCompletedCourses == 0) {
+                return -1;
+            } else {
+                return gpa;
+            }
         } else {
-            return gpa;
+            for (Semester semester : completedSemesters) {
+                gpa += semester.getGpa();
+            }
+
+            // Divide gpa by number of completed semesters.
+            return gpa / completedSemesters.size();
         }
     }
 
@@ -1188,9 +1224,9 @@ public class DatabaseFacade {
         }
 
         grade.setCourseId(cursor.getLong(1));
-        grade.setCategoryId(cursor.getLong(2));
+        grade.setComponentId(cursor.getLong(2));
         grade.setName(cursor.getString(3));
-        grade.setPointsEarned(cursor.getDouble(4));
+        grade.setPointsReceived(cursor.getDouble(4));
         grade.setPointsPossible(cursor.getDouble(5));
         grade.setAddDate(new GregorianCalendar(cursor.getInt(6), cursor.getInt(7), cursor.getInt(8)));
         return grade;

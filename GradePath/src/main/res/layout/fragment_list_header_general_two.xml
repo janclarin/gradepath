@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/tv_name_header"
+        style="@style/headerTextView"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/tv_name_sub_header"
+        style="@style/headerTextView"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

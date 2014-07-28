@@ -1,21 +1,32 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
-        <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/CustomActionBar</item>
-        <item name="android:actionBarTabStyle">@style/CustomActionBarTab</item>
-        <item name="android:actionBarTabBarStyle">@style/CustomActionBarTabBar</item>
-        <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabText</item>
+    Base application theme.
+
+    <style name="Theme.Gradepath" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_gradepath
+        </item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Gradepath</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Gradepath</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Gradepath</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Gradepath</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Gradepath</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_gradepath</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_gradepath
+        </item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Gradepath
+        </item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabText</item>
+        <item name="android:actionBarTabBarStyle">@style/CustomActionBarTabBar</item>
     </style>
 
-    <!-- ActionBar style -->
-    <style name="CustomActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:height">56dp</item>
-        <item name="android:windowActionBarOverlay">true</item>
+    <style name="ActionBar.Solid.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/theme_primary_color</item>
         <item name="android:backgroundStacked">@android:color/transparent</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_gradepath</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Gradepath</item>
+        <item name="android:height">56dp</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="CustomActionBarTabBar" parent="@android:style/Widget.Holo.Light.ActionBar.TabBar">
@@ -25,15 +36,38 @@
         <item name="android:divider">@null</item>
     </style>
 
-    <style name="CustomActionBarTab" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
-        <item name="android:height">48dp</item>
-        <item name="android:textColor">@drawable/color_action_bar_tab_text</item>
-    </style>
-
     <!-- ActionBar tabs text style -->
     <style name="CustomActionBarTabText" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
         <item name="android:textColor">@drawable/color_action_bar_tab_text</item>
         <item name="android:layout_width">wrap_content</item>
+    </style>
+
+
+    <style name="PopupMenu.Gradepath" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_gradepath</item>
+    </style>
+
+    <style name="DropDownListView.Gradepath" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_gradepath</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_gradepath</item>
+        <item name="android:textColor">@drawable/color_action_bar_tab_text</item>
+    </style>
+
+    <style name="DropDownNav.Gradepath" parent="@android:style/Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_gradepath</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_gradepath</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_gradepath</item>
+    </style>
+
+    <style name="ProgressBar.Gradepath" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_gradepath</item>
+    </style>
+
+    <style name="ActionButton.CloseMode.Gradepath" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_gradepath</item>
     </style>
 
     <!-- Borderless button for empty view for list fragments -->
@@ -65,14 +99,6 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <!-- Category title text view -->
-    <style name="headerTextView">
-        <item name="android:gravity">center_vertical|left</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
-    </style>
-
     <!-- Spinner-style button -->
     <style name="spinnerButton" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:layout_height">40dp</item>
@@ -94,7 +120,7 @@
         <item name="android:paddingLeft">16dp</item>
     </style>
 
-    <style name="listHeaderTextView">
+    <style name="headerTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>

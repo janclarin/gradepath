@@ -14,7 +14,7 @@
         android:src="@drawable/overflow" />
 
     <TextView
-        android:id="@+id/tv_course_name"
+        android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -27,15 +27,15 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tv_instructor_name"
+        android:id="@+id/tv_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tv_course_name"
-        android:layout_alignRight="@id/tv_course_name"
-        android:layout_below="@id/tv_course_name"
+        android:layout_alignLeft="@id/tv_name"
+        android:layout_alignRight="@id/tv_name"
+        android:layout_below="@id/tv_name"
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@android:color/tertiary_text_light"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

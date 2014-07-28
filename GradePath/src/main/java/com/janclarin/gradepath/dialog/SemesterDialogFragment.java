@@ -130,7 +130,7 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         });
 
         // Set to current by default if there are no semesters.
-        mCurrentCheckBox.setChecked(!mDatabase.semestersExist());
+        mCurrentCheckBox.setChecked(!mDatabase.noSemesters());
 
         // Set up spinners.
         setUpSpinners();

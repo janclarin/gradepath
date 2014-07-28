@@ -17,6 +17,7 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Semester;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -182,8 +183,9 @@ public class ListSemesterFragment extends BaseListFragment
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
+                            .inflate(R.layout.fragment_list_header_general_two, parent, false);
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
+                    viewHolder.tvInformation = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_semester, parent, false);
@@ -202,7 +204,20 @@ public class ListSemesterFragment extends BaseListFragment
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Header) listItem).getName());
+                String header = ((Header) listItem).getName();
+                viewHolder.tvName.setText(header);
+
+                // Set cumulative gpa for past courses only.
+                if (header.equals(mContext.getString(R.string.semester_past))) {
+                    double gpa = mDatabase.getCumulativeGPA();
+                    if (gpa > -1) {
+                        viewHolder.tvInformation.setText(mContext.getString(R.string.gpa) + ": "
+                                + new DecimalFormat("#.0#").format(gpa));
+                    } else {
+                        viewHolder.tvInformation.setText(mContext.getString(R.string.gpa) + ": "
+                                + mContext.getString(R.string.not_available));
+                    }
+                }
             } else {
                 Semester semester = (Semester) listItem;
                 viewHolder.tvName.setText(semester.toString());
@@ -217,7 +232,7 @@ public class ListSemesterFragment extends BaseListFragment
 
                     // Set gpa if it exists.
                     viewHolder.tvInformation.setText(gpa > -1 ? Double.toString(semester.getGpa()) :
-                                    mContext.getString(R.string.tv_not_set)
+                                    mContext.getString(R.string.not_available)
                     );
                     viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
                 }

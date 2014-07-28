@@ -66,7 +66,7 @@
 
     <!-- Task Dialog -->
     <string name="title_new_reminder_dialog">New reminder</string>
-    <string name="title_edit_reminder_dialog">Edit render</string>
+    <string name="title_edit_reminder_dialog">Edit reminder</string>
     <string name="tv_dialog_reminder_name">Title</string>
     <string name="cb_graded">Grade reminder</string>
     <string name="tv_dialog_reminder_date">Date</string>
@@ -113,7 +113,7 @@
     <string name="tv_gpa">\nGPA</string>
     <string name="semester_days_left">Days\nLeft</string>
     <string name="tv_list_semester_empty">No semesters</string>
-    <string name="tv_not_set">N/A</string>
+    <string name="not_available">N/A</string>
 
     <!-- Course Fragment -->
     <string name="title_fragment_list_courses">Courses</string>
@@ -137,12 +137,12 @@
 
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
-    <string name="welcome_message">Welcome to GradePath, try swiping from the left side of the
-        screen to open the navigation drawer.</string>
-    <string name="show_all">Show all</string>
+    <string name="welcome_message">Welcome to GradePath! Click on the add button to add your
+        first course. </string>
+    <string name="see_all">See all</string>
     <string name="none_use_button">None</string>
     <string name="hello">Hello</string>
-    <string name="welcome_confirmation">Okay</string>
+    <string name="welcome_confirmation">Hide</string>
 
     <!-- Settings Fragment -->
     <string name="title_fragment_settings">Settings</string>
@@ -168,5 +168,6 @@
     <string name="reminder">Reminder</string>
     <string name="graded">Graded</string>
     <string name="not_graded">Not graded</string>
+    <string name="gpa">GPA</string>
 
 </resources>

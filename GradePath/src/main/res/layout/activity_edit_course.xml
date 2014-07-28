@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/et_instructor_email"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/tv_letter_grade"

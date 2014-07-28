@@ -28,7 +28,7 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
 
     private static final String PREF_USER_HIDE_WELCOME = "show_welcome";
-    private static final int NUM_ITEMS_SHOWN = 3;
+    private static final int NUM_ITEMS_SHOWN = 5;
 
     private FragmentHomeListener mListener;
     private boolean mHideWelcome;
@@ -124,14 +124,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        // Set up map for quick course name querying in lists.
-        mCoursesById = new LongSparseArray<Course>();
-        List<Course> courseList = mDatabase.getCourses();
-
-        for (Course course : courseList) {
-            mCoursesById.put(course.getId(), course);
-        }
-
         if (mHideWelcome) {
             mCardItems = new CardList[]{CardList.COURSES, CardList.REMINDERS, CardList.GRADES};
         } else {
@@ -144,6 +136,13 @@ public class HomeFragment extends BaseFragment {
         Collections.sort(mCourses);
         Collections.sort(mReminders);
         Collections.sort(mGrades);
+
+        // Set up map for quick course name querying in lists.
+        mCoursesById = new LongSparseArray<Course>();
+
+        for (Course course : mCourses) {
+            mCoursesById.put(course.getId(), course);
+        }
 
         mAdapter = new ListAdapter();
         mListView.setAdapter(mAdapter);
@@ -172,6 +171,12 @@ public class HomeFragment extends BaseFragment {
         // Update lists based on parameters.
         if (updateCourses) {
             mCourses = mDatabase.getCurrentCourses();
+
+            // Refresh courses by id.
+            for (Course course : mCourses) {
+                mCoursesById.put(course.getId(), course);
+            }
+
             Collections.sort(mCourses);
             refreshCard(0);
         }
@@ -198,8 +203,14 @@ public class HomeFragment extends BaseFragment {
         // Add one to position since welcome card item is at position 0.
         if (!mHideWelcome) position++;
 
-        View view = mListView.getChildAt(position);
-        mListView.getAdapter().getView(position, view, mListView);
+        int firstPosition = mListView.getFirstVisiblePosition();
+        for (int i = firstPosition, j = mListView.getLastVisiblePosition(); i <= j; i++) {
+            if (position == mListView.getItemIdAtPosition(i)) {
+                View view = mListView.getChildAt(i - firstPosition);
+                mListView.getAdapter().getView(position, view, mListView);
+                break;
+            }
+        }
     }
 
     @Override
@@ -248,6 +259,7 @@ public class HomeFragment extends BaseFragment {
                 convertView = LayoutInflater.from(mContext)
                         .inflate(R.layout.fragment_list_item_home, parent, false);
                 viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_card_title);
+                viewHolder.vDivider = convertView.findViewById(R.id.divider);
                 viewHolder.llList = (LinearLayout) convertView.findViewById(R.id.ll_list_items);
                 viewHolder.btnAll = (Button) convertView.findViewById(R.id.btn_all);
 
@@ -263,10 +275,10 @@ public class HomeFragment extends BaseFragment {
             // Only refresh the linear layout if updating or it hasn't been loaded yet.
             if (!isUpdating && viewHolder.llList.getChildCount() > 0) {
                 return convertView;
-            } else {
-                // Clear list to prevent duplicates.
-                viewHolder.llList.removeAllViews();
             }
+
+            // Clear list to prevent duplicates.
+            viewHolder.llList.removeAllViews();
 
             // Number of items to show.
             int numShow;
@@ -283,10 +295,10 @@ public class HomeFragment extends BaseFragment {
                     viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mHideWelcome = true;
                             SharedPreferences sp = PreferenceManager
                                     .getDefaultSharedPreferences(mContext.getApplicationContext());
-                            sp.edit().putBoolean(PREF_USER_HIDE_WELCOME, true).apply();
-                            mHideWelcome = true;
+                            sp.edit().putBoolean(PREF_USER_HIDE_WELCOME, mHideWelcome).apply();
                             mCardItems = new CardList[]{CardList.COURSES, CardList.REMINDERS, CardList.GRADES};
                             mAdapter = new ListAdapter();
                             mListView.setAdapter(mAdapter);
@@ -297,8 +309,8 @@ public class HomeFragment extends BaseFragment {
                     for (final Course course : mCourses) {
                         FrameLayout layout = (FrameLayout) LayoutInflater.from(mContext)
                                 .inflate(R.layout.fragment_list_item_home_course, viewHolder.llList, false);
-                        TextView tvName = (TextView) layout.findViewById(R.id.tv_course_name);
-                        TextView tvInstructor = (TextView) layout.findViewById(R.id.tv_instructor_name);
+                        TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
+                        TextView tvInstructor = (TextView) layout.findViewById(R.id.tv_subtitle);
                         Button btnViewCourse = (Button) layout.findViewById(R.id.btn_view_course);
 
                         // Set text in views.
@@ -316,9 +328,11 @@ public class HomeFragment extends BaseFragment {
                     }
 
                     if (mCourses.isEmpty()) {
+                        viewHolder.vDivider.setVisibility(View.GONE);
                         viewHolder.btnAll.setText(R.string.none_use_button);
                     } else {
-                        viewHolder.btnAll.setText(R.string.show_all);
+                        viewHolder.vDivider.setVisibility(View.VISIBLE);
+                        viewHolder.btnAll.setText(R.string.see_all);
                         viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -332,12 +346,22 @@ public class HomeFragment extends BaseFragment {
                     numShow = mReminders.size() < NUM_ITEMS_SHOWN ? mReminders.size() : NUM_ITEMS_SHOWN;
 
                     for (int i = 0; i < numShow; i++) {
-                        Reminder reminder = mReminders.get(i);
+                        final Reminder reminder = mReminders.get(i);
                         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
                                 .inflate(R.layout.fragment_list_item_home_general, viewHolder.llList, false);
                         TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
                         TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_subtitle);
                         TextView tvDate = (TextView) layout.findViewById(R.id.tv_information);
+                        Button btnViewCourse = (Button) layout.findViewById(R.id.btn_view_course);
+
+                        btnViewCourse.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null)
+                                    mListener.onHomeViewCourse(
+                                            mCoursesById.get(reminder.getCourseId()), reminder);
+                            }
+                        });
 
                         // Set text in views.
                         tvName.setText(reminder.getName());
@@ -349,9 +373,11 @@ public class HomeFragment extends BaseFragment {
                     }
 
                     if (mReminders.isEmpty()) {
+                        viewHolder.vDivider.setVisibility(View.GONE);
                         viewHolder.btnAll.setText(R.string.none_use_button);
                     } else {
-                        viewHolder.btnAll.setText(R.string.show_all);
+                        viewHolder.vDivider.setVisibility(View.VISIBLE);
+                        viewHolder.btnAll.setText(R.string.see_all);
                         // Set button on click listener to open reminders fragment.
                         viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -366,12 +392,23 @@ public class HomeFragment extends BaseFragment {
                     numShow = mGrades.size() < NUM_ITEMS_SHOWN ? mGrades.size() : NUM_ITEMS_SHOWN;
 
                     for (int i = 0; i < numShow; i++) {
-                        Grade grade = mGrades.get(i);
+                        final Grade grade = mGrades.get(i);
                         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mContext)
                                 .inflate(R.layout.fragment_list_item_home_general, viewHolder.llList, false);
                         TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
                         TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_subtitle);
                         TextView tvGrade = (TextView) layout.findViewById(R.id.tv_information);
+                        Button btnViewCourse = (Button) layout.findViewById(R.id.btn_view_course);
+
+                        btnViewCourse.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null) {
+                                    mListener.onHomeViewCourse(
+                                            mCoursesById.get(grade.getCourseId()), grade);
+                                }
+                            }
+                        });
 
                         // Set text in views.
                         tvName.setText(grade.getName());
@@ -383,9 +420,11 @@ public class HomeFragment extends BaseFragment {
                     }
 
                     if (mGrades.isEmpty()) {
+                        viewHolder.vDivider.setVisibility(View.GONE);
                         viewHolder.btnAll.setText(R.string.none_use_button);
                     } else {
-                        viewHolder.btnAll.setText(R.string.show_all);
+                        viewHolder.vDivider.setVisibility(View.VISIBLE);
+                        viewHolder.btnAll.setText(R.string.see_all);
                         // Set button on click listener to open grades fragment.
                         viewHolder.btnAll.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -401,6 +440,7 @@ public class HomeFragment extends BaseFragment {
 
         private class ViewHolder {
             TextView tvTitle;
+            View vDivider;
             LinearLayout llList;
             Button btnAll;
         }
@@ -443,6 +483,12 @@ public class HomeFragment extends BaseFragment {
 
         /* Displays course detail fragment. */
         public void onHomeViewCourse(Course course);
+
+        /* Displays course detail fragment. Set to reminder page. */
+        public void onHomeViewCourse(Course course, Reminder reminder);
+
+        /* Displays course detail fragment. Set to grades page. */
+        public void onHomeViewCourse(Course course, Grade grade);
     }
 
 }

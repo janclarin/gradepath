@@ -87,14 +87,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GRADES = "grades";
     public static final String COLUMN_COMPONENT_ID = "component_id";
     public static final String COLUMN_GRADE_NAME = "grade_name";
-    public static final String COLUMN_POINTS_EARNED = "points_earned";
+    public static final String COLUMN_POINTS_RECEIVED = "points_received";
     public static final String COLUMN_POINTS_POSSIBLE = "points_possible";
     private static final String CREATE_TABLE_GRADES = "CREATE TABLE "
             + TABLE_GRADES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
             + COLUMN_COMPONENT_ID + " INTEGER NOT NULL, "
             + COLUMN_GRADE_NAME + " TEXT NOT NULL, "
-            + COLUMN_POINTS_EARNED + " REAL NOT NULL, "
+            + COLUMN_POINTS_RECEIVED + " REAL NOT NULL, "
             + COLUMN_POINTS_POSSIBLE + " REAL NOT NULL, "
             + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
             + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
     private static DatabaseHelper sInstance;
 
     /**

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +26,7 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Reminder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.ref.WeakReference;
 
 public class CourseDetailActivity extends BaseActivity
         implements ListCourseGradeFragment.FragmentListCourseGradeListener,
@@ -40,13 +40,17 @@ public class CourseDetailActivity extends BaseActivity
     private TabPagerAdapter mAdapter;
     private ViewPager mViewPager;
     private Course mCourse;
+    private Grade mGrade;
+    private Reminder mReminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_course);
 
-        mCourse = (Course) getIntent().getSerializableExtra(MainActivity.COURSE_KEY);
+        mCourse = (Course) getIntent().getSerializableExtra(COURSE_KEY);
+        mGrade = (Grade) getIntent().getSerializableExtra(GRADE_KEY);
+        mReminder = (Reminder) getIntent().getSerializableExtra(REMINDER_KEY);
 
         final ActionBar actionBar = getActionBar();
 
@@ -66,34 +70,40 @@ public class CourseDetailActivity extends BaseActivity
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
+                        super.onPageSelected(position);
                         actionBar.setSelectedNavigationItem(position);
+                        // Switch the floating button depending on page and set its on-click listener.
                         switch (position) {
+                            case 0:
+                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                                btnAddItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onListCourseGradeAdd();
+                                    }
+                                });
+                                break;
+                            case 1:
+                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                                btnAddItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onListCourseReminderAdd();
+                                    }
+                                });
+                                break;
                             case 2:
                                 btnAddItem.setImageResource(R.drawable.edit);
-                                break;
-                            default:
-                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                                btnAddItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onCourseEdit();
+                                    }
+                                });
                         }
                     }
                 }
         );
-
-        btnAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (mViewPager.getCurrentItem()) {
-                    case 0:
-                        onListCourseGradeAdd();
-                        break;
-                    case 1:
-                        onListCourseReminderAdd();
-                        break;
-                    case 2:
-                        onCourseEdit();
-                }
-
-            }
-        });
 
         // Create a tab listener that is called when the user changes tabs.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -112,12 +122,18 @@ public class CourseDetailActivity extends BaseActivity
             }
         };
 
+        // Add tabs. If coming from reminder item, set reminder option as selected tab.
         for (int i = 0; i < NUM_TABS; i++) {
             actionBar.addTab(
                     actionBar.newTab()
                             .setText(mAdapter.getPageTitle(i))
                             .setTabListener(tabListener)
             );
+        }
+
+        // Go to reminders page if being opened from reminder item click.
+        if (mReminder != null) {
+            mViewPager.setCurrentItem(1, false);
         }
     }
 
@@ -154,7 +170,7 @@ public class CourseDetailActivity extends BaseActivity
     public void onListCourseReminderAdd() {
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_new_reminder_dialog), mCourse);
-        taskDialog.show(getFragmentManager(), NEW_TASK_TAG);
+        taskDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
     }
 
     public void onCourseEdit() {
@@ -173,8 +189,8 @@ public class CourseDetailActivity extends BaseActivity
     @Override
     public void onListCourseReminderEdit(Reminder reminder) {
         ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_reminder_dialog, reminder));
-        taskDialog.show(getFragmentManager(), EDIT_TASK_TAG);
+                getString(R.string.title_edit_reminder_dialog, reminder), reminder);
+        taskDialog.show(getFragmentManager(), EDIT_REMINDER_TAG);
     }
 
     @Override
@@ -185,7 +201,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTab(0)).updateListItems();
+        ((BaseListFragment) mAdapter.getTabFragment(0)).updateListItems();
     }
 
     @Override
@@ -196,12 +212,12 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((BaseListFragment) mAdapter.getTab(1)).updateListItems();
+        ((BaseListFragment) mAdapter.getTabFragment(1)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        List<Fragment> mTabs = new ArrayList<Fragment>();
+        SparseArray<WeakReference<Fragment>> mTabs = new SparseArray<WeakReference<Fragment>>();
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -224,7 +240,7 @@ public class CourseDetailActivity extends BaseActivity
                     fragment = new Fragment();
             }
 
-            mTabs.add(position, fragment);
+            mTabs.put(position, new WeakReference<Fragment>(fragment));
             return fragment;
         }
 
@@ -247,8 +263,8 @@ public class CourseDetailActivity extends BaseActivity
             }
         }
 
-        public Fragment getTab(int position) {
-            Fragment fragment = mTabs.get(position);
+        public Fragment getTabFragment(int position) {
+            Fragment fragment = mTabs.get(position).get();
             if (fragment != null) {
                 return fragment;
             } else {

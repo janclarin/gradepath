@@ -44,7 +44,7 @@ public class CourseDetailFragment extends Fragment {
         // Inflate the layout for this fragment.
         View rootView = inflater.inflate(R.layout.fragment_course_detail, container, false);
 
-        TextView tvInstructorName = (TextView) rootView.findViewById(R.id.tv_instructor_name);
+        TextView tvInstructorName = (TextView) rootView.findViewById(R.id.tv_subtitle);
         TextView tvInstructorEmail = (TextView) rootView.findViewById(R.id.tv_instructor_email);
 
         tvInstructorName.setText(mCourse.getInstructorName());

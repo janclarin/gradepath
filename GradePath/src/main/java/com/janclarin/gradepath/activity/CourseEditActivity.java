@@ -301,6 +301,9 @@ public class CourseEditActivity extends BaseActivity
             mDatabase.updateCourse(mCourseToUpdate.getId(), semester.getId(), courseName,
                     instructorName, instructorEmail, gradeValue, mCompletedCheckBox.isChecked());
 
+            // Set course ID.
+            courseId = mCourseToUpdate.getId();
+
             // Update all grade components.
             for (GradeComponent gradeComponent : mOldGradeComponents) {
                 // If update fails, component doesn't exist yet. Insert it instead.
@@ -310,11 +313,9 @@ public class CourseEditActivity extends BaseActivity
 
                 // Ensure that the grade component fields are valid.
                 if (name != null && weight > 0 && numOfItems > 0) {
-                    mDatabase.updateGradeComponent(gradeComponent);
+                    mDatabase.updateGradeComponent(gradeComponent.getId(), courseId, name, weight, numOfItems);
                 }
             }
-            // Set course id.
-            courseId = mCourseToUpdate.getId();
         }
 
         // Add new grade components.
@@ -336,7 +337,7 @@ public class CourseEditActivity extends BaseActivity
     /**
      * Adds a new grade component, including all of its views.
      *
-     * @param gradeComponent
+     * @param gradeComponent grade component object.
      * @param updating       boolean to indicate if updating grade component.
      */
     private void addGradeComponent(GradeComponent gradeComponent, boolean updating) {
@@ -518,13 +519,6 @@ public class CourseEditActivity extends BaseActivity
                         ViewGroup.LayoutParams.MATCH_PARENT)
         );
     }
-
-    /**
-     * Sets spinner item based on value.
-     *
-     * @param spinner
-     * @param semester
-     */
 
     /**
      * View holder class for grade components.

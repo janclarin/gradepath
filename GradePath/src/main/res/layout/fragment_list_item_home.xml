@@ -25,6 +25,7 @@
         android:drawablePadding="4dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
+        android:textColor="@color/theme_primary_color_dark"
         android:paddingLeft="8dp"
         android:textSize="20sp" />
 

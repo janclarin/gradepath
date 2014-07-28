@@ -25,8 +25,6 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Reminder;
 
-import java.lang.ref.WeakReference;
-
 public class CourseDetailActivity extends BaseActivity
         implements ListCourseGradeFragment.FragmentListCourseGradeListener,
         ListCourseReminderFragment.FragmentListCourseReminderListener,
@@ -74,7 +72,7 @@ public class CourseDetailActivity extends BaseActivity
                         // Switch the floating button depending on page and set its on-click listener.
                         switch (position) {
                             case 0:
-                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                                btnAddItem.setImageResource(R.drawable.list_add_item);
                                 btnAddItem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -83,7 +81,7 @@ public class CourseDetailActivity extends BaseActivity
                                 });
                                 break;
                             case 1:
-                                btnAddItem.setImageResource(R.drawable.add_list_item);
+                                btnAddItem.setImageResource(R.drawable.list_add_item);
                                 btnAddItem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -216,7 +214,7 @@ public class CourseDetailActivity extends BaseActivity
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        SparseArray<WeakReference<Fragment>> mTabs = new SparseArray<WeakReference<Fragment>>();
+        SparseArray<Fragment> mTabs = new SparseArray<Fragment>();
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -239,7 +237,7 @@ public class CourseDetailActivity extends BaseActivity
                     fragment = new Fragment();
             }
 
-            mTabs.put(position, new WeakReference<Fragment>(fragment));
+            mTabs.put(position, fragment);
             return fragment;
         }
 
@@ -263,7 +261,7 @@ public class CourseDetailActivity extends BaseActivity
         }
 
         public Fragment getTabFragment(int position) {
-            Fragment fragment = mTabs.get(position).get();
+            Fragment fragment = mTabs.get(position);
             if (fragment != null) {
                 return fragment;
             } else {

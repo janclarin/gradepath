@@ -49,7 +49,7 @@ public class DatabaseFacade {
 
     private static final String[] TASK_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_REMINDER_NAME,
-            DatabaseHelper.COLUMN_IS_GRADED, DatabaseHelper.COLUMN_IS_COMPLETED,
+            DatabaseHelper.COLUMN_IS_EXAM, DatabaseHelper.COLUMN_IS_COMPLETED,
             DatabaseHelper.COLUMN_YEAR_ADDED, DatabaseHelper.COLUMN_MONTH_ADDED,
             DatabaseHelper.COLUMN_DAY_ADDED, DatabaseHelper.COLUMN_YEAR_DUE,
             DatabaseHelper.COLUMN_MONTH_DUE, DatabaseHelper.COLUMN_DAY_DUE};
@@ -894,7 +894,7 @@ public class DatabaseFacade {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
-        values.put(DatabaseHelper.COLUMN_IS_GRADED, isGraded ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_ADDED, addDate.get(Calendar.MONTH));
@@ -930,7 +930,7 @@ public class DatabaseFacade {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, reminder.getCourseId());
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, reminder.getName());
-        values.put(DatabaseHelper.COLUMN_IS_GRADED, reminder.isGraded() ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_IS_EXAM, reminder.isGraded() ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, reminder.isCompleted() ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
@@ -957,7 +957,7 @@ public class DatabaseFacade {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
-        values.put(DatabaseHelper.COLUMN_IS_GRADED, isGraded ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
         values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));

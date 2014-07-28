@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public static final String TABLE_REMINDERS = "reminders";
     public static final String COLUMN_REMINDER_NAME = "reminder_name";
-    public static final String COLUMN_IS_GRADED = "is_graded";
+    public static final String COLUMN_IS_EXAM = "is_exam";
     public static final String COLUMN_YEAR_DUE = "year_due";
     public static final String COLUMN_MONTH_DUE = "month_due";
     public static final String COLUMN_DAY_DUE = "day_due";
@@ -115,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_REMINDERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
             + COLUMN_REMINDER_NAME + " TEXT NOT NULL, "
-            + COLUMN_IS_GRADED + " INTEGER NOT NULL, "
+            + COLUMN_IS_EXAM + " INTEGER NOT NULL, "
             + COLUMN_IS_COMPLETED + " INTEGER NOT NULL, "
             + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
             + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static DatabaseHelper sInstance;
 
     /**

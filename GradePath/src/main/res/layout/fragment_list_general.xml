@@ -30,6 +30,6 @@
         android:contentDescription="@string/cd_add_button"
         android:padding="18dp"
         android:scaleType="fitXY"
-        android:src="@drawable/add_list_item" />
+        android:src="@drawable/list_add_item" />
 
 </FrameLayout>

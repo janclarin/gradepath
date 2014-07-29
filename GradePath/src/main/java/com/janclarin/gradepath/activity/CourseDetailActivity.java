@@ -19,15 +19,15 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.fragment.CourseDetailFragment;
-import com.janclarin.gradepath.fragment.ListCourseGradeFragment;
-import com.janclarin.gradepath.fragment.ListCourseReminderFragment;
+import com.janclarin.gradepath.fragment.CourseListGradeFragment;
+import com.janclarin.gradepath.fragment.CourseListReminderFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Reminder;
 
 public class CourseDetailActivity extends BaseActivity
-        implements ListCourseGradeFragment.FragmentListCourseGradeListener,
-        ListCourseReminderFragment.FragmentListCourseReminderListener,
+        implements CourseListGradeFragment.FragmentListCourseGradeListener,
+        CourseListReminderFragment.FragmentListCourseReminderListener,
         GradeDialogFragment.OnDialogGradeListener,
         ReminderDialogFragment.OnDialogReminderListener {
 
@@ -153,7 +153,8 @@ public class CourseDetailActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_LIST_COURSE_EDIT_COURSE) {
-            mAdapter.getItem(2);
+            // Refresh course data.
+            ((CourseDetailFragment) mAdapter.getTabFragment(2)).onCourseUpdated();
             Toast.makeText(this, R.string.course_saved_update, Toast.LENGTH_SHORT).show();
         }
     }
@@ -198,7 +199,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((ListCourseGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
+        ((CourseListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
     }
 
     @Override
@@ -209,7 +210,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((ListCourseReminderFragment) mAdapter.getTabFragment(1)).updateListItems();
+        ((CourseListReminderFragment) mAdapter.getTabFragment(1)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {
@@ -225,10 +226,10 @@ public class CourseDetailActivity extends BaseActivity
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment = ListCourseGradeFragment.newInstance(mCourse);
+                    fragment = CourseListGradeFragment.newInstance(mCourse);
                     break;
                 case 1:
-                    fragment = ListCourseReminderFragment.newInstance(mCourse);
+                    fragment = CourseListReminderFragment.newInstance(mCourse);
                     break;
                 case 2:
                     fragment = CourseDetailFragment.newInstance(mCourse);

@@ -32,7 +32,7 @@
         android:src="@drawable/list_add_item" />
 
     <ImageButton
-        android:id="@+id/btn_add_course"
+        android:id="@+id/btn_add_reminder"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_above="@id/btn_show_add_options"
@@ -43,7 +43,7 @@
         android:contentDescription="@string/cd_add_button"
         android:padding="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/list_add_course"
+        android:src="@drawable/list_add_reminder"
         android:visibility="invisible" />
 
     <ImageButton
@@ -62,18 +62,18 @@
         android:visibility="invisible" />
 
     <ImageButton
-        android:id="@+id/btn_add_reminder"
+        android:id="@+id/btn_add_course"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_above="@id/btn_add_grade"
         android:layout_marginBottom="12dp"
         android:layout_marginRight="12dp"
-        android:layout_toLeftOf="@id/btn_add_course"
+        android:layout_toLeftOf="@id/btn_add_reminder"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
+        android:src="@drawable/list_add_course"
         android:padding="8dp"
         android:scaleType="fitXY"
-        android:src="@drawable/list_add_reminder"
         android:visibility="invisible" />
 
 </RelativeLayout>

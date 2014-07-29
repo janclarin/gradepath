@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -21,14 +18,14 @@ import com.janclarin.gradepath.model.Reminder;
 import java.util.Collections;
 import java.util.List;
 
-public class ListCourseReminderFragment extends BaseListFragment {
+public class CourseListReminderFragment extends BaseListFragment {
 
     private FragmentListCourseReminderListener mListener;
 
     // Selected Course object.
     private Course mCourse;
 
-    public ListCourseReminderFragment() {
+    public CourseListReminderFragment() {
         // Required empty public constructor.
     }
 
@@ -37,8 +34,8 @@ public class ListCourseReminderFragment extends BaseListFragment {
      *
      * @return A new instance of fragment CourseDetailsFragment.
      */
-    public static ListCourseReminderFragment newInstance(Course course) {
-        ListCourseReminderFragment fragment = new ListCourseReminderFragment();
+    public static CourseListReminderFragment newInstance(Course course) {
+        CourseListReminderFragment fragment = new CourseListReminderFragment();
         Bundle args = new Bundle();
         args.putSerializable(MainActivity.COURSE_KEY, course);
         fragment.setArguments(args);
@@ -138,19 +135,6 @@ public class ListCourseReminderFragment extends BaseListFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate options menu.
-        inflater.inflate(R.menu.list_course, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
     }
 
     private class ListAdapter extends BaseListAdapter {

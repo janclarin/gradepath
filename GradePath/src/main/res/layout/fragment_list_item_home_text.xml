@@ -11,6 +11,5 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="8dp"
-    android:text="@string/welcome_message"
     android:textColor="@android:color/primary_text_light"
     android:textSize="14sp" />

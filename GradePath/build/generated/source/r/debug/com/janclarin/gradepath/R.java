@@ -206,7 +206,7 @@ public final class R {
         public static final int fragment_list_item_home=0x7f030013;
         public static final int fragment_list_item_home_course=0x7f030014;
         public static final int fragment_list_item_home_general=0x7f030015;
-        public static final int fragment_list_item_home_welcome=0x7f030016;
+        public static final int fragment_list_item_home_text=0x7f030016;
         public static final int fragment_list_item_navigation_drawer=0x7f030017;
         public static final int fragment_list_item_semester=0x7f030018;
         public static final int fragment_main=0x7f030019;

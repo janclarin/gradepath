@@ -156,9 +156,9 @@ public class MainActivity extends BaseActivity
 
         // Drawer items.
         mDrawerItems = new DrawerItem[]{
-                new DrawerItem(R.string.title_fragment_home, 0),
-                new DrawerItem(R.string.title_fragment_list_semesters, 0),
-                new DrawerItem(R.string.title_fragment_settings, 0)
+                new DrawerItem(R.string.title_fragment_home, R.drawable.home),
+                new DrawerItem(R.string.title_fragment_list_semesters, R.drawable.semester),
+                new DrawerItem(R.string.title_fragment_settings, R.drawable.settings)
         };
 
         BaseAdapter adapter = new ListAdapter();

@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -23,8 +21,7 @@ import java.util.List;
 /**
  * Fragment with list of list_course that allows for editing and sets option for a new course.
  */
-public class ListSemesterFragment extends BaseListFragment
-        implements PopupMenu.OnMenuItemClickListener {
+public class ListSemesterFragment extends BaseListFragment {
 
     private OnFragmentListSemesterListener mListener;
 
@@ -97,26 +94,6 @@ public class ListSemesterFragment extends BaseListFragment
             }
         }
         mAdapter.notifyDataSetChanged();
-    }
-
-    private void showPopupMenu(View view) {
-        // TODO: Change to PopupWindow.
-        PopupMenu popup = new PopupMenu(mContext, view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.list_semester_options, popup.getMenu());
-        popup.show();
-
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.set_semester_to_current:
-                // TODO: Display dialog to set end date.
-                return true;
-            default:
-                return false;
-        }
     }
 
     @Override
@@ -193,8 +170,6 @@ public class ListSemesterFragment extends BaseListFragment
                             (TextView) convertView.findViewById(R.id.tv_semester_information);
                     viewHolder.tvInformationLabel =
                             (TextView) convertView.findViewById(R.id.tv_semester_information_label);
-                    viewHolder.btnSemesterOptions =
-                            (ImageButton) convertView.findViewById(R.id.btn_semester_options);
                 }
 
                 convertView.setTag(viewHolder);
@@ -235,13 +210,6 @@ public class ListSemesterFragment extends BaseListFragment
                     );
                     viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
                 }
-
-                viewHolder.btnSemesterOptions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showPopupMenu(viewHolder.btnSemesterOptions);
-                    }
-                });
             }
 
             return convertView;
@@ -251,7 +219,6 @@ public class ListSemesterFragment extends BaseListFragment
             TextView tvName;
             TextView tvInformation;
             TextView tvInformationLabel;
-            ImageButton btnSemesterOptions;
         }
     }
 }

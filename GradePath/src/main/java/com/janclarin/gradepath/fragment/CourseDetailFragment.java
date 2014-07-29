@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.fragment;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,12 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.BaseActivity;
 import com.janclarin.gradepath.model.Course;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class CourseDetailFragment extends Fragment {
+public class CourseDetailFragment extends BaseFragment {
 
     private Course mCourse;
+
+    private TextView mInstructorName;
+    private TextView mInstructorEmail;
 
     public CourseDetailFragment() {
         // Required empty public constructor
@@ -44,12 +43,21 @@ public class CourseDetailFragment extends Fragment {
         // Inflate the layout for this fragment.
         View rootView = inflater.inflate(R.layout.fragment_course_detail, container, false);
 
-        TextView tvInstructorName = (TextView) rootView.findViewById(R.id.tv_subtitle);
-        TextView tvInstructorEmail = (TextView) rootView.findViewById(R.id.tv_instructor_email);
+        mInstructorName = (TextView) rootView.findViewById(R.id.tv_subtitle);
+        mInstructorEmail = (TextView) rootView.findViewById(R.id.tv_instructor_email);
 
-        tvInstructorName.setText(mCourse.getInstructorName());
-        tvInstructorEmail.setText(mCourse.getInstructorEmail());
+        mInstructorName.setText(mCourse.getInstructorName());
+        mInstructorEmail.setText(mCourse.getInstructorEmail());
 
         return rootView;
+    }
+
+    /**
+     * Gets the updated course from the database and refreshes the text views.
+     */
+    public void onCourseUpdated() {
+        mCourse = mDatabase.getCourse(mCourse.getId());
+        mInstructorName.setText(mCourse.getInstructorName());
+        mInstructorEmail.setText(mCourse.getInstructorEmail());
     }
 }

@@ -16,9 +16,6 @@ public class SettingsFragment extends PreferenceFragment {
 
     private OnFragmentSettingsListener mListener;
 
-    /**
-     * @return A new instance of fragment SettingsFragment.
-     */
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
@@ -41,6 +38,7 @@ public class SettingsFragment extends PreferenceFragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
+
 
     @Override
     public void onAttach(Activity activity) {

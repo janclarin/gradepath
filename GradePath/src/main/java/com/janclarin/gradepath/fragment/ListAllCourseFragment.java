@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -195,7 +194,6 @@ public class ListAllCourseFragment extends BaseListFragment {
                             .inflate(R.layout.fragment_list_item_course, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
-                    viewHolder.btnShowButtonBar = (ImageButton) convertView.findViewById(R.id.btn_overflow);
                 }
 
                 convertView.setTag(viewHolder);
@@ -220,7 +218,6 @@ public class ListAllCourseFragment extends BaseListFragment {
         private class ViewHolder {
             TextView tvName;
             TextView tvSubtitle;
-            ImageButton btnShowButtonBar;
         }
     }
 }

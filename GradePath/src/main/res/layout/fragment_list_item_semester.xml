@@ -16,19 +16,13 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/btn_semester_options"
-        style="@style/listItemButton"
-        android:layout_alignParentRight="true"
-        android:contentDescription="@string/cd_show_semester_options"
-        android:src="@drawable/overflow" />
-
     <TextView
         android:id="@+id/tv_semester_information_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/btn_semester_options"
+        android:layout_marginRight="16dp"
         android:fontFamily="sans-serif-light"
         android:textAllCaps="true"
         android:textColor="@android:color/tertiary_text_light"
@@ -41,7 +35,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/tv_semester_information_label"
-        android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@color/theme_primary_color"
         android:textSize="20sp" />

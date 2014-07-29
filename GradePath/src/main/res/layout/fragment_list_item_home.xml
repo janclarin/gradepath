@@ -9,10 +9,11 @@
     <Button
         android:id="@+id/btn_all"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:gravity="right|center_vertical"
+        android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:textAllCaps="true"
         android:textColor="@color/theme_primary_color"
@@ -25,8 +26,8 @@
         android:drawablePadding="4dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
-        android:textColor="@color/theme_primary_color_dark"
         android:paddingLeft="8dp"
+        android:textColor="@color/theme_primary_color_dark"
         android:textSize="20sp" />
 
     <TextView

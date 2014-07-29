@@ -2,7 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeightLarge">
+    android:layout_height="80dp"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
 
     <ImageButton
         android:id="@+id/btn_grade_component"
@@ -21,9 +23,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
         android:layout_toLeftOf="@id/btn_grade_component"
         android:background="?android:dividerVertical" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/et_grade_component_name"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:layout_toLeftOf="@id/divider_grade_component"
         android:orientation="horizontal">
 

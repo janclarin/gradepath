@@ -57,7 +57,7 @@
 
     <!-- Semester dialog -->
     <string name="title_new_semester_dialog">New semester</string>
-    <string name="cb_current_semester">This is my current semester</string>
+    <string name="cb_current_semester">Current</string>
     <string name="tv_dialog_semester_last_day">Last day (optional)</string>
     <string name="hint_dialog_semester_gpa">Semester GPA</string>
     <string name="toast_semester_saved">Semester saved</string>
@@ -138,7 +138,9 @@
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
     <string name="welcome_message">Welcome to GradePath! Click on the add button to add your
-        first course. </string>
+        first course.</string>
+    <string name="welcome_message2">Try swiping from the left side of the screen to open the
+        drawer.</string>
     <string name="see_all">See all</string>
     <string name="none_use_button">None</string>
     <string name="hello">Hello</string>

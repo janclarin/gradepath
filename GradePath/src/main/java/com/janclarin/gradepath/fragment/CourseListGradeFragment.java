@@ -18,14 +18,14 @@ import com.janclarin.gradepath.model.GradeComponent;
 
 import java.util.List;
 
-public class ListCourseGradeFragment extends BaseListFragment {
+public class CourseListGradeFragment extends BaseListFragment {
 
     private FragmentListCourseGradeListener mListener;
 
     // Selected Course object.
     private Course mCourse;
 
-    public ListCourseGradeFragment() {
+    public CourseListGradeFragment() {
         // Required empty public constructor.
     }
 
@@ -34,8 +34,8 @@ public class ListCourseGradeFragment extends BaseListFragment {
      *
      * @return A new instance of fragment CourseDetailsFragment.
      */
-    public static ListCourseGradeFragment newInstance(Course course) {
-        ListCourseGradeFragment fragment = new ListCourseGradeFragment();
+    public static CourseListGradeFragment newInstance(Course course) {
+        CourseListGradeFragment fragment = new CourseListGradeFragment();
         Bundle args = new Bundle();
         args.putSerializable(MainActivity.COURSE_KEY, course);
         fragment.setArguments(args);

@@ -159,7 +159,7 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
             mDateCalendar = mReminderToUpdate.getDate();
 
             // Set graded checkbox.
-            mCheckBoxGraded.setChecked(mReminderToUpdate.isGraded());
+            mCheckBoxGraded.setChecked(mReminderToUpdate.isExam());
         }
 
         // Date picker dialog instance.

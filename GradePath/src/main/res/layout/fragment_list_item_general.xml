@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/cardView"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:paddingLeft="16dp"
@@ -37,11 +36,8 @@
 
         <TextView
             android:id="@+id/tv_subtitle"
+            style="@style/subtitleTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:singleLine="true"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>

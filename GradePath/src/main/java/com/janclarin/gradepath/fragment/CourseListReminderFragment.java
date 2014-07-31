@@ -141,7 +141,7 @@ public class CourseListReminderFragment extends BaseListFragment {
 
         @Override
         public int getItemViewType(int position) {
-            return getItem(position) instanceof Header ? ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
+            return getItem(position) instanceof Header ? ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
         }
 
         @Override
@@ -161,7 +161,7 @@ public class CourseListReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                            .inflate(R.layout.fragment_list_item_general_card, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_information);
@@ -177,7 +177,7 @@ public class CourseListReminderFragment extends BaseListFragment {
             } else {
                 Reminder reminder = (Reminder) listItem;
                 viewHolder.tvName.setText(reminder.getName());
-                viewHolder.tvSubtitle.setText(reminder.isGraded() ? R.string.graded : R.string.not_graded);
+                viewHolder.tvSubtitle.setText(reminder.isExam() ? R.string.exam : R.string.not_exam);
                 viewHolder.tvDate.setText(reminder.getDateString(mContext));
             }
 

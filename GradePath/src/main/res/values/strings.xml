@@ -59,7 +59,7 @@
     <string name="title_new_semester_dialog">New semester</string>
     <string name="cb_current_semester">Current</string>
     <string name="tv_dialog_semester_last_day">Last day (optional)</string>
-    <string name="hint_dialog_semester_gpa">Semester GPA</string>
+    <string name="hint_dialog_semester_gpa">GPA</string>
     <string name="toast_semester_saved">Semester saved</string>
     <string name="toast_semester_updated">Semester updated</string>
     <string name="title_edit_semester_dialog">Edit semester</string>
@@ -137,13 +137,11 @@
 
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
-    <string name="welcome_message">Welcome to GradePath! Click on the add button to add your
-        first course.</string>
-    <string name="welcome_message2">Try swiping from the left side of the screen to open the
-        drawer.</string>
+    <string name="welcome_message">Click on the add button to add your first course.</string>
+    <string name="welcome_message2">Swipe from the left side of the screen to view more options.</string>
     <string name="see_all">See all</string>
     <string name="none_use_button">None</string>
-    <string name="hello">Hello</string>
+    <string name="welcome_card_title">Welcome!</string>
     <string name="welcome_confirmation">Hide</string>
 
     <!-- Settings Fragment -->
@@ -168,8 +166,8 @@
     <string name="days_ago">days ago</string>
     <string name="grade">Grade</string>
     <string name="reminder">Reminder</string>
-    <string name="graded">Graded</string>
-    <string name="not_graded">Not graded</string>
+    <string name="exam">Exam</string>
+    <string name="not_exam">General</string>
     <string name="gpa">GPA</string>
 
 </resources>

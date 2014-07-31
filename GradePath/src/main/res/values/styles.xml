@@ -136,4 +136,12 @@
         <item name="android:paddingLeft">12dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="subtitleTextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textSize">14sp</item>
+
+    </style>
 </resources>

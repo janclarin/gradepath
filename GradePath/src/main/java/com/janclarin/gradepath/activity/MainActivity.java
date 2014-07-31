@@ -298,7 +298,7 @@ public class MainActivity extends BaseActivity
      */
     private void refreshListCourse() {
         if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(true, false, false);
+            ((HomeFragment) mCurrentFragment).updateListItems(false, true, false);
         } else if (mCurrentFragment instanceof ListAllCourseFragment) {
             ((ListAllCourseFragment) mCurrentFragment).updateListItems();
         }
@@ -320,7 +320,7 @@ public class MainActivity extends BaseActivity
      */
     private void refreshListReminder() {
         if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(false, true, false);
+            ((HomeFragment) mCurrentFragment).updateListItems(true, false, false);
         } else if (mCurrentFragment instanceof ListAllReminderFragment) {
             ((ListAllReminderFragment) mCurrentFragment).updateListItems();
         }
@@ -374,7 +374,7 @@ public class MainActivity extends BaseActivity
         // Go to grades fragment.
         mCurrentFragment = ListAllGradeFragment.newInstance();
         getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .replace(R.id.container, mCurrentFragment).commit();
         getActionBar().setTitle(R.string.title_fragment_list_grades);
@@ -389,7 +389,7 @@ public class MainActivity extends BaseActivity
         // Go to reminders fragment.
         mCurrentFragment = ListAllReminderFragment.newInstance();
         getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .replace(R.id.container, mCurrentFragment).commit();
         getActionBar().setTitle(R.string.title_fragment_list_reminders);
@@ -404,7 +404,7 @@ public class MainActivity extends BaseActivity
         // Go to courses fragment.
         mCurrentFragment = ListAllCourseFragment.newInstance();
         getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .replace(R.id.container, mCurrentFragment).commit();
         getActionBar().setTitle(R.string.title_fragment_list_courses);
@@ -667,7 +667,7 @@ public class MainActivity extends BaseActivity
             // If item has an mIcon, apply it to text view. Remove default padding left.
             int iconId = selectedItem.getIcon();
             if (iconId != 0) {
-                viewHolder.tvSectionName.setCompoundDrawablePadding(8);
+                viewHolder.tvSectionName.setCompoundDrawablePadding(16);
                 viewHolder.tvSectionName.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
             }
 

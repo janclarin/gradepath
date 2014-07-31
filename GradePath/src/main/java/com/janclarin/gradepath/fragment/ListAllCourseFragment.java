@@ -171,7 +171,7 @@ public class ListAllCourseFragment extends BaseListFragment {
         @Override
         public int getItemViewType(int position) {
             return (mListItems.get(position) instanceof Semester) ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
         }
 
         @Override

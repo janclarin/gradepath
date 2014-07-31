@@ -45,7 +45,7 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_POINTS_POSSIBLE, DatabaseHelper.COLUMN_YEAR_ADDED,
             DatabaseHelper.COLUMN_MONTH_ADDED, DatabaseHelper.COLUMN_DAY_ADDED};
 
-    private static final String[] TASK_COLUMNS = {DatabaseHelper.COLUMN_ID,
+    private static final String[] REMINDER_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_REMINDER_NAME,
             DatabaseHelper.COLUMN_IS_EXAM, DatabaseHelper.COLUMN_IS_COMPLETED,
             DatabaseHelper.COLUMN_YEAR_ADDED, DatabaseHelper.COLUMN_MONTH_ADDED,
@@ -747,7 +747,7 @@ public class DatabaseFacade {
     public List<Reminder> getReminders() {
         List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -766,7 +766,7 @@ public class DatabaseFacade {
     public List<Reminder> getReminders(long courseId) {
         List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
 
         cursor.moveToFirst();
@@ -782,12 +782,14 @@ public class DatabaseFacade {
     /**
      * @return list of all current reminders.
      */
-    public List<Reminder> getCurrentReminders() {
+    public List<Reminder> getUpcomingReminders() {
         List<Reminder> reminders = new ArrayList<Reminder>();
+
+        // Yesterday calendar for comparison.
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DAY_OF_MONTH, -1);
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -813,7 +815,7 @@ public class DatabaseFacade {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DAY_OF_MONTH, -1);
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
 
         cursor.moveToFirst();
@@ -838,7 +840,7 @@ public class DatabaseFacade {
 
         List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
         );
 
@@ -859,7 +861,7 @@ public class DatabaseFacade {
 
         List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
                         DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
         );
@@ -881,7 +883,7 @@ public class DatabaseFacade {
 
         List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, TASK_COLUMNS,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
                         DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null
         );
@@ -1006,7 +1008,7 @@ public class DatabaseFacade {
 
         reminder.setCourseId(cursor.getLong(1));
         reminder.setName(cursor.getString(2));
-        reminder.setGraded((cursor.getInt(3) == 1));
+        reminder.setExam((cursor.getInt(3) == 1));
         reminder.setCompleted((cursor.getInt(4) == 1));
         reminder.setAddDate(new GregorianCalendar(cursor.getInt(5), cursor.getInt(6), cursor.getInt(7)));
         reminder.setDueDate(new GregorianCalendar(cursor.getInt(8), cursor.getInt(9), cursor.getInt(10)));

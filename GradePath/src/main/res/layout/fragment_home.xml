@@ -41,7 +41,7 @@
         android:layout_marginRight="4dp"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
-        android:padding="10dp"
+        android:padding="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/list_add_reminder"
         android:visibility="invisible" />
@@ -71,9 +71,9 @@
         android:layout_toLeftOf="@id/btn_add_reminder"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
-        android:src="@drawable/list_add_course"
-        android:padding="8dp"
+        android:padding="10dp"
         android:scaleType="fitXY"
+        android:src="@drawable/list_add_course"
         android:visibility="invisible" />
 
 </RelativeLayout>

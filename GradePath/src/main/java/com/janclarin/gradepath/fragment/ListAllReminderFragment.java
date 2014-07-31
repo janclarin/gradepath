@@ -131,7 +131,7 @@ public class ListAllReminderFragment extends BaseListFragment {
         @Override
         public int getItemViewType(int position) {
             return mListItems.get(position) instanceof Header ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_DATABASE_ITEM;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
         }
 
         @Override
@@ -151,7 +151,7 @@ public class ListAllReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView;
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                            .inflate(R.layout.fragment_list_item_general_card, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_information);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);

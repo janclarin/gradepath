@@ -26,7 +26,7 @@ import java.util.List;
 abstract public class BaseListFragment extends BaseFragment {
 
     protected static final int ITEM_VIEW_TYPE_HEADER = 0;
-    protected static final int ITEM_VIEW_TYPE_DATABASE_ITEM = 1;
+    protected static final int ITEM_VIEW_TYPE_MAIN = 1;
     protected static final int NUM_ITEM_VIEW_TYPES = 2;
 
     protected List<DatabaseItem> mListItems;
@@ -211,7 +211,7 @@ abstract public class BaseListFragment extends BaseFragment {
 
         @Override
         public boolean isEnabled(int position) {
-            return getItemViewType(position) == ITEM_VIEW_TYPE_DATABASE_ITEM;
+            return getItemViewType(position) == ITEM_VIEW_TYPE_MAIN;
         }
 
         @Override

@@ -12,7 +12,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
 
     private long courseId;
     private String name;
-    private boolean graded;
+    private boolean isExam;
     private boolean completed;
     private Calendar addDate;
     private Calendar dueDate;
@@ -28,12 +28,12 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         this.name = name;
     }
 
-    public boolean isGraded() {
-        return graded;
+    public boolean isExam() {
+        return isExam;
     }
 
-    public void setGraded(boolean graded) {
-        this.graded = graded;
+    public void setExam(boolean exam) {
+        this.isExam = exam;
     }
 
     public boolean isCompleted() {

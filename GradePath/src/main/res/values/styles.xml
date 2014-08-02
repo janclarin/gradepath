@@ -37,7 +37,7 @@
 
     <!-- ActionBar tabs text style -->
     <style name="CustomActionBarTabText" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@drawable/color_white_opacity</item>
+        <item name="android:textColor">@drawable/color_actionbar_indicator</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 

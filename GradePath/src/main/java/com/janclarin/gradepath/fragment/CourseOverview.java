@@ -11,19 +11,19 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.BaseActivity;
 import com.janclarin.gradepath.model.Course;
 
-public class CourseDetailFragment extends BaseFragment {
+public class CourseOverview extends BaseFragment {
 
     private Course mCourse;
 
     private TextView mInstructorName;
     private TextView mInstructorEmail;
 
-    public CourseDetailFragment() {
+    public CourseOverview() {
         // Required empty public constructor
     }
 
-    public static CourseDetailFragment newInstance(Course course) {
-        CourseDetailFragment fragment = new CourseDetailFragment();
+    public static CourseOverview newInstance(Course course) {
+        CourseOverview fragment = new CourseOverview();
         Bundle args = new Bundle();
         args.putSerializable(BaseActivity.COURSE_KEY, course);
         fragment.setArguments(args);

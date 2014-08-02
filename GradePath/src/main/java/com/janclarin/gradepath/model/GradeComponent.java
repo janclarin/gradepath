@@ -73,6 +73,12 @@ public class GradeComponent extends DatabaseItem {
 
         GradeComponent other = (GradeComponent) object;
 
-        return (this.id == other.id);
+        if (id > -1) {
+            return (this.id == other.id);
+        } else {
+            return (this.name.equals(other.name) &&
+                    this.weight == other.weight &&
+                    this.numberOfItems == other.numberOfItems);
+        }
     }
 }

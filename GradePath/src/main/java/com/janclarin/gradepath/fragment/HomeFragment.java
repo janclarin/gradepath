@@ -30,7 +30,7 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
 
     private static final String PREF_USER_HIDE_WELCOME = "show_welcome";
-    private static final int NUM_ITEMS_SHOWN = 5;
+    private static final int NUM_ITEMS_SHOWN = 3;
 
     private FragmentHomeListener mListener;
     private boolean mHideWelcome;
@@ -144,20 +144,21 @@ public class HomeFragment extends BaseFragment {
         // Get current courses if there is a current semester.
         // Set semester header information accordingly.
         if (mCurrentSemester == null) {
+            mReminders = new ArrayList<Reminder>();
             mCourses = new ArrayList<Course>();
+            mGrades = new ArrayList<Grade>();
             mSemesterName.setText("No current semester");
         } else {
             mCourses = mDatabase.getCourses(mCurrentSemester.getId());
+            mReminders = mDatabase.getUpcomingReminders();
+            mGrades = mDatabase.getGrades();
+            Collections.sort(mCourses);
+            Collections.sort(mReminders);
+            Collections.sort(mGrades);
             mSemesterName.setText(mCurrentSemester.toString());
             mSemesterDaysLeftLabel.setText(R.string.semester_days_left);
             mSemesterDaysLeft.setText(mCurrentSemester.getDaysLeft());
         }
-
-        mReminders = mDatabase.getUpcomingReminders();
-        mGrades = mDatabase.getGrades();
-        Collections.sort(mCourses);
-        Collections.sort(mReminders);
-        Collections.sort(mGrades);
 
         // Set up map for quick course name querying in lists.
         mCoursesById = new LongSparseArray<Course>();
@@ -207,7 +208,13 @@ public class HomeFragment extends BaseFragment {
             refreshCard(1);
         }
         if (updateGrades) {
-            mGrades = mDatabase.getGrades();
+            // Reset grades list.
+            mGrades = new ArrayList<Grade>();
+
+            for (Course course : mCourses) {
+                mGrades.addAll(mDatabase.getGrades(course.getId()));
+            }
+
             Collections.sort(mGrades);
             refreshCard(2);
         }

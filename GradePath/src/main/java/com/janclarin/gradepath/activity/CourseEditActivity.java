@@ -31,9 +31,6 @@ public class CourseEditActivity extends BaseActivity
         implements SemesterDialogFragment.OnDialogSemesterCallbacks,
         GradeComponentDialogFragment.OnDialogGradeComponentListener {
 
-    // Tags used to check state of a button.
-    public static final String ADD_TAG = "Add";
-    public static final String REMOVE_TAG = "Remove";
     public static final String LOG_TAG = CourseEditActivity.class.getSimpleName();
 
     private Spinner mSemesterSpinner;
@@ -47,6 +44,7 @@ public class CourseEditActivity extends BaseActivity
 
     // List of grade components.
     private List<GradeComponent> mGradeComponents;
+    private List<GradeComponent> mRemoveComponents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +61,7 @@ public class CourseEditActivity extends BaseActivity
 
         // Set up grade category list view.
         mGradeComponents = new ArrayList<GradeComponent>();
+        mRemoveComponents = new ArrayList<GradeComponent>();
 
         // Set up the views.
         setUpView();
@@ -198,10 +197,10 @@ public class CourseEditActivity extends BaseActivity
     /**
      * Add grade component view to the list.
      */
-    private void addGradeComponent(GradeComponent gradeComponent) {
+    private void addGradeComponent(final GradeComponent gradeComponent) {
 
         // Inflate grade component view.
-        View gradeComponentView = getLayoutInflater().inflate(R.layout.fragment_list_item_general,
+        View gradeComponentView = getLayoutInflater().inflate(R.layout.activity_edit_course_component,
                 mComponentList, false);
 
         ((TextView) gradeComponentView.findViewById(R.id.tv_name)).setText(gradeComponent.getName());
@@ -218,6 +217,18 @@ public class CourseEditActivity extends BaseActivity
         } else {
             mComponentList.addView(gradeComponentView);
         }
+
+        // Set remove button on click listener to remove grade component.
+        gradeComponentView.findViewById(R.id.btn_remove_grade_component)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = mGradeComponents.indexOf(gradeComponent);
+                        mRemoveComponents.add(gradeComponent);
+                        mGradeComponents.remove(position);
+                        mComponentList.removeViewAt(position);
+                    }
+                });
     }
 
     /**
@@ -268,6 +279,11 @@ public class CourseEditActivity extends BaseActivity
                         gradeComponent.getName(), gradeComponent.getWeight(),
                         gradeComponent.getNumberOfItems());
             }
+        }
+
+        // Remove all grade components to be removed.
+        for (GradeComponent gradeComponent : mRemoveComponents) {
+            mDatabase.deleteGradeComponent(gradeComponent);
         }
 
         setResult(RESULT_OK);

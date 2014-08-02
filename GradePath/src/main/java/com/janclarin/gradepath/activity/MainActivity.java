@@ -316,7 +316,7 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * Refresh task list.
+     * Refresh reminder list.
      */
     private void refreshListReminder() {
         if (mCurrentFragment instanceof HomeFragment) {
@@ -357,16 +357,15 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onHomeNewReminder() {
-        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_new_reminder_dialog));
-        taskDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
+        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
     }
 
     @Override
     public void onHomeNewCourse() {
         Intent intent = new Intent(this, CourseEditActivity.class);
         startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
-
     }
 
     @Override
@@ -499,9 +498,9 @@ public class MainActivity extends BaseActivity
     @Override
     public void onListCourseNewReminder(Course course) {
         // Show new task dialog.
-        ReminderDialogFragment taskDialog = ReminderDialogFragment
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment
                 .newInstance(getString(R.string.title_new_reminder_dialog), course);
-        taskDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
+        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
     }
 
     @Override
@@ -572,18 +571,18 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onListReminderNew() {
-        // Show new task dialog.
-        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+        // Show new reminder dialog.
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_new_reminder_dialog));
-        taskDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
+        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
     }
 
     @Override
     public void onListReminderEdit(Reminder reminder) {
-        // Show edit task dialog.
-        ReminderDialogFragment taskDialog = ReminderDialogFragment.newInstance(
+        // Show edit reminder dialog.
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_edit_reminder_dialog), reminder);
-        taskDialog.show(getFragmentManager(), EDIT_REMINDER_TAG);
+        reminderDialog.show(getFragmentManager(), EDIT_REMINDER_TAG);
     }
 
     /* Dialog listeners */
@@ -612,9 +611,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onReminderSaved(boolean isNew) {
-        // String set to "task saved" if task is new, if updating "task updated."
-        String toastMessage = isNew ? getString(R.string.toast_task_saved) :
-                getString(R.string.toast_task_updated);
+        String toastMessage = isNew ? getString(R.string.toast_reminder_saved) :
+                getString(R.string.toast_reminder_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 

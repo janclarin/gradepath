@@ -18,9 +18,9 @@ import android.widget.Toast;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
-import com.janclarin.gradepath.fragment.CourseDetailFragment;
 import com.janclarin.gradepath.fragment.CourseListGradeFragment;
 import com.janclarin.gradepath.fragment.CourseListReminderFragment;
+import com.janclarin.gradepath.fragment.CourseOverview;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Reminder;
@@ -72,11 +72,11 @@ public class CourseDetailActivity extends BaseActivity
                         // Switch the floating button depending on page and set its on-click listener.
                         switch (position) {
                             case 0:
-                                btnAddItem.setImageResource(R.drawable.list_add_item);
+                                btnAddItem.setImageResource(R.drawable.edit);
                                 btnAddItem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        onListCourseGradeAdd();
+                                        onCourseEdit();
                                     }
                                 });
                                 break;
@@ -85,16 +85,16 @@ public class CourseDetailActivity extends BaseActivity
                                 btnAddItem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        onListCourseReminderAdd();
+                                        onListCourseGradeAdd();
                                     }
                                 });
                                 break;
                             case 2:
-                                btnAddItem.setImageResource(R.drawable.edit);
+                                btnAddItem.setImageResource(R.drawable.list_add_item);
                                 btnAddItem.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        onCourseEdit();
+                                        onListCourseReminderAdd();
                                     }
                                 });
                         }
@@ -128,11 +128,22 @@ public class CourseDetailActivity extends BaseActivity
             );
         }
 
-        // Go to reminders page if being opened from reminder item click.
-        if (mReminder != null) {
+
+        if (mGrade != null) {
+            // Go to grades page if being opened from grade item click.
             mViewPager.setCurrentItem(1, false);
+        } else if (mReminder != null) {
+            // Go to reminders page if being opened from reminder item click.
+            mViewPager.setCurrentItem(2, false);
         } else {
-            mViewPager.setCurrentItem(0, false);
+            // Set button to edit course.
+            btnAddItem.setImageResource(R.drawable.edit);
+            btnAddItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCourseEdit();
+                }
+            });
         }
     }
 
@@ -145,10 +156,6 @@ public class CourseDetailActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -160,9 +167,9 @@ public class CourseDetailActivity extends BaseActivity
             getActionBar().setTitle(mCourse.getName());
 
             // Refresh course data.
-            ((CourseDetailFragment) mAdapter.getTabFragment(2)).onCourseUpdated(mCourse);
+            ((CourseOverview) mAdapter.getTabFragment(0)).onCourseUpdated(mCourse);
             // Update the grades list in case grade component was deleted.
-            ((CourseListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
+            ((CourseListGradeFragment) mAdapter.getTabFragment(1)).updateListItems();
 
             Toast.makeText(this, R.string.course_saved_update, Toast.LENGTH_SHORT).show();
         }
@@ -208,14 +215,14 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((CourseListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
+        ((CourseListGradeFragment) mAdapter.getTabFragment(1)).updateListItems();
     }
 
     @Override
     public void onReminderSaved(boolean isNew) {
         // String set to "task saved" if task is new, if updating "task updated."
-        String toastMessage = isNew ? getString(R.string.toast_task_saved) :
-                getString(R.string.toast_task_updated);
+        String toastMessage = isNew ? getString(R.string.toast_reminder_saved) :
+                getString(R.string.toast_reminder_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
@@ -235,13 +242,13 @@ public class CourseDetailActivity extends BaseActivity
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment = CourseListGradeFragment.newInstance(mCourse);
+                    fragment = CourseOverview.newInstance(mCourse);
                     break;
                 case 1:
-                    fragment = CourseListReminderFragment.newInstance(mCourse);
+                    fragment = CourseListGradeFragment.newInstance(mCourse);
                     break;
                 case 2:
-                    fragment = CourseDetailFragment.newInstance(mCourse);
+                    fragment = CourseListReminderFragment.newInstance(mCourse);
                     break;
                 default:
                     fragment = new Fragment();
@@ -260,11 +267,11 @@ public class CourseDetailActivity extends BaseActivity
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.title_fragment_list_grades);
+                    return getString(R.string.title_fragment_overview);
                 case 1:
-                    return getString(R.string.title_fragment_list_reminders);
+                    return getString(R.string.title_fragment_list_grades);
                 case 2:
-                    return getString(R.string.title_fragment_details);
+                    return getString(R.string.title_fragment_list_reminders);
                 default:
                     return null;
             }

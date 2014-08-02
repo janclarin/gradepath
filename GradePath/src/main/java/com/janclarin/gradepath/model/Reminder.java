@@ -98,9 +98,6 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
             } else if (daysLeftBeforeDue == 1) {
                 // Tomorrow.
                 due = context.getString(R.string.task_due_date_tomorrow);
-            } else if (daysLeftBeforeDue <= 3) {
-                // 2 days.
-                due = context.getString(R.string.task_due_date_two_days);
             } else if (daysLeftBeforeDue < 7) {
                 // This week.
                 due = dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());

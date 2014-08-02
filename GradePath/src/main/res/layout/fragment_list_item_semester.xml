@@ -24,6 +24,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="16dp"
         android:fontFamily="sans-serif-light"
+        android:gravity="right"
         android:textAllCaps="true"
         android:textColor="@android:color/tertiary_text_light"
         android:textSize="12sp" />
@@ -35,6 +36,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/tv_semester_information_label"
+        android:gravity="right"
         android:singleLine="true"
         android:textColor="@color/theme_primary_color"
         android:textSize="20sp" />

@@ -3,8 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_default"
-    android:orientation="vertical">
+    android:background="@drawable/bg_card_rounded_default"
+    android:orientation="vertical"
+    android:paddingBottom="1.5dp">
 
     <Button
         android:id="@+id/btn_all"

@@ -21,7 +21,9 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Reminder;
+import com.janclarin.gradepath.model.Semester;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,13 +38,17 @@ public class HomeFragment extends BaseFragment {
     private boolean isUpdating;
     private LongSparseArray<Course> mCoursesById;
 
+    private TextView mSemesterName;
+    private TextView mSemesterDaysLeft;
+    private TextView mSemesterDaysLeftLabel;
+    private ListView mListView;
     private ImageButton mShowAddButton;
     private ImageButton mAddReminderButton;
     private ImageButton mAddGradeButton;
     private ImageButton mAddCourseButton;
-    private ListView mListView;
 
     private CardList[] mCardItems;
+    private Semester mCurrentSemester;
     private List<Course> mCourses;
     private List<Reminder> mReminders;
     private List<Grade> mGrades;
@@ -66,6 +72,8 @@ public class HomeFragment extends BaseFragment {
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(mContext.getApplicationContext());
         mHideWelcome = sp.getBoolean(PREF_USER_HIDE_WELCOME, false);
+
+        mCurrentSemester = mDatabase.getCurrentSemester();
     }
 
     @Override
@@ -76,11 +84,14 @@ public class HomeFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Find all views.
+        mSemesterName = (TextView) rootView.findViewById(R.id.tv_semester_name);
+        mSemesterDaysLeft = (TextView) rootView.findViewById(R.id.tv_semester_days_left);
+        mSemesterDaysLeftLabel = (TextView) rootView.findViewById(R.id.tv_semester_days_left_header);
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
         mShowAddButton = (ImageButton) rootView.findViewById(R.id.btn_show_add_options);
         mAddReminderButton = (ImageButton) rootView.findViewById(R.id.btn_add_reminder);
         mAddGradeButton = (ImageButton) rootView.findViewById(R.id.btn_add_grade);
         mAddCourseButton = (ImageButton) rootView.findViewById(R.id.btn_add_course);
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
 
         return rootView;
     }
@@ -130,7 +141,18 @@ public class HomeFragment extends BaseFragment {
             mCardItems = CardList.values();
         }
 
-        mCourses = mDatabase.getCurrentCourses();
+        // Get current courses if there is a current semester.
+        // Set semester header information accordingly.
+        if (mCurrentSemester == null) {
+            mCourses = new ArrayList<Course>();
+            mSemesterName.setText("No current semester");
+        } else {
+            mCourses = mDatabase.getCourses(mCurrentSemester.getId());
+            mSemesterName.setText(mCurrentSemester.toString());
+            mSemesterDaysLeftLabel.setText(R.string.semester_days_left);
+            mSemesterDaysLeft.setText(mCurrentSemester.getDaysLeft());
+        }
+
         mReminders = mDatabase.getUpcomingReminders();
         mGrades = mDatabase.getGrades();
         Collections.sort(mCourses);

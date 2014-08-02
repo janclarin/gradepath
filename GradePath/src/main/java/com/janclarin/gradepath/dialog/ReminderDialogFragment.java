@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Reminder;
 
@@ -31,9 +28,8 @@ import java.util.List;
 /**
  * Dialog for adding and updating tasks.
  */
-public class ReminderDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-    static final String DIALOG_TITLE = "Title";
+public class ReminderDialogFragment extends BaseDialogFragment
+        implements DatePickerDialog.OnDateSetListener {
 
     private static final String LOG_TAG = ReminderDialogFragment.class.getSimpleName();
 
@@ -43,21 +39,11 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E, MMMM d, y");
 
     private OnDialogReminderListener mListener;
-
-    private Context mContext;
-
-    private DatabaseFacade mDatabase;
-
     private Reminder mReminderToUpdate;
-
     private boolean mOpenedFromCourse;
-
     private Spinner mCourseSpinner;
-
     private EditText mReminderName;
-
     private CheckBox mCheckBoxGraded;
-
     private Button mDueDateButton;
 
     // Calendar to keep track of due date.
@@ -101,13 +87,6 @@ public class ReminderDialogFragment extends DialogFragment implements DatePicker
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set mContext.
-        mContext = getActivity();
-
-        // Initialize database.
-        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
-        mDatabase.open();
 
         // Calendar instance.
         mDateCalendar = Calendar.getInstance();

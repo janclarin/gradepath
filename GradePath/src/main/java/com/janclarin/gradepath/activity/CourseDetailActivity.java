@@ -131,6 +131,8 @@ public class CourseDetailActivity extends BaseActivity
         // Go to reminders page if being opened from reminder item click.
         if (mReminder != null) {
             mViewPager.setCurrentItem(1, false);
+        } else {
+            mViewPager.setCurrentItem(0, false);
         }
     }
 
@@ -153,8 +155,15 @@ public class CourseDetailActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_LIST_COURSE_EDIT_COURSE) {
+            // Update course item and update action bar title.
+            mCourse = mDatabase.getCourse(mCourse.getId());
+            getActionBar().setTitle(mCourse.getName());
+
             // Refresh course data.
-            ((CourseDetailFragment) mAdapter.getTabFragment(2)).onCourseUpdated();
+            ((CourseDetailFragment) mAdapter.getTabFragment(2)).onCourseUpdated(mCourse);
+            // Update the grades list in case grade component was deleted.
+            ((CourseListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
+
             Toast.makeText(this, R.string.course_saved_update, Toast.LENGTH_SHORT).show();
         }
     }

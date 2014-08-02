@@ -27,9 +27,9 @@
     <string name="final_grade">Final grade</string>
     <string name="new_semester">New semester</string>
     <string name="et_grade_component">Component name</string>
-    <string name="et_grade_component_weight">% weight</string>
+    <string name="et_grade_component_weight">Weight percentage</string>
     <string name="cd_btn_grade_component">Add/remove grade component</string>
-    <string name="et_grade_component_number_of_items"># of items</string>
+    <string name="et_grade_component_number_of_items">Number of items</string>
     <string name="tv_course_information">Course information</string>
     <string name="prompt_pick_semester">Pick a semester</string>
     <string name="prompt_enter_course_name">Enter course name</string>
@@ -53,6 +53,7 @@
     <string name="dialog_item_name">Name</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_save">Save</string>
+    <string name="dialog_another">Add another</string>
     <string name="dialog_update">Update</string>
 
     <!-- Semester dialog -->
@@ -169,5 +170,14 @@
     <string name="exam">Exam</string>
     <string name="not_exam">General</string>
     <string name="gpa">GPA</string>
+    <string name="weight_invalid">Weight is invalid</string>
+    <string name="name_invalid">Name is invalid</string>
+    <string name="num_items_invalid">Number of items is invalid</string>
+    <string name="semester_invalid">Pick or add a semester</string>
+    <string name="title_new_grade_component_dialog">New grade component</string>
+    <string name="grade_component_updated">Grade component updated</string>
+    <string name="grade_component_saved">Grade component saved</string>
+    <string name="add_grade_component">Add grade component</string>
+    <string name="items">items</string>
 
 </resources>

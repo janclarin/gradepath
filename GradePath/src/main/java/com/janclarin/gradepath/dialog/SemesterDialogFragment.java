@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.Semester;
 
 import java.text.SimpleDateFormat;
@@ -28,34 +25,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class SemesterDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-    static final String DIALOG_TITLE = "Title";
+public class SemesterDialogFragment extends BaseDialogFragment
+        implements DatePickerDialog.OnDateSetListener {
 
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM d, y");
 
     private OnDialogSemesterCallbacks mListener;
 
-    private Context mContext;
-
-    private DatabaseFacade mDatabase;
-
     private DatePickerDialog mDatePickerDialog;
-
     private Semester mSemesterToUpdate;
-
     private Spinner mSeasonSpinner;
-
     private Spinner mYearSpinner;
-
     private CheckBox mCurrentCheckBox;
-
     private EditText mGPA;
-
     private TextView mLastDayHeader;
-
     private Button mLastDayButton;
-
     private Calendar mLastDayCalendar;
 
     public SemesterDialogFragment() {
@@ -82,16 +66,8 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set mContext.
-        mContext = getActivity();
-
         // Get semester to update if it's available.
         mSemesterToUpdate = (Semester) getArguments().getSerializable(MainActivity.SEMESTER_KEY);
-
-        // Initialize mDatabase.
-        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
-        mDatabase.open();
     }
 
     @Override
@@ -107,8 +83,9 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
         mGPA = (EditText) rootView.findViewById(R.id.et_dialog_semester_gpa);
         mLastDayHeader = (TextView) rootView.findViewById(R.id.tv_dialog_semester_last_day_header);
         mLastDayButton = (Button) rootView.findViewById(R.id.btn_dialog_semester_last_day);
-        // Initialize calendar.
-        mLastDayCalendar = Calendar.getInstance();
+        // Initialize calendar to today if there is no end date yet.
+        mLastDayCalendar = mSemesterToUpdate == null ? Calendar.getInstance() :
+                mSemesterToUpdate.getEndDate();
 
         // Set on checked change listener.
         mCurrentCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -231,8 +208,6 @@ public class SemesterDialogFragment extends DialogFragment implements DatePicker
                     }
                 }
         );
-
-        DatePicker datePicker = mDatePickerDialog.getDatePicker();
 
         // Set default text for last day.
         mLastDayButton.setText(DATE_FORMAT.format(mLastDayCalendar.getTime()));

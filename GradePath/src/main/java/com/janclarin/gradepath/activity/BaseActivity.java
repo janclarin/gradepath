@@ -12,6 +12,7 @@ abstract public class BaseActivity extends Activity {
     protected static final String EDIT_GRADE_TAG = "EditGradeDialog";
     protected static final String NEW_REMINDER_TAG = "NewTaskDialog";
     protected static final String EDIT_REMINDER_TAG = "EditTaskDialog";
+    protected static final String NEW_GRADE_COMPONENT_TAG = "NewGradeComponentDialog";
     public static final int REQUEST_LIST_COURSE_NEW_COURSE = 101;
     public static final int REQUEST_LIST_COURSE_EDIT_COURSE = 102;
     public static final String SEMESTER_KEY = "Semester";

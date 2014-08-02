@@ -4,10 +4,56 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
+    <RelativeLayout
+        android:id="@+id/semester_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_card_bottom"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tv_semester_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-light"
+            android:singleLine="true"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_semester_days_left_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-light"
+            android:gravity="right"
+            android:textAllCaps="true"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_semester_days_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/tv_semester_days_left_header"
+            android:fontFamily="sans-serif-light"
+            android:gravity="right"
+            android:singleLine="true"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/lv_list_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/semester_header"
         android:clipToPadding="false"
         android:divider="@null"
         android:dividerHeight="16dp"
@@ -15,7 +61,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="16dp"
-        android:scrollbarStyle="outsideOverlay" />
+        android:scrollbars="none" />
 
     <ImageButton
         android:id="@+id/btn_show_add_options"

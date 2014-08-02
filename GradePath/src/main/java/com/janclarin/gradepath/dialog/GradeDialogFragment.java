@@ -3,8 +3,6 @@ package com.janclarin.gradepath.dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
-import com.janclarin.gradepath.database.DatabaseFacade;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.GradeComponent;
@@ -27,18 +24,12 @@ import java.util.List;
 /**
  * Dialog for adding and updating grades.
  */
-public class GradeDialogFragment extends DialogFragment {
+public class GradeDialogFragment extends BaseDialogFragment {
 
-    /**
-     * Dialog title bundle parameter to access title.
-     */
-    public static final String DIALOG_TITLE = "Title";
     private static final String LOG_TAG = GradeDialogFragment.class.getSimpleName();
 
     private OnDialogGradeListener mListener;
 
-    private Context mContext;
-    private DatabaseFacade mDatabase;
     private Grade mGradeToUpdate;
     private boolean mOpenedFromCourse;
     private Course mCourseSelected;
@@ -56,8 +47,7 @@ public class GradeDialogFragment extends DialogFragment {
     /**
      * Creates a new instance of this dialog fragment.
      *
-     * @param title The title of the dialog (New/Edit Grade).
-     * @return A new instance of fragment NewGradeDialog.
+     * @return A new instance of GradeDialogFragment.
      */
     public static GradeDialogFragment newInstance(String title) {
         GradeDialogFragment fragment = new GradeDialogFragment();
@@ -70,9 +60,7 @@ public class GradeDialogFragment extends DialogFragment {
     /**
      * Call when adding a new grade from course fragment.
      *
-     * @param title
-     * @param course
-     * @return
+     * @return A new instance of GradeDialogFragment.
      */
     public static GradeDialogFragment newInstance(String title, Course course) {
         GradeDialogFragment fragment = new GradeDialogFragment();
@@ -83,6 +71,9 @@ public class GradeDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    /**
+     * Call when updating a grade.
+     */
     public static GradeDialogFragment newInstance(String title, Grade grade) {
         GradeDialogFragment fragment = new GradeDialogFragment();
         Bundle args = new Bundle();
@@ -96,17 +87,9 @@ public class GradeDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set mContext.
-        mContext = getActivity();
-
-        // Initialize mDatabase.
-        mDatabase = DatabaseFacade.getInstance(mContext.getApplicationContext());
-        mDatabase.open();
-
         // Set boolean to indicate it was opened from course fragment and not home.
         mOpenedFromCourse = getArguments().containsKey(MainActivity.COURSE_KEY);
 
-        // Get grade if updating.
         mGradeToUpdate = (Grade) getArguments().getSerializable(MainActivity.GRADE_KEY);
     }
 
@@ -204,60 +187,59 @@ public class GradeDialogFragment extends DialogFragment {
         alertDialog.show();
 
         // Set alert dialog's positive button to check for proper edit text fields.
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).
-                setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Toast message to display at end if need be.
-                        String toastMessage = "";
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toast message to display at end if need be.
+                String toastMessage = "";
 
-                        // Grade name and grade from edit text fields.
-                        String gradeName = mGradeName.getText().toString().trim();
-                        String gradeReceived = mGradeReceived.getText().toString().trim();
-                        String gradePossible = mGradePossible.getText().toString().trim();
+                // Grade name and grade from edit text fields.
+                String gradeName = mGradeName.getText().toString().trim();
+                String gradeReceived = mGradeReceived.getText().toString().trim();
+                String gradePossible = mGradePossible.getText().toString().trim();
 
-                        // Check if grade name is missing.
-                        if (gradeName.isEmpty()) {
-                            toastMessage = mContext.getString(R.string.grade_name_missing);
+                // Check if grade name is missing.
+                if (gradeName.isEmpty()) {
+                    toastMessage = mContext.getString(R.string.grade_name_missing);
 
-                            // Check if grade received is missing.
-                        } else if (gradeReceived.isEmpty()) {
-                            toastMessage = mContext.getString(R.string.grade_received_missing);
+                    // Check if grade received is missing.
+                } else if (gradeReceived.isEmpty()) {
+                    toastMessage = mContext.getString(R.string.grade_received_missing);
 
-                            // Check if grade possible is missing.
-                        } else if (gradePossible.isEmpty()) {
-                            toastMessage = mContext.getString(R.string.grade_possible_missing);
+                    // Check if grade possible is missing.
+                } else if (gradePossible.isEmpty()) {
+                    toastMessage = mContext.getString(R.string.grade_possible_missing);
 
-                        } else {
-                            long courseId = ((Course) mCourseSpinner.getSelectedItem()).getId();
-                            long componentId = ((GradeComponent) mComponentSpinner.getSelectedItem()).getId();
+                } else {
+                    long courseId = ((Course) mCourseSpinner.getSelectedItem()).getId();
+                    long componentId = ((GradeComponent) mComponentSpinner.getSelectedItem()).getId();
 
-                            if (mGradeToUpdate == null) {
-                                // Insert grade if all the other tests pass.
-                                mDatabase.insertGrade(courseId, componentId, gradeName,
-                                        Double.parseDouble(gradeReceived), Double.parseDouble(gradePossible));
-                                // Notify listeners that grade is saved.
-                                if (mListener != null) mListener.onGradeSaved(true);
-                            } else {
-                                // Update grade.
-                                mDatabase.updateGrade(mGradeToUpdate.getId(), courseId, componentId,
-                                        gradeName,
-                                        Double.parseDouble(gradeReceived),
-                                        Double.parseDouble(gradePossible));
-                                // Notify listeners that grade is updated.
-                                if (mListener != null) mListener.onGradeSaved(false);
-                            }
-
-                            // Dismiss dialog.
-                            alertDialog.dismiss();
-                        }
-
-                        // Display toast if the message is not empty.
-                        if (!toastMessage.isEmpty()) {
-                            Toast.makeText(mContext, toastMessage, Toast.LENGTH_SHORT).show();
-                        }
+                    if (mGradeToUpdate == null) {
+                        // Insert grade if all the other tests pass.
+                        mDatabase.insertGrade(courseId, componentId, gradeName,
+                                Double.parseDouble(gradeReceived), Double.parseDouble(gradePossible));
+                        // Notify listeners that grade is saved.
+                        if (mListener != null) mListener.onGradeSaved(true);
+                    } else {
+                        // Update grade.
+                        mDatabase.updateGrade(mGradeToUpdate.getId(), courseId, componentId,
+                                gradeName,
+                                Double.parseDouble(gradeReceived),
+                                Double.parseDouble(gradePossible));
+                        // Notify listeners that grade is updated.
+                        if (mListener != null) mListener.onGradeSaved(false);
                     }
-                });
+
+                    // Dismiss dialog.
+                    alertDialog.dismiss();
+                }
+
+                // Display toast if the message is not empty.
+                if (!toastMessage.isEmpty()) {
+                    Toast.makeText(mContext, toastMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return alertDialog;
     }

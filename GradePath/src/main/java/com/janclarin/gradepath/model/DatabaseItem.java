@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class DatabaseItem implements Serializable {
 
-    protected long id;
+    protected long id = -1;
 
     public long getId() {
         return id;

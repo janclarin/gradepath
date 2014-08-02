@@ -55,8 +55,8 @@ public class CourseDetailFragment extends BaseFragment {
     /**
      * Gets the updated course from the database and refreshes the text views.
      */
-    public void onCourseUpdated() {
-        mCourse = mDatabase.getCourse(mCourse.getId());
+    public void onCourseUpdated(Course course) {
+        mCourse = course;
         mInstructorName.setText(mCourse.getInstructorName());
         mInstructorEmail.setText(mCourse.getInstructorEmail());
     }

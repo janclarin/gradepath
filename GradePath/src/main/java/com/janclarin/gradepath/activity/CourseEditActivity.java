@@ -3,69 +3,50 @@ package com.janclarin.gradepath.activity;
 import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.dialog.GradeComponentDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.GradeComponent;
 import com.janclarin.gradepath.model.Semester;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseEditActivity extends BaseActivity
-        implements SemesterDialogFragment.OnDialogSemesterCallbacks {
+        implements SemesterDialogFragment.OnDialogSemesterCallbacks,
+        GradeComponentDialogFragment.OnDialogGradeComponentListener {
 
     // Tags used to check state of a button.
     public static final String ADD_TAG = "Add";
     public static final String REMOVE_TAG = "Remove";
     public static final String LOG_TAG = CourseEditActivity.class.getSimpleName();
 
-    private final Semester mNewSemesterIndicator = new Semester() {
-        @Override
-        public String toString() {
-            return getString(R.string.new_semester);
-        }
-    };
-
+    private Spinner mSemesterSpinner;
     private EditText mCourseName;
     private EditText mInstructorName;
     private EditText mInstructorEmail;
-    private Spinner mSemesterSpinner;
-    private CheckBox mCompletedCheckBox;
-    private TextView mSectionTwoHeader;
-    private TextView mGradeTextView;
-    private SeekBar mGradeSeeker;
     private LinearLayout mComponentList;
-    private TextView mComponentListHeader;
 
     private Course mCourseToUpdate;
     private ArrayAdapter<Semester> mAdapter;
 
     // List of grade components.
-    private List<GradeComponent> mNewGradeComponents;
-    private List<GradeComponent> mOldGradeComponents;
+    private List<GradeComponent> mGradeComponents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,32 +55,26 @@ public class CourseEditActivity extends BaseActivity
         // Set up content view.
         setContentView(R.layout.activity_edit_course);
 
-        // Set up the views.
-        setUpView();
+        // Set up custom action bar.
+        setUpCustomActionBar();
 
         // Arguments from activity.
         mCourseToUpdate = (Course) getIntent().getSerializableExtra(MainActivity.COURSE_KEY);
 
         // Set up grade category list view.
-        mNewGradeComponents = new ArrayList<GradeComponent>();
+        mGradeComponents = new ArrayList<GradeComponent>();
+
+        // Set up the views.
+        setUpView();
 
         // Check if there is a Course in arguments. If so, insert course information into views.
-        // Update Course.
         if (mCourseToUpdate != null) {
-            mOldGradeComponents = mDatabase.getGradeComponents(mCourseToUpdate.getId());
+            mGradeComponents = mDatabase.getGradeComponents(mCourseToUpdate.getId());
 
             // Set edit text fields to course data.
             mCourseName.setText(mCourseToUpdate.getName());
             mInstructorName.setText(mCourseToUpdate.getInstructorName());
             mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
-
-            boolean isCompleted = mCourseToUpdate.isCompleted();
-            mCompletedCheckBox.setChecked(isCompleted);
-            // Check if there was a final grade for this course.
-            if (isCompleted) {
-                // Set seek bar to saved grade.
-                mGradeSeeker.setProgress(mCourseToUpdate.getFinalGradeValue());
-            }
 
             // Get semester.
             Semester courseSemester = mDatabase.getSemester(mCourseToUpdate.getSemesterId());
@@ -108,22 +83,10 @@ public class CourseEditActivity extends BaseActivity
             ArrayAdapter adapter = (ArrayAdapter) mSemesterSpinner.getAdapter();
             mSemesterSpinner.setSelection(adapter.getPosition(courseSemester));
 
-            // Checks if there are any grade components.
-            if (mOldGradeComponents.size() == 0) {
-                // False because it is going to be a new grade component.
-                addGradeComponent(new GradeComponent(), false);
-            } else {
-                // Add grade component view for each existing grade component.
-                for (GradeComponent gradeComponent : mOldGradeComponents)
-                    addGradeComponent(gradeComponent, true);
-            }
-        } else {
-            // Add first grade component by default if none exist.
-            addGradeComponent(new GradeComponent(), false);
+            // Add grade component view for each existing grade component.
+            for (GradeComponent gradeComponent : mGradeComponents)
+                addGradeComponent(gradeComponent);
         }
-
-        // Set up custom action bar.
-        setUpCustomActionBar();
     }
 
     @Override
@@ -131,10 +94,8 @@ public class CourseEditActivity extends BaseActivity
         // Display toast to notify user that the semester is saved.
         Toast.makeText(getApplicationContext(), R.string.toast_semester_saved, Toast.LENGTH_SHORT).show();
 
-        // Remove new semester indicator. Add new semester, then re-add new semester indicator.
-        mAdapter.remove(mNewSemesterIndicator);
+        // Add semester to spinner and refresh list.
         mAdapter.add(semester);
-        mAdapter.add(mNewSemesterIndicator);
         mAdapter.notifyDataSetChanged();
         mSemesterSpinner.setSelection(mAdapter.getPosition(semester));
     }
@@ -145,33 +106,41 @@ public class CourseEditActivity extends BaseActivity
         semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
     }
 
+    private void newGradeComponent() {
+        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+                getString(R.string.title_new_grade_component_dialog));
+        gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
+    }
+
     /**
      * Set up views.
      */
     private void setUpView() {
         // Find views.
+        mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
         mCourseName = (EditText) findViewById(R.id.et_course_name);
         mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
         mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
-        mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
-        mCompletedCheckBox = (CheckBox) findViewById(R.id.cb_course_completed);
-        mSectionTwoHeader = (TextView) findViewById(R.id.tv_section_two_header);
-        mGradeTextView = (TextView) findViewById(R.id.tv_letter_grade);
-        mGradeSeeker = (SeekBar) findViewById(R.id.seek_letter_grade);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
 
-        if (!mCompletedCheckBox.isChecked()) {
-            // Set visibility of final grade seek bar to gone.
-            mSectionTwoHeader.setText(R.string.grade_components);
-            mGradeTextView.setVisibility(View.GONE);
-            mGradeSeeker.setVisibility(View.GONE);
-        }
+        // Set add button to open new semester dialog.
+        findViewById(R.id.btn_add_semester).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newSemester();
+            }
+        });
+
+        // Set add button to open new grade component dialog.
+        findViewById(R.id.btn_add_grade_component).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newGradeComponent();
+            }
+        });
 
         // Set up semester spinner.
         List<Semester> semesters = mDatabase.getSemesters();
-
-        // New semester object as an indication to open new semester dialog.
-        semesters.add(mNewSemesterIndicator);
 
         mAdapter = new ArrayAdapter<Semester>(this,
                 android.R.layout.simple_spinner_item, semesters);
@@ -183,20 +152,6 @@ public class CourseEditActivity extends BaseActivity
         if (currentSemester != null) {
             mSemesterSpinner.setSelection(mAdapter.getPosition(currentSemester));
         }
-
-        mSemesterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int lastIndex = parent.getAdapter().getCount() - 1;
-                if (position == lastIndex) {
-                    newSemester();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         // Close keyboard on spinner press with custom listeners.
         mSemesterSpinner.setOnTouchListener(new View.OnTouchListener() {
@@ -215,263 +170,108 @@ public class CourseEditActivity extends BaseActivity
             }
         });
 
-        // Set radio group listener.
-        mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // Set visibility of final grade seek bar to visible.
-                    mSectionTwoHeader.setText(R.string.final_grade);
-                    mSectionTwoHeader.setVisibility(View.VISIBLE);
-                    mGradeTextView.setVisibility(View.VISIBLE);
-                    mGradeSeeker.setVisibility(View.VISIBLE);
-                    mComponentList.setVisibility(View.INVISIBLE);
-                } else {
-                    // Set visibility of final grade seek bar to gone. Set text for header.
-                    mSectionTwoHeader.setText(R.string.grade_components);
-                    mGradeTextView.setVisibility(View.GONE);
-                    mGradeSeeker.setVisibility(View.GONE);
-                    mComponentList.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        // Set up grade seeker.
+//        // Set max value to the number of possible letter grades values.
+//        mGradeSeeker.setMax(Course.LetterGrade.values().length - 1);
+//        mGradeSeeker.setKeyProgressIncrement(1);
+//        mGradeSeeker.setProgress(6);
+//        mGradeTextView.setText(Course.LetterGrade.values()[6].toString());
+//
+//        // Set seek bar change listener.
+//        mGradeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                // Set text view to display corresponding
+//                mGradeTextView.setText(Course.LetterGrade.values()[progress].toString());
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//            }
+//        });
+    }
 
-        // Set up grade seeker.
-        // Set max value to the number of possible letter grades values.
-        mGradeSeeker.setMax(Course.LetterGrade.values().length - 1);
-        mGradeSeeker.setKeyProgressIncrement(1);
-        mGradeSeeker.setProgress(6);
-        mGradeTextView.setText(Course.LetterGrade.values()[6].toString());
+    /**
+     * Add grade component view to the list.
+     */
+    private void addGradeComponent(GradeComponent gradeComponent) {
 
-        // Set seek bar change listener.
-        mGradeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // Set text view to display corresponding
-                mGradeTextView.setText(Course.LetterGrade.values()[progress].toString());
-            }
+        // Inflate grade component view.
+        View gradeComponentView = getLayoutInflater().inflate(R.layout.fragment_list_item_general,
+                mComponentList, false);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+        ((TextView) gradeComponentView.findViewById(R.id.tv_name)).setText(gradeComponent.getName());
+        ((TextView) gradeComponentView.findViewById(R.id.tv_subtitle))
+                .setText(Integer.toString(gradeComponent.getNumberOfItems()) + " "
+                        + getString(R.string.items));
+        ((TextView) gradeComponentView.findViewById(R.id.tv_information))
+                .setText(new DecimalFormat("#.##").format(gradeComponent.getWeight()) + "%");
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+        // Add view to position of grade component in list if its being updated.
+        // Otherwise add it to the end of the list.
+        if (gradeComponent.getId() > -1) {
+            mComponentList.addView(gradeComponentView, mGradeComponents.indexOf(gradeComponent));
+        } else {
+            mComponentList.addView(gradeComponentView);
+        }
     }
 
     /**
      * Saves course with information from new course activity.
      */
     private void saveCourse() {
+        // Insert semester into Database to get id. Checks if semester already exists.
+        Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
         String courseName = mCourseName.getText().toString().trim();
+        String instructorName = mInstructorName.getText().toString().trim();
+        String instructorEmail = mInstructorEmail.getText().toString().trim();
 
-        // Check if there is a course name. Prompt for one if there isn't one.
-        if (courseName.isEmpty()) {
-            Toast toast = Toast.makeText(this, getString(R.string.prompt_enter_course_name),
-                    Toast.LENGTH_SHORT);
+        String toastMessage = "";
+        if (semester == null) {
+            toastMessage = getString(R.string.semester_invalid);
+        } else if (courseName.isEmpty()) {
+            toastMessage = getString(R.string.prompt_enter_course_name);
+        }
+
+        if (toastMessage.length() > 0) {
+            Toast toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             return;
         }
 
-        String instructorName = mInstructorName.getText().toString().trim();
-        String instructorEmail = mInstructorEmail.getText().toString().trim();
-
-        // Insert semester into Database to get id. Checks if semester already exists.
-        Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
-
-        // Check if this is a proper semester.
-        if (semester.toString().equals(getString(R.string.new_semester))) {
-            Toast.makeText(this, R.string.prompt_pick_semester, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Set grade value to -1 if the course is not completed.
-        int gradeValue = mCompletedCheckBox.isChecked() ? mGradeSeeker.getProgress() : -1;
-
         long courseId;
         if (mCourseToUpdate == null) {
             // Course is a new one not found in Database.
             courseId = mDatabase.insertCourse(semester.getId(), courseName, instructorName,
-                    instructorEmail, gradeValue, mCompletedCheckBox.isChecked());
+                    instructorEmail, -1, false);
         } else {
             // Update course.
-            mDatabase.updateCourse(mCourseToUpdate.getId(), semester.getId(), courseName,
-                    instructorName, instructorEmail, gradeValue, mCompletedCheckBox.isChecked());
-
-            // Set course ID.
             courseId = mCourseToUpdate.getId();
-
-            // Update all grade components.
-            for (GradeComponent gradeComponent : mOldGradeComponents) {
-                // If update fails, component doesn't exist yet. Insert it instead.
-                String name = gradeComponent.getName();
-                double weight = gradeComponent.getWeight();
-                int numOfItems = gradeComponent.getNumberOfItems();
-
-                // Ensure that the grade component fields are valid.
-                if (name != null && weight > 0 && numOfItems > 0) {
-                    mDatabase.updateGradeComponent(gradeComponent.getId(), courseId, name, weight, numOfItems);
-                }
-            }
+            mDatabase.updateCourse(courseId, semester.getId(), courseName,
+                    instructorName, instructorEmail, mCourseToUpdate.getFinalGradeValue(),
+                    mCourseToUpdate.isCompleted());
         }
 
-        // Add new grade components.
-        for (GradeComponent gradeComponent : mNewGradeComponents) {
-            String name = gradeComponent.getName();
-            double weight = gradeComponent.getWeight();
-            int numOfItems = gradeComponent.getNumberOfItems();
-
-            // Ensure that the grade component fields are valid.
-            if (name != null && weight > 0 && numOfItems > 0) {
-                mDatabase.insertGradeComponent(courseId, name, weight, numOfItems);
+        for (GradeComponent gradeComponent : mGradeComponents) {
+            // Insert grade component into database if there isn't one to update.
+            if (gradeComponent.getId() == -1) {
+                mDatabase.insertGradeComponent(courseId, gradeComponent.getName(),
+                        gradeComponent.getWeight(), gradeComponent.getNumberOfItems());
+            } else {
+                // Upgrade grade component.
+                mDatabase.updateGradeComponent(gradeComponent.getId(), courseId,
+                        gradeComponent.getName(), gradeComponent.getWeight(),
+                        gradeComponent.getNumberOfItems());
             }
         }
 
         setResult(RESULT_OK);
         finish();
-    }
-
-    /**
-     * Adds a new grade component, including all of its views.
-     *
-     * @param gradeComponent grade component object.
-     * @param updating       boolean to indicate if updating grade component.
-     */
-    private void addGradeComponent(GradeComponent gradeComponent, boolean updating) {
-
-        // View holder for grade component.
-        final ViewHolder viewHolder = new ViewHolder();
-
-        // Inflate first grade component.
-        viewHolder.layout = (RelativeLayout) LayoutInflater.from(this)
-                .inflate(R.layout.activity_edit_course_component, mComponentList, false);
-
-        // Initialize grade component and views.
-        viewHolder.gradeComponent = gradeComponent;
-        viewHolder.etName = (EditText) viewHolder.layout.findViewById(R.id.et_grade_component_name);
-        viewHolder.etWeight = (EditText) viewHolder.layout.findViewById(R.id.et_grade_component_weight);
-        viewHolder.etNumberOfItems = (EditText) viewHolder.layout.findViewById(R.id.et_grade_component_number_of_items);
-        viewHolder.btnAddRemove = (ImageButton) viewHolder.layout.findViewById(R.id.btn_grade_component);
-
-        // Add view to dynamic linear layout with corresponding identifier.
-        mComponentList.addView(viewHolder.layout);
-
-        // Check if updating course.
-        if (updating) {
-            // Set button tag to add if it is the last grade component.
-            if (mOldGradeComponents.indexOf(gradeComponent) == mOldGradeComponents.size() - 1) {
-                viewHolder.btnAddRemove.setTag(ADD_TAG);
-            } else {
-                // Set button to remove.
-                viewHolder.btnAddRemove.setTag(REMOVE_TAG);
-                viewHolder.btnAddRemove.setImageResource(R.drawable.ic_grade_component_remove);
-            }
-
-            // Set grade component views.
-            viewHolder.etName.setText(gradeComponent.getName());
-            viewHolder.etWeight.setText(Double.toString(gradeComponent.getWeight()));
-            viewHolder.etNumberOfItems.setText(Integer.toString(gradeComponent.getNumberOfItems()));
-        } else {
-            viewHolder.btnAddRemove.setTag(ADD_TAG);
-
-            // Add grade component to list.
-            mNewGradeComponents.add(gradeComponent);
-
-            // Request focus to view if there is more than one component.
-            if (mNewGradeComponents.size() > 1) viewHolder.layout.requestFocus();
-        }
-
-        // Add text change listener for component name.
-        viewHolder.etName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewHolder.gradeComponent.setName(s.toString().trim());
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        // Add text change listener for weight.
-        viewHolder.etWeight.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    viewHolder.gradeComponent.setWeight(Double.parseDouble(s.toString()));
-                } catch (NumberFormatException e) {
-                    Log.e(LOG_TAG, "Error reading double value: " + s.toString());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        // Add text change listener for number of items.
-        viewHolder.etNumberOfItems.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    viewHolder.gradeComponent.setNumberOfItems(Integer.parseInt(s.toString()));
-                } catch (NumberFormatException e) {
-                    Log.e(LOG_TAG, "Error reading double value: " + s.toString());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        // Sets button on click listener.
-        viewHolder.btnAddRemove.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ImageButton button = viewHolder.btnAddRemove;
-
-                        // Checks if button is set to add.
-                        if (button.getTag().equals(ADD_TAG)) {
-                            // Adds new grade component.
-                            addGradeComponent(new GradeComponent(), false);
-
-                            // Changes button to remove button.
-                            button.setImageResource(R.drawable.ic_grade_component_remove);
-
-                            // Changes button tag to remove.
-                            button.setTag(REMOVE_TAG);
-                        } else {
-                            // Remove grade component from linear layout list.
-                            mComponentList.removeView(viewHolder.layout);
-
-                            // Remove grade component from mDatabase.
-                            if (mCourseToUpdate != null) {
-                                mDatabase.deleteGradeComponent(viewHolder.gradeComponent);
-                            }
-
-                            // Removes grade component from list of grade components.
-                            mNewGradeComponents.remove(viewHolder.gradeComponent);
-                        }
-                    }
-                }
-        );
     }
 
     /**
@@ -520,15 +320,16 @@ public class CourseEditActivity extends BaseActivity
         );
     }
 
-    /**
-     * View holder class for grade components.
-     */
-    private class ViewHolder {
-        GradeComponent gradeComponent;
-        RelativeLayout layout;
-        EditText etName;
-        EditText etWeight;
-        EditText etNumberOfItems;
-        ImageButton btnAddRemove;
+    @Override
+    public void onGradeComponentSaved(GradeComponent gradeComponent, boolean isNew) {
+        if (isNew) {
+            mGradeComponents.add(gradeComponent);
+        } else {
+            // Get position of grade component from list and replace the existing one.
+            int position = mGradeComponents.indexOf(gradeComponent);
+            mGradeComponents.add(position, gradeComponent);
+        }
+
+        addGradeComponent(gradeComponent);
     }
 }

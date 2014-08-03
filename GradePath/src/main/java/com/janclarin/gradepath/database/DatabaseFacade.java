@@ -16,7 +16,6 @@ import com.janclarin.gradepath.model.Semester;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -27,8 +26,7 @@ public class DatabaseFacade {
     private static final String[] SEMESTER_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_SEASON, DatabaseHelper.COLUMN_YEAR,
             DatabaseHelper.COLUMN_SEMESTER_GPA, DatabaseHelper.COLUMN_IS_CURRENT,
-            DatabaseHelper.COLUMN_END_YEAR, DatabaseHelper.COLUMN_END_MONTH,
-            DatabaseHelper.COLUMN_END_DAY};
+            DatabaseHelper.COLUMN_DATE_END};
 
     private static final String[] COURSE_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_SEMESTER_ID, DatabaseHelper.COLUMN_COURSE_NAME,
@@ -42,15 +40,13 @@ public class DatabaseFacade {
     private static final String[] GRADE_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_COMPONENT_ID,
             DatabaseHelper.COLUMN_GRADE_NAME, DatabaseHelper.COLUMN_POINTS_RECEIVED,
-            DatabaseHelper.COLUMN_POINTS_POSSIBLE, DatabaseHelper.COLUMN_YEAR_ADDED,
-            DatabaseHelper.COLUMN_MONTH_ADDED, DatabaseHelper.COLUMN_DAY_ADDED};
+            DatabaseHelper.COLUMN_POINTS_POSSIBLE, DatabaseHelper.COLUMN_DATE_ADDED};
 
     private static final String[] REMINDER_COLUMNS = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_REMINDER_NAME,
             DatabaseHelper.COLUMN_IS_EXAM, DatabaseHelper.COLUMN_IS_COMPLETED,
-            DatabaseHelper.COLUMN_YEAR_ADDED, DatabaseHelper.COLUMN_MONTH_ADDED,
-            DatabaseHelper.COLUMN_DAY_ADDED, DatabaseHelper.COLUMN_YEAR_DUE,
-            DatabaseHelper.COLUMN_MONTH_DUE, DatabaseHelper.COLUMN_DAY_DUE};
+            DatabaseHelper.COLUMN_DATE_ADDED, DatabaseHelper.COLUMN_DATE_REMIND};
+
     /**
      * Instance of the mDatabase following the singleton pattern.
      */
@@ -103,9 +99,7 @@ public class DatabaseFacade {
             values.put(DatabaseHelper.COLUMN_YEAR, year);
             values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
             values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
-            values.put(DatabaseHelper.COLUMN_END_YEAR, endDate.get(Calendar.YEAR));
-            values.put(DatabaseHelper.COLUMN_END_MONTH, endDate.get(Calendar.MONTH));
-            values.put(DatabaseHelper.COLUMN_END_DAY, endDate.get(Calendar.DAY_OF_MONTH));
+            values.put(DatabaseHelper.COLUMN_DATE_END, endDate.getTimeInMillis());
 
             long semesterId = mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
 
@@ -141,9 +135,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_YEAR, year);
         values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
         values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_END_YEAR, endDate.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_END_MONTH, endDate.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_END_DAY, endDate.get(Calendar.DAY_OF_MONTH));
+        values.put(DatabaseHelper.COLUMN_DATE_END, endDate.getTimeInMillis());
 
         return mDatabase.update(DatabaseHelper.TABLE_SEMESTERS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null);
@@ -516,8 +508,6 @@ public class DatabaseFacade {
      */
     public long insertGrade(long courseId, long componentId, String name,
                             double pointsEarned, double pointsPossible) {
-        // Calendar instance of year and day of year columns.
-        Calendar calendar = Calendar.getInstance();
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
@@ -525,9 +515,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_GRADE_NAME, name);
         values.put(DatabaseHelper.COLUMN_POINTS_RECEIVED, pointsEarned);
         values.put(DatabaseHelper.COLUMN_POINTS_POSSIBLE, pointsPossible);
-        values.put(DatabaseHelper.COLUMN_YEAR_ADDED, calendar.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_MONTH_ADDED, calendar.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_DAY_ADDED, calendar.get(Calendar.DAY_OF_MONTH));
+        values.put(DatabaseHelper.COLUMN_DATE_ADDED, Calendar.getInstance().getTimeInMillis());
 
         return mDatabase.insert(DatabaseHelper.TABLE_GRADES, null, values);
     }
@@ -691,7 +679,7 @@ public class DatabaseFacade {
      * @return reminder ID.
      */
     public long insertReminder(long courseId, String name, boolean isGraded, boolean isCompleted,
-                               Calendar dueDate) {
+                               Calendar remindDate) {
 
         // Calendar instance for day added to mDatabase.
         Calendar addDate = Calendar.getInstance();
@@ -701,12 +689,8 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
         values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_YEAR_ADDED, addDate.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_MONTH_ADDED, addDate.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_DAY_ADDED, addDate.get(Calendar.DAY_OF_MONTH));
-        values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
+        values.put(DatabaseHelper.COLUMN_DATE_ADDED, Calendar.getInstance().getTimeInMillis());
+        values.put(DatabaseHelper.COLUMN_DATE_REMIND, remindDate.getTimeInMillis());
 
         return mDatabase.insert(DatabaseHelper.TABLE_REMINDERS, null, values);
     }
@@ -717,16 +701,14 @@ public class DatabaseFacade {
      * @return -1 if update failed.
      */
     public int updateReminder(long reminderId, long courseId, String name, boolean isGraded,
-                              boolean isCompleted, Calendar dueDate) {
+                              boolean isCompleted, Calendar remindDate) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
         values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
         values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_YEAR_DUE, dueDate.get(Calendar.YEAR));
-        values.put(DatabaseHelper.COLUMN_MONTH_DUE, dueDate.get(Calendar.MONTH));
-        values.put(DatabaseHelper.COLUMN_DAY_DUE, dueDate.get(Calendar.DAY_OF_MONTH));
+        values.put(DatabaseHelper.COLUMN_DATE_REMIND, remindDate.getTimeInMillis());
 
         return mDatabase.update(DatabaseHelper.TABLE_REMINDERS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + reminderId + "'", null);
@@ -797,7 +779,7 @@ public class DatabaseFacade {
             Reminder reminder = cursorToReminder(cursor);
 
             // Only add the reminder if it's current.
-            if (reminder.getDate().after(yesterday)) {
+            if (reminder.getReminderDate().after(yesterday)) {
                 reminders.add(reminder);
             }
             cursor.moveToNext();
@@ -823,7 +805,7 @@ public class DatabaseFacade {
             Reminder reminder = cursorToReminder(cursor);
 
             // Only add the reminder if it's current.
-            if (reminder.getDate().after(yesterday)) {
+            if (reminder.getReminderDate().after(yesterday)) {
                 reminders.add(reminder);
             }
             cursor.moveToNext();
@@ -917,8 +899,10 @@ public class DatabaseFacade {
         semester.setYear(cursor.getInt(2));
         semester.setGpa(cursor.getDouble(3));
         semester.setCurrent(cursor.getInt(4) == 1);
-        semester.setEndDate(
-                new GregorianCalendar(cursor.getInt(5), cursor.getInt(6), cursor.getInt(7)));
+
+        Calendar addDate = Calendar.getInstance();
+        addDate.setTimeInMillis(cursor.getLong(5));
+        semester.setEndDate(addDate);
 
         return semester;
     }
@@ -988,7 +972,11 @@ public class DatabaseFacade {
         grade.setName(cursor.getString(3));
         grade.setPointsReceived(cursor.getDouble(4));
         grade.setPointsPossible(cursor.getDouble(5));
-        grade.setAddDate(new GregorianCalendar(cursor.getInt(6), cursor.getInt(7), cursor.getInt(8)));
+
+        Calendar addDate = Calendar.getInstance();
+        addDate.setTimeInMillis(cursor.getLong(6));
+        grade.setAddDate(addDate);
+
         return grade;
     }
 
@@ -1010,8 +998,15 @@ public class DatabaseFacade {
         reminder.setName(cursor.getString(2));
         reminder.setExam((cursor.getInt(3) == 1));
         reminder.setCompleted((cursor.getInt(4) == 1));
-        reminder.setAddDate(new GregorianCalendar(cursor.getInt(5), cursor.getInt(6), cursor.getInt(7)));
-        reminder.setDueDate(new GregorianCalendar(cursor.getInt(8), cursor.getInt(9), cursor.getInt(10)));
+
+        Calendar addDate = Calendar.getInstance();
+        addDate.setTimeInMillis(cursor.getLong(5));
+        reminder.setAddDate(addDate);
+
+        Calendar remindDate = Calendar.getInstance();
+        remindDate.setTimeInMillis(cursor.getLong(6));
+        reminder.setReminderDate(remindDate);
+
         return reminder;
     }
 }

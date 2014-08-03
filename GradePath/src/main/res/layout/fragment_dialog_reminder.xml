@@ -58,4 +58,20 @@
         android:layout_width="match_parent"
         android:layout_below="@id/spn_dialog_reminder_courses"
         android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tv_dialog_time_header"
+        style="@style/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_dialog_date"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_dialog_reminder_time" />
+
+    <Button
+        android:id="@+id/btn_dialog_time"
+        style="@style/spinnerButton"
+        android:layout_width="match_parent"
+        android:layout_below="@id/btn_dialog_date"
+        android:layout_marginTop="20dp" />
 </RelativeLayout>

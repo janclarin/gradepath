@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
@@ -29,7 +31,8 @@ import java.util.List;
  * Dialog for adding and updating tasks.
  */
 public class ReminderDialogFragment extends BaseDialogFragment
-        implements DatePickerDialog.OnDateSetListener {
+        implements DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener {
 
     private static final String LOG_TAG = ReminderDialogFragment.class.getSimpleName();
 
@@ -37,6 +40,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
      * Date formatter for the due date.
      */
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E, MMMM d, y");
+    private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
 
     private OnDialogReminderListener mListener;
     private Reminder mReminderToUpdate;
@@ -44,10 +48,13 @@ public class ReminderDialogFragment extends BaseDialogFragment
     private Spinner mCourseSpinner;
     private EditText mReminderName;
     private CheckBox mCheckBoxGraded;
-    private Button mDueDateButton;
+    private Button mReminderDateButton;
+    private Button mReminderTimeButton;
 
     // Calendar to keep track of due date.
     private Calendar mDateCalendar;
+    private int mDefaultHour = 12;
+    private int mDefaultMinutes = 0;
 
     public ReminderDialogFragment() {
     }
@@ -90,6 +97,8 @@ public class ReminderDialogFragment extends BaseDialogFragment
 
         // Calendar instance.
         mDateCalendar = Calendar.getInstance();
+        mDateCalendar.set(Calendar.HOUR_OF_DAY, mDefaultHour);
+        mDateCalendar.set(Calendar.MINUTE, mDefaultMinutes);
 
         // Set boolean to indicate it was opened from course fragment and not home.
         mOpenedFromCourse = getArguments().containsKey(MainActivity.COURSE_KEY);
@@ -108,7 +117,8 @@ public class ReminderDialogFragment extends BaseDialogFragment
         mReminderName = (EditText) rootView.findViewById(R.id.et_reminder_name);
         mCourseSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_reminder_courses);
         mCheckBoxGraded = (CheckBox) rootView.findViewById(R.id.cb_graded);
-        mDueDateButton = (Button) rootView.findViewById(R.id.btn_dialog_date);
+        mReminderDateButton = (Button) rootView.findViewById(R.id.btn_dialog_date);
+        mReminderTimeButton = (Button) rootView.findViewById(R.id.btn_dialog_time);
 
         // Get all recent courses. Set up course spinner.
         List<Course> courses = mDatabase.getCurrentCourses();
@@ -135,13 +145,13 @@ public class ReminderDialogFragment extends BaseDialogFragment
             mCourseSpinner.setSelection(courseAdapter.getPosition(reminderCourse));
 
             // Set due date calendar to reminder due date.
-            mDateCalendar = mReminderToUpdate.getDate();
+            mDateCalendar = mReminderToUpdate.getReminderDate();
 
             // Set graded checkbox.
             mCheckBoxGraded.setChecked(mReminderToUpdate.isExam());
         }
 
-        // Date picker dialog instance.
+        /* Set up date picker dialog. */
         final DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
                 DatePickerDialog.THEME_HOLO_LIGHT, ReminderDialogFragment.this,
                 mDateCalendar.get(Calendar.YEAR), mDateCalendar.get(Calendar.MONTH),
@@ -157,20 +167,6 @@ public class ReminderDialogFragment extends BaseDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Dismissing dialog calls onStop method, which notifies date set.
-                        dialog.dismiss();
-                    }
-                }
-        );
-        datePickerDialog.setButton(DatePickerDialog.BUTTON_NEUTRAL,
-                mContext.getString(R.string.btn_date_picker_neutral),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Update to due date to the day after.
-                        final Calendar calendar = Calendar.getInstance();
-                        calendar.add(Calendar.DAY_OF_MONTH, 1);
-                        ((DatePickerDialog) dialog).updateDate(calendar.get(Calendar.YEAR),
-                                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                         dialog.dismiss();
                     }
                 }
@@ -195,11 +191,16 @@ public class ReminderDialogFragment extends BaseDialogFragment
         datePicker.setCalendarViewShown(true);
         datePicker.getCalendarView().setShowWeekNumber(false);
 
+        /* Set up time picker dialog. */
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(mContext,
+                AlertDialog.THEME_HOLO_LIGHT, ReminderDialogFragment.this,
+                mDateCalendar.get(Calendar.HOUR_OF_DAY), mDateCalendar.get(Calendar.MINUTE), false);
+
         // Set button to date.
-        mDueDateButton.setText(DATE_FORMAT.format(mDateCalendar.getTime()));
+        mReminderDateButton.setText(DATE_FORMAT.format(mDateCalendar.getTime()));
 
         // Set button click listener to show date picker dialog.
-        mDueDateButton.setOnClickListener(new View.OnClickListener() {
+        mReminderDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Update the date.
@@ -207,6 +208,21 @@ public class ReminderDialogFragment extends BaseDialogFragment
                         mDateCalendar.get(Calendar.YEAR), mDateCalendar.get(Calendar.MONTH),
                         mDateCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+            }
+        });
+
+        // Set button to time.
+        mReminderTimeButton.setText(TIME_FORMAT.format(mDateCalendar.getTime()));
+
+        // Set button click listener to show time picker dialog.
+        mReminderTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Update the time.
+                timePickerDialog.updateTime(
+                        mDateCalendar.get(Calendar.HOUR), mDateCalendar.get(Calendar.MINUTE)
+                );
+                timePickerDialog.show();
             }
         });
 
@@ -287,8 +303,18 @@ public class ReminderDialogFragment extends BaseDialogFragment
         mDateCalendar.set(Calendar.MONTH, monthOfYear);
         mDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        // Update the due date button text.
-        mDueDateButton.setText(DATE_FORMAT.format(mDateCalendar.getTime()));
+        // Update the reminder date button text.
+        mReminderDateButton.setText(DATE_FORMAT.format(mDateCalendar.getTime()));
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        // Update the reminder calendar object.
+        mDateCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        mDateCalendar.set(Calendar.MINUTE, minute);
+
+        // Update the reminder time button text.
+        mReminderTimeButton.setText(TIME_FORMAT.format(mDateCalendar.getTime()));
     }
 
     /**

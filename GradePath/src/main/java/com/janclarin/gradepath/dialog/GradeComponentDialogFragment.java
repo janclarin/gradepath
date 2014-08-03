@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.GradeComponent;
 
+import java.text.DecimalFormat;
+
 public class GradeComponentDialogFragment extends BaseDialogFragment {
 
     private OnDialogGradeComponentListener mListener;
@@ -75,22 +77,41 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
         } else {
             positiveButton = getString(R.string.dialog_update);
             mComponentName.setText(mGradeComponentToUpdate.getName());
-            mComponentWeight.setText(Double.toString(mGradeComponentToUpdate.getWeight()));
+            mComponentWeight.setText(new DecimalFormat("#.##").format((mGradeComponentToUpdate.getWeight())));
             mComponentNumItems.setText(Integer.toString(mGradeComponentToUpdate.getNumberOfItems()));
         }
 
         // Return new dialog using builder. Gets title from arguments.
-        final AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+        // Show neutral button if they are new grade components. Save only if not.
+        final AlertDialog alertDialog = isNew ?
+                new AlertDialog.Builder(mContext)
+                        .setView(rootView)
+                        .setTitle(getArguments().getString(DIALOG_TITLE))
+                        .setCancelable(false)
+                        .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Overridden after. Prevents dialog from being dismissed without checks.
+                            }
+                        })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNeutralButton(R.string.dialog_another, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Overridden after. Prevents dialog from being dismissed without checks.
+                            }
+                        })
+                        .create()
+                : new AlertDialog.Builder(mContext)
                 .setView(rootView)
                 .setTitle(getArguments().getString(DIALOG_TITLE))
                 .setCancelable(false)
                 .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Overridden after. Prevents dialog from being dismissed without checks.
-                    }
-                })
-                .setNeutralButton(R.string.dialog_another, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Overridden after. Prevents dialog from being dismissed without checks.
@@ -136,39 +157,40 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
             }
         });
 
-        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = mComponentName.getText().toString().trim();
-                String weight = mComponentWeight.getText().toString().trim();
-                String numItems = mComponentNumItems.getText().toString().trim();
+        if (isNew)
+            alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String name = mComponentName.getText().toString().trim();
+                    String weight = mComponentWeight.getText().toString().trim();
+                    String numItems = mComponentNumItems.getText().toString().trim();
 
-                if (inputValid(name, weight, numItems)) {
-                    GradeComponent gradeComponent;
-                    if (isNew) {
-                        gradeComponent = new GradeComponent();
-                    } else {
-                        gradeComponent = mGradeComponentToUpdate;
+                    if (inputValid(name, weight, numItems)) {
+                        GradeComponent gradeComponent;
+                        if (isNew) {
+                            gradeComponent = new GradeComponent();
+                        } else {
+                            gradeComponent = mGradeComponentToUpdate;
+                        }
+
+                        gradeComponent.setName(name);
+                        gradeComponent.setWeight(Double.parseDouble(weight));
+                        gradeComponent.setNumberOfItems(Integer.parseInt(numItems));
+
+                        // Notify listeners.
+                        if (mListener != null)
+                            mListener.onGradeComponentSaved(gradeComponent, isNew);
+
+                        // Clear edit text fields.
+                        mComponentName.getText().clear();
+                        mComponentWeight.getText().clear();
+                        mComponentNumItems.getText().clear();
+
+                        // Request focus back to the first edit text field.
+                        mComponentName.requestFocus();
                     }
-
-                    gradeComponent.setName(name);
-                    gradeComponent.setWeight(Double.parseDouble(weight));
-                    gradeComponent.setNumberOfItems(Integer.parseInt(numItems));
-
-                    // Notify listeners.
-                    if (mListener != null)
-                        mListener.onGradeComponentSaved(gradeComponent, isNew);
-
-                    // Clear edit text fields.
-                    mComponentName.getText().clear();
-                    mComponentWeight.getText().clear();
-                    mComponentNumItems.getText().clear();
-
-                    // Request focus back to the first edit text field.
-                    mComponentName.requestFocus();
                 }
-            }
-        });
+            });
 
         return alertDialog;
     }

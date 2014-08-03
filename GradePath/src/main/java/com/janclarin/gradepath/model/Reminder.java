@@ -15,7 +15,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
     private boolean isExam;
     private boolean completed;
     private Calendar addDate;
-    private Calendar dueDate;
+    private Calendar reminderDate;
 
     public Reminder() {
     }
@@ -60,12 +60,12 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         this.addDate = addDate;
     }
 
-    public Calendar getDate() {
-        return dueDate;
+    public Calendar getReminderDate() {
+        return reminderDate;
     }
 
-    public void setDueDate(Calendar dueDate) {
-        this.dueDate = dueDate;
+    public void setReminderDate(Calendar reminderDate) {
+        this.reminderDate = reminderDate;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         Calendar today = Calendar.getInstance();
 
         // Add one because it rounds down.
-        long daysLeftBeforeDue = super.getDayDifference(dueDate, today);
+        long daysLeftBeforeDue = super.getDayDifference(reminderDate, today);
 
         String due;
 
@@ -100,9 +100,9 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
                 due = context.getString(R.string.task_due_date_tomorrow);
             } else if (daysLeftBeforeDue < 7) {
                 // This week.
-                due = dueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+                due = reminderDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
             } else {
-                due = new SimpleDateFormat("MMMM d").format(dueDate.getTime());
+                due = new SimpleDateFormat("MMMM d").format(reminderDate.getTime());
             }
         }
 
@@ -117,7 +117,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
     public int getUrgencyColor(Context context) {
         Calendar today = Calendar.getInstance();
 
-        long daysLeftBeforeDue = super.getDayDifference(dueDate, today);
+        long daysLeftBeforeDue = super.getDayDifference(reminderDate, today);
 
         if (isCompleted() || daysLeftBeforeDue > 14) {
             return R.color.course_urgency_0;
@@ -141,7 +141,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
         if (this.isCompleted()) {
             if (another.isCompleted()) {
                 // If both are complete, sort by due date. More recent first.
-                return -this.dueDate.compareTo(another.dueDate);
+                return -this.reminderDate.compareTo(another.reminderDate);
             } else {
                 return 1;
             }
@@ -150,7 +150,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
                 return -1;
             } else {
                 // If both are not completed sort by due date. More recent last.
-                return this.dueDate.compareTo(another.dueDate);
+                return this.reminderDate.compareTo(another.reminderDate);
             }
         }
     }

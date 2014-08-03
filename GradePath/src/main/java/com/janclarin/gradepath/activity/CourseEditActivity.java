@@ -40,6 +40,7 @@ public class CourseEditActivity extends BaseActivity
     private LinearLayout mComponentList;
 
     private Course mCourseToUpdate;
+    private int updatePosition = -1;
     private ArrayAdapter<Semester> mAdapter;
 
     // List of grade components.
@@ -109,6 +110,13 @@ public class CourseEditActivity extends BaseActivity
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_new_grade_component_dialog));
         gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
+    }
+
+    private void editGradeComponent(GradeComponent gradeComponent) {
+        updatePosition = mGradeComponents.indexOf(gradeComponent);
+        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+                getString(R.string.title_edit_grade_component_dialog), gradeComponent);
+        gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
     }
 
     /**
@@ -194,11 +202,7 @@ public class CourseEditActivity extends BaseActivity
 //        });
     }
 
-    /**
-     * Add grade component view to the list.
-     */
-    private void addGradeComponent(final GradeComponent gradeComponent) {
-
+    private View createGradeComponentView(final GradeComponent gradeComponent) {
         // Inflate grade component view.
         View gradeComponentView = getLayoutInflater().inflate(R.layout.activity_edit_course_component,
                 mComponentList, false);
@@ -210,13 +214,14 @@ public class CourseEditActivity extends BaseActivity
         ((TextView) gradeComponentView.findViewById(R.id.tv_information))
                 .setText(new DecimalFormat("#.##").format(gradeComponent.getWeight()) + "%");
 
-        // Add view to position of grade component in list if its being updated.
-        // Otherwise add it to the end of the list.
-        if (gradeComponent.getId() > -1) {
-            mComponentList.addView(gradeComponentView, mGradeComponents.indexOf(gradeComponent));
-        } else {
-            mComponentList.addView(gradeComponentView);
-        }
+        // Set edit button on click listener to edit grade component.
+        gradeComponentView.findViewById(R.id.btn_edit_grade_component)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editGradeComponent(gradeComponent);
+                    }
+                });
 
         // Set remove button on click listener to remove grade component.
         gradeComponentView.findViewById(R.id.btn_remove_grade_component)
@@ -229,6 +234,42 @@ public class CourseEditActivity extends BaseActivity
                         mComponentList.removeViewAt(position);
                     }
                 });
+
+        return gradeComponentView;
+    }
+
+    /**
+     * Add grade component view to the list.
+     */
+    private void addGradeComponent(final GradeComponent gradeComponent) {
+
+        View gradeComponentView = createGradeComponentView(gradeComponent);
+
+        // Add view to position of grade component in list if its being updated.
+        // Otherwise add it to the end of the list.
+        if (gradeComponent.getId() > -1) {
+            mComponentList.addView(gradeComponentView, mGradeComponents.indexOf(gradeComponent));
+        } else {
+            mComponentList.addView(gradeComponentView);
+        }
+
+    }
+
+    /**
+     * Updates grade component view in the list.
+     */
+    private void updateGradeComponent(final GradeComponent gradeComponent) {
+        View gradeComponentView = createGradeComponentView(gradeComponent);
+
+        // Insert view into old spot and remove the one after it as it is the old one.
+        mComponentList.removeViewAt(updatePosition);
+        if (updatePosition < mGradeComponents.size()) {
+            mGradeComponents.add(updatePosition, gradeComponent);
+            mComponentList.addView(gradeComponentView, updatePosition);
+        } else {
+            mGradeComponents.add(updatePosition, gradeComponent);
+            mComponentList.addView(gradeComponentView);
+        }
     }
 
     /**
@@ -340,12 +381,12 @@ public class CourseEditActivity extends BaseActivity
     public void onGradeComponentSaved(GradeComponent gradeComponent, boolean isNew) {
         if (isNew) {
             mGradeComponents.add(gradeComponent);
+            addGradeComponent(gradeComponent);
         } else {
             // Get position of grade component from list and replace the existing one.
             int position = mGradeComponents.indexOf(gradeComponent);
             mGradeComponents.add(position, gradeComponent);
+            updateGradeComponent(gradeComponent);
         }
-
-        addGradeComponent(gradeComponent);
     }
 }

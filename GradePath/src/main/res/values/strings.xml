@@ -26,10 +26,10 @@
     <string name="grade_components">Grade components</string>
     <string name="final_grade">Final grade</string>
     <string name="new_semester">New semester</string>
-    <string name="et_grade_component">Component name</string>
-    <string name="et_grade_component_weight">Weight percentage</string>
+    <string name="et_grade_component">Title</string>
+    <string name="et_grade_component_weight">% weight</string>
     <string name="cd_btn_grade_component">Add/remove grade component</string>
-    <string name="et_grade_component_number_of_items">Number of items</string>
+    <string name="et_grade_component_number_of_items"># of items</string>
     <string name="tv_course_information">Course information</string>
     <string name="prompt_pick_semester">Pick a semester</string>
     <string name="prompt_enter_course_name">Enter course name</string>
@@ -179,5 +179,7 @@
     <string name="grade_component_saved">Grade component saved</string>
     <string name="add_grade_component">Add grade component</string>
     <string name="items">items</string>
+    <string name="title_edit_grade_component_dialog">Edit grade component</string>
+    <string name="tv_dialog_reminder_time">Time</string>
 
 </resources>

@@ -20,9 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public static final String COLUMN_COURSE_ID = "course_id";
     public static final String COLUMN_IS_COMPLETED = "is_completed";
-    public static final String COLUMN_YEAR_ADDED = "year_added";
-    public static final String COLUMN_MONTH_ADDED = "month_added";
-    public static final String COLUMN_DAY_ADDED = "day_added";
+    public static final String COLUMN_DATE_ADDED = "date_added";
 
     /**
      * Semester table.
@@ -32,18 +30,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_SEMESTER_GPA = "semester_gpa";
     public static final String COLUMN_IS_CURRENT = "is_current";
-    public static final String COLUMN_END_YEAR = "end_year";
-    public static final String COLUMN_END_MONTH = "end_month";
-    public static final String COLUMN_END_DAY = "end_day";
+    public static final String COLUMN_DATE_END = "date_end";
     private static final String CREATE_TABLE_SEMESTERS = "CREATE TABLE "
             + TABLE_SEMESTERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_SEASON + " TEXT NOT NULL, "
             + COLUMN_YEAR + " INTEGER NOT NULL, "
             + COLUMN_SEMESTER_GPA + " REAL NOT NULL, "
             + COLUMN_IS_CURRENT + " INTEGER NOT NULL, "
-            + COLUMN_END_YEAR + " INTEGER NOT NULL, "
-            + COLUMN_END_MONTH + " INTEGER NOT NULL, "
-            + COLUMN_END_DAY + " INTEGER NOT NULL"
+            + COLUMN_DATE_END + " INTEGER NOT NULL"
             + ");";
 
     /**
@@ -96,9 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_GRADE_NAME + " TEXT NOT NULL, "
             + COLUMN_POINTS_RECEIVED + " REAL NOT NULL, "
             + COLUMN_POINTS_POSSIBLE + " REAL NOT NULL, "
-            + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_DAY_ADDED + " INTEGER NOT NULL"
+            + COLUMN_DATE_ADDED + " INTEGER NOT NULL"
             + ");";
 
     /**
@@ -108,27 +100,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REMINDERS = "reminders";
     public static final String COLUMN_REMINDER_NAME = "reminder_name";
     public static final String COLUMN_IS_EXAM = "is_exam";
-    public static final String COLUMN_YEAR_DUE = "year_due";
-    public static final String COLUMN_MONTH_DUE = "month_due";
-    public static final String COLUMN_DAY_DUE = "day_due";
-    private static final String CREATE_TABLE_TASKS = "CREATE TABLE "
+    public static final String COLUMN_DATE_REMIND = "date_remind";
+    private static final String CREATE_TABLE_REMINDERS = "CREATE TABLE "
             + TABLE_REMINDERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
             + COLUMN_REMINDER_NAME + " TEXT NOT NULL, "
             + COLUMN_IS_EXAM + " INTEGER NOT NULL, "
             + COLUMN_IS_COMPLETED + " INTEGER NOT NULL, "
-            + COLUMN_YEAR_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_MONTH_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_DAY_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_YEAR_DUE + " INTEGER NOT NULL, "
-            + COLUMN_MONTH_DUE + " INTEGER NOT NULL, "
-            + COLUMN_DAY_DUE + " INTEGER NOT NULL"
+            + COLUMN_DATE_ADDED + " INTEGER NOT NULL, "
+            + COLUMN_DATE_REMIND + " INTEGER NOT NULL"
             + ");";
     /**
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static DatabaseHelper sInstance;
 
     /**
@@ -151,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(CREATE_TABLE_COURSES);
         database.execSQL(CREATE_TABLE_COMPONENTS);
         database.execSQL(CREATE_TABLE_GRADES);
-        database.execSQL(CREATE_TABLE_TASKS);
+        database.execSQL(CREATE_TABLE_REMINDERS);
     }
 
     @Override

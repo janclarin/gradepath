@@ -17,27 +17,31 @@
         android:inputType="textCapWords"
         android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/et_grade_component_weight"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0.5"
-        android:hint="@string/et_grade_component_weight"
-        android:imeOptions="actionNext"
-        android:inputType="numberDecimal"
-        android:digits="1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ."
-        android:singleLine="true" />
+        android:layout_marginTop="8dp">
 
-    <EditText
-        android:id="@+id/et_grade_component_number_of_items"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0.5"
-        android:hint="@string/et_grade_component_number_of_items"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:singleLine="true" />
+        <EditText
+            android:id="@+id/et_grade_component_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:digits="1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ."
+            android:hint="@string/et_grade_component_weight"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
 
+        <EditText
+            android:id="@+id/et_grade_component_number_of_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:hint="@string/et_grade_component_number_of_items"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:singleLine="true" />
+
+    </LinearLayout>
 </LinearLayout>

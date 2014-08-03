@@ -58,8 +58,6 @@
         android:divider="@null"
         android:dividerHeight="16dp"
         android:paddingBottom="40dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:paddingTop="16dp"
         android:scrollbars="none" />
 
@@ -73,7 +71,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
-        android:padding="18dp"
+        android:padding="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/list_add_item" />
 

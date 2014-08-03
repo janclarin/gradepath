@@ -5,17 +5,18 @@
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/circle_button_shadow" />
+            <solid android:color="@color/shadow_pressed" />
         </shape>
     </item>
     <item
         android:bottom="0.5dp"
-        android:left="0.25dp"
-        android:right="0.25dp">
+        android:left="0.5dp"
+        android:right="0.5dp"
+        android:top="0.5dp">
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_primary_color_dark_see_through" />
+            <solid android:color="@color/theme_secondary_color_light_see_through" />
         </shape>
     </item>
 </layer-list>

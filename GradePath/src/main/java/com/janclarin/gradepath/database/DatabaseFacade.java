@@ -187,9 +187,7 @@ public class DatabaseFacade {
                 DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null, null, null, null);
 
         cursor.moveToFirst();
-
         Semester semester = cursorToSemester(cursor);
-
         cursor.close();
 
         return semester;
@@ -345,14 +343,10 @@ public class DatabaseFacade {
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES, COURSE_COLUMNS,
                 DatabaseHelper.COLUMN_ID + " ='" + courseId + "'", null, null, null, null);
 
-        Course course;
-        if (cursor.moveToFirst()) {
-            course = cursorToCourse(cursor);
-        } else {
-            course = null;
-        }
-
+        cursor.moveToFirst();
+        Course course = cursorToCourse(cursor);
         cursor.close();
+
         return course;
     }
 
@@ -681,9 +675,6 @@ public class DatabaseFacade {
     public long insertReminder(long courseId, String name, boolean isGraded, boolean isCompleted,
                                Calendar remindDate) {
 
-        // Calendar instance for day added to mDatabase.
-        Calendar addDate = Calendar.getInstance();
-
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
         values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
@@ -721,6 +712,23 @@ public class DatabaseFacade {
 
         mDatabase.delete(DatabaseHelper.TABLE_REMINDERS,
                 DatabaseHelper.COLUMN_ID + " = '" + reminder.getId() + "'", null);
+    }
+
+    /**
+     * @return reminder from database using its ID.
+     */
+    public Reminder getReminder(long reminderId) {
+        Reminder reminder = null;
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
+                DatabaseHelper.COLUMN_ID + " = '" + reminderId + "'", null, null, null, null);
+
+        if (cursor.moveToFirst())
+            reminder = cursorToReminder(cursor);
+
+        cursor.close();
+
+        return reminder;
     }
 
     /**

@@ -10,6 +10,8 @@ import java.util.Locale;
 
 public class Reminder extends DatabaseItem implements Comparable<Reminder> {
 
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
+
     private long courseId;
     private String name;
     private boolean isExam;
@@ -110,22 +112,17 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
     }
 
     /**
-     * Returns the color to display beside a course based on its due date urgency
-     *
-     * @return
+     * Returns the time formatted.
      */
-    public int getUrgencyColor(Context context) {
-        Calendar today = Calendar.getInstance();
+    public String getTimeString() {
+        return TIME_FORMAT.format(reminderDate.getTime());
+    }
 
-        long daysLeftBeforeDue = super.getDayDifference(reminderDate, today);
-
-        if (isCompleted() || daysLeftBeforeDue > 14) {
-            return R.color.course_urgency_0;
-        } else if (daysLeftBeforeDue < 2) {
-            return R.color.course_urgency_2;
-        } else {
-            return R.color.course_urgency_1;
-        }
+    /**
+     * Returns type as a string.
+     */
+    public String getTypeString(Context context) {
+        return isExam ? context.getString(R.string.exam) : "";
     }
 
     /**

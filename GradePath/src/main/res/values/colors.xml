@@ -4,15 +4,24 @@
     <color name="theme_primary_color_dark">#327f7f</color>
     <color name="theme_primary_color_light">#c8e9e9</color>
     <color name="theme_primary_color_see_through">#cc47b5b5</color>
+    <color name="theme_primary_color_light_see_through">#ccc8e9e9</color>
     <color name="theme_primary_color_dark_see_through">#cc327f7f</color>
+    <color name="theme_secondary_color">#ffcc99</color>
+    <color name="theme_secondary_color_dark">#ffe6b88a</color>
+    <color name="theme_secondary_color_light">#ffe6cc</color>
+    <color name="theme_secondary_color_see_through">#e6ffcc99</color>
+    <color name="theme_secondary_color_light_see_through">#e6ffe6cc</color>
+    <color name="theme_secondary_color_dark_see_through">#e6e6b88a</color>
+
+    <color name="notification_color">#ff47b5b5</color>
+
     <color name="white_60_opacity">#99ffffff</color>
     <color name="actionbar_divider">#d6d6d6</color>
-    <color name="circle_button_shadow">@color/theme_primary_color_dark_see_through</color>
+    <color name="shadow">#ccdddddd</color>
+    <color name="shadow_pressed">#ccbbbbbb</color>
 
     <color name="card_fill">#fff</color>
-    <color name="card_shadow">#ccc</color>
     <color name="card_fill_pressed">#ccc</color>
-    <color name="card_shadow_pressed">#fff</color>
 
     <color name="course_urgency_0">#666</color>
     <color name="course_urgency_1">@color/theme_primary_color</color>

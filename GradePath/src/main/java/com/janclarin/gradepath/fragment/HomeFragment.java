@@ -348,7 +348,7 @@ public class HomeFragment extends BaseFragment {
                                 .inflate(R.layout.fragment_list_item_home_general, viewHolder.llList, false);
                         TextView tvName = (TextView) layout.findViewById(R.id.tv_name);
                         TextView tvSubtitle = (TextView) layout.findViewById(R.id.tv_subtitle);
-                        TextView tvDate = (TextView) layout.findViewById(R.id.tv_information);
+                        TextView tvInfo = (TextView) layout.findViewById(R.id.tv_information);
                         Button btnViewCourse = (Button) layout.findViewById(R.id.btn_view_course);
 
                         btnViewCourse.setOnClickListener(new View.OnClickListener() {
@@ -362,8 +362,13 @@ public class HomeFragment extends BaseFragment {
 
                         // Set text in views.
                         tvName.setText(reminder.getName());
-                        tvSubtitle.setText(mCoursesById.get(reminder.getCourseId()).getName());
-                        tvDate.setText(reminder.getDateString(mContext));
+                        tvSubtitle.setText(
+                                reminder.getDateString(mContext) + ", "
+                                        + reminder.getTimeString() + " "
+                                        + getString(R.string.bullet) + " "
+                                        + mCoursesById.get(reminder.getCourseId()).getName());
+
+                        tvInfo.setText(reminder.getTypeString(mContext));
 
                         // Add layout to list.
                         viewHolder.llList.addView(layout);

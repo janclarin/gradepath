@@ -31,6 +31,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.janclarin.gradepath.activity.MainActivity" />
         </activity>
+
+        <service android:name=".service.ReminderService" />
+        <service android:name=".service.NotifyService" />
+
+        <receiver android:name=".receiver.RemindersOnBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

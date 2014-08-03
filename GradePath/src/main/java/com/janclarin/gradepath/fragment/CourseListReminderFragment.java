@@ -164,7 +164,7 @@ public class CourseListReminderFragment extends BaseListFragment {
                             .inflate(R.layout.fragment_list_item_general_card, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
-                    viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_information);
+                    viewHolder.tvInfo = (TextView) convertView.findViewById(R.id.tv_information);
                 }
 
                 convertView.setTag(viewHolder);
@@ -177,8 +177,10 @@ public class CourseListReminderFragment extends BaseListFragment {
             } else {
                 Reminder reminder = (Reminder) listItem;
                 viewHolder.tvName.setText(reminder.getName());
-                viewHolder.tvSubtitle.setText(reminder.isExam() ? R.string.exam : R.string.not_exam);
-                viewHolder.tvDate.setText(reminder.getDateString(mContext));
+                viewHolder.tvSubtitle.setText(
+                        reminder.getDateString(mContext) + ", "
+                                + reminder.getTimeString() + " ");
+                viewHolder.tvInfo.setText(reminder.getTypeString(mContext));
             }
 
             return convertView;
@@ -187,7 +189,7 @@ public class CourseListReminderFragment extends BaseListFragment {
         private class ViewHolder {
             TextView tvName;
             TextView tvSubtitle;
-            TextView tvDate;
+            TextView tvInfo;
         }
     }
 

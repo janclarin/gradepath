@@ -21,6 +21,7 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Reminder;
+import com.janclarin.gradepath.service.ReminderClient;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,6 +56,8 @@ public class ReminderDialogFragment extends BaseDialogFragment
     private Calendar mDateCalendar;
     private int mDefaultHour = 12;
     private int mDefaultMinutes = 0;
+
+    private ReminderClient mReminderClient;
 
     public ReminderDialogFragment() {
     }
@@ -99,12 +102,26 @@ public class ReminderDialogFragment extends BaseDialogFragment
         mDateCalendar = Calendar.getInstance();
         mDateCalendar.set(Calendar.HOUR_OF_DAY, mDefaultHour);
         mDateCalendar.set(Calendar.MINUTE, mDefaultMinutes);
+        mDateCalendar.set(Calendar.SECOND, 0);
+        mDateCalendar.set(Calendar.MILLISECOND, 0);
 
         // Set boolean to indicate it was opened from course fragment and not home.
         mOpenedFromCourse = getArguments().containsKey(MainActivity.COURSE_KEY);
 
         // Get reminder to update if it exists.
         mReminderToUpdate = (Reminder) getArguments().getSerializable(MainActivity.REMINDER_KEY);
+
+        // Create service client and bind our activity to it.
+        mReminderClient = new ReminderClient(getActivity());
+        mReminderClient.doBindService();
+    }
+
+    @Override
+    public void onStop() {
+        // Prevent activity from leaking.
+        if (mReminderClient != null)
+            mReminderClient.doUnbindService();
+        super.onStop();
     }
 
     @Override
@@ -220,8 +237,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
             public void onClick(View v) {
                 // Update the time.
                 timePickerDialog.updateTime(
-                        mDateCalendar.get(Calendar.HOUR), mDateCalendar.get(Calendar.MINUTE)
-                );
+                        mDateCalendar.get(Calendar.HOUR), mDateCalendar.get(Calendar.MINUTE));
                 timePickerDialog.show();
             }
         });
@@ -255,16 +271,21 @@ public class ReminderDialogFragment extends BaseDialogFragment
                     long courseId = ((Course) mCourseSpinner.getSelectedItem()).getId();
                     boolean isGraded = mCheckBoxGraded.isChecked();
 
+                    long reminderId;
                     if (mReminderToUpdate == null) {
                         // Insert task into mDatabase. false because it isn't completed yet.
-                        mDatabase.insertReminder(courseId, name, isGraded, false, mDateCalendar);
+                        reminderId = mDatabase.insertReminder(courseId, name, isGraded, false, mDateCalendar);
                         if (mListener != null) mListener.onReminderSaved(true);
                     } else {
                         // Update task.
-                        mDatabase.updateReminder(mReminderToUpdate.getId(), courseId, name, isGraded,
+                        reminderId = mReminderToUpdate.getId();
+                        mDatabase.updateReminder(reminderId, courseId, name, isGraded,
                                 mReminderToUpdate.isCompleted(), mDateCalendar);
                         if (mListener != null) mListener.onReminderSaved(false);
                     }
+
+                    // Set future notification.
+                    mReminderClient.setAlarmForNotification(mDatabase.getReminder(reminderId));
 
                     // Notify listeners that a task was saved.
                     alertDialog.dismiss();

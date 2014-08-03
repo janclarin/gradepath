@@ -37,7 +37,7 @@
         android:layout_toLeftOf="@id/tv_semester_information_label"
         android:gravity="right"
         android:singleLine="true"
-        android:textColor="@color/theme_primary_color"
+        android:textColor="@android:color/tertiary_text_light"
         android:textSize="20sp" />
 
 </RelativeLayout>

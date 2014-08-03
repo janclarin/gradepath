@@ -226,7 +226,7 @@ public class CourseDetailActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        ((CourseListReminderFragment) mAdapter.getTabFragment(1)).updateListItems();
+        ((CourseListReminderFragment) mAdapter.getTabFragment(2)).updateListItems();
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter {

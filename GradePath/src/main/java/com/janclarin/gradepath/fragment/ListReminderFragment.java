@@ -2,62 +2,44 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.LongSparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.activity.MainActivity;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CourseListReminderFragment extends BaseListFragment {
+public class ListReminderFragment extends BaseListFragment {
 
-    private FragmentListCourseReminderListener mListener;
+    private OnFragmentListTaskListener mListener;
+    private LongSparseArray<Course> mCoursesById;
 
-    // Selected Course object.
-    private Course mCourse;
+    public static ListReminderFragment newInstance() {
+        return new ListReminderFragment();
+    }
 
-    public CourseListReminderFragment() {
+    public ListReminderFragment() {
         // Required empty public constructor.
     }
 
-    /**
-     * Creates a new instance of this fragment.
-     *
-     * @return A new instance of fragment CourseDetailsFragment.
-     */
-    public static CourseListReminderFragment newInstance(Course course) {
-        CourseListReminderFragment fragment = new CourseListReminderFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(MainActivity.COURSE_KEY, course);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mCourse = (Course) getArguments().getSerializable(MainActivity.COURSE_KEY);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list_course_general, container, false);
-
-        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
-        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
-
-        return rootView;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -65,46 +47,38 @@ public class CourseListReminderFragment extends BaseListFragment {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_task_empty);
 
+        mCoursesById = new LongSparseArray<Course>();
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
-
-        showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
     public void updateListItems() {
         clearListItems();
 
-        long courseId = mCourse.getId();
-        List<Reminder> currentReminders = mDatabase.getCurrentReminders(courseId);
-        List<Reminder> pastReminders = mDatabase.getPastReminders(courseId);
+        // Get list of current courses.
+        List<Course> courses = mDatabase.getCurrentCourses();
+        List<Reminder> reminders = new ArrayList<Reminder>();
 
-        Collections.sort(pastReminders);
-        Collections.sort(currentReminders);
-
-        // Add current reminders.
-        if (currentReminders.size() > 0) {
-            mListItems.add(new Header(mContext.getString(R.string.list_reminders_upcoming)));
-            mListItems.addAll(currentReminders);
+        for (Course course : courses) {
+            reminders.addAll(mDatabase.getReminders(course.getId()));
+            mCoursesById.put(course.getId(), course);
         }
 
-        // Add past reminders.
-        if (pastReminders.size() > 0) {
-            mListItems.add(new Header(mContext.getString(R.string.list_reminders_past)));
-            mListItems.addAll(pastReminders);
-        }
+        Collections.sort(reminders);
+
+        mListItems.addAll(reminders);
 
         notifyAdapter();
 
-        // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
         if (mListener != null)
-            mListener.onListCourseReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
+            mListener.onListReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -124,10 +98,10 @@ public class CourseListReminderFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (FragmentListCourseReminderListener) activity;
+            mListener = (OnFragmentListTaskListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement FragmentListCourseTaskListener");
+                    + " must implement FragmentListTaskListener");
         }
     }
 
@@ -137,11 +111,18 @@ public class CourseListReminderFragment extends BaseListFragment {
         mListener = null;
     }
 
+    public interface OnFragmentListTaskListener {
+
+        /* Called when a task is going to be edited. */
+        public void onListReminderEdit(Reminder reminder);
+    }
+
     private class ListAdapter extends BaseListAdapter {
 
         @Override
         public int getItemViewType(int position) {
-            return getItem(position) instanceof Header ? ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
+            return mListItems.get(position) instanceof Header ?
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
         }
 
         @Override
@@ -158,10 +139,10 @@ public class CourseListReminderFragment extends BaseListFragment {
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general_card, parent, false);
+                            .inflate(R.layout.fragment_list_item_general, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.tvInfo = (TextView) convertView.findViewById(R.id.tv_information);
@@ -179,7 +160,9 @@ public class CourseListReminderFragment extends BaseListFragment {
                 viewHolder.tvName.setText(reminder.getName());
                 viewHolder.tvSubtitle.setText(
                         reminder.getDateString(mContext) + ", "
-                                + reminder.getTimeString() + " ");
+                                + reminder.getTimeString() + " "
+                                + getString(R.string.bullet) + " "
+                                + mCoursesById.get(reminder.getCourseId()).getName());
                 viewHolder.tvInfo.setText(reminder.getTypeString(mContext));
             }
 
@@ -191,16 +174,5 @@ public class CourseListReminderFragment extends BaseListFragment {
             TextView tvSubtitle;
             TextView tvInfo;
         }
-    }
-
-    /**
-     * Listeners.
-     */
-    public static interface FragmentListCourseReminderListener {
-
-        /**
-         * Called when a task is going to be updated.
-         */
-        public void onListCourseReminderEdit(Reminder reminder);
     }
 }

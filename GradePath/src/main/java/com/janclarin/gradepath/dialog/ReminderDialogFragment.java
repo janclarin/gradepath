@@ -41,7 +41,6 @@ public class ReminderDialogFragment extends BaseDialogFragment
      * Date formatter for the due date.
      */
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E, MMMM d, y");
-    private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
 
     private OnDialogReminderListener mListener;
     private Reminder mReminderToUpdate;
@@ -229,7 +228,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
         });
 
         // Set button to time.
-        mReminderTimeButton.setText(TIME_FORMAT.format(mDateCalendar.getTime()));
+        mReminderTimeButton.setText(Reminder.TIME_FORMAT.format(mDateCalendar.getTime()));
 
         // Set button click listener to show time picker dialog.
         mReminderTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +236,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
             public void onClick(View v) {
                 // Update the time.
                 timePickerDialog.updateTime(
-                        mDateCalendar.get(Calendar.HOUR), mDateCalendar.get(Calendar.MINUTE));
+                        mDateCalendar.get(Calendar.HOUR_OF_DAY), mDateCalendar.get(Calendar.MINUTE));
                 timePickerDialog.show();
             }
         });
@@ -335,7 +334,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
         mDateCalendar.set(Calendar.MINUTE, minute);
 
         // Update the reminder time button text.
-        mReminderTimeButton.setText(TIME_FORMAT.format(mDateCalendar.getTime()));
+        mReminderTimeButton.setText(Reminder.TIME_FORMAT.format(mDateCalendar.getTime()));
     }
 
     /**

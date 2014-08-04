@@ -1,8 +1,6 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +8,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -28,9 +28,9 @@ import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
-import com.janclarin.gradepath.fragment.ListAllCourseFragment;
-import com.janclarin.gradepath.fragment.ListAllGradeFragment;
-import com.janclarin.gradepath.fragment.ListAllReminderFragment;
+import com.janclarin.gradepath.fragment.ListCourseFragment;
+import com.janclarin.gradepath.fragment.ListGradeFragment;
+import com.janclarin.gradepath.fragment.ListReminderFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
@@ -47,9 +47,9 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends BaseActivity
         implements HomeFragment.FragmentHomeListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
-        ListAllCourseFragment.OnFragmentListCourseListener,
-        ListAllGradeFragment.OnFragmentListGradeListener,
-        ListAllReminderFragment.OnFragmentListTaskListener,
+        ListCourseFragment.OnFragmentListCourseListener,
+        ListGradeFragment.OnFragmentListGradeListener,
+        ListReminderFragment.OnFragmentListTaskListener,
         SemesterDialogFragment.OnDialogSemesterCallbacks,
         GradeDialogFragment.OnDialogGradeListener,
         ReminderDialogFragment.OnDialogReminderListener,
@@ -107,6 +107,7 @@ public class MainActivity extends BaseActivity
 
         // Set action bar title.
         mTitle = getString(mDrawerItems[mCurrentSelectedPosition].getTitle());
+
         getActionBar().setTitle(mTitle);
 
         // Select item from navigation drawer.
@@ -157,7 +158,6 @@ public class MainActivity extends BaseActivity
         // Drawer items.
         mDrawerItems = new DrawerItem[]{
                 new DrawerItem(R.string.title_fragment_home, R.drawable.home),
-                new DrawerItem(R.string.title_fragment_list_semesters, R.drawable.semester),
                 new DrawerItem(R.string.title_fragment_settings, R.drawable.settings)
         };
 
@@ -254,18 +254,12 @@ public class MainActivity extends BaseActivity
         // Get drawer item's fragment.
         mCurrentFragment = drawerItem.getFragment();
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (mCurrentFragment == null) {
             switch (position) {
                 case 0:
                     mCurrentFragment = HomeFragment.newInstance();
-                    break;
-                case 1:
-                    mCurrentFragment = ListSemesterFragment.newInstance();
-                    break;
-                case 2:
-                    mCurrentFragment = SettingsFragment.newInstance();
                     break;
                 default:
                     mCurrentFragment = new Fragment();
@@ -290,40 +284,28 @@ public class MainActivity extends BaseActivity
      * Refresh semester list.
      */
     private void refreshListSemester() {
-        ((ListSemesterFragment) mCurrentFragment).updateListItems();
+        ((HomeFragment) mCurrentFragment).refreshSemesterList();
     }
 
     /**
      * Refresh course list.
      */
     private void refreshListCourse() {
-        if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(false, true, false);
-        } else if (mCurrentFragment instanceof ListAllCourseFragment) {
-            ((ListAllCourseFragment) mCurrentFragment).updateListItems();
-        }
+        ((HomeFragment) mCurrentFragment).refreshCourseList();
     }
 
     /**
      * Refresh grade list.
      */
     private void refreshListGrade() {
-        if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(false, false, true);
-        } else if (mCurrentFragment instanceof ListAllGradeFragment) {
-            ((ListAllGradeFragment) mCurrentFragment).updateListItems();
-        }
+        ((HomeFragment) mCurrentFragment).refreshGradeList();
     }
 
     /**
      * Refresh reminder list.
      */
     private void refreshListReminder() {
-        if (mCurrentFragment instanceof HomeFragment) {
-            ((HomeFragment) mCurrentFragment).updateListItems(true, false, false);
-        } else if (mCurrentFragment instanceof ListAllReminderFragment) {
-            ((ListAllReminderFragment) mCurrentFragment).updateListItems();
-        }
+        ((HomeFragment) mCurrentFragment).refreshReminderList();
     }
 
     @Override
@@ -349,17 +331,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onHomeNewGrade() {
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog));
-        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
-    }
-
-    @Override
-    public void onHomeNewReminder() {
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_reminder_dialog));
-        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
+    public void onHomeNewSemester() {
+        SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
+                getString(R.string.title_new_semester_dialog));
+        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
     }
 
     @Override
@@ -368,49 +343,19 @@ public class MainActivity extends BaseActivity
         startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
     }
 
+
     @Override
-    public void onHomeAllGrades() {
-        // Go to grades fragment.
-        mCurrentFragment = ListAllGradeFragment.newInstance();
-        getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .replace(R.id.container, mCurrentFragment).commit();
-        getActionBar().setTitle(R.string.title_fragment_list_grades);
-        // Enable up arrow and disable navigation drawer.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    public void onHomeNewGrade() {
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_new_grade_dialog));
+        gradeDialog.show(getSupportFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
-    public void onHomeAllReminders() {
-        // Go to reminders fragment.
-        mCurrentFragment = ListAllReminderFragment.newInstance();
-        getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .replace(R.id.container, mCurrentFragment).commit();
-        getActionBar().setTitle(R.string.title_fragment_list_reminders);
-        // Enable up arrow and disable navigation drawer.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    @Override
-    public void onHomeAllCourses() {
-        // Go to courses fragment.
-        mCurrentFragment = ListAllCourseFragment.newInstance();
-        getFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .replace(R.id.container, mCurrentFragment).commit();
-        getActionBar().setTitle(R.string.title_fragment_list_courses);
-        // Enable up arrow and disable navigation drawer.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    public void onHomeNewReminder() {
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
+                getString(R.string.title_new_reminder_dialog));
+        reminderDialog.show(getSupportFragmentManager(), NEW_REMINDER_TAG);
     }
 
     @Override
@@ -437,17 +382,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onListSemesterNew() {
-        SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
-    }
-
-    @Override
     public void onListSemesterEdit(Semester semester) {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_edit_semester_dialog), semester);
-        semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
+        semesterDialog.show(getSupportFragmentManager(), EDIT_SEMESTER_TAG);
     }
 
     @Override
@@ -477,30 +415,6 @@ public class MainActivity extends BaseActivity
                     }
                 })
                 .show();
-    }
-
-    /* ListCourseFragment listeners */
-    @Override
-    public void onListCourseNew() {
-        // Check if there are any semesters. If not, display message.
-        Intent intent = new Intent(this, CourseEditActivity.class);
-        startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
-    }
-
-    @Override
-    public void onListCourseNewGrade(Course course) {
-        // Show new grade dialog.
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog), course);
-        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
-    }
-
-    @Override
-    public void onListCourseNewReminder(Course course) {
-        // Show new task dialog.
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment
-                .newInstance(getString(R.string.title_new_reminder_dialog), course);
-        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
     }
 
     @Override
@@ -545,20 +459,12 @@ public class MainActivity extends BaseActivity
                 .show();
     }
 
-    /* ListGradeFragment listeners */
-    @Override
-    public void onListGradeNew() {
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog));
-        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
-    }
-
     @Override
     public void onListGradeEdit(Grade grade) {
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_dialog), grade);
-        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
+        gradeDialog.show(getSupportFragmentManager(), EDIT_GRADE_TAG);
     }
 
     @Override
@@ -570,19 +476,11 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onListReminderNew() {
-        // Show new reminder dialog.
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_reminder_dialog));
-        reminderDialog.show(getFragmentManager(), NEW_REMINDER_TAG);
-    }
-
-    @Override
     public void onListReminderEdit(Reminder reminder) {
         // Show edit reminder dialog.
         ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_edit_reminder_dialog), reminder);
-        reminderDialog.show(getFragmentManager(), EDIT_REMINDER_TAG);
+        reminderDialog.show(getSupportFragmentManager(), EDIT_REMINDER_TAG);
     }
 
     /* Dialog listeners */

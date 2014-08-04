@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="theme_primary_color">#47b5b5</color>
-    <color name="theme_primary_color_dark">#327f7f</color>
-    <color name="theme_primary_color_light">#c8e9e9</color>
     <color name="theme_primary_color_see_through">#cc47b5b5</color>
+    <color name="theme_primary_color_light">#c8e9e9</color>
     <color name="theme_primary_color_light_see_through">#ccc8e9e9</color>
+    <color name="theme_primary_color_dark">#327f7f</color>
     <color name="theme_primary_color_dark_see_through">#cc327f7f</color>
-    <color name="theme_secondary_color">#ffcc99</color>
-    <color name="theme_secondary_color_dark">#ffe6b88a</color>
-    <color name="theme_secondary_color_light">#ffe6cc</color>
-    <color name="theme_secondary_color_see_through">#e6ffcc99</color>
-    <color name="theme_secondary_color_light_see_through">#e6ffe6cc</color>
-    <color name="theme_secondary_color_dark_see_through">#e6e6b88a</color>
+   
+    <color name="theme_secondary_color">#ffb296</color>
+    <color name="theme_secondary_color_see_through">#e6ffb296</color>
+    <color name="theme_secondary_color_light">#ffd8ca</color>
+    <color name="theme_secondary_color_light_see_through">#e6ffd8ca</color>
+    <color name="theme_secondary_color_dark">#e6a087</color>
+    <color name="theme_secondary_color_dark_see_through">#e6e6a087</color>
 
     <color name="notification_color">#ff47b5b5</color>
 

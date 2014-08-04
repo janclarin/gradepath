@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,15 +20,15 @@ import java.util.List;
 /**
  * Course list fragment.
  */
-public class ListAllCourseFragment extends BaseListFragment {
+public class ListCourseFragment extends BaseListFragment {
 
     private OnFragmentListCourseListener mListener;
 
-    public static ListAllCourseFragment newInstance() {
-        return new ListAllCourseFragment();
+    public static ListCourseFragment newInstance() {
+        return new ListCourseFragment();
     }
 
-    public ListAllCourseFragment() {
+    public ListCourseFragment() {
         // Required empty public constructor.
     }
 
@@ -44,12 +41,6 @@ public class ListAllCourseFragment extends BaseListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_course_empty);
-        mAddItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) mListener.onListCourseNew();
-            }
-        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -122,40 +113,10 @@ public class ListAllCourseFragment extends BaseListFragment {
         mListener = null;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate options menu if it hasn't been already.
-        if (!menu.hasVisibleItems()) inflater.inflate(R.menu.list_course, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: Handle menu options.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-            case R.id.action_list_course_sort:
-                break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Interface to be implemented by all listener classes.
      */
     public interface OnFragmentListCourseListener {
-
-        /* Called when the add item button is clicked. */
-        public void onListCourseNew();
-
-        /* Called when the add grade button is clicked under a course. */
-        public void onListCourseNewGrade(Course course);
-
-        /* Called when the add task button is clicked under a course. */
-        public void onListCourseNewReminder(Course course);
 
         /* Called when the course item is clicked. Opens course detail fragment. */
         public void onListCourseViewDetails(Course course);
@@ -188,7 +149,7 @@ public class ListAllCourseFragment extends BaseListFragment {
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
+                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.fragment_list_item_course, parent, false);

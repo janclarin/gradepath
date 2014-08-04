@@ -37,12 +37,6 @@ public class ListSemesterFragment extends BaseListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_semester_empty);
-        mAddItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) mListener.onListSemesterNew();
-            }
-        });
 
         updateListItems();
         mAdapter = new ListAdapter();
@@ -130,9 +124,6 @@ public class ListSemesterFragment extends BaseListFragment {
      */
     public interface OnFragmentListSemesterListener {
 
-        /* Called when add item button is clicked. */
-        public void onListSemesterNew();
-
         /* Called when contextual action bar edit button is clicked. */
         public void onListSemesterEdit(Semester semester);
 
@@ -159,7 +150,7 @@ public class ListSemesterFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general_two, parent, false);
+                            .inflate(R.layout.fragment_list_header_general, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                     viewHolder.tvInformation = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {

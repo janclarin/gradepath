@@ -71,7 +71,7 @@ public class NotifyService extends Service {
                         .setSmallIcon(R.drawable.notification_icon)
                         .setContentTitle(reminder.getName())
                         .setContentText(getString(R.string.reminder))
-                        .setVibrate(new long[]{0, 100, 70})
+                        .setVibrate(new long[]{0, 100, 70, 100, 70, 100, 70})
                         .setContentIntent(pendingIntent)
                         .setLights(Color.alpha(R.color.notification_color), 500, 100).build();
 

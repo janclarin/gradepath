@@ -1,11 +1,11 @@
 package com.janclarin.gradepath.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.janclarin.gradepath.database.DatabaseFacade;
 
-abstract public class BaseActivity extends Activity {
+abstract public class BaseActivity extends FragmentActivity {
     protected static final String NEW_SEMESTER_TAG = "NewSemesterDialog";
     protected static final String EDIT_SEMESTER_TAG = "EditSemesterDialog";
     protected static final String NEW_GRADE_TAG = "NewGradeDialog";

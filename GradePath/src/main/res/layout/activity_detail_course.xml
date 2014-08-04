@@ -2,23 +2,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.janclarin.gradepath.activity.CourseDetailActivity">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageButton
-        android:id="@+id/btn_add_item"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/bg_circle_button"
-        android:contentDescription="@string/cd_add_button"
-        android:padding="16dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/list_add_item" />
-</FrameLayout>
+    tools:context="com.janclarin.gradepath.activity.CourseDetailActivity"></FrameLayout>

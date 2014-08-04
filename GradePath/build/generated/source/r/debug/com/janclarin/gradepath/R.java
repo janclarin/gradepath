@@ -12,30 +12,128 @@ public final class R {
         public static final int seasons_array=0x7f040000;
     }
     public static final class attr {
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsDividerColor=0x7f010002;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsDividerPadding=0x7f010005;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsIndicatorColor=0x7f010000;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsIndicatorHeight=0x7f010003;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsScrollOffset=0x7f010007;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsShouldExpand=0x7f010009;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int pstsTabBackground=0x7f010008;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsTabPaddingLeftRight=0x7f010006;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsTextAllCaps=0x7f01000a;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsUnderlineColor=0x7f010001;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int pstsUnderlineHeight=0x7f010004;
     }
     public static final class color {
         public static final int actionbar_divider=0x7f050000;
-        public static final int card_fill=0x7f050001;
-        public static final int card_fill_pressed=0x7f050002;
-        public static final int course_urgency_0=0x7f050003;
-        public static final int course_urgency_1=0x7f050004;
-        public static final int course_urgency_2=0x7f050005;
-        public static final int notification_color=0x7f050006;
-        public static final int shadow=0x7f050007;
-        public static final int shadow_pressed=0x7f050008;
-        public static final int theme_primary_color=0x7f050009;
-        public static final int theme_primary_color_dark=0x7f05000a;
-        public static final int theme_primary_color_dark_see_through=0x7f05000b;
-        public static final int theme_primary_color_light=0x7f05000c;
-        public static final int theme_primary_color_light_see_through=0x7f05000d;
-        public static final int theme_primary_color_see_through=0x7f05000e;
-        public static final int theme_secondary_color=0x7f05000f;
-        public static final int theme_secondary_color_dark=0x7f050010;
-        public static final int theme_secondary_color_dark_see_through=0x7f050011;
-        public static final int theme_secondary_color_light=0x7f050012;
-        public static final int theme_secondary_color_light_see_through=0x7f050013;
-        public static final int theme_secondary_color_see_through=0x7f050014;
-        public static final int white_60_opacity=0x7f050015;
+        public static final int background_tab_pressed=0x7f050001;
+        public static final int card_fill=0x7f050002;
+        public static final int card_fill_pressed=0x7f050003;
+        public static final int course_urgency_0=0x7f050004;
+        public static final int course_urgency_1=0x7f050005;
+        public static final int course_urgency_2=0x7f050006;
+        public static final int notification_color=0x7f050007;
+        public static final int shadow=0x7f050008;
+        public static final int shadow_pressed=0x7f050009;
+        public static final int theme_primary_color=0x7f05000a;
+        public static final int theme_primary_color_dark=0x7f05000b;
+        public static final int theme_primary_color_dark_see_through=0x7f05000c;
+        public static final int theme_primary_color_light=0x7f05000d;
+        public static final int theme_primary_color_light_see_through=0x7f05000e;
+        public static final int theme_primary_color_see_through=0x7f05000f;
+        public static final int theme_secondary_color=0x7f050010;
+        public static final int theme_secondary_color_dark=0x7f050011;
+        public static final int theme_secondary_color_dark_see_through=0x7f050012;
+        public static final int theme_secondary_color_light=0x7f050013;
+        public static final int theme_secondary_color_light_see_through=0x7f050014;
+        public static final int theme_secondary_color_see_through=0x7f050015;
+        public static final int white_60_opacity=0x7f050016;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f060000;
@@ -44,167 +142,148 @@ public final class R {
     }
     public static final class drawable {
         public static final int ab_bottom_solid_gradepath=0x7f020000;
-        public static final int ab_solid_gradepath=0x7f020001;
-        public static final int ab_stacked_solid_gradepath=0x7f020002;
-        public static final int ab_texture_tile_gradepath=0x7f020003;
-        public static final int ab_transparent_gradepath=0x7f020004;
-        public static final int add_list_item=0x7f020005;
-        public static final int bg_card=0x7f020006;
-        public static final int bg_card_bottom=0x7f020007;
-        public static final int bg_card_default=0x7f020008;
-        public static final int bg_card_pressed=0x7f020009;
-        public static final int bg_card_rounded=0x7f02000a;
-        public static final int bg_card_rounded_default=0x7f02000b;
-        public static final int bg_card_rounded_pressed=0x7f02000c;
-        public static final int bg_circle_button=0x7f02000d;
-        public static final int bg_circle_button_default=0x7f02000e;
-        public static final int bg_circle_button_pressed=0x7f02000f;
-        public static final int bg_rounded_button=0x7f020010;
-        public static final int bg_rounded_button_default=0x7f020011;
-        public static final int bg_rounded_button_pressed=0x7f020012;
-        public static final int btn_cab_done_default_gradepath=0x7f020013;
-        public static final int btn_cab_done_focused_gradepath=0x7f020014;
-        public static final int btn_cab_done_gradepath=0x7f020015;
-        public static final int btn_cab_done_pressed_gradepath=0x7f020016;
-        public static final int cab_background_bottom_gradepath=0x7f020017;
-        public static final int cab_background_top_gradepath=0x7f020018;
-        public static final int cancel=0x7f020019;
-        public static final int color_actionbar_indicator=0x7f02001a;
-        public static final int color_white_opacity=0x7f02001b;
-        public static final int confirm=0x7f02001c;
-        public static final int course=0x7f02001d;
-        public static final int drawer_shadow=0x7f02001e;
-        public static final int edit=0x7f02001f;
-        public static final int floating_add_button=0x7f020020;
-        public static final int grade=0x7f020021;
-        public static final int home=0x7f020022;
-        public static final int ic_action_cancel=0x7f020023;
-        public static final int ic_action_contextual_delete=0x7f020024;
-        public static final int ic_action_contextual_edit=0x7f020025;
-        public static final int ic_action_done=0x7f020026;
-        public static final int ic_action_edit_course=0x7f020027;
-        public static final int ic_action_list_course_sort=0x7f020028;
-        public static final int ic_action_new_course=0x7f020029;
-        public static final int ic_action_new_grade=0x7f02002a;
-        public static final int ic_action_overflow=0x7f02002b;
-        public static final int ic_drawer=0x7f02002c;
-        public static final int ic_grade_component_add=0x7f02002d;
-        public static final int ic_grade_component_remove=0x7f02002e;
-        public static final int ic_launcher=0x7f02002f;
-        public static final int list_add_course=0x7f020030;
-        public static final int list_add_grade=0x7f020031;
-        public static final int list_add_item=0x7f020032;
-        public static final int list_add_reminder=0x7f020033;
-        public static final int list_focused_gradepath=0x7f020034;
-        public static final int list_pressed_gradepath=0x7f020035;
-        public static final int menu_dropdown_panel_gradepath=0x7f020036;
-        public static final int notification_icon=0x7f020037;
-        public static final int notification_reminder=0x7f020038;
-        public static final int overflow=0x7f020039;
-        public static final int progress_bg_gradepath=0x7f02003a;
-        public static final int progress_horizontal_gradepath=0x7f02003b;
-        public static final int progress_primary_gradepath=0x7f02003c;
-        public static final int progress_secondary_gradepath=0x7f02003d;
-        public static final int rectangle_border=0x7f02003e;
-        public static final int reminder=0x7f02003f;
-        public static final int row_selector=0x7f020040;
-        public static final int selectable_background_gradepath=0x7f020041;
-        public static final int semester=0x7f020042;
-        public static final int settings=0x7f020043;
-        public static final int spinner_ab_default_gradepath=0x7f020044;
-        public static final int spinner_ab_disabled_gradepath=0x7f020045;
-        public static final int spinner_ab_focused_gradepath=0x7f020046;
-        public static final int spinner_ab_pressed_gradepath=0x7f020047;
-        public static final int spinner_background_ab_gradepath=0x7f020048;
-        public static final int tab_indicator_ab_gradepath=0x7f020049;
-        public static final int tab_selected_focused_gradepath=0x7f02004a;
-        public static final int tab_selected_gradepath=0x7f02004b;
-        public static final int tab_selected_pressed_gradepath=0x7f02004c;
-        public static final int tab_unselected_focused_gradepath=0x7f02004d;
-        public static final int tab_unselected_gradepath=0x7f02004e;
-        public static final int tab_unselected_pressed_gradepath=0x7f02004f;
-        public static final int welcome=0x7f020050;
+        public static final int ab_stacked_solid_gradepath=0x7f020001;
+        public static final int ab_texture_tile_gradepath=0x7f020002;
+        public static final int ab_transparent_gradepath=0x7f020003;
+        public static final int background_tab=0x7f020004;
+        public static final int bg_card=0x7f020005;
+        public static final int bg_card_bottom=0x7f020006;
+        public static final int bg_card_default=0x7f020007;
+        public static final int bg_card_pressed=0x7f020008;
+        public static final int bg_card_rounded=0x7f020009;
+        public static final int bg_card_rounded_default=0x7f02000a;
+        public static final int bg_card_rounded_pressed=0x7f02000b;
+        public static final int bg_circle_button=0x7f02000c;
+        public static final int bg_circle_button_default=0x7f02000d;
+        public static final int bg_circle_button_pressed=0x7f02000e;
+        public static final int bg_rounded_button=0x7f02000f;
+        public static final int bg_rounded_button_default=0x7f020010;
+        public static final int bg_rounded_button_pressed=0x7f020011;
+        public static final int btn_cab_done_default_gradepath=0x7f020012;
+        public static final int btn_cab_done_focused_gradepath=0x7f020013;
+        public static final int btn_cab_done_gradepath=0x7f020014;
+        public static final int btn_cab_done_pressed_gradepath=0x7f020015;
+        public static final int cab_background_bottom_gradepath=0x7f020016;
+        public static final int cab_background_top_gradepath=0x7f020017;
+        public static final int cancel=0x7f020018;
+        public static final int color_tab_indicator=0x7f020019;
+        public static final int color_white_opacity=0x7f02001a;
+        public static final int confirm=0x7f02001b;
+        public static final int course=0x7f02001c;
+        public static final int drawer_shadow=0x7f02001d;
+        public static final int edit=0x7f02001e;
+        public static final int floating_add_button=0x7f02001f;
+        public static final int grade=0x7f020020;
+        public static final int home=0x7f020021;
+        public static final int ic_action_cancel=0x7f020022;
+        public static final int ic_action_contextual_delete=0x7f020023;
+        public static final int ic_action_contextual_edit=0x7f020024;
+        public static final int ic_action_done=0x7f020025;
+        public static final int ic_action_edit_course=0x7f020026;
+        public static final int ic_action_list_course_sort=0x7f020027;
+        public static final int ic_action_overflow=0x7f020028;
+        public static final int ic_drawer=0x7f020029;
+        public static final int ic_grade_component_add=0x7f02002a;
+        public static final int ic_grade_component_remove=0x7f02002b;
+        public static final int ic_launcher=0x7f02002c;
+        public static final int list_add_course=0x7f02002d;
+        public static final int list_add_grade=0x7f02002e;
+        public static final int list_add_item=0x7f02002f;
+        public static final int list_add_reminder=0x7f020030;
+        public static final int list_focused_gradepath=0x7f020031;
+        public static final int list_pressed_gradepath=0x7f020032;
+        public static final int menu_dropdown_panel_gradepath=0x7f020033;
+        public static final int notification_icon=0x7f020034;
+        public static final int progress_bg_gradepath=0x7f020035;
+        public static final int progress_horizontal_gradepath=0x7f020036;
+        public static final int progress_primary_gradepath=0x7f020037;
+        public static final int progress_secondary_gradepath=0x7f020038;
+        public static final int rectangle_border=0x7f020039;
+        public static final int reminder=0x7f02003a;
+        public static final int row_selector=0x7f02003b;
+        public static final int selectable_background_gradepath=0x7f02003c;
+        public static final int settings=0x7f02003d;
+        public static final int spinner_ab_default_gradepath=0x7f02003e;
+        public static final int spinner_ab_disabled_gradepath=0x7f02003f;
+        public static final int spinner_ab_focused_gradepath=0x7f020040;
+        public static final int spinner_ab_pressed_gradepath=0x7f020041;
+        public static final int spinner_background_ab_gradepath=0x7f020042;
+        public static final int tab_indicator_ab_gradepath=0x7f020043;
+        public static final int tab_selected_focused_gradepath=0x7f020044;
+        public static final int tab_selected_gradepath=0x7f020045;
+        public static final int tab_selected_pressed_gradepath=0x7f020046;
+        public static final int tab_unselected_focused_gradepath=0x7f020047;
+        public static final int tab_unselected_gradepath=0x7f020048;
+        public static final int tab_unselected_pressed_gradepath=0x7f020049;
+        public static final int welcome=0x7f02004a;
     }
     public static final class id {
-        public static final int action_list_course_sort=0x7f0a0048;
-        public static final int action_list_course_sort_alphabet_ascending=0x7f0a0049;
-        public static final int action_list_course_sort_alphabet_descending=0x7f0a004a;
-        public static final int action_list_semester_sort=0x7f0a004d;
+        public static final int action_list_course_sort=0x7f0a003b;
+        public static final int action_list_course_sort_alphabet_ascending=0x7f0a003c;
+        public static final int action_list_course_sort_alphabet_descending=0x7f0a003d;
+        public static final int action_list_semester_sort=0x7f0a0040;
         public static final int actionbar_cancel=0x7f0a0000;
         public static final int actionbar_done=0x7f0a0001;
-        public static final int btn_add_course=0x7f0a003a;
-        public static final int btn_add_grade=0x7f0a0039;
-        public static final int btn_add_grade_component=0x7f0a000d;
-        public static final int btn_add_item=0x7f0a0004;
-        public static final int btn_add_reminder=0x7f0a0038;
-        public static final int btn_add_semester=0x7f0a0006;
-        public static final int btn_all=0x7f0a003f;
-        public static final int btn_dialog_date=0x7f0a002b;
-        public static final int btn_dialog_semester_last_day=0x7f0a0031;
-        public static final int btn_dialog_time=0x7f0a0028;
-        public static final int btn_edit_grade_component=0x7f0a0010;
-        public static final int btn_remove_grade_component=0x7f0a000e;
-        public static final int btn_show_add_options=0x7f0a0037;
-        public static final int btn_view_course=0x7f0a0043;
-        public static final int cb_dialog_semester_current=0x7f0a002e;
-        public static final int cb_graded=0x7f0a0025;
-        public static final int container=0x7f0a0015;
-        public static final int divider=0x7f0a0041;
-        public static final int divider_grade_component=0x7f0a000f;
-        public static final int drawer_layout=0x7f0a0014;
-        public static final int et_course_name=0x7f0a0008;
-        public static final int et_dialog_semester_gpa=0x7f0a002f;
-        public static final int et_grade_component_name=0x7f0a0021;
-        public static final int et_grade_component_number_of_items=0x7f0a0023;
-        public static final int et_grade_component_weight=0x7f0a0022;
-        public static final int et_grade_name=0x7f0a0018;
-        public static final int et_grade_possible=0x7f0a001c;
-        public static final int et_grade_received=0x7f0a001b;
-        public static final int et_instructor_email=0x7f0a000a;
-        public static final int et_instructor_name=0x7f0a0009;
-        public static final int et_reminder_name=0x7f0a0024;
-        public static final int grade=0x7f0a003e;
-        public static final int ll_grade=0x7f0a001a;
-        public static final int ll_grade_components=0x7f0a000c;
-        public static final int ll_list_items=0x7f0a0042;
-        public static final int lv_list_items=0x7f0a0036;
-        public static final int lv_navigation_drawer=0x7f0a0016;
-        public static final int menu_contextual_delete=0x7f0a004c;
-        public static final int menu_contextual_edit=0x7f0a004b;
-        public static final int semester_header=0x7f0a0032;
-        public static final int set_semester_to_current=0x7f0a004e;
-        public static final int spn_dialog_grade_components=0x7f0a0020;
-        public static final int spn_dialog_grade_courses=0x7f0a001e;
-        public static final int spn_dialog_reminder_courses=0x7f0a0027;
-        public static final int spn_dialog_semester_season=0x7f0a002d;
-        public static final int spn_dialog_semester_year=0x7f0a002c;
-        public static final int spn_semester=0x7f0a0007;
+        public static final int btn_add_grade_component=0x7f0a000b;
+        public static final int btn_add_item=0x7f0a0032;
+        public static final int btn_add_semester=0x7f0a0004;
+        public static final int btn_dialog_date=0x7f0a0029;
+        public static final int btn_dialog_semester_last_day=0x7f0a002f;
+        public static final int btn_dialog_time=0x7f0a0026;
+        public static final int btn_edit_grade_component=0x7f0a000e;
+        public static final int btn_remove_grade_component=0x7f0a000c;
+        public static final int cb_dialog_semester_current=0x7f0a002c;
+        public static final int cb_graded=0x7f0a0023;
+        public static final int container=0x7f0a0013;
+        public static final int divider_grade_component=0x7f0a000d;
+        public static final int drawer_layout=0x7f0a0012;
+        public static final int et_course_name=0x7f0a0006;
+        public static final int et_dialog_semester_gpa=0x7f0a002d;
+        public static final int et_grade_component_name=0x7f0a001f;
+        public static final int et_grade_component_number_of_items=0x7f0a0021;
+        public static final int et_grade_component_weight=0x7f0a0020;
+        public static final int et_grade_name=0x7f0a0016;
+        public static final int et_grade_possible=0x7f0a001a;
+        public static final int et_grade_received=0x7f0a0019;
+        public static final int et_instructor_email=0x7f0a0008;
+        public static final int et_instructor_name=0x7f0a0007;
+        public static final int et_reminder_name=0x7f0a0022;
+        public static final int ll_grade=0x7f0a0018;
+        public static final int ll_grade_components=0x7f0a000a;
+        public static final int lv_list_items=0x7f0a0033;
+        public static final int lv_navigation_drawer=0x7f0a0014;
+        public static final int menu_contextual_delete=0x7f0a003f;
+        public static final int menu_contextual_edit=0x7f0a003e;
+        public static final int set_semester_to_current=0x7f0a0041;
+        public static final int spn_dialog_grade_components=0x7f0a001e;
+        public static final int spn_dialog_grade_courses=0x7f0a001c;
+        public static final int spn_dialog_reminder_courses=0x7f0a0025;
+        public static final int spn_dialog_semester_season=0x7f0a002b;
+        public static final int spn_dialog_semester_year=0x7f0a002a;
+        public static final int spn_semester=0x7f0a0005;
         public static final int tv_actionbar_done=0x7f0a0002;
-        public static final int tv_card_title=0x7f0a0040;
-        public static final int tv_course_information=0x7f0a0005;
-        public static final int tv_dialog_date_header=0x7f0a002a;
-        public static final int tv_dialog_grade_component_header=0x7f0a001f;
-        public static final int tv_dialog_grade_course_header=0x7f0a001d;
-        public static final int tv_dialog_grade_header=0x7f0a0019;
-        public static final int tv_dialog_reminder_course_header=0x7f0a0026;
-        public static final int tv_dialog_semester_last_day_header=0x7f0a0030;
-        public static final int tv_dialog_time_header=0x7f0a0029;
-        public static final int tv_drawer_list_item=0x7f0a0045;
-        public static final int tv_grade_components_header=0x7f0a000b;
-        public static final int tv_grade_name=0x7f0a0044;
-        public static final int tv_information=0x7f0a0011;
-        public static final int tv_instructor_email=0x7f0a0017;
-        public static final int tv_list_empty=0x7f0a003b;
-        public static final int tv_name=0x7f0a0012;
-        public static final int tv_name_header=0x7f0a003c;
-        public static final int tv_name_sub_header=0x7f0a003d;
-        public static final int tv_semester_days_left=0x7f0a0035;
-        public static final int tv_semester_days_left_header=0x7f0a0034;
-        public static final int tv_semester_information=0x7f0a0047;
-        public static final int tv_semester_information_label=0x7f0a0046;
-        public static final int tv_semester_name=0x7f0a0033;
-        public static final int tv_subtitle=0x7f0a0013;
-        public static final int viewPager=0x7f0a0003;
+        public static final int tv_course_information=0x7f0a0003;
+        public static final int tv_dialog_date_header=0x7f0a0028;
+        public static final int tv_dialog_grade_component_header=0x7f0a001d;
+        public static final int tv_dialog_grade_course_header=0x7f0a001b;
+        public static final int tv_dialog_grade_header=0x7f0a0017;
+        public static final int tv_dialog_reminder_course_header=0x7f0a0024;
+        public static final int tv_dialog_semester_last_day_header=0x7f0a002e;
+        public static final int tv_dialog_time_header=0x7f0a0027;
+        public static final int tv_drawer_list_item=0x7f0a0037;
+        public static final int tv_grade_components_header=0x7f0a0009;
+        public static final int tv_information=0x7f0a000f;
+        public static final int tv_instructor_email=0x7f0a0015;
+        public static final int tv_list_empty=0x7f0a0034;
+        public static final int tv_name=0x7f0a0010;
+        public static final int tv_name_header=0x7f0a0035;
+        public static final int tv_name_sub_header=0x7f0a0036;
+        public static final int tv_semester_information=0x7f0a003a;
+        public static final int tv_semester_information_label=0x7f0a0039;
+        public static final int tv_semester_name=0x7f0a0038;
+        public static final int tv_subtitle=0x7f0a0011;
+        public static final int viewPager=0x7f0a0031;
+        public static final int viewPagerTabs=0x7f0a0030;
     }
     public static final class layout {
         public static final int actionbar_cancel_button=0x7f030000;
@@ -220,22 +299,14 @@ public final class R {
         public static final int fragment_dialog_reminder=0x7f03000a;
         public static final int fragment_dialog_semester=0x7f03000b;
         public static final int fragment_home=0x7f03000c;
-        public static final int fragment_list_course_general=0x7f03000d;
-        public static final int fragment_list_general=0x7f03000e;
-        public static final int fragment_list_header_general=0x7f03000f;
-        public static final int fragment_list_header_general_two=0x7f030010;
-        public static final int fragment_list_item_course=0x7f030011;
-        public static final int fragment_list_item_general=0x7f030012;
-        public static final int fragment_list_item_general_card=0x7f030013;
-        public static final int fragment_list_item_grade=0x7f030014;
-        public static final int fragment_list_item_home=0x7f030015;
-        public static final int fragment_list_item_home_course=0x7f030016;
-        public static final int fragment_list_item_home_general=0x7f030017;
-        public static final int fragment_list_item_home_text=0x7f030018;
-        public static final int fragment_list_item_navigation_drawer=0x7f030019;
-        public static final int fragment_list_item_semester=0x7f03001a;
-        public static final int fragment_main=0x7f03001b;
-        public static final int fragment_settings=0x7f03001c;
+        public static final int fragment_list_general=0x7f03000d;
+        public static final int fragment_list_header_general=0x7f03000e;
+        public static final int fragment_list_item_course=0x7f03000f;
+        public static final int fragment_list_item_general=0x7f030010;
+        public static final int fragment_list_item_navigation_drawer=0x7f030011;
+        public static final int fragment_list_item_semester=0x7f030012;
+        public static final int fragment_main=0x7f030013;
+        public static final int fragment_settings=0x7f030014;
     }
     public static final class menu {
         public static final int detail_course=0x7f090000;
@@ -402,15 +473,215 @@ public final class R {
         public static final int PopupMenu_Gradepath=0x7f080007;
         public static final int ProgressBar_Gradepath=0x7f080008;
         public static final int Theme_Gradepath=0x7f080009;
-        public static final int cardView=0x7f08000a;
-        public static final int checkBox=0x7f08000b;
-        public static final int dialogPrompt=0x7f08000c;
-        public static final int emptyListTextView=0x7f08000d;
-        public static final int headerTextView=0x7f08000e;
-        public static final int listHeaderTextView=0x7f08000f;
+        public static final int checkBox=0x7f08000a;
+        public static final int dialogPrompt=0x7f08000b;
+        public static final int emptyListTextView=0x7f08000c;
+        public static final int headerTextView=0x7f08000d;
+        public static final int listHeaderTextView=0x7f08000e;
+        public static final int listItem=0x7f08000f;
         public static final int listItemButton=0x7f080010;
         public static final int roundedCardView=0x7f080011;
         public static final int spinnerButton=0x7f080012;
         public static final int subtitleTextView=0x7f080013;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a PagerSlidingTabStrip.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsDividerColor com.janclarin.gradepath:pstsDividerColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsDividerPadding com.janclarin.gradepath:pstsDividerPadding}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsIndicatorColor com.janclarin.gradepath:pstsIndicatorColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsIndicatorHeight com.janclarin.gradepath:pstsIndicatorHeight}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsScrollOffset com.janclarin.gradepath:pstsScrollOffset}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsShouldExpand com.janclarin.gradepath:pstsShouldExpand}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsTabBackground com.janclarin.gradepath:pstsTabBackground}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsTabPaddingLeftRight com.janclarin.gradepath:pstsTabPaddingLeftRight}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsTextAllCaps com.janclarin.gradepath:pstsTextAllCaps}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsUnderlineColor com.janclarin.gradepath:pstsUnderlineColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #PagerSlidingTabStrip_pstsUnderlineHeight com.janclarin.gradepath:pstsUnderlineHeight}</code></td><td></td></tr>
+           </table>
+           @see #PagerSlidingTabStrip_pstsDividerColor
+           @see #PagerSlidingTabStrip_pstsDividerPadding
+           @see #PagerSlidingTabStrip_pstsIndicatorColor
+           @see #PagerSlidingTabStrip_pstsIndicatorHeight
+           @see #PagerSlidingTabStrip_pstsScrollOffset
+           @see #PagerSlidingTabStrip_pstsShouldExpand
+           @see #PagerSlidingTabStrip_pstsTabBackground
+           @see #PagerSlidingTabStrip_pstsTabPaddingLeftRight
+           @see #PagerSlidingTabStrip_pstsTextAllCaps
+           @see #PagerSlidingTabStrip_pstsUnderlineColor
+           @see #PagerSlidingTabStrip_pstsUnderlineHeight
+         */
+        public static final int[] PagerSlidingTabStrip = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
+            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007,
+            0x7f010008, 0x7f010009, 0x7f01000a
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsDividerColor}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsDividerColor
+        */
+        public static final int PagerSlidingTabStrip_pstsDividerColor = 2;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsDividerPadding}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsDividerPadding
+        */
+        public static final int PagerSlidingTabStrip_pstsDividerPadding = 5;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsIndicatorColor}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsIndicatorColor
+        */
+        public static final int PagerSlidingTabStrip_pstsIndicatorColor = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsIndicatorHeight}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsIndicatorHeight
+        */
+        public static final int PagerSlidingTabStrip_pstsIndicatorHeight = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsScrollOffset}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsScrollOffset
+        */
+        public static final int PagerSlidingTabStrip_pstsScrollOffset = 7;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsShouldExpand}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsShouldExpand
+        */
+        public static final int PagerSlidingTabStrip_pstsShouldExpand = 9;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsTabBackground}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.janclarin.gradepath:pstsTabBackground
+        */
+        public static final int PagerSlidingTabStrip_pstsTabBackground = 8;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsTabPaddingLeftRight}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsTabPaddingLeftRight
+        */
+        public static final int PagerSlidingTabStrip_pstsTabPaddingLeftRight = 6;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsTextAllCaps}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsTextAllCaps
+        */
+        public static final int PagerSlidingTabStrip_pstsTextAllCaps = 10;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsUnderlineColor}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsUnderlineColor
+        */
+        public static final int PagerSlidingTabStrip_pstsUnderlineColor = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.janclarin.gradepath.R.attr#pstsUnderlineHeight}
+          attribute's value can be found in the {@link #PagerSlidingTabStrip} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.janclarin.gradepath:pstsUnderlineHeight
+        */
+        public static final int PagerSlidingTabStrip_pstsUnderlineHeight = 4;
+    };
 }

@@ -4,65 +4,20 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
-    <RelativeLayout
-        android:id="@+id/semester_header"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/viewPagerTabs"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@drawable/bg_card_bottom"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="48dp"
+        android:background="@color/theme_primary_color" />
 
-        <TextView
-            android:id="@+id/tv_semester_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:fontFamily="sans-serif-light"
-            android:singleLine="true"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/tv_semester_days_left_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:fontFamily="sans-serif-light"
-            android:gravity="right"
-            android:textAllCaps="true"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_semester_days_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="4dp"
-            android:layout_toLeftOf="@id/tv_semester_days_left_header"
-            android:fontFamily="sans-serif-light"
-            android:gravity="right"
-            android:singleLine="true"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textSize="24sp" />
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/lv_list_items"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/semester_header"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:dividerHeight="16dp"
-        android:paddingBottom="40dp"
-        android:paddingTop="16dp"
-        android:scrollbars="none" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewPagerTabs" />
 
     <ImageButton
-        android:id="@+id/btn_show_add_options"
+        android:id="@+id/btn_add_item"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
@@ -74,50 +29,5 @@
         android:padding="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/list_add_item" />
-
-    <ImageButton
-        android:id="@+id/btn_add_reminder"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_above="@id/btn_show_add_options"
-        android:layout_alignRight="@id/btn_show_add_options"
-        android:layout_marginBottom="24dp"
-        android:layout_marginRight="4dp"
-        android:background="@drawable/bg_circle_button"
-        android:contentDescription="@string/cd_add_button"
-        android:padding="8dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/list_add_reminder"
-        android:visibility="invisible" />
-
-    <ImageButton
-        android:id="@+id/btn_add_grade"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignBottom="@id/btn_show_add_options"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="24dp"
-        android:layout_toLeftOf="@id/btn_show_add_options"
-        android:background="@drawable/bg_circle_button"
-        android:contentDescription="@string/cd_add_button"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/list_add_grade"
-        android:visibility="invisible" />
-
-    <ImageButton
-        android:id="@+id/btn_add_course"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_above="@id/btn_add_grade"
-        android:layout_marginBottom="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_toLeftOf="@id/btn_add_reminder"
-        android:background="@drawable/bg_circle_button"
-        android:contentDescription="@string/cd_add_button"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/list_add_course"
-        android:visibility="invisible" />
 
 </RelativeLayout>

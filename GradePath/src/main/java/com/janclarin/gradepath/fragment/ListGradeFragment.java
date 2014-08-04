@@ -8,27 +8,28 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
-import com.janclarin.gradepath.model.Reminder;
+import com.janclarin.gradepath.model.Grade;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ListAllReminderFragment extends BaseListFragment {
+public class ListGradeFragment extends BaseListFragment {
 
-    private OnFragmentListTaskListener mListener;
+    private OnFragmentListGradeListener mListener;
     private LongSparseArray<Course> mCoursesById;
 
-    public static ListAllReminderFragment newInstance() {
-        return new ListAllReminderFragment();
+    public static ListGradeFragment newInstance() {
+        return new ListGradeFragment();
     }
 
-    public ListAllReminderFragment() {
+    public ListGradeFragment() {
         // Required empty public constructor.
     }
 
@@ -45,18 +46,23 @@ public class ListAllReminderFragment extends BaseListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mEmptyTextView.setText(R.string.tv_list_task_empty);
-        mAddItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) mListener.onListReminderNew();
-            }
-        });
+        mEmptyTextView.setText(R.string.tv_list_grade_empty);
 
         mCoursesById = new LongSparseArray<Course>();
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
+
+        // Set on item click listener to notify listener to open course detail activity into grades.
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Grade grade = (Grade) mAdapter.getItem(position);
+                if (mListener != null) {
+                    mListener.onListGradeClick(grade, mCoursesById.get(grade.getCourseId()));
+                }
+            }
+        });
     }
 
     @Override
@@ -65,26 +71,27 @@ public class ListAllReminderFragment extends BaseListFragment {
 
         // Get list of current courses.
         List<Course> courses = mDatabase.getCurrentCourses();
-        List<Reminder> reminders = new ArrayList<Reminder>();
+        List<Grade> grades = new ArrayList<Grade>();
 
         for (Course course : courses) {
-            reminders.addAll(mDatabase.getReminders(course.getId()));
+            grades.addAll(mDatabase.getGrades(course.getId()));
             mCoursesById.put(course.getId(), course);
         }
 
-        Collections.sort(reminders);
+        Collections.sort(grades);
 
-        mListItems.addAll(reminders);
+        mListItems.addAll(grades);
 
         notifyAdapter();
 
+        // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
     }
 
     @Override
     protected void editSelectedItem(int selectedPosition) {
         if (mListener != null)
-            mListener.onListReminderEdit((Reminder) mAdapter.getItem(selectedPosition));
+            mListener.onListGradeEdit((Grade) mAdapter.getItem(selectedPosition));
     }
 
     @Override
@@ -92,9 +99,9 @@ public class ListAllReminderFragment extends BaseListFragment {
         int numItems = mListItems.size();
         for (int i = numItems - 1; i >= 0; i--) {
             if (possibleSelectedPositions.get(i, false)) {
-                Reminder selectedReminder = (Reminder) mAdapter.getItem(i);
-                mDatabase.deleteReminder(selectedReminder);
-                mListItems.remove(selectedReminder);
+                Grade selectedGrade = (Grade) mAdapter.getItem(i);
+                mDatabase.deleteGrade(selectedGrade);
+                mListItems.remove(selectedGrade);
             }
         }
         updateListItems();
@@ -104,10 +111,10 @@ public class ListAllReminderFragment extends BaseListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentListTaskListener) activity;
+            mListener = (OnFragmentListGradeListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement FragmentListTaskListener");
+                    + " must implement FragmentListGradeListener");
         }
     }
 
@@ -117,21 +124,20 @@ public class ListAllReminderFragment extends BaseListFragment {
         mListener = null;
     }
 
-    public interface OnFragmentListTaskListener {
-
-        /* Called when the add item button is clicked. */
-        public void onListReminderNew();
-
-        /* Called when a task is going to be edited. */
-        public void onListReminderEdit(Reminder reminder);
-    }
-
     private class ListAdapter extends BaseListAdapter {
+        @Override
+        public int getViewTypeCount() {
+            return 1;
+        }
 
         @Override
         public int getItemViewType(int position) {
-            return mListItems.get(position) instanceof Header ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
+            return 0;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
         }
 
         @Override
@@ -145,35 +151,21 @@ public class ListAllReminderFragment extends BaseListFragment {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                if (type == ITEM_VIEW_TYPE_HEADER) {
-                    convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView;
-                } else {
-                    convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general_card, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-                    viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
-                    viewHolder.tvInfo = (TextView) convertView.findViewById(R.id.tv_information);
-                }
+                convertView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.fragment_list_item_general, parent, false);
+                viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_information);
 
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Header) listItem).getName());
-            } else {
-                Reminder reminder = (Reminder) listItem;
-                viewHolder.tvName.setText(reminder.getName());
-                viewHolder.tvSubtitle.setText(
-                        reminder.getDateString(mContext) + ", "
-                                + reminder.getTimeString() + " "
-                                + getString(R.string.bullet) + " "
-                                + mCoursesById.get(reminder.getCourseId()).getName());
-                viewHolder.tvInfo.setText(reminder.getTypeString(mContext));
-            }
+            Grade grade = (Grade) listItem;
+            viewHolder.tvName.setText(grade.getName());
+            viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
+            viewHolder.tvGrade.setText(grade.getGradePercentage());
 
             return convertView;
         }
@@ -181,7 +173,16 @@ public class ListAllReminderFragment extends BaseListFragment {
         private class ViewHolder {
             TextView tvName;
             TextView tvSubtitle;
-            TextView tvInfo;
+            TextView tvGrade;
         }
+    }
+
+    public interface OnFragmentListGradeListener {
+
+        /* Called when a grade is selected for edit in contextual action bar */
+        public void onListGradeEdit(Grade grade);
+
+        /* Called when a grade is clicked in list. Opens course detail fragment. */
+        public void onListGradeClick(Grade grade, Course course);
     }
 }

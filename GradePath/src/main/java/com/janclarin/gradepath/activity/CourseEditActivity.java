@@ -103,20 +103,20 @@ public class CourseEditActivity extends BaseActivity
     private void newSemester() {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
+        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
     }
 
     private void newGradeComponent() {
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_new_grade_component_dialog));
-        gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
+        gradeComponentDialog.show(getSupportFragmentManager(), NEW_GRADE_COMPONENT_TAG);
     }
 
     private void editGradeComponent(GradeComponent gradeComponent) {
         updatePosition = mGradeComponents.indexOf(gradeComponent);
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_component_dialog), gradeComponent);
-        gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
+        gradeComponentDialog.show(getSupportFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
     }
 
     /**

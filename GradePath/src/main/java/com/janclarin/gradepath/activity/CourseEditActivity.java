@@ -282,11 +282,18 @@ public class CourseEditActivity extends BaseActivity
         String instructorName = mInstructorName.getText().toString().trim();
         String instructorEmail = mInstructorEmail.getText().toString().trim();
 
+        double gradeComponentWeightTotal = 0;
+        for (GradeComponent gradeComponent : mGradeComponents) {
+            gradeComponentWeightTotal += gradeComponent.getWeight();
+        }
+
         String toastMessage = "";
         if (semester == null) {
             toastMessage = getString(R.string.semester_invalid);
         } else if (courseName.isEmpty()) {
             toastMessage = getString(R.string.prompt_enter_course_name);
+        } else if (gradeComponentWeightTotal < 99.9 || gradeComponentWeightTotal > 100.1) {
+            toastMessage = getString(R.string.grade_component_total_weight_invalid);
         }
 
         if (toastMessage.length() > 0) {
@@ -295,6 +302,7 @@ public class CourseEditActivity extends BaseActivity
             toast.show();
             return;
         }
+
 
         long courseId;
         if (mCourseToUpdate == null) {

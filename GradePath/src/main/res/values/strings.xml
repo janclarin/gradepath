@@ -181,5 +181,6 @@
     <string name="items">items</string>
     <string name="title_edit_grade_component_dialog">Edit grade component</string>
     <string name="tv_dialog_reminder_time">Time</string>
+    <string name="grade_component_total_weight_invalid">Grade component weights must sum to 100%</string>
 
 </resources>

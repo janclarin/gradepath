@@ -114,19 +114,12 @@
         <item name="android:paddingTop">8dp</item>
     </style>
 
-    <style name="listItem">
-        <item name="android:background">@android:color/white</item>
-        <item name="android:paddingLeft">16dp</item>
-    </style>
-
     <style name="roundedCardView">
         <item name="android:background">@drawable/bg_card_rounded</item>
         <item name="android:paddingLeft">16dp</item>
     </style>
 
     <style name="listHeaderTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">14sp</item>

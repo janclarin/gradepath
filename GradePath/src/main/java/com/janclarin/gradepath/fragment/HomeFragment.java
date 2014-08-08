@@ -15,12 +15,10 @@ import android.widget.ImageButton;
 import com.astuetz.PagerSlidingTabStrip;
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.model.Course;
-import com.janclarin.gradepath.model.Grade;
-import com.janclarin.gradepath.model.Reminder;
 
 public class HomeFragment extends BaseFragment {
 
-    private static final int NUM_TABS = 4;
+    private static final int NUM_TABS = 3;
     private int mSelectedPosition;
     private FragmentHomeListener mListener;
 
@@ -70,15 +68,7 @@ public class HomeFragment extends BaseFragment {
                         mSelectedPosition = position;
                         // Switch the floating button depending on page and set its on-click listener.
                         switch (position) {
-                            case 0:
-                                addButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (mListener != null) mListener.onHomeNewReminder();
-                                    }
-                                });
-                                break;
-                            case 1:
+                            case 0: {
                                 addButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -86,7 +76,8 @@ public class HomeFragment extends BaseFragment {
                                     }
                                 });
                                 break;
-                            case 2:
+                            }
+                            case 1: {
                                 addButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -94,7 +85,8 @@ public class HomeFragment extends BaseFragment {
                                     }
                                 });
                                 break;
-                            case 3:
+                            }
+                            case 2: {
                                 addButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -102,6 +94,7 @@ public class HomeFragment extends BaseFragment {
                                     }
                                 });
                                 break;
+                            }
                         }
                     }
                 };
@@ -120,32 +113,32 @@ public class HomeFragment extends BaseFragment {
         onPageChangeListener.onPageSelected(mSelectedPosition);
     }
 
-    /**
-     * Refresh reminder list.
-     */
-    public void refreshReminderList() {
-        ((ListReminderFragment) mAdapter.getTabFragment(0)).updateListItems();
-    }
+//    /**
+//     * Refresh reminder list.
+//     */
+//    public void refreshReminderList() {
+//        ((ListReminderFragment) mAdapter.getTabFragment(0)).updateListItems();
+//    }
 
     /**
      * Refresh grade list.
      */
     public void refreshGradeList() {
-        ((ListGradeFragment) mAdapter.getTabFragment(1)).updateListItems();
+        ((ListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
     }
 
     /**
      * Refresh course list.
      */
     public void refreshCourseList() {
-        ((ListCourseFragment) mAdapter.getTabFragment(2)).updateListItems();
+        ((ListCourseFragment) mAdapter.getTabFragment(1)).updateListItems();
     }
 
     /**
      * Refresh semester list.
      */
     public void refreshSemesterList() {
-        ((ListSemesterFragment) mAdapter.getTabFragment(3)).updateListItems();
+        ((ListSemesterFragment) mAdapter.getTabFragment(2)).updateListItems();
     }
 
     @Override
@@ -177,20 +170,21 @@ public class HomeFragment extends BaseFragment {
         public Fragment getItem(int position) {
             Fragment fragment;
             switch (position) {
-                case 0:
-                    fragment = ListReminderFragment.newInstance();
-                    break;
-                case 1:
+                case 0: {
                     fragment = ListGradeFragment.newInstance();
                     break;
-                case 2:
+                }
+                case 1: {
                     fragment = ListCourseFragment.newInstance();
                     break;
-                case 3:
+                }
+                case 2: {
                     fragment = ListSemesterFragment.newInstance();
                     break;
-                default:
+                }
+                default: {
                     fragment = new Fragment();
+                }
             }
 
             mTabs.put(position, fragment);
@@ -206,12 +200,10 @@ public class HomeFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.title_fragment_list_reminders);
-                case 1:
                     return getString(R.string.title_fragment_list_grades);
-                case 2:
+                case 1:
                     return getString(R.string.title_fragment_list_courses);
-                case 3:
+                case 2:
                     return getString(R.string.title_fragment_list_semesters);
                 default:
                     return null;
@@ -244,12 +236,5 @@ public class HomeFragment extends BaseFragment {
 
         /* Displays course detail fragment. */
         public void onHomeViewCourse(Course course);
-
-        /* Displays course detail fragment. Set to reminder page. */
-        public void onHomeViewCourse(Course course, Reminder reminder);
-
-        /* Displays course detail fragment. Set to grades page. */
-        public void onHomeViewCourse(Course course, Grade grade);
     }
-
 }

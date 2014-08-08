@@ -127,8 +127,7 @@ public class Reminder extends DatabaseItem implements Comparable<Reminder> {
 
     /**
      * Compares the due dates of two tasks for sorting.
-     * Incomplete tasks first.
-     * Most recent tasks are at the beginning of the list.
+     * Upcoming tasks first.
      *
      * @param another
      * @return

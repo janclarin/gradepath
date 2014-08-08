@@ -15,7 +15,6 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Reminder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,17 +56,9 @@ public class ListReminderFragment extends BaseListFragment {
     public void updateListItems() {
         clearListItems();
 
-        // Get list of current courses.
-        List<Course> courses = mDatabase.getCurrentCourses();
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        for (Course course : courses) {
-            reminders.addAll(mDatabase.getReminders(course.getId()));
-            mCoursesById.put(course.getId(), course);
-        }
-
+        // Get and sort reminders from database. Add upcoming reminders.
+        List<Reminder> reminders = mDatabase.getUpcomingReminders();
         Collections.sort(reminders);
-
         mListItems.addAll(reminders);
 
         notifyAdapter();
@@ -142,7 +133,7 @@ public class ListReminderFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_general, parent, false);
+                            .inflate(R.layout.list_item_general, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.tvInfo = (TextView) convertView.findViewById(R.id.tv_information);

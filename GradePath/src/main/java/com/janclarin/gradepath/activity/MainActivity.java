@@ -301,12 +301,12 @@ public class MainActivity extends BaseActivity
         ((HomeFragment) mCurrentFragment).refreshGradeList();
     }
 
-    /**
-     * Refresh reminder list.
-     */
-    private void refreshListReminder() {
-        ((HomeFragment) mCurrentFragment).refreshReminderList();
-    }
+//    /**
+//     * Refresh reminder list.
+//     */
+//    private void refreshListReminder() {
+//        ((HomeFragment) mCurrentFragment).refreshReminderList();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -362,22 +362,6 @@ public class MainActivity extends BaseActivity
     public void onHomeViewCourse(Course course) {
         Intent intent = new Intent(this, CourseDetailActivity.class);
         intent.putExtra(COURSE_KEY, course);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onHomeViewCourse(Course course, Reminder reminder) {
-        Intent intent = new Intent(this, CourseDetailActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        intent.putExtra(REMINDER_KEY, reminder);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onHomeViewCourse(Course course, Grade grade) {
-        Intent intent = new Intent(this, CourseDetailActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        intent.putExtra(GRADE_KEY, grade);
         startActivity(intent);
     }
 
@@ -514,7 +498,7 @@ public class MainActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        refreshListReminder();
+//        refreshListReminder();
     }
 
     /**
@@ -548,7 +532,7 @@ public class MainActivity extends BaseActivity
             if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = getLayoutInflater()
-                        .inflate(R.layout.fragment_list_item_navigation_drawer, parent, false);
+                        .inflate(R.layout.list_item_navigation_drawer, parent, false);
 
                 viewHolder.tvSectionName = (TextView) convertView.findViewById(R.id.tv_drawer_list_item);
 

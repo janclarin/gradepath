@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,7 +49,6 @@ public class ListSemesterFragment extends BaseListFragment {
 
         // Add current semester header and semester into list if they exist.
         if (currentSemester != null) {
-            mListItems.add(new Header(getString(R.string.semester_current)));
             mListItems.add(currentSemester);
 
             // Remove current semester from list of all semesters.
@@ -107,18 +103,6 @@ public class ListSemesterFragment extends BaseListFragment {
         mListener = null;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate options menu if it hasn't been already.
-        if (!menu.hasVisibleItems()) inflater.inflate(R.menu.list_semester, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Provides an interface to alert listeners.
      */
@@ -155,7 +139,7 @@ public class ListSemesterFragment extends BaseListFragment {
                     viewHolder.tvInformation = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_semester, parent, false);
+                            .inflate(R.layout.list_item_semesters, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_semester_name);
                     viewHolder.tvInformation =
                             (TextView) convertView.findViewById(R.id.tv_semester_information);
@@ -172,17 +156,14 @@ public class ListSemesterFragment extends BaseListFragment {
                 String header = ((Header) listItem).getName();
                 viewHolder.tvName.setText(header);
 
-                // Set cumulative gpa for past courses only.
-                if (header.equals(mContext.getString(R.string.semester_past))) {
-                    double gpa = mDatabase.getCumulativeGPA();
-                    if (gpa > -1) {
-                        viewHolder.tvInformation.setText(mContext.getString(R.string.gpa) + ": "
-                                + new DecimalFormat("#.0#").format(gpa));
-                    } else {
-                        viewHolder.tvInformation.setText(mContext.getString(R.string.gpa) + ": "
-                                + mContext.getString(R.string.not_available));
-                    }
+                double gpa = mDatabase.getCumulativeGPA();
+                String info = mContext.getString(R.string.gpa) + ": ";
+                if (gpa > -1) {
+                    info += new DecimalFormat("#.0#").format(gpa);
+                } else {
+                    info += mContext.getString(R.string.not_available);
                 }
+                viewHolder.tvInformation.setText(info);
             } else {
                 Semester semester = (Semester) listItem;
                 viewHolder.tvName.setText(semester.toString());

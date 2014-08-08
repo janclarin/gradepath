@@ -1,7 +1,4 @@
 <resources>
-
-    Base application theme.
-
     <style name="Theme.Gradepath" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_gradepath
         </item>
@@ -114,16 +111,10 @@
         <item name="android:paddingTop">8dp</item>
     </style>
 
-    <style name="roundedCardView">
-        <item name="android:background">@drawable/bg_card_rounded</item>
-        <item name="android:paddingLeft">16dp</item>
-    </style>
-
     <style name="listHeaderTextView">
         <item name="android:gravity">center_vertical</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
     </style>
 
@@ -139,5 +130,10 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Card">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:paddingLeft">16dp</item>
     </style>
 </resources>

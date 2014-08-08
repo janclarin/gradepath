@@ -4,8 +4,6 @@
     android:id="@+id/tv_drawer_list_item"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@drawable/row_selector"
     android:gravity="center_vertical"
-    android:paddingRight="16dp"
-    android:textColor="@android:color/primary_text_light"
+    android:textColor="@drawable/color_nav_item"
     android:textSize="16sp" />

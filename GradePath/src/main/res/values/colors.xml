@@ -27,4 +27,6 @@
     <color name="course_urgency_0">#666</color>
     <color name="course_urgency_1">@color/theme_primary_color</color>
     <color name="course_urgency_2">@android:color/holo_red_light</color>
+
+    <color name="black">#ff000000</color>
 </resources>

@@ -204,7 +204,7 @@ public class CourseEditActivity extends BaseActivity
 
     private View createGradeComponentView(final GradeComponent gradeComponent) {
         // Inflate grade component view.
-        View gradeComponentView = getLayoutInflater().inflate(R.layout.activity_edit_course_component,
+        View gradeComponentView = getLayoutInflater().inflate(R.layout.list_item_course_component,
                 mComponentList, false);
 
         ((TextView) gradeComponentView.findViewById(R.id.tv_name)).setText(gradeComponent.getName());

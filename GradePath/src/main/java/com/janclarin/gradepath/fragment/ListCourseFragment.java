@@ -62,12 +62,14 @@ public class ListCourseFragment extends BaseListFragment {
 
         // Get list of Semesters.
         List<Semester> semesters = mDatabase.getSemesters();
+        Semester currentSemester = mDatabase.getCurrentSemester();
 
         // For all semesters that contain Courses, add the Semester and Courses to the list.
         for (Semester semester : semesters) {
             List<Course> courses = mDatabase.getCourses(semester.getId());
             if (courses.size() > 0) {
-                mListItems.add(semester);
+                // Only add title if it's a past semester.
+                if (!semester.equals(currentSemester)) mListItems.add(semester);
                 Collections.sort(courses);
                 mListItems.addAll(courses);
             }
@@ -152,7 +154,7 @@ public class ListCourseFragment extends BaseListFragment {
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_item_course, parent, false);
+                            .inflate(R.layout.list_item_course, parent, false);
                     viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                 }

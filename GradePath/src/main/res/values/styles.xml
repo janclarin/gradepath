@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Theme.Gradepath" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_gradepath
         </item>
@@ -18,15 +19,16 @@
     </style>
 
     <style name="ActionBar.Solid.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/theme_primary_color</item>
+        <item name="android:background">@color/theme_primary</item>
         <item name="android:backgroundStacked">@android:color/transparent</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_gradepath</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Gradepath</item>
         <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:height">48dp</item>
     </style>
 
     <style name="CustomActionBarTabBar" parent="@android:style/Widget.Holo.Light.ActionBar.TabBar">
-        <item name="android:background">@color/theme_primary_color</item>
+        <item name="android:background">@color/theme_primary</item>
         <item name="android:height">48dp</item>
         <item name="android:gravity">center</item>
         <item name="android:divider">@null</item>
@@ -34,7 +36,7 @@
 
     <!-- ActionBar tabs text style -->
     <style name="CustomActionBarTabText" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@drawable/color_tab_indicator</item>
+        <item name="android:textColor">@color/tab_indicator</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
@@ -49,7 +51,7 @@
 
     <style name="ActionBarTabStyle.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_gradepath</item>
-        <item name="android:textColor">@drawable/color_white_opacity</item>
+        <item name="android:textColor">@color/white_opacity</item>
     </style>
 
     <style name="DropDownNav.Gradepath" parent="@android:style/Widget.Holo.Light.Spinner">
@@ -66,6 +68,14 @@
         <item name="android:background">@drawable/btn_cab_done_gradepath</item>
     </style>
 
+    <!-- Floating action button -->
+    <style name="FloatingActionButton">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/bg_circle_button</item>
+    </style>
+
     <!-- Borderless button for empty view for list fragments -->
     <style name="emptyListTextView">
         <item name="android:padding">8dp</item>
@@ -77,15 +87,6 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:visibility">gone</item>
-    </style>
-
-    <!-- Borderless button for list items -->
-    <style name="listItemButton" parent="@android:style/Widget.Holo.Button.Borderless">
-        <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:focusable">false</item>
-        <item name="android:scaleType">fitCenter</item>
     </style>
 
     <!-- Check box -->
@@ -116,6 +117,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="headerTextView">
@@ -126,14 +128,8 @@
     </style>
 
     <style name="subtitleTextView">
-        <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
         <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="Card">
-        <item name="android:background">@drawable/bg_card</item>
-        <item name="android:paddingLeft">16dp</item>
     </style>
 </resources>

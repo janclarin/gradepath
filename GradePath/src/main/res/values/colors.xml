@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_primary_color">#47b5b5</color>
-    <color name="theme_primary_color_see_through">#cc47b5b5</color>
-    <color name="theme_primary_color_light">#c8e9e9</color>
-    <color name="theme_primary_color_light_see_through">#ccc8e9e9</color>
-    <color name="theme_primary_color_dark">#327f7f</color>
-    <color name="theme_primary_color_dark_see_through">#cc327f7f</color>
+    <color name="theme_primary">#ff47b5b5</color>
+    <color name="theme_primary_see_through">#cc47b5b5</color>
+    <color name="theme_primary_light">#ffc8e9e9</color>
+    <color name="theme_primary_light_see_through">#ccc8e9e9</color>
+    <color name="theme_primary_dark">#ff327f7f</color>
+    <color name="theme_primary_dark_see_through">#cc327f7f</color>
    
-    <color name="theme_secondary_color">#ffb296</color>
-    <color name="theme_secondary_color_see_through">#e6ffb296</color>
-    <color name="theme_secondary_color_light">#ffd8ca</color>
-    <color name="theme_secondary_color_light_see_through">#e6ffd8ca</color>
-    <color name="theme_secondary_color_dark">#e6a087</color>
-    <color name="theme_secondary_color_dark_see_through">#e6e6a087</color>
+    <color name="theme_secondary">#fff88379</color>
+    <color name="theme_secondary_see_through">#e6f88379</color>
+    <color name="theme_secondary_light">#fffaa8a1</color>
+    <color name="theme_secondary_light_see_through">#e6faa8a1</color>
+    <color name="theme_secondary_dark">#ffc66961</color>
+    <color name="theme_secondary_dark_see_through">#e6c66961</color>
 
-    <color name="notification_color">#ff47b5b5</color>
+    <color name="list_divider">#92a3a3a3</color>
+    <color name="notification">#ff47b5b5</color>
 
     <color name="white_60_opacity">#99ffffff</color>
     <color name="actionbar_divider">#d6d6d6</color>
@@ -25,7 +26,7 @@
     <color name="card_fill_pressed">#ccc</color>
 
     <color name="course_urgency_0">#666</color>
-    <color name="course_urgency_1">@color/theme_primary_color</color>
+    <color name="course_urgency_1">@color/theme_primary</color>
     <color name="course_urgency_2">@android:color/holo_red_light</color>
 
     <color name="black">#ff000000</color>

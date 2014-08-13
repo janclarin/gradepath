@@ -2,30 +2,48 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.SparseArray;
+import android.util.LongSparseArray;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.activity.BaseActivity;
 import com.janclarin.gradepath.model.Course;
+import com.janclarin.gradepath.model.DatabaseItem;
+import com.janclarin.gradepath.model.Grade;
+import com.janclarin.gradepath.model.Reminder;
+import com.janclarin.gradepath.model.Semester;
 
-public class HomeFragment extends BaseFragment {
+import java.util.List;
 
-    private static final int NUM_TABS = 3;
-    private int mSelectedPosition;
+public class HomeFragment extends BaseListFragment {
+
+    private ImageButton mAddItemButton;
+    private LinearLayout mButtonLayout;
+    private ImageButton mAddCourseButton;
+    private ImageButton mAddGradeButton;
+    private ImageButton mAddReminderButton;
+
     private FragmentHomeListener mListener;
 
-    private TabPagerAdapter mAdapter;
+    private LongSparseArray<Course> mCoursesById;
+    private int mNumGradesToShow = 3;
+    private Semester mSemester;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static HomeFragment newInstance(Semester semester) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(BaseActivity.SEMESTER_KEY, semester);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public HomeFragment() {
@@ -44,102 +62,154 @@ public class HomeFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment.
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
+        mButtonLayout = (LinearLayout) rootView.findViewById(R.id.button_layout);
+        mAddItemButton = (ImageButton) rootView.findViewById(R.id.btn_add_item);
+        mAddCourseButton = (ImageButton) rootView.findViewById(R.id.btn_add_course);
+        mAddGradeButton = (ImageButton) rootView.findViewById(R.id.btn_add_grade);
+        mAddReminderButton = (ImageButton) rootView.findViewById(R.id.btn_add_reminder);
+
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.viewPagerTabs);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        final ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_item);
+        mSemester = (Semester) getArguments().getSerializable(BaseActivity.SEMESTER_KEY);
 
-        mAdapter = new TabPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(NUM_TABS - 1);
+        if (mSemester != null) {
+            mEmptyTextView.setText(R.string.welcome_message);
+            mEmptyTextView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.course_large, 0, 0);
 
-        ViewPager.SimpleOnPageChangeListener onPageChangeListener =
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        super.onPageSelected(position);
+            mCoursesById = new LongSparseArray<Course>();
+            updateListItems();
+            mAdapter = new ListAdapter();
+            setUpListView();
 
-                        mSelectedPosition = position;
-                        // Switch the floating button depending on page and set its on-click listener.
-                        switch (position) {
-                            case 0: {
-                                addButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (mListener != null) mListener.onHomeNewGrade();
-                                    }
-                                });
-                                break;
-                            }
-                            case 1: {
-                                addButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (mListener != null) mListener.onHomeNewCourse();
-                                    }
-                                });
-                                break;
-                            }
-                            case 2: {
-                                addButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (mListener != null) mListener.onHomeNewSemester();
-                                    }
-                                });
-                                break;
-                            }
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    DatabaseItem item = mListItems.get(position);
+
+                    if (mListener != null) {
+                        if (item instanceof Reminder) {
+                            mListener.onHomeEditReminder((Reminder) item);
+                        } else if (item instanceof Grade) {
+                            mListener.onHomeEditGrade((Grade) item);
+                        } else {
+                            mListener.onHomeViewCourse((Course) item);
                         }
                     }
-                };
+                }
+            });
 
-        // Set tab strip ViewPager.
-        tabStrip.setViewPager(viewPager);
-        tabStrip.setUnderlineColorResource(android.R.color.transparent);
-        tabStrip.setDividerColorResource(android.R.color.transparent);
-        tabStrip.setTextColorResource(android.R.color.white);
-        tabStrip.setTabBackground(R.color.theme_primary_color);
-        tabStrip.setUnderlineHeight(0);
-        tabStrip.setIndicatorColorResource(R.color.theme_secondary_color);
-        tabStrip.setIndicatorHeight(8);
-        tabStrip.setOnPageChangeListener(onPageChangeListener);
+            mAddItemButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAddButtons();
+                }
+            });
 
-        onPageChangeListener.onPageSelected(mSelectedPosition);
+            mAddCourseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) mListener.onHomeAddCourse();
+                    hideAddButtons();
+                }
+            });
+
+            mAddGradeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) mListener.onHomeAddGrade();
+                    hideAddButtons();
+                }
+            });
+
+            mAddReminderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) mListener.onHomeAddReminder();
+                    hideAddButtons();
+                }
+            });
+        } else {
+            mEmptyTextView.setText(mContext.getString(R.string.add_first_semester));
+        }
     }
-
-//    /**
-//     * Refresh reminder list.
-//     */
-//    public void refreshReminderList() {
-//        ((ListReminderFragment) mAdapter.getTabFragment(0)).updateListItems();
-//    }
 
     /**
-     * Refresh grade list.
+     * Show add buttons.
      */
-    public void refreshGradeList() {
-        ((ListGradeFragment) mAdapter.getTabFragment(0)).updateListItems();
+    private void showAddButtons() {
+        // Show other add buttons on click.
+        if (mButtonLayout.getVisibility() == View.INVISIBLE)
+            mButtonLayout.setVisibility(View.VISIBLE);
     }
 
     /**
-     * Refresh course list.
+     * Hide add buttons.
      */
-    public void refreshCourseList() {
-        ((ListCourseFragment) mAdapter.getTabFragment(1)).updateListItems();
+    private void hideAddButtons() {
+        if (mButtonLayout.getVisibility() == View.VISIBLE)
+            mButtonLayout.setVisibility(View.INVISIBLE);
     }
 
-    /**
-     * Refresh semester list.
-     */
-    public void refreshSemesterList() {
-        ((ListSemesterFragment) mAdapter.getTabFragment(2)).updateListItems();
+    @Override
+    public void updateListItems() {
+        clearListItems();
+
+        // Get list of current courses.
+        List<Course> courses = mDatabase.getCourses(mSemester.getId());
+
+        // For every course, map course ID to the course.
+        for (Course course : courses) {
+            Long courseId = course.getId();
+            mCoursesById.put(courseId, course);
+        }
+
+        if (courses.size() > 0) {
+            // Get list of upcoming reminders.
+            List<Reminder> reminders = mDatabase.getUpcomingReminders();
+
+            if (reminders.size() > 0) {
+                mListItems.add(new Header(getString(R.string.title_fragment_list_reminders)));
+                mListItems.addAll(reminders);
+            }
+
+            // Get list of recent grades.
+            List<Grade> grades = mDatabase.getRecentGrades(mNumGradesToShow);
+
+            if (grades.size() > 0) {
+                mListItems.add(new Header(getString(R.string.title_fragment_list_grades)));
+                mListItems.addAll(grades);
+            }
+
+            // Add all courses to the list now.
+            mListItems.add(new Header(getString(R.string.title_fragment_list_courses)));
+            mListItems.addAll(courses);
+        }
+
+        notifyAdapter();
+
+        // Determine list view state.
+        showEmptyStateView(mListItems.isEmpty());
     }
+
+    @Override
+    protected void editSelectedItem(int selectedPosition) {
+
+    }
+
+    @Override
+    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
+
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -158,81 +228,156 @@ public class HomeFragment extends BaseFragment {
         mListener = null;
     }
 
-    private class TabPagerAdapter extends FragmentPagerAdapter {
-
-        SparseArray<Fragment> mTabs = new SparseArray<Fragment>();
-
-        public TabPagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
+    /**
+     * List adapter for the list view.
+     */
+    private class ListAdapter extends BaseListAdapter {
 
         @Override
-        public Fragment getItem(int position) {
-            Fragment fragment;
-            switch (position) {
-                case 0: {
-                    fragment = ListGradeFragment.newInstance();
-                    break;
-                }
-                case 1: {
-                    fragment = ListCourseFragment.newInstance();
-                    break;
-                }
-                case 2: {
-                    fragment = ListSemesterFragment.newInstance();
-                    break;
-                }
-                default: {
-                    fragment = new Fragment();
-                }
-            }
+        public int getItemViewType(int position) {
+            DatabaseItem item = mListItems.get(position);
 
-            mTabs.put(position, fragment);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_TABS;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_fragment_list_grades);
-                case 1:
-                    return getString(R.string.title_fragment_list_courses);
-                case 2:
-                    return getString(R.string.title_fragment_list_semesters);
-                default:
-                    return null;
-            }
-        }
-
-        public Fragment getTabFragment(int position) {
-            Fragment fragment = mTabs.get(position);
-            if (fragment != null) {
-                return fragment;
+            if (item instanceof Header) {
+                return ITEM_VIEW_TYPE_HEADER;
+            } else if (item instanceof Course) {
+                return ITEM_VIEW_TYPE_MAIN_2_LINE;
             } else {
-                return getItem(position);
+                return ITEM_VIEW_TYPE_MAIN_3_LINE;
             }
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            final DatabaseItem item = mListItems.get(position);
+            final int itemViewType = getItemViewType(position);
+
+            ViewHolder viewHolder;
+
+            if (convertView == null) {
+
+                viewHolder = new ViewHolder();
+
+                switch (itemViewType) {
+                    case ITEM_VIEW_TYPE_HEADER: {
+                        convertView = LayoutInflater.from(mContext)
+                                .inflate(R.layout.list_header_home, parent, false);
+
+                        viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
+                        viewHolder.btnSecondary = convertView.findViewById(R.id.btn_more);
+                        viewHolder.divider = convertView.findViewById(R.id.divider_view);
+                        break;
+                    }
+                    case ITEM_VIEW_TYPE_MAIN_2_LINE: {
+                        convertView = LayoutInflater.from(mContext)
+                                .inflate(R.layout.list_item_general_two_line, parent, false);
+
+                        viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                        viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                        viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
+                        viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
+                        break;
+                    }
+                    default: {
+                        convertView = LayoutInflater.from(mContext)
+                                .inflate(R.layout.list_item_general_three_line, parent, false);
+
+                        viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                        viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                        viewHolder.tvSubtitle2 = (TextView) convertView.findViewById(R.id.tv_subtitle_2);
+                        viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
+                        viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
+                    }
+                }
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            if (item instanceof Header) {
+                final String name = ((Header) item).getName();
+                viewHolder.tvTitle.setText(name);
+                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mListener != null) {
+                            if (name.equals(getString(R.string.title_fragment_list_reminders))) {
+                                mListener.onHomeViewReminders();
+                            } else if (name.equals(getString(R.string.title_fragment_list_grades))) {
+                                mListener.onHomeViewGrades();
+                            } else {
+                                mListener.onHomeViewCourses();
+                            }
+                        }
+                    }
+                });
+                // If this is the first header, hide the divider.
+                if (position == 0) viewHolder.divider.setVisibility(View.GONE);
+            } else if (item instanceof Reminder) {
+                Reminder reminder = (Reminder) item;
+                viewHolder.tvTitle.setText(reminder.getName());
+                viewHolder.tvSubtitle.setText(mCoursesById.get(reminder.getCourseId()).getName());
+                viewHolder.tvSubtitle2.setText(
+                        reminder.getDateString(mContext) + " "
+                                + getString(R.string.bullet) + " "
+                                + reminder.getTimeString()
+                );
+                viewHolder.ivDetail.setImageResource(R.drawable.reminder);
+                // Set circle background based on course's color.
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+            } else if (item instanceof Grade) {
+                Grade grade = (Grade) item;
+                viewHolder.tvTitle.setText(grade.getName());
+                viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
+                viewHolder.tvSubtitle2.setText(
+                        grade.getGradePercentage() + " "
+                                + getString(R.string.bullet) + " "
+                                + grade.toString()
+                );
+                viewHolder.ivDetail.setImageResource(R.drawable.grade);
+
+                // Set circle background based on course's color.
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+            } else if (item instanceof Course) {
+                Course course = (Course) item;
+                viewHolder.tvTitle.setText(course.getName());
+                viewHolder.tvSubtitle.setText(course.getInstructorName());
+                viewHolder.ivDetail.setImageResource(R.drawable.course);
+
+                // Set circle background based on course's color.
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+            }
+
+            return convertView;
         }
     }
 
     public interface FragmentHomeListener {
 
         /* Calls new grade dialog. */
-        public void onHomeNewGrade();
+        public void onHomeAddGrade();
 
         /* Calls new reminder dialog. */
-        public void onHomeNewReminder();
+        public void onHomeAddReminder();
 
         /* Calls new course activity. */
-        public void onHomeNewCourse();
+        public void onHomeAddCourse();
 
-        /* Calls new semester dialog. */
-        public void onHomeNewSemester();
+        /* Opens reminder edit dialog */
+        public void onHomeEditReminder(Reminder reminder);
+
+        /* Opens grade edit dialog */
+        public void onHomeEditGrade(Grade grade);
+
+        /* Displays reminder list fragment. */
+        public void onHomeViewReminders();
+
+        /* Displays grade list fragment. */
+        public void onHomeViewGrades();
+
+        /* Displays course list fragment. */
+        public void onHomeViewCourses();
 
         /* Displays course detail fragment. */
         public void onHomeViewCourse(Course course);

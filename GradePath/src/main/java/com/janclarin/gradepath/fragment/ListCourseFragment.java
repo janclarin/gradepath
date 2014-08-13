@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -134,7 +135,7 @@ public class ListCourseFragment extends BaseListFragment {
         @Override
         public int getItemViewType(int position) {
             return (mListItems.get(position) instanceof Semester) ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN_2_LINE;
         }
 
         @Override
@@ -150,13 +151,14 @@ public class ListCourseFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
+                            .inflate(R.layout.list_header_general, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.list_item_course, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                            .inflate(R.layout.list_item_general_two_line, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
+                    viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
                 }
 
                 convertView.setTag(viewHolder);
@@ -165,22 +167,16 @@ public class ListCourseFragment extends BaseListFragment {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Semester) listItem).toString());
+                viewHolder.tvTitle.setText(listItem.toString());
             } else {
                 Course course = (Course) listItem;
-                viewHolder.tvName.setText(course.getName());
+                viewHolder.tvTitle.setText(course.getName());
                 viewHolder.tvSubtitle.setText(course.getInstructorName());
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+                viewHolder.ivDetail.setImageResource(R.drawable.course);
             }
 
             return convertView;
-        }
-
-        /**
-         * View holder class for course item layout.
-         */
-        private class ViewHolder {
-            TextView tvName;
-            TextView tvSubtitle;
         }
     }
 }

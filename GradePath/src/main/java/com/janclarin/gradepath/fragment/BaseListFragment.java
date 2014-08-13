@@ -1,8 +1,12 @@
 package com.janclarin.gradepath.fragment;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -13,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,24 +30,23 @@ import java.util.List;
 abstract public class BaseListFragment extends BaseFragment {
 
     protected static final int ITEM_VIEW_TYPE_HEADER = 0;
-    protected static final int ITEM_VIEW_TYPE_MAIN = 1;
-    protected static final int NUM_ITEM_VIEW_TYPES = 2;
+    protected static final int ITEM_VIEW_TYPE_MAIN_2_LINE = 1;
+    protected static final int ITEM_VIEW_TYPE_MAIN_3_LINE = 2;
+    protected static final int NUM_ITEM_VIEW_TYPES = 3;
 
     protected List<DatabaseItem> mListItems;
     protected TextView mEmptyTextView;
     protected ListView mListView;
-    protected ImageButton mAddItemButton;
     protected BaseListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_general, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_general_list, container, false);
 
         mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
-        mAddItemButton = (ImageButton) rootView.findViewById(R.id.btn_add_item);
 
         return rootView;
     }
@@ -189,6 +192,36 @@ abstract public class BaseListFragment extends BaseFragment {
     }
 
     abstract protected class BaseListAdapter extends BaseAdapter {
+
+        private static final int COLOR_CIRCLE_DIAMETER = 40;
+
+        // Maps color integer value to color circle drawable.
+        final SparseArray<ShapeDrawable> mColorDrawables = new SparseArray<ShapeDrawable>();
+
+        // Creates a circle if it hasn't been already for this color.
+        public ShapeDrawable getColorCircle(int color) {
+            ShapeDrawable colorDrawable = mColorDrawables.get(color);
+
+            if (colorDrawable == null) {
+                colorDrawable = new ShapeDrawable(new OvalShape());
+                colorDrawable.setIntrinsicWidth(COLOR_CIRCLE_DIAMETER);
+                colorDrawable.setIntrinsicHeight(COLOR_CIRCLE_DIAMETER);
+                colorDrawable.getPaint().setStyle(Paint.Style.FILL);
+                colorDrawable.getPaint().setColor(getResources().getColor(color));
+            }
+
+            return colorDrawable;
+        }
+
+        protected class ViewHolder {
+            TextView tvTitle;
+            TextView tvSubtitle;
+            TextView tvSubtitle2;
+            ImageView ivDetail;
+            View btnSecondary;
+            View divider;
+        }
+
         @Override
         public int getCount() {
             return mListItems.size();
@@ -211,7 +244,10 @@ abstract public class BaseListFragment extends BaseFragment {
 
         @Override
         public boolean isEnabled(int position) {
-            return getItemViewType(position) == ITEM_VIEW_TYPE_MAIN;
+            final int itemViewType = getItemViewType(position);
+
+            return itemViewType == ITEM_VIEW_TYPE_MAIN_2_LINE
+                    || itemViewType == ITEM_VIEW_TYPE_MAIN_3_LINE;
         }
 
         @Override

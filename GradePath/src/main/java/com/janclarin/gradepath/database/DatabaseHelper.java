@@ -36,8 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_SEASON + " TEXT NOT NULL, "
             + COLUMN_YEAR + " INTEGER NOT NULL, "
             + COLUMN_SEMESTER_GPA + " REAL NOT NULL, "
-            + COLUMN_IS_CURRENT + " INTEGER NOT NULL, "
-            + COLUMN_DATE_END + " INTEGER NOT NULL"
+            + COLUMN_IS_CURRENT + " INTEGER NOT NULL"
             + ");";
 
     /**
@@ -97,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Reminder table.
      * Includes course id, year added, day of year added.
      */
-    public static final String TABLE_REMINDERS = "reminders";
+    public static final String TABLE_REMINDERS = "reminder";
     public static final String COLUMN_REMINDER_NAME = "reminder_name";
     public static final String COLUMN_IS_EXAM = "is_exam";
     public static final String COLUMN_DATE_REMIND = "date_remind";
@@ -114,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static DatabaseHelper sInstance;
 
     /**

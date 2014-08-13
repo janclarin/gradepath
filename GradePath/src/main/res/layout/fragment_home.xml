@@ -4,30 +4,61 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/viewPagerTabs"
+    <ListView
+        android:id="@+id/lv_list_items"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/theme_primary_color" />
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="true"
+        android:paddingBottom="80dp"
+        android:scrollbars="none" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewPagerTabs" />
+    <TextView
+        android:id="@+id/tv_list_empty"
+        style="@style/emptyListTextView"
+        android:layout_centerInParent="true" />
 
     <ImageButton
         android:id="@+id/btn_add_item"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        style="@style/FloatingActionButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/bg_circle_button"
         android:contentDescription="@string/cd_add_button"
-        android:padding="8dp"
-        android:scaleType="fitXY"
         android:src="@drawable/list_add_item" />
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/btn_add_item"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <ImageButton
+            android:id="@+id/btn_add_reminder"
+            style="@style/FloatingActionButton"
+            android:contentDescription="@string/cd_add_button"
+            android:src="@drawable/reminder" />
+
+        <ImageButton
+            android:id="@+id/btn_add_grade"
+            style="@style/FloatingActionButton"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:contentDescription="@string/cd_add_button"
+            android:src="@drawable/grade" />
+
+        <ImageButton
+            android:id="@+id/btn_add_course"
+            style="@style/FloatingActionButton"
+            android:contentDescription="@string/cd_add_button"
+            android:src="@drawable/course" />
+
+    </LinearLayout>
 
 </RelativeLayout>

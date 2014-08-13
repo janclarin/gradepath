@@ -73,7 +73,7 @@ public class NotifyService extends Service {
                         .setContentText(getString(R.string.reminder))
                         .setVibrate(new long[]{0, 100, 70, 100, 70, 100, 70})
                         .setContentIntent(pendingIntent)
-                        .setLights(Color.alpha(R.color.notification_color), 500, 100).build();
+                        .setLights(Color.alpha(R.color.notification), 500, 100).build();
 
         notification.defaults = Notification.DEFAULT_SOUND;
         notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_ONLY_ALERT_ONCE

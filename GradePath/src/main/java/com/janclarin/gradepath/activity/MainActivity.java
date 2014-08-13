@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -18,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,9 +28,6 @@ import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
-import com.janclarin.gradepath.fragment.ListCourseFragment;
-import com.janclarin.gradepath.fragment.ListGradeFragment;
-import com.janclarin.gradepath.fragment.ListReminderFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
@@ -39,18 +36,17 @@ import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 
 /**
  * Main activity that contains the navigation drawer.
  */
 public class MainActivity extends BaseActivity
-        implements HomeFragment.FragmentHomeListener,
+        implements ActionBar.OnNavigationListener,
+        HomeFragment.FragmentHomeListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
-        ListCourseFragment.OnFragmentListCourseListener,
-        ListGradeFragment.OnFragmentListGradeListener,
-        ListReminderFragment.OnFragmentListTaskListener,
-        SemesterDialogFragment.OnDialogSemesterCallbacks,
+        SemesterDialogFragment.OnDialogSemesterListener,
         GradeDialogFragment.OnDialogGradeListener,
         ReminderDialogFragment.OnDialogReminderListener,
         SettingsFragment.OnFragmentSettingsListener {
@@ -66,13 +62,17 @@ public class MainActivity extends BaseActivity
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     /**
+     * List of drawer items.
+     */
+    private static final DrawerItem[] mDrawerItems = new DrawerItem[]{
+            new DrawerItem(R.string.title_fragment_home, R.drawable.home),
+            new DrawerItem(R.string.title_fragment_settings, R.drawable.settings)
+    };
+    /**
      * Used to store the last screen mTitle.
      */
     private CharSequence mTitle;
-    /**
-     * List of drawer items.
-     */
-    private DrawerItem[] mDrawerItems;
+
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
@@ -84,6 +84,17 @@ public class MainActivity extends BaseActivity
     private ListView mDrawerListView;
     private Fragment mCurrentFragment;
 
+    private Semester mCurrentSemester;
+    private List<Semester> mSemesters;
+
+    private final Semester mAllSemestersOption = new Semester() {
+        @Override
+        public String toString() {
+            return getString(R.string.all_semesters);
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +103,6 @@ public class MainActivity extends BaseActivity
 
         // Change soft input to adjust pan.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        setUpNavigationDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -104,14 +113,31 @@ public class MainActivity extends BaseActivity
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+    }
 
-        // Set action bar title.
-        mTitle = getString(mDrawerItems[mCurrentSelectedPosition].getTitle());
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
-        getActionBar().setTitle(mTitle);
+        // Get list of semesters from database.
+        mSemesters = mDatabase.getSemesters();
+
+        // If no semesters, set title to app name.
+        if (mSemesters.isEmpty()) {
+            // Ask for semester input.
+            SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
+                    getString(R.string.current_semester));
+            semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+        }
+
+        // Set action bar drawer
+        setUpActionBarSpinner();
+
+        // Set up navigation drawer.
+        setUpNavigationDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Select item from navigation drawer.
-        selectItem(mCurrentSelectedPosition);
+        onNavDrawerItemSelected(mCurrentSelectedPosition);
     }
 
     @Override
@@ -123,14 +149,21 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerListView)) {
-            getMenuInflater().inflate(R.menu.main, menu);
             return true;
+        } else {
+            getMenuInflater().inflate(R.menu.main, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.new_semester) {
+            // Show semester dialog.
+            SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
+                    getString(R.string.title_new_semester_dialog));
+            semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+        }
         if (mDrawerToggle.onOptionsItemSelected(item) && mDrawerToggle.isDrawerIndicatorEnabled()) {
             return true;
         }
@@ -140,9 +173,9 @@ public class MainActivity extends BaseActivity
     /* Go back to home. If on home and back is pressed, leave app */
     @Override
     public void onBackPressed() {
-        getActionBar().setTitle(mTitle);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         super.onBackPressed();
     }
 
@@ -155,20 +188,14 @@ public class MainActivity extends BaseActivity
         /* Set up list view first. */
         mDrawerListView = (ListView) findViewById(R.id.lv_navigation_drawer);
 
-        // Drawer items.
-        mDrawerItems = new DrawerItem[]{
-                new DrawerItem(R.string.title_fragment_home, R.drawable.home),
-                new DrawerItem(R.string.title_fragment_settings, R.drawable.settings)
-        };
-
-        BaseAdapter adapter = new ListAdapter();
+        BaseAdapter adapter = new NavigationDrawerAdapter();
         mDrawerListView.setAdapter(adapter);
 
         // Set on click listener for items in list view.
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                onNavDrawerItemSelected(position);
             }
         });
 
@@ -190,8 +217,8 @@ public class MainActivity extends BaseActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                setUpActionBarSpinner();
             }
 
             @Override
@@ -207,8 +234,8 @@ public class MainActivity extends BaseActivity
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 
-                getActionBar().setTitle(R.string.app_name);
                 invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                showGlobalActionBar();
             }
         };
 
@@ -220,22 +247,19 @@ public class MainActivity extends BaseActivity
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        // Sync the toggle state after onRestoreInstanceState.
+        mDrawerToggle.syncState();
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState.
-        mDrawerToggle.syncState();
-    }
+    private void showGlobalActionBar() {
+        final ActionBar actionBar = getActionBar();
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass configuration changes to drawer toggle.
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(R.string.app_name);
     }
 
     /**
@@ -243,13 +267,10 @@ public class MainActivity extends BaseActivity
      *
      * @param position
      */
-    private void selectItem(int position) {
+    private void onNavDrawerItemSelected(int position) {
 
         // Selected drawer item.
         DrawerItem drawerItem = mDrawerItems[position];
-
-        // Set mTitle to drawer item.
-        mTitle = getString(drawerItem.getTitle());
 
         // Get drawer item's fragment.
         mCurrentFragment = drawerItem.getFragment();
@@ -258,11 +279,14 @@ public class MainActivity extends BaseActivity
 
         if (mCurrentFragment == null) {
             switch (position) {
-                case 0:
-                    mCurrentFragment = HomeFragment.newInstance();
+                case 0: {
+                    mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
                     break;
-                default:
-                    mCurrentFragment = new Fragment();
+                }
+                case 1: {
+                    mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+                    break;
+                }
             }
             drawerItem.setFragment(mCurrentFragment);
         }
@@ -281,32 +305,91 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * Refresh semester list.
+     * Set up action bar spinner.
+     */
+    private void setUpActionBarSpinner() {
+        if (mSemesters.size() > 0) {
+            final ActionBar actionBar = getActionBar();
+
+            // Add a semester to provide action to go to all semesters.
+            if (!mSemesters.get(mSemesters.size() - 1).equals(mAllSemestersOption)) {
+                mSemesters.add(mAllSemestersOption);
+            }
+
+            final ArrayAdapter<Semester> spinnerAdapter = new ArrayAdapter<Semester>(this,
+                    R.layout.actionbar_item_spinner, mSemesters);
+
+
+            spinnerAdapter.setDropDownViewResource(R.layout.actionbar_item_spinner_dropdown);
+
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            actionBar.setListNavigationCallbacks(spinnerAdapter, this);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int position, long id) {
+        // Set current semester selected semester.
+        mCurrentSemester = mSemesters.get(position);
+
+        if (position == mSemesters.size() - 1) {
+            // Open semesters list when "All semesters is chosen".
+            Intent intent = new Intent(this, ListFragmentActivity.class);
+            intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 3);
+            startActivity(intent);
+        } else {
+            // Selected drawer item.
+            DrawerItem drawerItem = mDrawerItems[position];
+            mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+            drawerItem.setFragment(mCurrentFragment);
+
+            // Otherwise, just open the home fragment properly.
+            onNavDrawerItemSelected(0);
+        }
+        return mCurrentFragment != null;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass configuration changes to drawer toggle.
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
+    /**
+     * Refresh semester list in action bar.
      */
     private void refreshListSemester() {
-        ((HomeFragment) mCurrentFragment).refreshSemesterList();
+        if (mCurrentFragment instanceof ListSemesterFragment) {
+            ((ListSemesterFragment) mCurrentFragment).updateListItems();
+        } else {
+            mSemesters = mDatabase.getSemesters();
+            setUpActionBarSpinner();
+        }
     }
 
     /**
      * Refresh course list.
      */
     private void refreshListCourse() {
-        ((HomeFragment) mCurrentFragment).refreshCourseList();
+        ((HomeFragment) mCurrentFragment).updateListItems();
     }
 
     /**
      * Refresh grade list.
      */
     private void refreshListGrade() {
-        ((HomeFragment) mCurrentFragment).refreshGradeList();
+        ((HomeFragment) mCurrentFragment).updateListItems();
     }
 
-//    /**
-//     * Refresh reminder list.
-//     */
-//    private void refreshListReminder() {
-//        ((HomeFragment) mCurrentFragment).refreshReminderList();
-//    }
+    /**
+     * Refresh reminder list.
+     */
+    private void refreshListReminder() {
+        ((HomeFragment) mCurrentFragment).updateListItems();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -331,32 +414,42 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onHomeNewSemester() {
-        SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
-    }
-
-    @Override
-    public void onHomeNewCourse() {
+    public void onHomeAddCourse() {
         Intent intent = new Intent(this, CourseEditActivity.class);
+        intent.putExtra(SEMESTER_KEY, mCurrentSemester);
         startActivityForResult(intent, REQUEST_LIST_COURSE_NEW_COURSE);
     }
 
-
     @Override
-    public void onHomeNewGrade() {
+    public void onHomeAddGrade() {
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_new_grade_dialog));
         gradeDialog.show(getSupportFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
-    public void onHomeNewReminder() {
+    public void onHomeAddReminder() {
         ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
                 getString(R.string.title_new_reminder_dialog));
         reminderDialog.show(getSupportFragmentManager(), NEW_REMINDER_TAG);
     }
+
+    @Override
+    public void onHomeEditReminder(Reminder reminder) {
+        // Show edit reminder dialog.
+        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
+                getString(R.string.title_edit_reminder_dialog), reminder);
+        reminderDialog.show(getSupportFragmentManager(), EDIT_REMINDER_TAG);
+    }
+
+    @Override
+    public void onHomeEditGrade(Grade grade) {
+        // Show edit grade dialog.
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_edit_grade_dialog), grade);
+        gradeDialog.show(getSupportFragmentManager(), EDIT_GRADE_TAG);
+    }
+
 
     @Override
     public void onHomeViewCourse(Course course) {
@@ -366,105 +459,39 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onListSemesterEdit(Semester semester) {
+    public void onHomeViewReminders() {
+        Intent intent = new Intent(this, ListFragmentActivity.class);
+        intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 0);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onHomeViewGrades() {
+        Intent intent = new Intent(this, ListFragmentActivity.class);
+        intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 1);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onHomeViewCourses() {
+        Intent intent = new Intent(this, ListFragmentActivity.class);
+        intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 2);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListSemesterNew() {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_edit_semester_dialog), semester);
-        semesterDialog.show(getSupportFragmentManager(), EDIT_SEMESTER_TAG);
+                getString(R.string.title_new_semester_dialog));
+        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+    }
+
+    @Override
+    public void onListSemesterEdit(Semester semester) {
     }
 
     @Override
     public void onListSemesterDelete(final Semester semester) {
-        final String title = String.format(getString(R.string.title_delete_semester_dialog), semester.toString());
-        final String positiveMessage =
-                String.format(getString(R.string.toast_alert_delete_confirmation), semester.toString());
-
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(R.string.message_delete_semester_dialog)
-                .setIcon(R.drawable.ic_action_contextual_delete)
-                .setPositiveButton(R.string.btn_alert_delete_positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Delete course, display text, and refresh list.
-                        mDatabase.deleteSemester(semester);
-                        Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
-                        // Refresh lists.
-                        refreshListSemester();
-                    }
-                })
-                .setNegativeButton(R.string.btn_alert_delete_negative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, just dismiss.
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onListCourseViewDetails(Course course) {
-        Intent intent = new Intent(this, CourseDetailActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onListCourseEdit(Course course) {
-        Intent intent = new Intent(this, CourseEditActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        startActivityForResult(intent, REQUEST_LIST_COURSE_EDIT_COURSE);
-    }
-
-    @Override
-    public void onListCourseDelete(final Course course) {
-        final String title = String.format(getString(R.string.title_delete_course_dialog), course.getName());
-        final String positiveMessage =
-                String.format(getString(R.string.toast_alert_delete_confirmation), course.getName());
-
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(R.string.message_delete_course_dialog)
-                .setIcon(R.drawable.ic_action_contextual_delete)
-                .setPositiveButton(R.string.btn_alert_delete_positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Delete course, display text, and refresh list.
-                        mDatabase.deleteCourse(course.getId());
-                        Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
-                        refreshListCourse();
-                    }
-                })
-                .setNegativeButton(R.string.btn_alert_delete_negative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, just dismiss.
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onListGradeEdit(Grade grade) {
-        // Show edit grade dialog.
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_edit_grade_dialog), grade);
-        gradeDialog.show(getSupportFragmentManager(), EDIT_GRADE_TAG);
-    }
-
-    @Override
-    public void onListGradeClick(Grade grade, Course course) {
-        Intent intent = new Intent(this, CourseDetailActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        intent.putExtra(GRADE_KEY, grade);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onListReminderEdit(Reminder reminder) {
-        // Show edit reminder dialog.
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_reminder_dialog), reminder);
-        reminderDialog.show(getSupportFragmentManager(), EDIT_REMINDER_TAG);
     }
 
     /* Dialog listeners */
@@ -498,13 +525,13 @@ public class MainActivity extends BaseActivity
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-//        refreshListReminder();
+        refreshListReminder();
     }
 
     /**
      * List adapter for drawer.
      */
-    private class ListAdapter extends BaseAdapter {
+    private class NavigationDrawerAdapter extends BaseAdapter {
         @Override
         public int getCount() {
             return mDrawerItems.length;
@@ -562,7 +589,7 @@ public class MainActivity extends BaseActivity
     /**
      * Navigation drawer item.
      */
-    private class DrawerItem {
+    private static class DrawerItem {
         private final int mTitle;
         private final int mIcon;
         private WeakReference<Fragment> mFragmentReference;

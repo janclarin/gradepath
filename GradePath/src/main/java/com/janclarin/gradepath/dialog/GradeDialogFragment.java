@@ -97,7 +97,7 @@ public class GradeDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment.
-        View rootView = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_grade, null);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_grade, null);
 
         // Find views.
         mCourseSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_grade_courses);

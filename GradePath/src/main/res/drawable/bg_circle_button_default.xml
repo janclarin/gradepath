@@ -16,7 +16,7 @@
         <shape
             android:shape="oval"
             android:thicknessRatio="100">
-            <solid android:color="@color/theme_secondary_color_see_through" />
+            <solid android:color="@color/theme_secondary_see_through" />
         </shape>
     </item>
 </layer-list>

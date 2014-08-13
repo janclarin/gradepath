@@ -62,7 +62,7 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment.
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.fragment_dialog_grade_component, null);
+        View rootView = LayoutInflater.from(mContext).inflate(R.layout.dialog_grade_component, null);
 
         // Find views.
         mComponentName = (EditText) rootView.findViewById(R.id.et_grade_component_name);

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -47,16 +49,29 @@ public class ListReminderFragment extends BaseListFragment {
         mEmptyTextView.setText(R.string.tv_list_task_empty);
 
         mCoursesById = new LongSparseArray<Course>();
+
+        for (Course course : mDatabase.getCurrentCourses()) {
+            mCoursesById.put(course.getId(), course);
+        }
+
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (mListener != null)
+                    mListener.onListReminderEdit((Reminder) mListItems.get(position));
+            }
+        });
     }
 
     @Override
     public void updateListItems() {
         clearListItems();
 
-        // Get and sort reminders from database. Add upcoming reminders.
+        // Get and sort reminder from database. Add upcoming reminder.
         List<Reminder> reminders = mDatabase.getUpcomingReminders();
         Collections.sort(reminders);
         mListItems.addAll(reminders);
@@ -113,7 +128,7 @@ public class ListReminderFragment extends BaseListFragment {
         @Override
         public int getItemViewType(int position) {
             return mListItems.get(position) instanceof Header ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN_3_LINE;
         }
 
         @Override
@@ -129,14 +144,15 @@ public class ListReminderFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
+                            .inflate(R.layout.list_header_general, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.list_item_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                            .inflate(R.layout.list_item_general_three_line, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
-                    viewHolder.tvInfo = (TextView) convertView.findViewById(R.id.tv_information);
+                    viewHolder.tvSubtitle2 = (TextView) convertView.findViewById(R.id.tv_subtitle_2);
+                    viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
                 }
 
                 convertView.setTag(viewHolder);
@@ -145,25 +161,20 @@ public class ListReminderFragment extends BaseListFragment {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                viewHolder.tvName.setText(((Header) listItem).getName());
+                viewHolder.tvTitle.setText(((Header) listItem).getName());
             } else {
                 Reminder reminder = (Reminder) listItem;
-                viewHolder.tvName.setText(reminder.getName());
-                viewHolder.tvSubtitle.setText(
-                        reminder.getDateString(mContext) + ", "
-                                + reminder.getTimeString() + " "
+                viewHolder.tvTitle.setText(reminder.getName());
+                viewHolder.tvSubtitle.setText(mCoursesById.get(reminder.getCourseId()).getName());
+                viewHolder.tvSubtitle2.setText(
+                        reminder.getDateString(mContext) + " "
                                 + getString(R.string.bullet) + " "
-                                + mCoursesById.get(reminder.getCourseId()).getName());
-                viewHolder.tvInfo.setText(reminder.getTypeString(mContext));
+                                + reminder.getTimeString());
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+                viewHolder.ivDetail.setImageResource(R.drawable.reminder);
             }
 
             return convertView;
-        }
-
-        private class ViewHolder {
-            TextView tvName;
-            TextView tvSubtitle;
-            TextView tvInfo;
         }
     }
 }

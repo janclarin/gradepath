@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -53,14 +54,11 @@ public class ListGradeFragment extends BaseListFragment {
         mAdapter = new ListAdapter();
         setUpListView();
 
-        // Set on item click listener to notify listener to open course detail activity into grades.
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Grade grade = (Grade) mAdapter.getItem(position);
-                if (mListener != null) {
-                    mListener.onListGradeClick(grade, mCoursesById.get(grade.getCourseId()));
-                }
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (mListener != null)
+                    mListener.onListGradeEdit((Grade) mListItems.get(position));
             }
         });
     }
@@ -144,7 +142,6 @@ public class ListGradeFragment extends BaseListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem listItem = mListItems.get(position);
-            final int type = getItemViewType(position);
 
             ViewHolder viewHolder;
 
@@ -152,10 +149,11 @@ public class ListGradeFragment extends BaseListFragment {
                 viewHolder = new ViewHolder();
 
                 convertView = LayoutInflater.from(mContext)
-                        .inflate(R.layout.list_item_general, parent, false);
-                viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                        .inflate(R.layout.list_item_general_three_line, parent, false);
+                viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
                 viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
-                viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_information);
+                viewHolder.tvSubtitle2 = (TextView) convertView.findViewById(R.id.tv_subtitle_2);
+                viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -163,17 +161,17 @@ public class ListGradeFragment extends BaseListFragment {
             }
 
             Grade grade = (Grade) listItem;
-            viewHolder.tvName.setText(grade.getName());
+            viewHolder.tvTitle.setText(grade.getName());
             viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
-            viewHolder.tvGrade.setText(grade.getGradePercentage());
+            viewHolder.tvSubtitle2.setText(
+                    grade.getGradePercentage() + " "
+                            + getString(R.string.bullet) + " "
+                            + grade.toString()
+            );
+            viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+            viewHolder.ivDetail.setImageResource(R.drawable.grade);
 
             return convertView;
-        }
-
-        private class ViewHolder {
-            TextView tvName;
-            TextView tvSubtitle;
-            TextView tvGrade;
         }
     }
 
@@ -181,8 +179,5 @@ public class ListGradeFragment extends BaseListFragment {
 
         /* Called when a grade is selected for edit in contextual action bar */
         public void onListGradeEdit(Grade grade);
-
-        /* Called when a grade is clicked in list. Opens course detail fragment. */
-        public void onListGradeClick(Grade grade, Course course);
     }
 }

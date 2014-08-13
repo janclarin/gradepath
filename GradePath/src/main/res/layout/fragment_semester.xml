@@ -8,15 +8,24 @@
         android:id="@+id/lv_list_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:clipToPadding="false"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
+        android:drawSelectorOnTop="true"
+        android:paddingBottom="8dp"
         android:scrollbars="none" />
 
     <TextView
         android:id="@+id/tv_list_empty"
         style="@style/emptyListTextView" />
+
+    <ImageButton
+        android:id="@+id/btn_add_item"
+        style="@style/FloatingActionButton"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/cd_add_button"
+        android:src="@drawable/list_add_item" />
 
 </FrameLayout>

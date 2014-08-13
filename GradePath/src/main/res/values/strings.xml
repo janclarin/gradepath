@@ -13,14 +13,13 @@
     <string name="actionbar_save">Save</string>
     <string name="actionbar_update">Update</string>
 
-
     <!-- Contextual action bar selected -->
     <string name="contextual_action_edit">Edit</string>
     <string name="contextual_action_delete">Delete</string>
 
     <!-- Edit Course Activity -->
     <string name="title_activity_edit_course">Edit course</string>
-    <string name="hint_course_name">Name</string>
+    <string name="hint_course_name">Course name</string>
     <string name="hint_instructor">Instructor</string>
     <string name="hint_email_address">Email address</string>
     <string name="grade_components">Grade components</string>
@@ -111,7 +110,7 @@
     <string name="title_fragment_list_semesters">Semesters</string>
     <string name="semester_current">Current</string>
     <string name="semester_past">Past</string>
-    <string name="tv_gpa">\nGPA</string>
+    <string name="tv_gpa">GPA</string>
     <string name="semester_days_left">Days\nLeft</string>
     <string name="tv_list_semester_empty">No semesters</string>
     <string name="not_available">N/A</string>
@@ -131,14 +130,14 @@
     <string name="task_due_date_tomorrow">Tomorrow</string>
     <string name="task_due_date_none">No tasks</string>
     <string name="bullet">•</string>
-    <string name="cd_show_overflow">Show overflow menu</string>
+    <string name="cd_overflow">Show menu</string>
     <string name="action_list_sort_by">Sort by</string>
     <string name="action_list_sort_alphabet_ascending">Alphabetical ascending</string>
     <string name="action_list_sort_alphabet_descending">Alphabetical descending</string>
 
     <!-- Home Fragment -->
     <string name="title_fragment_home">Home</string>
-    <string name="welcome_message">Click on the add button to add your first course.</string>
+    <string name="welcome_message">Add a course</string>
     <string name="welcome_message2">Swipe from the left side of the screen to view more options.</string>
     <string name="see_all">See all</string>
     <string name="none_use_button">None</string>
@@ -170,6 +169,7 @@
     <string name="exam">Exam</string>
     <string name="not_exam">General</string>
     <string name="gpa">GPA</string>
+    <string name="cumulative_gpa">Cumulative GPA:</string>
     <string name="weight_invalid">Weight is invalid</string>
     <string name="name_invalid">Name is invalid</string>
     <string name="num_items_invalid">Number of items is invalid</string>
@@ -177,10 +177,20 @@
     <string name="title_new_grade_component_dialog">New grade component</string>
     <string name="grade_component_updated">Grade component updated</string>
     <string name="grade_component_saved">Grade component saved</string>
-    <string name="add_grade_component">Add grade component</string>
+    <string name="add_grade_component">New component</string>
     <string name="items">items</string>
     <string name="title_edit_grade_component_dialog">Edit grade component</string>
     <string name="tv_dialog_reminder_time">Time</string>
     <string name="grade_component_total_weight_invalid">Grade component weights must sum to 100%</string>
+    <string name="more">More</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="no_semesters">No semesters</string>
+    <string name="add">Add</string>
+    <string name="semester">Semester</string>
+    <string name="title_activity_list_fragment">ListFragmentActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="all_semesters">All semesters</string>
+    <string name="current_semester">Current semester</string>
+    <string name="add_first_semester">Add a semester. \n Click on the top-right icon.</string>
 
 </resources>

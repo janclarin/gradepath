@@ -6,6 +6,10 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -20,6 +24,7 @@ import java.util.List;
  */
 public class ListSemesterFragment extends BaseListFragment {
 
+    private ImageButton mAddItemButton;
     private OnFragmentListSemesterListener mListener;
 
     public static ListSemesterFragment newInstance() {
@@ -31,13 +36,42 @@ public class ListSemesterFragment extends BaseListFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_semester, container, false);
+
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
+        mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mAddItemButton = (ImageButton) rootView.findViewById(R.id.btn_add_item);
+
+        return rootView;
+
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEmptyTextView.setText(R.string.tv_list_semester_empty);
+        mAddItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) mListener.onListSemesterNew();
+            }
+        });
 
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (mListener != null)
+                    mListener.onListSemesterEdit((Semester) mListItems.get(position));
+            }
+        });
     }
 
     @Override
@@ -49,6 +83,7 @@ public class ListSemesterFragment extends BaseListFragment {
 
         // Add current semester header and semester into list if they exist.
         if (currentSemester != null) {
+            mListItems.add(new Header(getString(R.string.semester_current)));
             mListItems.add(currentSemester);
 
             // Remove current semester from list of all semesters.
@@ -57,7 +92,7 @@ public class ListSemesterFragment extends BaseListFragment {
 
         // Add all other semesters under "Past" header.
         if (semesters.size() > 0) {
-            mListItems.add(new Header(getString(R.string.semester_past)));
+            mListItems.add(new Header(null));
             mListItems.addAll(semesters);
         }
 
@@ -108,6 +143,9 @@ public class ListSemesterFragment extends BaseListFragment {
      */
     public interface OnFragmentListSemesterListener {
 
+        /* Called when the add item button is clicked. */
+        public void onListSemesterNew();
+
         /* Called when contextual action bar edit button is clicked. */
         public void onListSemesterEdit(Semester semester);
 
@@ -119,7 +157,7 @@ public class ListSemesterFragment extends BaseListFragment {
         @Override
         public int getItemViewType(int position) {
             return (mListItems.get(position) instanceof Header) ?
-                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN;
+                    ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_MAIN_2_LINE;
         }
 
         @Override
@@ -134,17 +172,16 @@ public class ListSemesterFragment extends BaseListFragment {
 
                 if (type == ITEM_VIEW_TYPE_HEADER) {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.fragment_list_header_general, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_header);
-                    viewHolder.tvInformation = (TextView) convertView.findViewById(R.id.tv_name_sub_header);
+                            .inflate(R.layout.list_header_general, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
+                    viewHolder.divider = convertView.findViewById(R.id.divider_view);
                 } else {
                     convertView = LayoutInflater.from(mContext)
-                            .inflate(R.layout.list_item_semesters, parent, false);
-                    viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_semester_name);
-                    viewHolder.tvInformation =
-                            (TextView) convertView.findViewById(R.id.tv_semester_information);
-                    viewHolder.tvInformationLabel =
-                            (TextView) convertView.findViewById(R.id.tv_semester_information_label);
+                            .inflate(R.layout.list_item_general_two_line, parent, false);
+                    viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                    viewHolder.tvSubtitle =
+                            (TextView) convertView.findViewById(R.id.tv_subtitle);
+                    viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
                 }
 
                 convertView.setTag(viewHolder);
@@ -153,44 +190,42 @@ public class ListSemesterFragment extends BaseListFragment {
             }
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
-                String header = ((Header) listItem).getName();
-                viewHolder.tvName.setText(header);
 
-                double gpa = mDatabase.getCumulativeGPA();
-                String info = mContext.getString(R.string.gpa) + ": ";
-                if (gpa > -1) {
-                    info += new DecimalFormat("#.0#").format(gpa);
-                } else {
-                    info += mContext.getString(R.string.not_available);
+                String info = ((Header) listItem).getName();
+
+                if (info == null) {
+                    double gpa = mDatabase.getCumulativeGPA();
+                    info = getString(R.string.cumulative_gpa) + " ";
+                    if (gpa > -1) {
+                        info += new DecimalFormat("#.0#").format(gpa);
+                    } else {
+                        info += mContext.getString(R.string.not_available);
+                    }
                 }
-                viewHolder.tvInformation.setText(info);
+
+                viewHolder.tvTitle.setText(info);
+
+                if (position == 0) viewHolder.divider.setVisibility(View.GONE);
             } else {
                 Semester semester = (Semester) listItem;
-                viewHolder.tvName.setText(semester.toString());
+                viewHolder.tvTitle.setText(semester.toString());
 
-                // Set semester label to current or completed based on semester value.
-                if (semester.isCurrent()) {
-                    viewHolder.tvInformation.setText(semester.getDaysLeft());
-                    viewHolder.tvInformationLabel.setText(mContext.getString(R.string.semester_days_left));
-                } else {
-                    // Otherwise set label to completed and information to gpa.
-                    double gpa = semester.getGpa();
+                // Otherwise set label to completed and information to gpa.
+                double gpa = semester.getGpa();
 
-                    // Set gpa if it exists.
-                    viewHolder.tvInformation.setText(gpa > -1 ? Double.toString(semester.getGpa()) :
-                                    mContext.getString(R.string.not_available)
-                    );
-                    viewHolder.tvInformationLabel.setText(mContext.getString(R.string.tv_gpa));
-                }
+                // Set gpa if it exists.
+                viewHolder.tvSubtitle.setText(
+                        getString(R.string.tv_gpa) + ": "
+                                + (gpa > -1 ?
+                                Double.toString(semester.getGpa())
+                                : mContext.getString(R.string.not_available))
+                );
+
+                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+                viewHolder.ivDetail.setImageResource(R.drawable.semester_light);
             }
 
             return convertView;
-        }
-
-        private class ViewHolder {
-            TextView tvName;
-            TextView tvInformation;
-            TextView tvInformationLabel;
         }
     }
 }

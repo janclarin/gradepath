@@ -1,7 +1,6 @@
 package com.janclarin.gradepath.model;
 
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 public class Semester extends DatabaseItem implements Comparable<Semester> {
 
@@ -11,7 +10,7 @@ public class Semester extends DatabaseItem implements Comparable<Semester> {
     private int year;
     private double gpa;
     private boolean isCurrent;
-    private Calendar endDate;
+    private Calendar eDate;
 
     public Semester() {
     }
@@ -64,27 +63,6 @@ public class Semester extends DatabaseItem implements Comparable<Semester> {
     public void setGpa(double gpa) {
         this.gpa = gpa;
     }
-
-    public Calendar getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Calendar endDate) {
-        this.endDate = endDate;
-    }
-
-    /**
-     * Gets the number of days left for the semester.
-     *
-     * @return number of days left if over 0 days. return 0 if negative number of days.
-     */
-    public String getDaysLeft() {
-        long timeDiff = endDate.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-        long dayDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
-
-        return (dayDiff < 0) ? Long.toString(0) : Long.toString(dayDiff);
-    }
-
 
     /**
      * Compares two semesters to figure out which is older.

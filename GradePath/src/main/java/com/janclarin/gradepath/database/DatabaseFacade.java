@@ -23,29 +23,51 @@ import java.util.List;
  */
 public class DatabaseFacade {
 
-    private static final String[] SEMESTER_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_SEASON, DatabaseHelper.COLUMN_YEAR,
-            DatabaseHelper.COLUMN_SEMESTER_GPA, DatabaseHelper.COLUMN_IS_CURRENT,
-            DatabaseHelper.COLUMN_DATE_END};
+    private static final String[] SEMESTER_COLUMNS = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_SEASON,
+            DatabaseHelper.COLUMN_YEAR,
+            DatabaseHelper.COLUMN_SEMESTER_GPA,
+            DatabaseHelper.COLUMN_IS_CURRENT
+    };
 
-    private static final String[] COURSE_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_SEMESTER_ID, DatabaseHelper.COLUMN_COURSE_NAME,
-            DatabaseHelper.COLUMN_INSTRUCTOR_NAME, DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL,
-            DatabaseHelper.COLUMN_FINAL_GRADE, DatabaseHelper.COLUMN_IS_COMPLETED};
+    private static final String[] COURSE_COLUMNS = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_SEMESTER_ID,
+            DatabaseHelper.COLUMN_COURSE_NAME,
+            DatabaseHelper.COLUMN_INSTRUCTOR_NAME,
+            DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL,
+            DatabaseHelper.COLUMN_FINAL_GRADE,
+            DatabaseHelper.COLUMN_IS_COMPLETED
+    };
 
-    private static final String[] COMPONENT_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_COMPONENT_NAME,
-            DatabaseHelper.COLUMN_COMPONENT_WEIGHT, DatabaseHelper.COLUMN_COMPONENT_NUM_ITEMS};
+    private static final String[] COMPONENT_COLUMNS = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_COURSE_ID,
+            DatabaseHelper.COLUMN_COMPONENT_NAME,
+            DatabaseHelper.COLUMN_COMPONENT_WEIGHT,
+            DatabaseHelper.COLUMN_COMPONENT_NUM_ITEMS
+    };
 
-    private static final String[] GRADE_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_COMPONENT_ID,
-            DatabaseHelper.COLUMN_GRADE_NAME, DatabaseHelper.COLUMN_POINTS_RECEIVED,
-            DatabaseHelper.COLUMN_POINTS_POSSIBLE, DatabaseHelper.COLUMN_DATE_ADDED};
+    private static final String[] GRADE_COLUMNS = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_COURSE_ID,
+            DatabaseHelper.COLUMN_COMPONENT_ID,
+            DatabaseHelper.COLUMN_GRADE_NAME,
+            DatabaseHelper.COLUMN_POINTS_RECEIVED,
+            DatabaseHelper.COLUMN_POINTS_POSSIBLE,
+            DatabaseHelper.COLUMN_DATE_ADDED
+    };
 
-    private static final String[] REMINDER_COLUMNS = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_COURSE_ID, DatabaseHelper.COLUMN_REMINDER_NAME,
-            DatabaseHelper.COLUMN_IS_EXAM, DatabaseHelper.COLUMN_IS_COMPLETED,
-            DatabaseHelper.COLUMN_DATE_ADDED, DatabaseHelper.COLUMN_DATE_REMIND};
+    private static final String[] REMINDER_COLUMNS = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_COURSE_ID,
+            DatabaseHelper.COLUMN_REMINDER_NAME,
+            DatabaseHelper.COLUMN_IS_EXAM,
+            DatabaseHelper.COLUMN_IS_COMPLETED,
+            DatabaseHelper.COLUMN_DATE_ADDED,
+            DatabaseHelper.COLUMN_DATE_REMIND
+    };
 
     /**
      * Instance of the mDatabase following the singleton pattern.
@@ -78,8 +100,7 @@ public class DatabaseFacade {
      *
      * @return semester ID
      */
-    public Semester insertSemester(String season, int year, double gpa, boolean isCurrent,
-                                   Calendar endDate) {
+    public Semester insertSemester(String season, int year, double gpa, boolean isCurrent) {
 
         // Cursor to check if this semester exists before inserting it.
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
@@ -99,7 +120,6 @@ public class DatabaseFacade {
             values.put(DatabaseHelper.COLUMN_YEAR, year);
             values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
             values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
-            values.put(DatabaseHelper.COLUMN_DATE_END, endDate.getTimeInMillis());
 
             long semesterId = mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
 
@@ -125,7 +145,7 @@ public class DatabaseFacade {
      * @return -1 if update failed.
      */
     public int updateSemester(long semesterId, String season, int year, double gpa,
-                              boolean isCurrent, Calendar endDate) {
+                              boolean isCurrent) {
 
         // Set all other semesters as not current if this semester is.
         if (isCurrent) setOtherSemestersToNotCurrent();
@@ -135,7 +155,6 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_YEAR, year);
         values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
         values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_DATE_END, endDate.getTimeInMillis());
 
         return mDatabase.update(DatabaseHelper.TABLE_SEMESTERS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null);
@@ -595,6 +614,31 @@ public class DatabaseFacade {
     }
 
     /**
+     * Gets recent grades.
+     *
+     * @param number of grades to return.
+     */
+    public List<Grade> getRecentGrades(int number) {
+
+        List<Grade> grades = new ArrayList<Grade>();
+
+        // Get most recent grades.
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_GRADES, GRADE_COLUMNS,
+                null, null, null, null, "'DESC'", Integer.toString(number));
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            grades.add(cursorToGrade(cursor));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return grades;
+    }
+
+    /**
      * Get all grades for a grade component.
      */
     public List<Grade> getComponentGrades(long componentId) {
@@ -732,7 +776,7 @@ public class DatabaseFacade {
     }
 
     /**
-     * @return list of all reminders.
+     * @return list of all reminder.
      */
     public List<Reminder> getReminders() {
         List<Reminder> reminders = new ArrayList<Reminder>();
@@ -770,7 +814,7 @@ public class DatabaseFacade {
     }
 
     /**
-     * @return list of all current reminders.
+     * @return list of all current reminder.
      */
     public List<Reminder> getUpcomingReminders() {
         List<Reminder> reminders = new ArrayList<Reminder>();
@@ -794,11 +838,13 @@ public class DatabaseFacade {
         }
         cursor.close();
 
+        Collections.sort(reminders);
+
         return reminders;
     }
 
     /**
-     * @return list of all current reminders.
+     * @return list of all current reminder.
      */
     public List<Reminder> getCurrentReminders(long courseId) {
         List<Reminder> reminders = new ArrayList<Reminder>();
@@ -907,10 +953,6 @@ public class DatabaseFacade {
         semester.setYear(cursor.getInt(2));
         semester.setGpa(cursor.getDouble(3));
         semester.setCurrent(cursor.getInt(4) == 1);
-
-        Calendar addDate = Calendar.getInstance();
-        addDate.setTimeInMillis(cursor.getLong(5));
-        semester.setEndDate(addDate);
 
         return semester;
     }

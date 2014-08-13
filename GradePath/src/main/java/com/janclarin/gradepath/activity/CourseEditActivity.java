@@ -1,24 +1,18 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeComponentDialogFragment;
-import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.GradeComponent;
 import com.janclarin.gradepath.model.Semester;
@@ -28,12 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseEditActivity extends BaseActivity
-        implements SemesterDialogFragment.OnDialogSemesterCallbacks,
-        GradeComponentDialogFragment.OnDialogGradeComponentListener {
+        implements GradeComponentDialogFragment.OnDialogGradeComponentListener {
 
     public static final String LOG_TAG = CourseEditActivity.class.getSimpleName();
 
-    private Spinner mSemesterSpinner;
     private EditText mCourseName;
     private EditText mInstructorName;
     private EditText mInstructorEmail;
@@ -41,7 +33,6 @@ public class CourseEditActivity extends BaseActivity
 
     private Course mCourseToUpdate;
     private int updatePosition = -1;
-    private ArrayAdapter<Semester> mAdapter;
 
     // List of grade components.
     private List<GradeComponent> mGradeComponents;
@@ -76,34 +67,10 @@ public class CourseEditActivity extends BaseActivity
             mInstructorName.setText(mCourseToUpdate.getInstructorName());
             mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
 
-            // Get semester.
-            Semester courseSemester = mDatabase.getSemester(mCourseToUpdate.getSemesterId());
-
-            // Set spinners to proper season and year.
-            ArrayAdapter adapter = (ArrayAdapter) mSemesterSpinner.getAdapter();
-            mSemesterSpinner.setSelection(adapter.getPosition(courseSemester));
-
             // Add grade component view for each existing grade component.
             for (GradeComponent gradeComponent : mGradeComponents)
                 addGradeComponent(gradeComponent);
         }
-    }
-
-    @Override
-    public void onSemesterSaved(boolean isNew, Semester semester) {
-        // Display toast to notify user that the semester is saved.
-        Toast.makeText(getApplicationContext(), R.string.toast_semester_saved, Toast.LENGTH_SHORT).show();
-
-        // Add semester to spinner and refresh list.
-        mAdapter.add(semester);
-        mAdapter.notifyDataSetChanged();
-        mSemesterSpinner.setSelection(mAdapter.getPosition(semester));
-    }
-
-    private void newSemester() {
-        SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
     }
 
     private void newGradeComponent() {
@@ -124,56 +91,16 @@ public class CourseEditActivity extends BaseActivity
      */
     private void setUpView() {
         // Find views.
-        mSemesterSpinner = (Spinner) findViewById(R.id.spn_semester);
         mCourseName = (EditText) findViewById(R.id.et_course_name);
         mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
         mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
-
-        // Set add button to open new semester dialog.
-        findViewById(R.id.btn_add_semester).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newSemester();
-            }
-        });
 
         // Set add button to open new grade component dialog.
         findViewById(R.id.btn_add_grade_component).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newGradeComponent();
-            }
-        });
-
-        // Set up semester spinner.
-        List<Semester> semesters = mDatabase.getSemesters();
-
-        mAdapter = new ArrayAdapter<Semester>(this,
-                android.R.layout.simple_spinner_item, semesters);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSemesterSpinner.setAdapter(mAdapter);
-
-        // Set selection to current semester if available.
-        Semester currentSemester = mDatabase.getCurrentSemester();
-        if (currentSemester != null) {
-            mSemesterSpinner.setSelection(mAdapter.getPosition(currentSemester));
-        }
-
-        // Close keyboard on spinner press with custom listeners.
-        mSemesterSpinner.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Hide keyboard.
-                InputMethodManager inputMethodManager = (InputMethodManager) CourseEditActivity.this
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                try {
-                    inputMethodManager.hideSoftInputFromWindow(
-                            CourseEditActivity.this.getCurrentFocus().getWindowToken(), 0);
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-                return false;
             }
         });
 
@@ -207,11 +134,11 @@ public class CourseEditActivity extends BaseActivity
         View gradeComponentView = getLayoutInflater().inflate(R.layout.list_item_course_component,
                 mComponentList, false);
 
-        ((TextView) gradeComponentView.findViewById(R.id.tv_name)).setText(gradeComponent.getName());
+        ((TextView) gradeComponentView.findViewById(R.id.tv_title)).setText(gradeComponent.getName());
         ((TextView) gradeComponentView.findViewById(R.id.tv_subtitle))
                 .setText(Integer.toString(gradeComponent.getNumberOfItems()) + " "
                         + getString(R.string.items));
-        ((TextView) gradeComponentView.findViewById(R.id.tv_information))
+        ((TextView) gradeComponentView.findViewById(R.id.tv_detail))
                 .setText(new DecimalFormat("#.##").format(gradeComponent.getWeight()) + "%");
 
         // Set edit button on click listener to edit grade component.
@@ -277,7 +204,7 @@ public class CourseEditActivity extends BaseActivity
      */
     private void saveCourse() {
         // Insert semester into Database to get id. Checks if semester already exists.
-        Semester semester = (Semester) mSemesterSpinner.getSelectedItem();
+        Semester semester = (Semester) getIntent().getSerializableExtra(SEMESTER_KEY);
         String courseName = mCourseName.getText().toString().trim();
         String instructorName = mInstructorName.getText().toString().trim();
         String instructorEmail = mInstructorEmail.getText().toString().trim();
@@ -302,7 +229,6 @@ public class CourseEditActivity extends BaseActivity
             toast.show();
             return;
         }
-
 
         long courseId;
         if (mCourseToUpdate == null) {
@@ -358,10 +284,7 @@ public class CourseEditActivity extends BaseActivity
                     }
                 });
 
-        // If updating course, set positive button to "Update", otherwise just "Save"
         View positiveButton = customActionBarView.findViewById(R.id.actionbar_done);
-        String positiveButtonText = (mCourseToUpdate != null) ? getString(R.string.actionbar_update) : getString(R.string.actionbar_save);
-        ((TextView) positiveButton.findViewById(R.id.tv_actionbar_done)).setText(positiveButtonText);
 
         // Set done button on click listener.
         positiveButton.setOnClickListener(new View.OnClickListener() {

@@ -20,9 +20,7 @@
         </activity>
         <activity
             android:name=".activity.CourseEditActivity"
-            android:label="@string/title_activity_edit_course">
-
-        </activity>
+            android:label="@string/title_activity_edit_course"></activity>
         <activity
             android:name=".activity.CourseDetailActivity"
             android:label="@string/title_activity_detail_course"
@@ -40,6 +38,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activity.ListFragmentActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.janclarin.gradepath.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

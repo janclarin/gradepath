@@ -127,7 +127,7 @@ public class ReminderDialogFragment extends BaseDialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment.
-        View rootView = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_reminder, null);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_reminder, null);
 
         // Find views.
         mReminderName = (EditText) rootView.findViewById(R.id.et_reminder_name);

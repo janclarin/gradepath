@@ -2,22 +2,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.janclarin.gradepath.fragment.CourseOverview">
+    tools:context="com.janclarin.gradepath.fragment.CourseDetailFragment">
 
-    <TextView
-        android:id="@+id/tv_subtitle"
+    <LinearLayout
+        android:id="@+id/layout_text_fields"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:background="@color/theme_primary"
+        android:orientation="vertical"
+        android:paddingBottom="48dp">
 
-    <TextView
-        android:id="@+id/tv_instructor_email"
+        <TextView
+            android:id="@+id/tv_course_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/keyline_1"
+            android:layout_marginRight="@dimen/keyline_1"
+            android:layout_marginTop="16dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_instructor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/keyline_1"
+            android:layout_marginRight="@dimen/keyline_1"
+            android:layout_marginTop="16dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_instructor_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/keyline_1"
+            android:layout_marginRight="@dimen/keyline_1"
+            android:layout_marginTop="16dp"
+            android:autoLink="email"
+            android:singleLine="true"
+            android:textColorLink="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_list_items"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_subtitle"
-        android:layout_marginTop="8dp"
-        android:autoLink="email"
-        android:textSize="20sp" />
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/layout_text_fields"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="true"
+        android:paddingBottom="8dp"
+        android:scrollbars="none" />
+
+    <View
+        android:id="@+id/button_bottom"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_below="@id/layout_text_fields"
+        android:background="@null" />
+
+    <ImageButton
+        android:id="@+id/btn_edit_course"
+        style="@style/FloatingActionButton"
+        android:layout_alignBottom="@id/button_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/keyline_1"
+        android:contentDescription="@string/cd_add_button"
+        android:src="@drawable/edit" />
 
 </RelativeLayout>

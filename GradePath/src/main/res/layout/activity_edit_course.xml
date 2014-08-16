@@ -8,7 +8,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <LinearLayout
             android:id="@+id/layout_text_fields"
@@ -31,7 +33,7 @@
                 android:inputType="textCapWords"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/white_60_opacity"
                 android:textSize="24sp" />
 
             <EditText
@@ -40,13 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/keyline_1"
                 android:layout_marginRight="@dimen/keyline_1"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:hint="@string/hint_instructor"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
+                android:textColorHint="@color/white_60_opacity" />
 
             <EditText
                 android:id="@+id/et_instructor_email"
@@ -60,7 +62,7 @@
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
+                android:textColorHint="@color/white_60_opacity" />
 
         </LinearLayout>
 
@@ -83,12 +85,18 @@
             android:orientation="vertical"
             android:showDividers="middle" />
 
+        <View
+            android:id="@+id/button_bottom"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_below="@id/layout_text_fields"
+            android:background="@null" />
+
         <ImageButton
             android:id="@+id/btn_add_grade_component"
             style="@style/FloatingActionButton"
-            android:layout_above="@id/ll_grade_components"
+            android:layout_alignBottom="@id/button_bottom"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
             android:layout_marginRight="@dimen/keyline_1"
             android:src="@drawable/list_add_item" />
 

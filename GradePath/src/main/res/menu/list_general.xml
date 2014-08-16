@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/set_semester_to_current"
-        android:title="@string/list_semester_set_to_current" />
-
+        android:id="@+id/menu_delete"
+        android:title="@string/delete"
+        android:orderInCategory="1000"/>
 </menu>

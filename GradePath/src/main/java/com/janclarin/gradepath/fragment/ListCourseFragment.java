@@ -2,7 +2,6 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,24 +81,6 @@ public class ListCourseFragment extends BaseListFragment {
     }
 
     @Override
-    protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null) {
-            mListener.onListCourseEdit((Course) mAdapter.getItem(selectedPosition));
-        }
-    }
-
-    @Override
-    protected void deleteSelectedItems(SparseBooleanArray selectedPositions) {
-        int numItems = mListItems.size();
-        for (int i = numItems - 1; i >= 0; i--) {
-            if (selectedPositions.get(i, false)) {
-                Course selectedCourse = (Course) mAdapter.getItem(i);
-                if (mListener != null) mListener.onListCourseDelete(selectedCourse);
-            }
-        }
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -126,9 +107,6 @@ public class ListCourseFragment extends BaseListFragment {
 
         /* Called when the contextual action bar edit button is clicked. */
         public void onListCourseEdit(Course course);
-
-        /* Called when the contextual action bar delete button is clicked. */
-        public void onListCourseDelete(Course course);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -139,7 +117,7 @@ public class ListCourseFragment extends BaseListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem listItem = mListItems.get(position);
             final int type = getItemViewType(position);
@@ -159,6 +137,7 @@ public class ListCourseFragment extends BaseListFragment {
                     viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
                     viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
+                    viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
                 }
 
                 convertView.setTag(viewHolder);
@@ -174,6 +153,13 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.tvSubtitle.setText(course.getInstructorName());
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
                 viewHolder.ivDetail.setImageResource(R.drawable.course);
+                // Set button to open popup menu.
+                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPopupMenu(view, R.menu.list_general, position);
+                    }
+                });
             }
 
             return convertView;

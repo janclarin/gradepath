@@ -184,6 +184,19 @@ public class DatabaseFacade {
         }
 
         cursor.close();
+
+        // Set the most recent semester before the one to be deleted to be current.
+        if (semester.isCurrent()) {
+            List<Semester> semesters = getSemesters();
+            Collections.sort(semesters);
+            Semester mostRecentSemester = semesters.get(semesters.size() - 1);
+            updateSemester(
+                    mostRecentSemester.getId(),
+                    mostRecentSemester.getSeason(),
+                    mostRecentSemester.getYear(),
+                    mostRecentSemester.getGpa(),
+                    true);  // Set to current.
+        }
     }
 
     /**
@@ -372,7 +385,7 @@ public class DatabaseFacade {
     /**
      * @return list of all {@code Course}.
      */
-    public List<Course> getCourses() {
+    public List<Course> getAllCourses() {
 
         List<Course> courses = new ArrayList<Course>();
 
@@ -556,8 +569,7 @@ public class DatabaseFacade {
     /**
      * Deletes a grade from mDatabase.
      */
-    public void deleteGrade(Grade grade) {
-        long gradeId = grade.getId();
+    public void deleteGrade(long gradeId) {
 
         mDatabase.delete(DatabaseHelper.TABLE_GRADES,
                 DatabaseHelper.COLUMN_ID + " = '" + gradeId + "'", null);
@@ -566,7 +578,7 @@ public class DatabaseFacade {
     /**
      * Get recent grades.
      */
-    public List<Grade> getGrades() {
+    public List<Grade> getAllGrades() {
 
         List<Grade> grades = new ArrayList<Grade>();
 
@@ -802,127 +814,6 @@ public class DatabaseFacade {
 
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
                 DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            reminders.add(cursorToReminder(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
-
-    /**
-     * @return list of all current reminder.
-     */
-    public List<Reminder> getUpcomingReminders() {
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        // Yesterday calendar for comparison.
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DAY_OF_MONTH, -1);
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Reminder reminder = cursorToReminder(cursor);
-
-            // Only add the reminder if it's current.
-            if (reminder.getReminderDate().after(yesterday)) {
-                reminders.add(reminder);
-            }
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        Collections.sort(reminders);
-
-        return reminders;
-    }
-
-    /**
-     * @return list of all current reminder.
-     */
-    public List<Reminder> getCurrentReminders(long courseId) {
-        List<Reminder> reminders = new ArrayList<Reminder>();
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DAY_OF_MONTH, -1);
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Reminder reminder = cursorToReminder(cursor);
-
-            // Only add the reminder if it's current.
-            if (reminder.getReminderDate().after(yesterday)) {
-                reminders.add(reminder);
-            }
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
-
-    /**
-     * @return list of all incomplete tasks for a course.
-     */
-    public List<Reminder> getIncompleteReminders() {
-
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
-        );
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            reminders.add(cursorToReminder(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
-
-    /**
-     * @return list of all incomplete tasks for a course.
-     */
-    public List<Reminder> getIncompleteReminders(long courseId) {
-
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
-                        DatabaseHelper.COLUMN_IS_COMPLETED + " = '0'", null, null, null, null
-        );
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            reminders.add(cursorToReminder(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
-
-    /**
-     * @return list of all complete tasks for a course.
-     */
-    public List<Reminder> getPastReminders(long courseId) {
-
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "' AND " +
-                        DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null
-        );
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

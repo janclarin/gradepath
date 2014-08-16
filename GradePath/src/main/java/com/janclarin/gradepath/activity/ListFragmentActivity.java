@@ -1,32 +1,25 @@
 package com.janclarin.gradepath.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
-import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.BaseListFragment;
 import com.janclarin.gradepath.fragment.ListCourseFragment;
 import com.janclarin.gradepath.fragment.ListGradeFragment;
-import com.janclarin.gradepath.fragment.ListReminderFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
-import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
 
 public class ListFragmentActivity extends BaseActivity
-        implements ListReminderFragment.OnFragmentListTaskListener,
-        ListGradeFragment.OnFragmentListGradeListener,
+        implements ListGradeFragment.OnFragmentListGradeListener,
         ListCourseFragment.OnFragmentListCourseListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
         GradeDialogFragment.OnDialogGradeListener,
-        ReminderDialogFragment.OnDialogReminderListener,
         SemesterDialogFragment.OnDialogSemesterListener {
 
     public static final String FRAGMENT_TYPE = "Fragment";
@@ -48,25 +41,21 @@ public class ListFragmentActivity extends BaseActivity
 
         switch (fragmentType) {
             case 0:
-                mCurrentFragment = ListReminderFragment.newInstance();
-                title = R.string.title_fragment_list_reminders;
-                break;
-            case 1:
                 mCurrentFragment = ListGradeFragment.newInstance();
                 title = R.string.title_fragment_list_grades;
                 break;
-            case 2:
+            case 1:
                 mCurrentFragment = ListCourseFragment.newInstance();
                 title = R.string.title_fragment_list_courses;
                 break;
-            case 3:
+            case 2:
                 mCurrentFragment = ListSemesterFragment.newInstance();
                 title = R.string.title_fragment_list_semesters;
         }
 
         getActionBar().setTitle(title);
 
-        getSupportFragmentManager()
+        getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, mCurrentFragment)
                 .commit();
@@ -113,47 +102,11 @@ public class ListFragmentActivity extends BaseActivity
     }
 
     @Override
-    public void onListCourseDelete(final Course course) {
-        final String title = String.format(getString(R.string.title_delete_course_dialog), course.getName());
-        final String positiveMessage =
-                String.format(getString(R.string.toast_alert_delete_confirmation), course.getName());
-
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(R.string.message_delete_course_dialog)
-                .setIcon(R.drawable.ic_action_contextual_delete)
-                .setPositiveButton(R.string.btn_alert_delete_positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Delete course, display text, and refresh list.
-                        mDatabase.deleteCourse(course.getId());
-                        Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
-                        refreshList();
-                    }
-                })
-                .setNegativeButton(R.string.btn_alert_delete_negative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, just dismiss.
-                    }
-                })
-                .show();
-    }
-
-    @Override
     public void onListGradeEdit(Grade grade) {
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_dialog), grade);
-        gradeDialog.show(getSupportFragmentManager(), EDIT_GRADE_TAG);
-    }
-
-    @Override
-    public void onListReminderEdit(Reminder reminder) {
-        // Show edit reminder dialog.
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_reminder_dialog), reminder);
-        reminderDialog.show(getSupportFragmentManager(), EDIT_REMINDER_TAG);
+        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }
 
     @Override
@@ -168,56 +121,17 @@ public class ListFragmentActivity extends BaseActivity
     }
 
     @Override
-    public void onReminderSaved(boolean isNew) {
-        String toastMessage = isNew ? getString(R.string.toast_reminder_saved) :
-                getString(R.string.toast_reminder_updated);
-
-        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
-
-        refreshList();
-    }
-
-    @Override
     public void onListSemesterNew() {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+        semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
     }
 
     @Override
     public void onListSemesterEdit(Semester semester) {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                 getString(R.string.title_edit_semester_dialog), semester);
-        semesterDialog.show(getSupportFragmentManager(), EDIT_SEMESTER_TAG);
-    }
-
-    @Override
-    public void onListSemesterDelete(final Semester semester) {
-        final String title = String.format(getString(R.string.title_delete_semester_dialog), semester.toString());
-        final String positiveMessage =
-                String.format(getString(R.string.toast_alert_delete_confirmation), semester.toString());
-
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(R.string.message_delete_semester_dialog)
-                .setIcon(R.drawable.ic_action_contextual_delete)
-                .setPositiveButton(R.string.btn_alert_delete_positive, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Delete course, display text, and refresh list.
-                        mDatabase.deleteSemester(semester);
-                        Toast.makeText(getApplicationContext(), positiveMessage, Toast.LENGTH_SHORT).show();
-                        // Refresh lists.
-                        refreshList();
-                    }
-                })
-                .setNegativeButton(R.string.btn_alert_delete_negative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing, just dismiss.
-                    }
-                })
-                .show();
+        semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
     }
 
     @Override
@@ -230,6 +144,5 @@ public class ListFragmentActivity extends BaseActivity
 
         // Refresh the semester list.
         refreshList();
-
     }
 }

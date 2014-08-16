@@ -1,17 +1,13 @@
 package com.janclarin.gradepath.fragment;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.SparseArray;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +15,15 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
+import com.janclarin.gradepath.model.Grade;
+import com.janclarin.gradepath.model.Semester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,11 @@ abstract public class BaseListFragment extends BaseFragment {
     protected ListView mListView;
     protected BaseListAdapter mAdapter;
 
+    /**
+     * Updates the list view within the fragment.
+     */
+    abstract public void updateListItems();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,22 +58,106 @@ abstract public class BaseListFragment extends BaseFragment {
     }
 
     /**
-     * Updates the list view within the fragment.
+     * Show popup menu on overflow button click.
      */
-    abstract public void updateListItems();
+    public void showPopupMenu(View view, int menuId, final int position) {
+        PopupMenu popupMenu = new PopupMenu(mContext, view);
+
+        popupMenu.getMenuInflater().inflate(menuId, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_delete:
+                        deleteSelectedItem(position);
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
+    }
 
     /**
-     * Edit select item under contextual action bar.
+     * Delete selected item. Display confirmation message for courses.
      */
-    abstract protected void editSelectedItem(int selectedPosition);
+    protected void deleteSelectedItem(int position) {
+        final DatabaseItem selectedItem = (DatabaseItem) mAdapter.getItem(position);
 
-    /**
-     * Delete selected items under contextual action bar.
-     * Deletes items starting with right side of the list.
-     *
-     * @param possibleSelectedPositions
-     */
-    abstract protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions);
+        if (selectedItem instanceof Grade) {
+            mDatabase.deleteGrade(selectedItem.getId());
+            updateListItems();
+            notifyAdapter();
+
+        } else if (selectedItem instanceof Course) {
+            final Course course = (Course) selectedItem;
+            final String title = String.format(getString(R.string.title_delete_dialog), course.getName());
+            final String positiveMessage =
+                    String.format(getString(R.string.toast_alert_delete_confirmation), course.getName());
+            new AlertDialog.Builder(mContext)
+                    .setTitle(title)
+                    .setMessage(R.string.message_delete_course_dialog)
+                    .setIcon(R.drawable.remove)
+                    .setPositiveButton(R.string.btn_alert_delete_positive,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // Delete course, display toast, and refresh list.
+                                    mDatabase.deleteCourse(course.getId());
+                                    Toast.makeText(mContext, positiveMessage, Toast.LENGTH_SHORT)
+                                            .show();
+                                    // Update list.
+                                    updateListItems();
+                                    notifyAdapter();
+                                }
+                            })
+                    .setNegativeButton(R.string.btn_alert_delete_negative,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Toast.makeText(mContext, mContext.getString(R.string.cancelled),
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            })
+                    .show();
+
+        } else if (selectedItem instanceof Semester) {
+            final Semester semester = (Semester) selectedItem;
+            final String title = String.format(getString(R.string.title_delete_dialog), semester.toString());
+            final String positiveMessage =
+                    String.format(getString(R.string.toast_alert_delete_confirmation), semester.toString());
+
+            new AlertDialog.Builder(mContext)
+                    .setTitle(title)
+                    .setMessage(R.string.message_delete_semester_dialog)
+                    .setIcon(R.drawable.remove)
+                    .setPositiveButton(R.string.btn_alert_delete_positive,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Delete semester, display text, and refresh list.
+                                    mDatabase.deleteSemester(semester);
+                                    Toast.makeText(mContext, positiveMessage, Toast.LENGTH_SHORT)
+                                            .show();
+                                    // Refresh lists.
+                                    updateListItems();
+                                    notifyAdapter();
+                                }
+                            })
+                    .setNegativeButton(R.string.btn_alert_delete_negative,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(mContext, mContext.getString(R.string.cancelled),
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            })
+                    .show();
+        }
+    }
 
     /**
      * Clear items from list.
@@ -92,90 +182,7 @@ abstract public class BaseListFragment extends BaseFragment {
      */
     protected void setUpListView() {
         mListView.setAdapter(mAdapter);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
-            private int mNumSelected;
-            private int mCurrentSelectedPosition;
-            private SparseBooleanArray selectedPositions;
-
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
-                                                  boolean checked) {
-                Menu menu = mode.getMenu();
-                MenuInflater inflater = mode.getMenuInflater();
-
-                // When an item is checked keep track of how many are selected.
-                if (checked) {
-                    mNumSelected++;
-                    selectedPositions.put(position, true);
-                    // Change menu when more than one item is selected.
-                    if (mNumSelected > 1) {
-                        if (menu.getItem(0).getItemId() == R.id.menu_contextual_edit) {
-                            menu.clear();
-                            inflater.inflate(R.menu.list_item_selected, menu);
-                        }
-                    }
-                } else {
-                    if (mNumSelected > 0) {
-                        mNumSelected--;
-                        selectedPositions.put(position, false);
-                    }
-
-                    // Change menu when only one is left selected.
-                    if (mNumSelected == 1) {
-                        menu.clear();
-                        inflater.inflate(R.menu.list_item_one_selected, menu);
-                    }
-                }
-
-                mCurrentSelectedPosition = position;
-                mode.setTitle(Integer.toString(mNumSelected));
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mNumSelected = 0;
-                mCurrentSelectedPosition = 0;
-                selectedPositions = new SparseBooleanArray();
-
-                // Vibrate on open.
-                Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(300);
-
-                // Inflate the menu for the contextual action bar.
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.list_item_one_selected, menu);
-
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_contextual_edit:
-                        editSelectedItem(mCurrentSelectedPosition);
-                        mode.finish();
-                        return true;
-                    case R.id.menu_contextual_delete:
-                        deleteSelectedItems(selectedPositions);
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                mListView.getCheckedItemPositions().clear();
-            }
-        });
+        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
     }
 
     /**
@@ -191,7 +198,7 @@ abstract public class BaseListFragment extends BaseFragment {
         }
     }
 
-    abstract protected class BaseListAdapter extends BaseAdapter {
+    abstract public class BaseListAdapter extends BaseAdapter {
 
         private static final int COLOR_CIRCLE_DIAMETER = 40;
 
@@ -211,15 +218,6 @@ abstract public class BaseListFragment extends BaseFragment {
             }
 
             return colorDrawable;
-        }
-
-        protected class ViewHolder {
-            TextView tvTitle;
-            TextView tvSubtitle;
-            TextView tvSubtitle2;
-            ImageView ivDetail;
-            View btnSecondary;
-            View divider;
         }
 
         @Override
@@ -257,10 +255,19 @@ abstract public class BaseListFragment extends BaseFragment {
         abstract public View getView(int position, View convertView, ViewGroup parent);
     }
 
+    public class ViewHolder {
+        public TextView tvTitle;
+        public TextView tvSubtitle;
+        public TextView tvSubtitle2;
+        public ImageView ivDetail;
+        public View btnSecondary;
+        public View divider;
+    }
+
     /**
      * Header for tasks.
      */
-    protected class Header extends DatabaseItem {
+    public class Header extends DatabaseItem {
         private final String name;
 
         public Header(String name) {

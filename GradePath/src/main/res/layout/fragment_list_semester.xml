@@ -23,8 +23,9 @@
     <ImageButton
         android:id="@+id/btn_add_item"
         style="@style/FloatingActionButton"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="16dp"
+        android:layout_marginRight="@dimen/keyline_1"
         android:contentDescription="@string/cd_add_button"
         android:src="@drawable/list_add_item" />
 

@@ -2,7 +2,6 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class ListSemesterFragment extends BaseListFragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_semester, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list_semester, container, false);
 
         mEmptyTextView = (TextView) rootView.findViewById(R.id.tv_list_empty);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
@@ -102,26 +101,6 @@ public class ListSemesterFragment extends BaseListFragment {
     }
 
     @Override
-    protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null)
-            mListener.onListSemesterEdit((Semester) mAdapter.getItem(selectedPosition));
-    }
-
-    @Override
-    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        int numItems = mListItems.size();
-        for (int i = numItems - 1; i >= 0; i--) {
-            if (possibleSelectedPositions.get(i, false)) {
-                Semester selectedSemester = (Semester) mAdapter.getItem(i);
-                if (mListener != null) {
-                    mListener.onListSemesterDelete(selectedSemester);
-                }
-            }
-        }
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -148,9 +127,6 @@ public class ListSemesterFragment extends BaseListFragment {
 
         /* Called when contextual action bar edit button is clicked. */
         public void onListSemesterEdit(Semester semester);
-
-        /* Called when contextual action bar delete button is clicked. */
-        public void onListSemesterDelete(Semester semester);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -161,7 +137,7 @@ public class ListSemesterFragment extends BaseListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem listItem = mListItems.get(position);
             final int type = getItemViewType(position);
@@ -182,6 +158,7 @@ public class ListSemesterFragment extends BaseListFragment {
                     viewHolder.tvSubtitle =
                             (TextView) convertView.findViewById(R.id.tv_subtitle);
                     viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
+                    viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
                 }
 
                 convertView.setTag(viewHolder);
@@ -223,6 +200,14 @@ public class ListSemesterFragment extends BaseListFragment {
 
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
                 viewHolder.ivDetail.setImageResource(R.drawable.semester_light);
+
+                // Set button to open popup menu.
+                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPopupMenu(view, R.menu.list_general, position);
+                    }
+                });
             }
 
             return convertView;

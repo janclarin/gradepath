@@ -3,7 +3,6 @@ package com.janclarin.gradepath.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.LongSparseArray;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,9 @@ import com.janclarin.gradepath.activity.BaseActivity;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Grade;
-import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
 
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends BaseListFragment {
@@ -30,7 +29,6 @@ public class HomeFragment extends BaseListFragment {
     private LinearLayout mButtonLayout;
     private ImageButton mAddCourseButton;
     private ImageButton mAddGradeButton;
-    private ImageButton mAddReminderButton;
 
     private FragmentHomeListener mListener;
 
@@ -70,7 +68,6 @@ public class HomeFragment extends BaseListFragment {
         mAddItemButton = (ImageButton) rootView.findViewById(R.id.btn_add_item);
         mAddCourseButton = (ImageButton) rootView.findViewById(R.id.btn_add_course);
         mAddGradeButton = (ImageButton) rootView.findViewById(R.id.btn_add_grade);
-        mAddReminderButton = (ImageButton) rootView.findViewById(R.id.btn_add_reminder);
 
         return rootView;
     }
@@ -96,9 +93,7 @@ public class HomeFragment extends BaseListFragment {
                     DatabaseItem item = mListItems.get(position);
 
                     if (mListener != null) {
-                        if (item instanceof Reminder) {
-                            mListener.onHomeEditReminder((Reminder) item);
-                        } else if (item instanceof Grade) {
+                        if (item instanceof Grade) {
                             mListener.onHomeEditGrade((Grade) item);
                         } else {
                             mListener.onHomeViewCourse((Course) item);
@@ -130,13 +125,6 @@ public class HomeFragment extends BaseListFragment {
                 }
             });
 
-            mAddReminderButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mListener != null) mListener.onHomeAddReminder();
-                    hideAddButtons();
-                }
-            });
         } else {
             mEmptyTextView.setText(mContext.getString(R.string.add_first_semester));
         }
@@ -147,16 +135,22 @@ public class HomeFragment extends BaseListFragment {
      */
     private void showAddButtons() {
         // Show other add buttons on click.
-        if (mButtonLayout.getVisibility() == View.INVISIBLE)
+        if (mButtonLayout.getVisibility() == View.INVISIBLE) {
             mButtonLayout.setVisibility(View.VISIBLE);
+            mAddItemButton.setRotation(45f);
+        } else {
+            hideAddButtons();
+        }
     }
 
     /**
      * Hide add buttons.
      */
     private void hideAddButtons() {
-        if (mButtonLayout.getVisibility() == View.VISIBLE)
+        if (mButtonLayout.getVisibility() == View.VISIBLE) {
             mButtonLayout.setVisibility(View.INVISIBLE);
+            mAddItemButton.setRotation(0f);
+        }
     }
 
     @Override
@@ -165,6 +159,7 @@ public class HomeFragment extends BaseListFragment {
 
         // Get list of current courses.
         List<Course> courses = mDatabase.getCourses(mSemester.getId());
+        Collections.sort(courses);
 
         // For every course, map course ID to the course.
         for (Course course : courses) {
@@ -173,13 +168,9 @@ public class HomeFragment extends BaseListFragment {
         }
 
         if (courses.size() > 0) {
-            // Get list of upcoming reminders.
-            List<Reminder> reminders = mDatabase.getUpcomingReminders();
-
-            if (reminders.size() > 0) {
-                mListItems.add(new Header(getString(R.string.title_fragment_list_reminders)));
-                mListItems.addAll(reminders);
-            }
+            // Add all courses to the list now.
+            mListItems.add(new Header(getString(R.string.title_fragment_list_courses)));
+            mListItems.addAll(courses);
 
             // Get list of recent grades.
             List<Grade> grades = mDatabase.getRecentGrades(mNumGradesToShow);
@@ -189,9 +180,6 @@ public class HomeFragment extends BaseListFragment {
                 mListItems.addAll(grades);
             }
 
-            // Add all courses to the list now.
-            mListItems.add(new Header(getString(R.string.title_fragment_list_courses)));
-            mListItems.addAll(courses);
         }
 
         notifyAdapter();
@@ -199,17 +187,6 @@ public class HomeFragment extends BaseListFragment {
         // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
     }
-
-    @Override
-    protected void editSelectedItem(int selectedPosition) {
-
-    }
-
-    @Override
-    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-
-    }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -247,7 +224,7 @@ public class HomeFragment extends BaseListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem item = mListItems.get(position);
             final int itemViewType = getItemViewType(position);
@@ -302,9 +279,7 @@ public class HomeFragment extends BaseListFragment {
                     @Override
                     public void onClick(View view) {
                         if (mListener != null) {
-                            if (name.equals(getString(R.string.title_fragment_list_reminders))) {
-                                mListener.onHomeViewReminders();
-                            } else if (name.equals(getString(R.string.title_fragment_list_grades))) {
+                            if (name.equals(getString(R.string.title_fragment_list_grades))) {
                                 mListener.onHomeViewGrades();
                             } else {
                                 mListener.onHomeViewCourses();
@@ -314,39 +289,34 @@ public class HomeFragment extends BaseListFragment {
                 });
                 // If this is the first header, hide the divider.
                 if (position == 0) viewHolder.divider.setVisibility(View.GONE);
-            } else if (item instanceof Reminder) {
-                Reminder reminder = (Reminder) item;
-                viewHolder.tvTitle.setText(reminder.getName());
-                viewHolder.tvSubtitle.setText(mCoursesById.get(reminder.getCourseId()).getName());
-                viewHolder.tvSubtitle2.setText(
-                        reminder.getDateString(mContext) + " "
-                                + getString(R.string.bullet) + " "
-                                + reminder.getTimeString()
-                );
-                viewHolder.ivDetail.setImageResource(R.drawable.reminder);
-                // Set circle background based on course's color.
-                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
-            } else if (item instanceof Grade) {
-                Grade grade = (Grade) item;
-                viewHolder.tvTitle.setText(grade.getName());
-                viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
-                viewHolder.tvSubtitle2.setText(
-                        grade.getGradePercentage() + " "
-                                + getString(R.string.bullet) + " "
-                                + grade.toString()
-                );
-                viewHolder.ivDetail.setImageResource(R.drawable.grade);
+            } else {
+                if (item instanceof Grade) {
+                    Grade grade = (Grade) item;
+                    viewHolder.tvTitle.setText(grade.getName());
+                    viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
+                    viewHolder.tvSubtitle2.setText(
+                            grade.getGradePercentage() + " "
+                                    + getString(R.string.bullet) + " "
+                                    + grade.toString()
+                    );
+                    viewHolder.ivDetail.setImageResource(R.drawable.grade);
+                } else {
+                    Course course = (Course) item;
+                    viewHolder.tvTitle.setText(course.getName());
+                    viewHolder.tvSubtitle.setText(course.getInstructorName());
+                    viewHolder.ivDetail.setImageResource(R.drawable.course);
 
+                }
                 // Set circle background based on course's color.
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
-            } else if (item instanceof Course) {
-                Course course = (Course) item;
-                viewHolder.tvTitle.setText(course.getName());
-                viewHolder.tvSubtitle.setText(course.getInstructorName());
-                viewHolder.ivDetail.setImageResource(R.drawable.course);
 
-                // Set circle background based on course's color.
-                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
+                // Set button to open popup menu.
+                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPopupMenu(view, R.menu.list_general, position);
+                    }
+                });
             }
 
             return convertView;
@@ -358,20 +328,11 @@ public class HomeFragment extends BaseListFragment {
         /* Calls new grade dialog. */
         public void onHomeAddGrade();
 
-        /* Calls new reminder dialog. */
-        public void onHomeAddReminder();
-
         /* Calls new course activity. */
         public void onHomeAddCourse();
 
-        /* Opens reminder edit dialog */
-        public void onHomeEditReminder(Reminder reminder);
-
         /* Opens grade edit dialog */
         public void onHomeEditGrade(Grade grade);
-
-        /* Displays reminder list fragment. */
-        public void onHomeViewReminders();
 
         /* Displays grade list fragment. */
         public void onHomeViewGrades();

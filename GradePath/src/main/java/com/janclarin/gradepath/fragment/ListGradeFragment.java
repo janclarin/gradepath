@@ -3,7 +3,6 @@ package com.janclarin.gradepath.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.LongSparseArray;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,25 +86,6 @@ public class ListGradeFragment extends BaseListFragment {
     }
 
     @Override
-    protected void editSelectedItem(int selectedPosition) {
-        if (mListener != null)
-            mListener.onListGradeEdit((Grade) mAdapter.getItem(selectedPosition));
-    }
-
-    @Override
-    protected void deleteSelectedItems(SparseBooleanArray possibleSelectedPositions) {
-        int numItems = mListItems.size();
-        for (int i = numItems - 1; i >= 0; i--) {
-            if (possibleSelectedPositions.get(i, false)) {
-                Grade selectedGrade = (Grade) mAdapter.getItem(i);
-                mDatabase.deleteGrade(selectedGrade);
-                mListItems.remove(selectedGrade);
-            }
-        }
-        updateListItems();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -139,7 +119,7 @@ public class ListGradeFragment extends BaseListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem listItem = mListItems.get(position);
 
@@ -154,6 +134,7 @@ public class ListGradeFragment extends BaseListFragment {
                 viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
                 viewHolder.tvSubtitle2 = (TextView) convertView.findViewById(R.id.tv_subtitle_2);
                 viewHolder.ivDetail = (ImageView) convertView.findViewById(R.id.iv_detail);
+                viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -170,6 +151,14 @@ public class ListGradeFragment extends BaseListFragment {
             );
             viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
             viewHolder.ivDetail.setImageResource(R.drawable.grade);
+
+            // Set button to open popup menu.
+            viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopupMenu(view, R.menu.list_general, position);
+                }
+            });
 
             return convertView;
         }

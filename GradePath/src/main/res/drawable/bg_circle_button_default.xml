@@ -9,10 +9,10 @@
         </shape>
     </item>
     <item
-        android:bottom="0.5dp"
+        android:bottom="1dp"
         android:left="0.5dp"
         android:right="0.5dp"
-        android:top="0.5dp">
+        android:top="0dp">
         <shape
             android:shape="oval"
             android:thicknessRatio="100">

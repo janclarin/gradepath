@@ -49,7 +49,7 @@ public class CourseEditActivity extends BaseActivity
         setUpCustomActionBar();
 
         // Arguments from activity.
-        mCourseToUpdate = (Course) getIntent().getSerializableExtra(MainActivity.COURSE_KEY);
+        mCourseToUpdate = (Course) getIntent().getSerializableExtra(COURSE_KEY);
 
         // Set up grade category list view.
         mGradeComponents = new ArrayList<GradeComponent>();
@@ -76,14 +76,14 @@ public class CourseEditActivity extends BaseActivity
     private void newGradeComponent() {
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_new_grade_component_dialog));
-        gradeComponentDialog.show(getSupportFragmentManager(), NEW_GRADE_COMPONENT_TAG);
+        gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
     }
 
     private void editGradeComponent(GradeComponent gradeComponent) {
         updatePosition = mGradeComponents.indexOf(gradeComponent);
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_component_dialog), gradeComponent);
-        gradeComponentDialog.show(getSupportFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
+        gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
     }
 
     /**
@@ -209,19 +209,9 @@ public class CourseEditActivity extends BaseActivity
         String instructorName = mInstructorName.getText().toString().trim();
         String instructorEmail = mInstructorEmail.getText().toString().trim();
 
-        double gradeComponentWeightTotal = 0;
-        for (GradeComponent gradeComponent : mGradeComponents) {
-            gradeComponentWeightTotal += gradeComponent.getWeight();
-        }
-
         String toastMessage = "";
-        if (semester == null) {
-            toastMessage = getString(R.string.semester_invalid);
-        } else if (courseName.isEmpty()) {
+        if (courseName.isEmpty())
             toastMessage = getString(R.string.prompt_enter_course_name);
-        } else if (gradeComponentWeightTotal < 99.9 || gradeComponentWeightTotal > 100.1) {
-            toastMessage = getString(R.string.grade_component_total_weight_invalid);
-        }
 
         if (toastMessage.length() > 0) {
             Toast toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
@@ -238,7 +228,7 @@ public class CourseEditActivity extends BaseActivity
         } else {
             // Update course.
             courseId = mCourseToUpdate.getId();
-            mDatabase.updateCourse(courseId, semester.getId(), courseName,
+            mDatabase.updateCourse(courseId, mCourseToUpdate.getSemesterId(), courseName,
                     instructorName, instructorEmail, mCourseToUpdate.getFinalGradeValue(),
                     mCourseToUpdate.isCompleted());
         }
@@ -268,6 +258,7 @@ public class CourseEditActivity extends BaseActivity
     /**
      * Sets up custom done/cancel action bar.
      */
+
     private void setUpCustomActionBar() {
         // Inflate done/cancel custom actionbar view.
         final LayoutInflater inflater = (LayoutInflater) getActionBar().getThemedContext()

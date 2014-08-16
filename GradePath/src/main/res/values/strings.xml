@@ -15,7 +15,7 @@
 
     <!-- Contextual action bar selected -->
     <string name="contextual_action_edit">Edit</string>
-    <string name="contextual_action_delete">Delete</string>
+    <string name="delete">Delete</string>
 
     <!-- Edit Course Activity -->
     <string name="title_activity_edit_course">Edit course</string>
@@ -26,9 +26,9 @@
     <string name="final_grade">Final grade</string>
     <string name="new_semester">New semester</string>
     <string name="et_grade_component">Title</string>
-    <string name="et_grade_component_weight">% weight</string>
+    <string name="et_grade_component_weight">Weight %</string>
     <string name="cd_btn_grade_component">Add/remove grade component</string>
-    <string name="et_grade_component_number_of_items"># of items</string>
+    <string name="et_grade_component_number_of_items">Number of items</string>
     <string name="tv_course_information">Course information</string>
     <string name="prompt_pick_semester">Pick a semester</string>
     <string name="prompt_enter_course_name">Enter course name</string>
@@ -96,14 +96,13 @@
     <string name="btn_alert_delete_positive">Delete</string>
     <string name="btn_alert_delete_negative">Cancel</string>
     <string name="toast_alert_delete_confirmation">%1$s deleted</string>
+    <string name="title_delete_dialog">Delete %1$s?</string>
 
     <!-- Delete semester alert dialog -->
-    <string name="title_delete_semester_dialog">Delete %1$s?</string>
     <string name="message_delete_semester_dialog">You\'ll delete every course in this semester!</string>
 
     <!-- Delete course alert dialog -->
-    <string name="title_delete_course_dialog">Delete %1$s?</string>
-    <string name="message_delete_course_dialog">You\'ll delete every grade and task related to this course!</string>
+    <string name="message_delete_course_dialog">You\'ll delete every grade in this course!</string>
     <string name="cd_add_button">Add button</string>
 
     <!-- Semesters fragment -->
@@ -192,5 +191,7 @@
     <string name="all_semesters">All semesters</string>
     <string name="current_semester">Current semester</string>
     <string name="add_first_semester">Add a semester. \n Click on the top-right icon.</string>
+    <string name="total">Total</string>
+    <string name="cancelled">Cancelled</string>
 
 </resources>

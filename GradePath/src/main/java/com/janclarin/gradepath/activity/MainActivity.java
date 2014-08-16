@@ -1,14 +1,13 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -25,14 +24,11 @@ import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
-import com.janclarin.gradepath.dialog.ReminderDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
-import com.janclarin.gradepath.fragment.SettingsFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
-import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
 
 import java.lang.ref.WeakReference;
@@ -45,11 +41,8 @@ import java.util.List;
 public class MainActivity extends BaseActivity
         implements ActionBar.OnNavigationListener,
         HomeFragment.FragmentHomeListener,
-        ListSemesterFragment.OnFragmentListSemesterListener,
         SemesterDialogFragment.OnDialogSemesterListener,
-        GradeDialogFragment.OnDialogGradeListener,
-        ReminderDialogFragment.OnDialogReminderListener,
-        SettingsFragment.OnFragmentSettingsListener {
+        GradeDialogFragment.OnDialogGradeListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     /**
@@ -127,7 +120,7 @@ public class MainActivity extends BaseActivity
             // Ask for semester input.
             SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                     getString(R.string.current_semester));
-            semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+            semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
 
         // Set action bar drawer
@@ -162,7 +155,7 @@ public class MainActivity extends BaseActivity
             // Show semester dialog.
             SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
                     getString(R.string.title_new_semester_dialog));
-            semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
+            semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
         if (mDrawerToggle.onOptionsItemSelected(item) && mDrawerToggle.isDrawerIndicatorEnabled()) {
             return true;
@@ -177,6 +170,14 @@ public class MainActivity extends BaseActivity
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         super.onBackPressed();
+    }
+
+    private void showGlobalActionBar() {
+        final ActionBar actionBar = getActionBar();
+
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(R.string.app_name);
     }
 
     /**
@@ -254,14 +255,6 @@ public class MainActivity extends BaseActivity
         getActionBar().setHomeButtonEnabled(true);
     }
 
-    private void showGlobalActionBar() {
-        final ActionBar actionBar = getActionBar();
-
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.app_name);
-    }
-
     /**
      * Select item from navigation drawer.
      *
@@ -275,23 +268,27 @@ public class MainActivity extends BaseActivity
         // Get drawer item's fragment.
         mCurrentFragment = drawerItem.getFragment();
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (mCurrentFragment == null) {
             switch (position) {
                 case 0: {
                     mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+                    drawerItem.setFragment(mCurrentFragment);
+
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, mCurrentFragment)
+                            .commit();
                     break;
                 }
                 case 1: {
-                    mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+                    // Open settings activity.
+                    Intent intent = new Intent(this, SettingsActivity.class);
+                    startActivity(intent);
                     break;
                 }
             }
-            drawerItem.setFragment(mCurrentFragment);
         }
-
-        fragmentTransaction.replace(R.id.container, mCurrentFragment).commit();
 
         mCurrentSelectedPosition = position;
 
@@ -336,7 +333,7 @@ public class MainActivity extends BaseActivity
         if (position == mSemesters.size() - 1) {
             // Open semesters list when "All semesters is chosen".
             Intent intent = new Intent(this, ListFragmentActivity.class);
-            intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 3);
+            intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 2);
             startActivity(intent);
         } else {
             // Selected drawer item.
@@ -345,7 +342,10 @@ public class MainActivity extends BaseActivity
             drawerItem.setFragment(mCurrentFragment);
 
             // Otherwise, just open the home fragment properly.
-            onNavDrawerItemSelected(0);
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, mCurrentFragment)
+                    .commit();
         }
         return mCurrentFragment != null;
     }
@@ -384,13 +384,6 @@ public class MainActivity extends BaseActivity
         ((HomeFragment) mCurrentFragment).updateListItems();
     }
 
-    /**
-     * Refresh reminder list.
-     */
-    private void refreshListReminder() {
-        ((HomeFragment) mCurrentFragment).updateListItems();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check if request was successful.
@@ -424,22 +417,7 @@ public class MainActivity extends BaseActivity
     public void onHomeAddGrade() {
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_new_grade_dialog));
-        gradeDialog.show(getSupportFragmentManager(), NEW_GRADE_TAG);
-    }
-
-    @Override
-    public void onHomeAddReminder() {
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_new_reminder_dialog));
-        reminderDialog.show(getSupportFragmentManager(), NEW_REMINDER_TAG);
-    }
-
-    @Override
-    public void onHomeEditReminder(Reminder reminder) {
-        // Show edit reminder dialog.
-        ReminderDialogFragment reminderDialog = ReminderDialogFragment.newInstance(
-                getString(R.string.title_edit_reminder_dialog), reminder);
-        reminderDialog.show(getSupportFragmentManager(), EDIT_REMINDER_TAG);
+        gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
@@ -447,7 +425,7 @@ public class MainActivity extends BaseActivity
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
                 getString(R.string.title_edit_grade_dialog), grade);
-        gradeDialog.show(getSupportFragmentManager(), EDIT_GRADE_TAG);
+        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }
 
 
@@ -459,39 +437,17 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onHomeViewReminders() {
+    public void onHomeViewGrades() {
         Intent intent = new Intent(this, ListFragmentActivity.class);
         intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 0);
         startActivity(intent);
     }
 
     @Override
-    public void onHomeViewGrades() {
+    public void onHomeViewCourses() {
         Intent intent = new Intent(this, ListFragmentActivity.class);
         intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 1);
         startActivity(intent);
-    }
-
-    @Override
-    public void onHomeViewCourses() {
-        Intent intent = new Intent(this, ListFragmentActivity.class);
-        intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 2);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onListSemesterNew() {
-        SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_new_semester_dialog));
-        semesterDialog.show(getSupportFragmentManager(), NEW_SEMESTER_TAG);
-    }
-
-    @Override
-    public void onListSemesterEdit(Semester semester) {
-    }
-
-    @Override
-    public void onListSemesterDelete(final Semester semester) {
     }
 
     /* Dialog listeners */
@@ -516,16 +472,6 @@ public class MainActivity extends BaseActivity
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
         refreshListGrade();
-    }
-
-    @Override
-    public void onReminderSaved(boolean isNew) {
-        String toastMessage = isNew ? getString(R.string.toast_reminder_saved) :
-                getString(R.string.toast_reminder_updated);
-
-        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
-
-        refreshListReminder();
     }
 
     /**

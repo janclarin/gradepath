@@ -3,7 +3,9 @@ package com.janclarin.gradepath.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.LongSparseArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,7 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.BaseActivity;
@@ -36,16 +40,16 @@ public class HomeFragment extends BaseListFragment {
     private int mNumGradesToShow = 3;
     private Semester mSemester;
 
+    public HomeFragment() {
+        // Required empty public constructor.
+    }
+
     public static HomeFragment newInstance(Semester semester) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putSerializable(BaseActivity.SEMESTER_KEY, semester);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public HomeFragment() {
-        // Required empty public constructor.
     }
 
     @Override
@@ -117,16 +121,18 @@ public class HomeFragment extends BaseListFragment {
                 }
             });
 
+            // If there are no courses, display toast on button press.
             mAddGradeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mListener != null) mListener.onHomeAddGrade();
-                    hideAddButtons();
+                    if (mCoursesById.size() == 0) {
+                        Toast.makeText(mContext, "You need to add a course first", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (mListener != null) mListener.onHomeAddGrade();
+                        hideAddButtons();
+                    }
                 }
             });
-
-        } else {
-            mEmptyTextView.setText(mContext.getString(R.string.add_first_semester));
         }
     }
 
@@ -167,7 +173,7 @@ public class HomeFragment extends BaseListFragment {
             mCoursesById.put(courseId, course);
         }
 
-        if (courses.size() > 0) {
+        if (!courses.isEmpty()) {
             // Add all courses to the list now.
             mListItems.add(new Header(getString(R.string.title_fragment_list_courses)));
             mListItems.addAll(courses);
@@ -175,17 +181,43 @@ public class HomeFragment extends BaseListFragment {
             // Get list of recent grades.
             List<Grade> grades = mDatabase.getRecentGrades(mNumGradesToShow);
 
-            if (grades.size() > 0) {
+            if (!grades.isEmpty()) {
                 mListItems.add(new Header(getString(R.string.title_fragment_list_grades)));
                 mListItems.addAll(grades);
             }
 
         }
-
         notifyAdapter();
 
         // Determine list view state.
         showEmptyStateView(mListItems.isEmpty());
+    }
+
+
+    /**
+     * Show popup menu on overflow button click.
+     */
+    @Override
+    public void showPopupMenu(View view, int menuId, final int position) {
+        PopupMenu popupMenu = new PopupMenu(mContext, view);
+
+        popupMenu.getMenuInflater().inflate(menuId, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_delete:
+                        deleteSelectedItem(position);
+                    case R.id.menu_set_final_grade:
+                        if (mListener != null)
+                            mListener.onHomeSetFinalGrade((Course) mAdapter.getItem(position));
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     @Override
@@ -203,6 +235,30 @@ public class HomeFragment extends BaseListFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public interface FragmentHomeListener {
+
+        /* Calls new grade dialog. */
+        public void onHomeAddGrade();
+
+        /* Calls new course activity. */
+        public void onHomeAddCourse();
+
+        /* Calls new final grade dialog. */
+        public void onHomeSetFinalGrade(Course course);
+
+        /* Opens grade edit dialog */
+        public void onHomeEditGrade(Grade grade);
+
+        /* Displays grade list fragment. */
+        public void onHomeViewGrades();
+
+        /* Displays course list fragment. */
+        public void onHomeViewCourses();
+
+        /* Displays course detail fragment. */
+        public void onHomeViewCourse(Course course);
     }
 
     /**
@@ -255,7 +311,7 @@ public class HomeFragment extends BaseListFragment {
                         viewHolder.btnSecondary = convertView.findViewById(R.id.btn_secondary);
                         break;
                     }
-                    default: {
+                    case ITEM_VIEW_TYPE_MAIN_3_LINE: {
                         convertView = LayoutInflater.from(mContext)
                                 .inflate(R.layout.list_item_general_three_line, parent, false);
 
@@ -300,47 +356,43 @@ public class HomeFragment extends BaseListFragment {
                                     + grade.toString()
                     );
                     viewHolder.ivDetail.setImageResource(R.drawable.grade);
+
+                    // Set button to open popup menu.
+                    viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showPopupMenu(view, R.menu.list_general, position);
+                        }
+                    });
                 } else {
                     Course course = (Course) item;
+                    String instructorName = course.getInstructorName();
+
+                    if (instructorName.isEmpty()) {
+                        viewHolder.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
+                        viewHolder.tvSubtitle.setVisibility(View.GONE);
+                    } else {
+                        if (viewHolder.tvSubtitle.getVisibility() == View.GONE)
+                            viewHolder.tvSubtitle.setVisibility(View.VISIBLE);
+                        viewHolder.tvSubtitle.setText(instructorName);
+                    }
                     viewHolder.tvTitle.setText(course.getName());
-                    viewHolder.tvSubtitle.setText(course.getInstructorName());
                     viewHolder.ivDetail.setImageResource(R.drawable.course);
 
+                    // Set button to open popup menu.
+                    viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showPopupMenu(view, R.menu.list_course, position);
+                        }
+                    });
                 }
                 // Set circle background based on course's color.
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
 
-                // Set button to open popup menu.
-                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showPopupMenu(view, R.menu.list_general, position);
-                    }
-                });
             }
 
             return convertView;
         }
-    }
-
-    public interface FragmentHomeListener {
-
-        /* Calls new grade dialog. */
-        public void onHomeAddGrade();
-
-        /* Calls new course activity. */
-        public void onHomeAddCourse();
-
-        /* Opens grade edit dialog */
-        public void onHomeEditGrade(Grade grade);
-
-        /* Displays grade list fragment. */
-        public void onHomeViewGrades();
-
-        /* Displays course list fragment. */
-        public void onHomeViewCourses();
-
-        /* Displays course detail fragment. */
-        public void onHomeViewCourse(Course course);
     }
 }

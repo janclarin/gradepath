@@ -6,9 +6,9 @@ public class Course extends DatabaseItem implements Comparable<Course> {
     private String name;
     private String instructorName;
     private String instructorEmail;
+    private double credits;
     private int color;
     private int finalGradeValue;
-    private boolean completed;
 
     public Course() {
     }
@@ -45,6 +45,15 @@ public class Course extends DatabaseItem implements Comparable<Course> {
         this.instructorEmail = instructorEmail;
     }
 
+    public double getCredits() {
+        return credits;
+    }
+
+    public void setCredits(double credits) {
+        this.credits = credits;
+    }
+
+
     public int getColor() {
         return color;
     }
@@ -59,14 +68,6 @@ public class Course extends DatabaseItem implements Comparable<Course> {
 
     public void setFinalGradeValue(int finalGradeValue) {
         this.finalGradeValue = finalGradeValue;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
     }
 
     @Override

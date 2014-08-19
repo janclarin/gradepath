@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,19 +23,18 @@ import java.util.List;
 
 public class CourseDetailFragment extends BaseListFragment {
 
-    private Callbacks mListener;
-    private Course mCourse;
-
-    private TextView mCourseName;
-    private TextView mInstructorName;
-    private TextView mInstructorEmail;
-
     private final GradeComponent TOTAL_GRADE_COMPONENT = new GradeComponent() {
         @Override
         public String getName() {
             return getString(R.string.total);
         }
     };
+    private Callbacks mListener;
+    private Course mCourse;
+    private TextView mCourseCredits;
+    private TextView mCourseName;
+    private TextView mInstructorName;
+    private TextView mInstructorEmail;
 
     public CourseDetailFragment() {
         // Required empty public constructor
@@ -59,8 +59,9 @@ public class CourseDetailFragment extends BaseListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment.
-        View rootView = inflater.inflate(R.layout.fragment_course_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_detail_course, container, false);
 
+        mCourseCredits = (TextView) rootView.findViewById(R.id.tv_course_credits);
         mCourseName = (TextView) rootView.findViewById(R.id.tv_course_name);
         mInstructorName = (TextView) rootView.findViewById(R.id.tv_instructor_name);
         mInstructorEmail = (TextView) rootView.findViewById(R.id.tv_instructor_email);
@@ -83,12 +84,50 @@ public class CourseDetailFragment extends BaseListFragment {
         updateListItems();
         mAdapter = new ListAdapter();
         setUpListView();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (mListener != null)
+                    mListener.onEditGrade((Grade) mListItems.get(position));
+            }
+        });
     }
 
     private void updateTextViews() {
+        mCourseCredits.setText(
+                Double.toString(mCourse.getCredits()) + " " + getString(R.string.course_credits));
         mCourseName.setText(mCourse.getName());
-        mInstructorName.setText(mCourse.getInstructorName());
-        mInstructorEmail.setText(mCourse.getInstructorEmail());
+
+        String instructorName = mCourse.getInstructorName();
+        String instructorEmail = mCourse.getInstructorEmail();
+
+        // Set instructor name and email based on their availability.
+        if (instructorName.length() > 0 && instructorEmail.length() > 0) {
+            mInstructorName.setText(instructorName + " " + getString(R.string.bullet) + " ");
+            mInstructorEmail.setText(instructorEmail);
+            if (mInstructorName.getVisibility() == View.GONE
+                    || mInstructorEmail.getVisibility() == View.GONE) {
+                mInstructorName.setVisibility(View.VISIBLE);
+                mInstructorEmail.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (instructorName.isEmpty()) {
+                mInstructorName.setVisibility(View.GONE);
+            } else {
+                if (mInstructorName.getVisibility() == View.GONE)
+                    mInstructorName.setVisibility(View.VISIBLE);
+                mInstructorName.setText(instructorName);
+            }
+
+            if (instructorEmail.isEmpty()) {
+                mInstructorEmail.setVisibility(View.GONE);
+            } else {
+                if (mInstructorEmail.getVisibility() == View.GONE)
+                    mInstructorEmail.setVisibility(View.VISIBLE);
+                mInstructorEmail.setText(instructorEmail);
+            }
+        }
     }
 
 
@@ -152,6 +191,15 @@ public class CourseDetailFragment extends BaseListFragment {
         mListener = null;
     }
 
+    public interface Callbacks {
+
+        /* Edit course. */
+        public void onEditCourse(Course course);
+
+        /* Edit grade. */
+        public void onEditGrade(Grade grade);
+    }
+
     private class ListAdapter extends BaseListAdapter {
 
         private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -163,7 +211,7 @@ public class CourseDetailFragment extends BaseListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             final DatabaseItem item = mListItems.get(position);
 
@@ -219,15 +267,16 @@ public class CourseDetailFragment extends BaseListFragment {
                 // Set circle background based on course's color.
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
 
+                // Set button to open popup menu.
+                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPopupMenu(view, R.menu.list_general, position);
+                    }
+                });
             }
 
             return convertView;
         }
-    }
-
-    public interface Callbacks {
-
-        /* Edit course */
-        public void onEditCourse(Course course);
     }
 }

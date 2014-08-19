@@ -17,10 +17,9 @@ import java.text.DecimalFormat;
 
 public class GradeComponentDialogFragment extends BaseDialogFragment {
 
-    private OnDialogGradeComponentListener mListener;
     private static final String COURSE_ID = "Course ID";
     private static final String GRADE_COMPONENT_KEY = "Grade Component";
-
+    private OnDialogGradeComponentListener mListener;
     private EditText mComponentName;
     private EditText mComponentWeight;
     private EditText mComponentNumItems;
@@ -28,6 +27,10 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
     private GradeComponent mGradeComponentToUpdate;
     private long mCourseId;
 
+
+    public GradeComponentDialogFragment() {
+        // Required empty public constructor.
+    }
 
     public static GradeComponentDialogFragment newInstance(String title) {
         GradeComponentDialogFragment fragment = new GradeComponentDialogFragment();
@@ -44,10 +47,6 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
         args.putSerializable(GRADE_COMPONENT_KEY, gradeComponent);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public GradeComponentDialogFragment() {
-        // Required empty public constructor.
     }
 
     @Override

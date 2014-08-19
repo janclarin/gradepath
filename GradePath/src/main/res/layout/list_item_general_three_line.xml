@@ -39,15 +39,18 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="@android:color/primary_text_light"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_subtitle"
-            style="@style/subtitleTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_subtitle_2"

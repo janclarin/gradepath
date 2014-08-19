@@ -19,7 +19,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Shared columns.
      */
     public static final String COLUMN_COURSE_ID = "course_id";
-    public static final String COLUMN_IS_COMPLETED = "is_completed";
     public static final String COLUMN_DATE_ADDED = "date_added";
 
     /**
@@ -29,14 +28,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SEASON = "season";
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_SEMESTER_GPA = "semester_gpa";
-    public static final String COLUMN_IS_CURRENT = "is_current";
-    public static final String COLUMN_DATE_END = "date_end";
     private static final String CREATE_TABLE_SEMESTERS = "CREATE TABLE "
             + TABLE_SEMESTERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_SEASON + " TEXT NOT NULL, "
             + COLUMN_YEAR + " INTEGER NOT NULL, "
-            + COLUMN_SEMESTER_GPA + " REAL NOT NULL, "
-            + COLUMN_IS_CURRENT + " INTEGER NOT NULL"
+            + COLUMN_SEMESTER_GPA + " REAL NOT NULL"
             + ");";
 
     /**
@@ -47,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_COURSE_NAME = "course_name";
     public static final String COLUMN_INSTRUCTOR_NAME = "instructor_name";
     public static final String COLUMN_INSTRUCTOR_EMAIL = "instructor_email";
+    public static final String COLUMN_CREDITS = "credits";
     public static final String COLUMN_FINAL_GRADE = "final_grade";
     private static final String CREATE_TABLE_COURSES = "CREATE TABLE "
             + TABLE_COURSES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -54,8 +51,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_COURSE_NAME + " TEXT NOT NULL, "
             + COLUMN_INSTRUCTOR_NAME + " TEXT NOT NULL, "
             + COLUMN_INSTRUCTOR_EMAIL + " TEXT NOT NULL, "
-            + COLUMN_FINAL_GRADE + " INTEGER NOT NULL, "
-            + COLUMN_IS_COMPLETED + " INTEGER NOT NULL"
+            + COLUMN_CREDITS + " REAL NOT NULL, "
+            + COLUMN_FINAL_GRADE + " INTEGER NOT NULL"
             + ");";
 
     /**
@@ -93,27 +90,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ");";
 
     /**
-     * Reminder table.
-     * Includes course id, year added, day of year added.
-     */
-    public static final String TABLE_REMINDERS = "reminder";
-    public static final String COLUMN_REMINDER_NAME = "reminder_name";
-    public static final String COLUMN_IS_EXAM = "is_exam";
-    public static final String COLUMN_DATE_REMIND = "date_remind";
-    private static final String CREATE_TABLE_REMINDERS = "CREATE TABLE "
-            + TABLE_REMINDERS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + COLUMN_COURSE_ID + " INTEGER NOT NULL, "
-            + COLUMN_REMINDER_NAME + " TEXT NOT NULL, "
-            + COLUMN_IS_EXAM + " INTEGER NOT NULL, "
-            + COLUMN_IS_COMPLETED + " INTEGER NOT NULL, "
-            + COLUMN_DATE_ADDED + " INTEGER NOT NULL, "
-            + COLUMN_DATE_REMIND + " INTEGER NOT NULL"
-            + ");";
-    /**
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
     private static DatabaseHelper sInstance;
 
     /**
@@ -136,7 +116,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(CREATE_TABLE_COURSES);
         database.execSQL(CREATE_TABLE_COMPONENTS);
         database.execSQL(CREATE_TABLE_GRADES);
-        database.execSQL(CREATE_TABLE_REMINDERS);
     }
 
     @Override
@@ -149,7 +128,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPONENTS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_GRADES);
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDERS);
         onCreate(database);
     }
 }

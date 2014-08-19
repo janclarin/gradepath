@@ -5,33 +5,42 @@
     <string name="app_name">GradePath</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_new_course">New course</string>
 
-    <!-- Action bar -->
-    <string name="actionbar_cancel">Cancel</string>
-    <string name="actionbar_save">Save</string>
-    <string name="actionbar_update">Update</string>
-
-    <!-- Contextual action bar selected -->
-    <string name="contextual_action_edit">Edit</string>
+    <!-- General -->
+    <string name="done">Done</string>
     <string name="delete">Delete</string>
+    <string name="cancelled">Cancelled</string>
 
-    <!-- Edit Course Activity -->
-    <string name="title_activity_edit_course">Edit course</string>
-    <string name="hint_course_name">Course name</string>
-    <string name="hint_instructor">Instructor</string>
-    <string name="hint_email_address">Email address</string>
-    <string name="grade_components">Grade components</string>
-    <string name="final_grade">Final grade</string>
-    <string name="new_semester">New semester</string>
-    <string name="et_grade_component">Title</string>
-    <string name="et_grade_component_weight">Weight %</string>
-    <string name="cd_btn_grade_component">Add/remove grade component</string>
-    <string name="et_grade_component_number_of_items">Number of items</string>
-    <string name="tv_course_information">Course information</string>
-    <string name="prompt_pick_semester">Pick a semester</string>
-    <string name="prompt_enter_course_name">Enter course name</string>
+    <!-- Dialogs -->
+    <string name="title_delete_dialog">Delete %1$s?</string>
+    <string name="dialog_course">Course</string>
+    <string name="dialog_item_name">Name</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_another">Add another</string>
+    <string name="dialog_update">Update</string>
+    <string name="btn_alert_delete_positive">Delete</string>
+    <string name="btn_alert_delete_negative">Cancel</string>
+    <string name="toast_alert_delete_confirmation">%1$s deleted</string>
+    <string name="cd_add_button">Add button</string>
+
+    <!-- Semesters -->
+    <string name="title_fragment_list_semesters">Semesters</string>
+    <string name="title_semester_dialog">Semester</string>
+    <string name="semester_current">Current</string>
+    <string name="tv_gpa">GPA</string>
+    <string name="tv_list_semester_empty">No semesters</string>
+    <string name="not_available">N/A</string>
+    <string name="cumulative_gpa">Cumulative GPA:</string>
+    <string name="cb_current_semester">Current</string>
+    <string name="hint_dialog_semester_gpa">GPA (optional)</string>
+    <string name="toast_semester_saved">Semester saved</string>
+    <string name="toast_semester_updated">Semester updated</string>
+    <string name="no_semesters">No semesters</string>
+    <string name="all_semesters">All Semesters</string>
+    <string name="current_semester">Current semester</string>
+    <string name="add_first_semester">Add a semester. \n Click on the top-right icon.</string>
+    <string name="gpa">GPA</string>
     <string name="season_fall">Fall</string>
     <string name="season_winter">Winter</string>
     <string name="season_spring">Spring</string>
@@ -44,42 +53,47 @@
         <item>@string/season_summer</item>
     </string-array>
 
-    <!-- Course details activity -->
-    <string name="title_activity_detail_course">Course details</string>
+    <!-- Course -->
+    <string name="title_fragment_list_courses">Courses</string>
+    <string name="message_delete_course_dialog">You\'ll delete every grade in this course!</string>
+    <string name="tv_course_fragment_grades">Grades</string>
+    <string name="tv_list_course_empty">No courses yet</string>
+    <string name="tv_semesters">Semesters</string>
+    <string name="course_saved_new">New course saved</string>
+    <string name="course_saved_update">Course updated</string>
+    <string name="bullet">•</string>
+    <string name="cd_overflow">Show menu</string>
+    <string name="hint_course_name">Course name</string>
+    <string name="hint_instructor">Instructor (optional)</string>
+    <string name="hint_email_address">Email (optional)</string>
+    <string name="grade_components">Grade components</string>
+    <string name="final_grade">Final grade</string>
+    <string name="new_semester">New semester</string>
+    <string name="et_grade_component">Title</string>
+    <string name="et_grade_component_weight">Weight %</string>
+    <string name="cd_btn_grade_component">Add/remove grade component</string>
+    <string name="et_grade_component_number_of_items">Number of items</string>
+    <string name="prompt_enter_course_name">Enter course name</string>
+    <string name="course_credits">credits</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_course">Course</string>
-    <string name="dialog_item_name">Name</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_save">Save</string>
-    <string name="dialog_another">Add another</string>
-    <string name="dialog_update">Update</string>
+    <!-- Final grade -->
+    <string name="title_final_grade_dialog">Final Grade</string>
+    <string name="toast_final_grade_saved">Final grade saved</string>
+    <string name="toast_final_grade_updated">Final grade updated</string>
+    <string name="set_final_grade">Set final grade</string>
 
-    <!-- Semester dialog -->
-    <string name="title_new_semester_dialog">New semester</string>
-    <string name="cb_current_semester">Current</string>
-    <string name="tv_dialog_semester_last_day">Last day (optional)</string>
-    <string name="hint_dialog_semester_gpa">GPA</string>
-    <string name="toast_semester_saved">Semester saved</string>
-    <string name="toast_semester_updated">Semester updated</string>
-    <string name="title_edit_semester_dialog">Edit semester</string>
+    <!-- Grade components -->
+    <string name="title_grade_component_dialog">Grade component</string>
+    <string name="grade_component_total_weight_invalid">Grade component weights must sum to 100%</string>
+    <string name="grade_component_updated">Grade component updated</string>
+    <string name="grade_component_saved">Grade component saved</string>
+    <string name="add_grade_component">New component</string>
 
-    <!-- Task Dialog -->
-    <string name="title_new_reminder_dialog">New reminder</string>
-    <string name="title_edit_reminder_dialog">Edit reminder</string>
-    <string name="tv_dialog_reminder_name">Title</string>
-    <string name="cb_exam">Exam</string>
-    <string name="tv_dialog_reminder_date">Date</string>
-    <string name="btn_date_picker_positive">Set</string>
-    <string name="btn_date_picker_neutral">Tomorrow</string>
-    <string name="btn_date_picker_negative">Cancel</string>
-    <string name="title_missing">No title</string>
-    <string name="toast_reminder_updated">Reminder updated</string>
-    <string name="toast_reminder_saved">Reminder saved</string>
-
-    <!-- Grade Dialog -->
-    <string name="title_new_grade_dialog">New grade</string>
-    <string name="title_edit_grade_dialog">Edit grade</string>
+    <!-- Grades -->
+    <string name="title_fragment_list_grades">Grades</string>
+    <string name="title_grade_dialog">Grade</string>
+    <string name="grade">Grade</string>
+    <string name="tv_list_grade_empty">No grades yet</string>
     <string name="tv_dialog_grade_component">Component</string>
     <string name="tv_dialog_grade">Grade</string>
     <string name="tv_dialog_grade_name">Title</string>
@@ -91,107 +105,69 @@
     <string name="grade_received_missing">No received grade</string>
     <string name="grade_possible_missing">No possible grade</string>
     <string name="warning_no_courses_yet">You have no courses, go add one first</string>
-
-    <!-- Delete general alert dialog -->
-    <string name="btn_alert_delete_positive">Delete</string>
-    <string name="btn_alert_delete_negative">Cancel</string>
-    <string name="toast_alert_delete_confirmation">%1$s deleted</string>
-    <string name="title_delete_dialog">Delete %1$s?</string>
-
-    <!-- Delete semester alert dialog -->
     <string name="message_delete_semester_dialog">You\'ll delete every course in this semester!</string>
-
-    <!-- Delete course alert dialog -->
-    <string name="message_delete_course_dialog">You\'ll delete every grade in this course!</string>
-    <string name="cd_add_button">Add button</string>
-
-    <!-- Semesters fragment -->
-    <string name="title_fragment_list_semesters">Semesters</string>
-    <string name="semester_current">Current</string>
-    <string name="semester_past">Past</string>
-    <string name="tv_gpa">GPA</string>
-    <string name="semester_days_left">Days\nLeft</string>
-    <string name="tv_list_semester_empty">No semesters</string>
-    <string name="not_available">N/A</string>
-
-    <!-- Course Fragment -->
-    <string name="title_fragment_list_courses">Courses</string>
-    <string name="tv_course_fragment_grades">Grades</string>
-    <string name="tv_list_course_empty">No courses yet</string>
-    <string name="tv_semesters">Semesters</string>
-    <string name="of">of</string>
-    <string name="course_saved_new">New course saved</string>
-    <string name="course_saved_update">Course updated</string>
-    <string name="tv_course_grades_current_average">Current average:</string>
-    <string name="task_due_date_two_days">In two days</string>
-    <string name="task_due_date_late">Late</string>
-    <string name="task_due_date_today">Today</string>
-    <string name="task_due_date_tomorrow">Tomorrow</string>
-    <string name="task_due_date_none">No tasks</string>
-    <string name="bullet">•</string>
-    <string name="cd_overflow">Show menu</string>
-    <string name="action_list_sort_by">Sort by</string>
-    <string name="action_list_sort_alphabet_ascending">Alphabetical ascending</string>
-    <string name="action_list_sort_alphabet_descending">Alphabetical descending</string>
-
-    <!-- Home Fragment -->
-    <string name="title_fragment_home">Home</string>
-    <string name="welcome_message">Add a course</string>
-    <string name="welcome_message2">Swipe from the left side of the screen to view more options.</string>
-    <string name="see_all">See all</string>
-    <string name="none_use_button">None</string>
-    <string name="welcome_card_title">Welcome!</string>
-    <string name="welcome_confirmation">Hide</string>
-
-    <!-- Settings Fragment -->
-    <string name="title_fragment_settings">Settings</string>
-    <string name="title_fragment_list_grades">Grades</string>
-    <string name="title_fragment_list_reminders">Reminders</string>
-    <string name="tv_list_grade_empty">No grades yet</string>
-    <string name="tv_list_task_empty">No reminders yet</string>
     <string name="added">Added</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="on">on</string>
     <string name="selected">selected</string>
-    <string name="due">Due</string>
-    <string name="cd_show_semester_options">Show semester options</string>
-    <string name="list_semester_set_to_current">Set to current</string>
-    <string name="title_fragment_overview">Overview</string>
-    <string name="list_reminders_past">Past</string>
-    <string name="list_reminders_upcoming">Upcoming</string>
-    <string name="was_due">Was due</string>
-    <string name="completed">Completed</string>
     <string name="days_ago">days ago</string>
-    <string name="grade">Grade</string>
-    <string name="reminder">Reminder</string>
-    <string name="exam">Exam</string>
-    <string name="not_exam">General</string>
-    <string name="gpa">GPA</string>
-    <string name="cumulative_gpa">Cumulative GPA:</string>
-    <string name="weight_invalid">Weight is invalid</string>
-    <string name="name_invalid">Name is invalid</string>
-    <string name="num_items_invalid">Number of items is invalid</string>
-    <string name="semester_invalid">Pick or add a semester</string>
-    <string name="title_new_grade_component_dialog">New grade component</string>
-    <string name="grade_component_updated">Grade component updated</string>
-    <string name="grade_component_saved">Grade component saved</string>
-    <string name="add_grade_component">New component</string>
-    <string name="items">items</string>
-    <string name="title_edit_grade_component_dialog">Edit grade component</string>
-    <string name="tv_dialog_reminder_time">Time</string>
-    <string name="grade_component_total_weight_invalid">Grade component weights must sum to 100%</string>
-    <string name="more">More</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="no_semesters">No semesters</string>
-    <string name="add">Add</string>
-    <string name="semester">Semester</string>
-    <string name="title_activity_list_fragment">ListFragmentActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="all_semesters">All semesters</string>
-    <string name="current_semester">Current semester</string>
-    <string name="add_first_semester">Add a semester. \n Click on the top-right icon.</string>
     <string name="total">Total</string>
-    <string name="cancelled">Cancelled</string>
+    <string name="items">items</string>
+
+    <!-- Errors -->
+    <string name="name_invalid">Name is invalid</string>
+    <string name="weight_invalid">Weight is invalid</string>
+    <string name="num_items_invalid">Number of items is invalid</string>
+
+    <!-- Home -->
+    <string name="title_fragment_home">Home</string>
+    <string name="welcome_message">Add a course</string>
+    <string name="see_all">See all</string>
+
+    <!-- Calculator -->
+    <string name="title_fragment_calculator">Grade Calculator</string>
+
+    <!-- Settings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_title_grades">Grades</string>
+    <string name="pref_letter_grades">Pick letter grades</string>
+    <string name="pref_dialog_title_letter_grade">Letter grade options</string>
+    <string name="pref_summary_letter_grades">Only show applicable letter grades.</string>
+    <string name="pref_gpa_equivalents">GPA letter grade values</string>
+    <string name="pref_summary_gpa_equivalents">Set equivalent values for letter grades.</string>
+    <string name="pref_summary_course_credits">Set default number of credits</string>
+    <string name="pref_title_course_credits">Course credits</string>
+
+    <string-array name="pref_entries_letter_grades">
+        <item>A+</item>
+        <item>A</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B</item>
+        <item>B-</item>
+        <item>C+</item>
+        <item>C</item>
+        <item>C-</item>
+        <item>D+</item>
+        <item>D</item>
+        <item>D-</item>
+        <item>F</item>
+    </string-array>
+    <string-array name="pref_entry_values_letter_grades">
+        <item>a_plus</item>
+        <item>a</item>
+        <item>a_minus</item>
+        <item>b_plus</item>
+        <item>b</item>
+        <item>b_minus</item>
+        <item>c_plus</item>
+        <item>c</item>
+        <item>c_minus</item>
+        <item>d_plus</item>
+        <item>d</item>
+        <item>d_minus</item>
+        <item>f</item>
+    </string-array>
 
 </resources>

@@ -26,12 +26,14 @@ public class ListSemesterFragment extends BaseListFragment {
     private ImageButton mAddItemButton;
     private OnFragmentListSemesterListener mListener;
 
-    public static ListSemesterFragment newInstance() {
-        return new ListSemesterFragment();
-    }
+    private List<Semester> mSemesters;
 
     public ListSemesterFragment() {
         // Required empty public constructor.
+    }
+
+    public static ListSemesterFragment newInstance() {
+        return new ListSemesterFragment();
     }
 
     @Override
@@ -77,22 +79,12 @@ public class ListSemesterFragment extends BaseListFragment {
     public void updateListItems() {
         clearListItems();
 
-        List<Semester> semesters = mDatabase.getSemesters();
-        Semester currentSemester = mDatabase.getCurrentSemester();
+        mSemesters = mDatabase.getSemesters();
 
-        // Add current semester header and semester into list if they exist.
-        if (currentSemester != null) {
-            mListItems.add(new Header(getString(R.string.semester_current)));
-            mListItems.add(currentSemester);
-
-            // Remove current semester from list of all semesters.
-            semesters.remove(currentSemester);
-        }
-
-        // Add all other semesters under "Past" header.
-        if (semesters.size() > 0) {
+        if (!mSemesters.isEmpty()) {
             mListItems.add(new Header(null));
-            mListItems.addAll(semesters);
+            for (Semester semester : mSemesters)
+                mListItems.add(semester);
         }
 
         notifyAdapter();
@@ -168,16 +160,13 @@ public class ListSemesterFragment extends BaseListFragment {
 
             if (type == ITEM_VIEW_TYPE_HEADER) {
 
-                String info = ((Header) listItem).getName();
+                String info = getString(R.string.cumulative_gpa) + " ";
+                double gpa = mDatabase.getCumulativeGPA(mSemesters);
 
-                if (info == null) {
-                    double gpa = mDatabase.getCumulativeGPA();
-                    info = getString(R.string.cumulative_gpa) + " ";
-                    if (gpa > -1) {
-                        info += new DecimalFormat("#.0#").format(gpa);
-                    } else {
-                        info += mContext.getString(R.string.not_available);
-                    }
+                if (gpa > -1) {
+                    info += new DecimalFormat("#.0#").format(gpa);
+                } else {
+                    info += mContext.getString(R.string.not_available);
                 }
 
                 viewHolder.tvTitle.setText(info);

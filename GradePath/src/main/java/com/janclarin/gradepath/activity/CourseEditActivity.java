@@ -6,8 +6,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ public class CourseEditActivity extends BaseActivity
     private EditText mCourseName;
     private EditText mInstructorName;
     private EditText mInstructorEmail;
+    private Spinner mCredits;
     private LinearLayout mComponentList;
 
     private Course mCourseToUpdate;
@@ -50,50 +53,17 @@ public class CourseEditActivity extends BaseActivity
 
         // Arguments from activity.
         mCourseToUpdate = (Course) getIntent().getSerializableExtra(COURSE_KEY);
-
-        // Set up grade category list view.
-        mGradeComponents = new ArrayList<GradeComponent>();
-        mRemoveComponents = new ArrayList<GradeComponent>();
-
-        // Set up the views.
-        setUpView();
-
-        // Check if there is a Course in arguments. If so, insert course information into views.
-        if (mCourseToUpdate != null) {
-            mGradeComponents = mDatabase.getGradeComponents(mCourseToUpdate.getId());
-
-            // Set edit text fields to course data.
-            mCourseName.setText(mCourseToUpdate.getName());
-            mInstructorName.setText(mCourseToUpdate.getInstructorName());
-            mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
-
-            // Add grade component view for each existing grade component.
-            for (GradeComponent gradeComponent : mGradeComponents)
-                addGradeComponent(gradeComponent);
-        }
     }
 
-    private void newGradeComponent() {
-        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
-                getString(R.string.title_new_grade_component_dialog));
-        gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
-    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
-    private void editGradeComponent(GradeComponent gradeComponent) {
-        updatePosition = mGradeComponents.indexOf(gradeComponent);
-        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
-                getString(R.string.title_edit_grade_component_dialog), gradeComponent);
-        gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
-    }
-
-    /**
-     * Set up views.
-     */
-    private void setUpView() {
         // Find views.
         mCourseName = (EditText) findViewById(R.id.et_course_name);
         mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
         mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
+        mCredits = (Spinner) findViewById(R.id.spn_course_credits);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
 
         // Set add button to open new grade component dialog.
@@ -104,29 +74,50 @@ public class CourseEditActivity extends BaseActivity
             }
         });
 
-//        // Set up grade seeker.
-//        // Set max value to the number of possible letter grades values.
-//        mGradeSeeker.setMax(Course.LetterGrade.values().length - 1);
-//        mGradeSeeker.setKeyProgressIncrement(1);
-//        mGradeSeeker.setProgress(6);
-//        mGradeTextView.setText(Course.LetterGrade.values()[6].toString());
-//
-//        // Set seek bar change listener.
-//        mGradeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                // Set text view to display corresponding
-//                mGradeTextView.setText(Course.LetterGrade.values()[progress].toString());
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//            }
-//        });
+        Double[] credits = new Double[]{3.0, 6.0};
+        ArrayAdapter<Double> adapter =
+                new ArrayAdapter<Double>(this, R.layout.spinner_item, credits);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mCredits.setAdapter(adapter);
+
+        // Set up grade category list view.
+        mGradeComponents = new ArrayList<GradeComponent>();
+        mRemoveComponents = new ArrayList<GradeComponent>();
+
+        // Check if there is a Course in arguments. If so, insert course information into views.
+        if (mCourseToUpdate != null) {
+            mGradeComponents = mDatabase.getGradeComponents(mCourseToUpdate.getId());
+
+            // Set edit text fields to course data.
+            mCourseName.setText(mCourseToUpdate.getName());
+            mInstructorName.setText(mCourseToUpdate.getInstructorName());
+            mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
+            mCredits.setSelection(adapter.getPosition(mCourseToUpdate.getCredits()));
+
+            // Add grade component view for each existing grade component.
+            for (GradeComponent gradeComponent : mGradeComponents)
+                addGradeComponent(gradeComponent);
+        }
+    }
+
+    private void newGradeComponent() {
+        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+                getString(R.string.title_grade_component_dialog));
+        gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
+    }
+
+    private void editGradeComponent(GradeComponent gradeComponent) {
+        updatePosition = mGradeComponents.indexOf(gradeComponent);
+        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+                getString(R.string.title_grade_component_dialog), gradeComponent);
+        gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
+    }
+
+    /**
+     * Set up views.
+     */
+    private void setUpView() {
     }
 
     private View createGradeComponentView(final GradeComponent gradeComponent) {
@@ -179,7 +170,6 @@ public class CourseEditActivity extends BaseActivity
         } else {
             mComponentList.addView(gradeComponentView);
         }
-
     }
 
     /**
@@ -224,13 +214,13 @@ public class CourseEditActivity extends BaseActivity
         if (mCourseToUpdate == null) {
             // Course is a new one not found in Database.
             courseId = mDatabase.insertCourse(semester.getId(), courseName, instructorName,
-                    instructorEmail, -1, false);
+                    instructorEmail, (Double) mCredits.getSelectedItem(), -1);
         } else {
             // Update course.
             courseId = mCourseToUpdate.getId();
             mDatabase.updateCourse(courseId, mCourseToUpdate.getSemesterId(), courseName,
-                    instructorName, instructorEmail, mCourseToUpdate.getFinalGradeValue(),
-                    mCourseToUpdate.isCompleted());
+                    instructorName, instructorEmail, (Double) mCredits.getSelectedItem(),
+                    mCourseToUpdate.getFinalGradeValue());
         }
 
         for (GradeComponent gradeComponent : mGradeComponents) {

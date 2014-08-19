@@ -23,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.dialog.FinalGradeDialogFragment;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
+import com.janclarin.gradepath.fragment.CalculatorFragment;
 import com.janclarin.gradepath.fragment.HomeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.model.Course;
@@ -41,8 +43,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity
         implements ActionBar.OnNavigationListener,
         HomeFragment.FragmentHomeListener,
+        CalculatorFragment.Callbacks,
         SemesterDialogFragment.OnDialogSemesterListener,
-        GradeDialogFragment.OnDialogGradeListener {
+        GradeDialogFragment.OnDialogGradeListener,
+        FinalGradeDialogFragment.Callbacks {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     /**
@@ -59,13 +63,15 @@ public class MainActivity extends BaseActivity
      */
     private static final DrawerItem[] mDrawerItems = new DrawerItem[]{
             new DrawerItem(R.string.title_fragment_home, R.drawable.home),
-            new DrawerItem(R.string.title_fragment_settings, R.drawable.settings)
+            new DrawerItem(R.string.title_fragment_calculator, R.drawable.calculator),
+            new DrawerItem(R.string.title_activity_settings, R.drawable.settings)
     };
-    /**
-     * Used to store the last screen mTitle.
-     */
-    private CharSequence mTitle;
-
+    private final Semester mAllSemestersOption = new Semester() {
+        @Override
+        public String toString() {
+            return getString(R.string.all_semesters);
+        }
+    };
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
@@ -76,17 +82,8 @@ public class MainActivity extends BaseActivity
     private boolean mUserLearnedDrawer;
     private ListView mDrawerListView;
     private Fragment mCurrentFragment;
-
     private Semester mCurrentSemester;
     private List<Semester> mSemesters;
-
-    private final Semester mAllSemestersOption = new Semester() {
-        @Override
-        public String toString() {
-            return getString(R.string.all_semesters);
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +93,9 @@ public class MainActivity extends BaseActivity
 
         // Change soft input to adjust pan.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        // Set default values.
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity
         if (item.getItemId() == R.id.new_semester) {
             // Show semester dialog.
             SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                    getString(R.string.title_new_semester_dialog));
+                    getString(R.string.title_semester_dialog));
             semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
         if (mDrawerToggle.onOptionsItemSelected(item) && mDrawerToggle.isDrawerIndicatorEnabled()) {
@@ -257,37 +257,13 @@ public class MainActivity extends BaseActivity
 
     /**
      * Select item from navigation drawer.
-     *
-     * @param position
      */
     private void onNavDrawerItemSelected(int position) {
 
-        // Selected drawer item.
-        DrawerItem drawerItem = mDrawerItems[position];
-
-        // Get drawer item's fragment.
-        mCurrentFragment = drawerItem.getFragment();
-
-
-        if (mCurrentFragment == null) {
-            switch (position) {
-                case 0: {
-                    mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
-                    drawerItem.setFragment(mCurrentFragment);
-
-                    getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.container, mCurrentFragment)
-                            .commit();
-                    break;
-                }
-                case 1: {
-                    // Open settings activity.
-                    Intent intent = new Intent(this, SettingsActivity.class);
-                    startActivity(intent);
-                    break;
-                }
-            }
+        if (position == 2) {
+            // Open settings activity.
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         mCurrentSelectedPosition = position;
@@ -325,6 +301,9 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    /**
+     * On semester item selected in spinner.
+     */
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
         // Set current semester selected semester.
@@ -337,11 +316,16 @@ public class MainActivity extends BaseActivity
             startActivity(intent);
         } else {
             // Selected drawer item.
-            DrawerItem drawerItem = mDrawerItems[position];
-            mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+            DrawerItem drawerItem = mDrawerItems[mCurrentSelectedPosition];
+
+            if (mCurrentSelectedPosition == 0) {
+                mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+            } else if (mCurrentSelectedPosition == 1) {
+                mCurrentFragment = CalculatorFragment.newInstance();
+            }
+
             drawerItem.setFragment(mCurrentFragment);
 
-            // Otherwise, just open the home fragment properly.
             getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, mCurrentFragment)
@@ -416,15 +400,22 @@ public class MainActivity extends BaseActivity
     @Override
     public void onHomeAddGrade() {
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_new_grade_dialog));
+                getString(R.string.title_grade_dialog));
         gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
+    }
+
+    @Override
+    public void onHomeSetFinalGrade(Course course) {
+        FinalGradeDialogFragment finalGradeDialog = FinalGradeDialogFragment.newInstance(
+                getString(R.string.title_final_grade_dialog), course);
+        finalGradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
     public void onHomeEditGrade(Grade grade) {
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_edit_grade_dialog), grade);
+                getString(R.string.title_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }
 
@@ -466,12 +457,52 @@ public class MainActivity extends BaseActivity
     @Override
     public void onGradeSaved(boolean isNew) {
         // String is set to "grade saved" if grade is new, if updating "grade updated."
-        String toastMessage = isNew ? getString(R.string.toast_grade_saved) :
+        String toastMessage = isNew
+                ? getString(R.string.toast_grade_saved) :
                 getString(R.string.toast_grade_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
         refreshListGrade();
+    }
+
+    @Override
+    public void onFinalGradeSaved(boolean isNew) {
+        String toastMessage = isNew
+                ? getString(R.string.toast_final_grade_saved)
+                : getString(R.string.toast_final_grade_updated);
+
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Navigation drawer item.
+     */
+    private static class DrawerItem {
+        private final int mTitle;
+        private final int mIcon;
+        private WeakReference<Fragment> mFragmentReference;
+
+        public DrawerItem(int title, int icon) {
+            mTitle = title;
+            mIcon = icon;
+        }
+
+        public int getTitle() {
+            return mTitle;
+        }
+
+        public int getIcon() {
+            return mIcon;
+        }
+
+        public Fragment getFragment() {
+            return mFragmentReference == null ? null : mFragmentReference.get();
+        }
+
+        public void setFragment(Fragment fragment) {
+            this.mFragmentReference = new WeakReference<Fragment>(fragment);
+        }
     }
 
     /**
@@ -529,36 +560,6 @@ public class MainActivity extends BaseActivity
 
         class ViewHolder {
             TextView tvSectionName;
-        }
-    }
-
-    /**
-     * Navigation drawer item.
-     */
-    private static class DrawerItem {
-        private final int mTitle;
-        private final int mIcon;
-        private WeakReference<Fragment> mFragmentReference;
-
-        public DrawerItem(int title, int icon) {
-            mTitle = title;
-            mIcon = icon;
-        }
-
-        public int getTitle() {
-            return mTitle;
-        }
-
-        public int getIcon() {
-            return mIcon;
-        }
-
-        public Fragment getFragment() {
-            return mFragmentReference == null ? null : mFragmentReference.get();
-        }
-
-        public void setFragment(Fragment fragment) {
-            this.mFragmentReference = new WeakReference<Fragment>(fragment);
         }
     }
 }

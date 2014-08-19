@@ -3,15 +3,15 @@
     style="@style/dialogPrompt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".dialog.SemesterDialog">
 
     <Spinner
         android:id="@+id/spn_dialog_semester_year"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="8dp"
-        android:paddingRight="8dp" />
+        android:layout_alignParentRight="true" />
 
     <Spinner
         android:id="@+id/spn_dialog_semester_season"
@@ -19,23 +19,13 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="4dp"
-        android:layout_toLeftOf="@id/spn_dialog_semester_year"
-        android:paddingRight="8dp" />
-
-    <CheckBox
-        android:id="@+id/cb_dialog_semester_current"
-        style="@style/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@id/spn_dialog_semester_year"
-        android:layout_marginTop="8dp"
-        android:text="@string/cb_current_semester" />
+        android:layout_toLeftOf="@id/spn_dialog_semester_year" />
 
     <EditText
         android:id="@+id/et_dialog_semester_gpa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cb_dialog_semester_current"
+        android:layout_below="@id/spn_dialog_semester_year"
         android:layout_marginTop="8dp"
         android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
         android:hint="@string/hint_dialog_semester_gpa"

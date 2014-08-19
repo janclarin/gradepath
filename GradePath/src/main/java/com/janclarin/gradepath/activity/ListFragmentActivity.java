@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.dialog.FinalGradeDialogFragment;
 import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.dialog.SemesterDialogFragment;
 import com.janclarin.gradepath.fragment.BaseListFragment;
@@ -20,7 +21,8 @@ public class ListFragmentActivity extends BaseActivity
         ListCourseFragment.OnFragmentListCourseListener,
         ListSemesterFragment.OnFragmentListSemesterListener,
         GradeDialogFragment.OnDialogGradeListener,
-        SemesterDialogFragment.OnDialogSemesterListener {
+        SemesterDialogFragment.OnDialogSemesterListener,
+        FinalGradeDialogFragment.Callbacks {
 
     public static final String FRAGMENT_TYPE = "Fragment";
     BaseListFragment mCurrentFragment;
@@ -95,17 +97,17 @@ public class ListFragmentActivity extends BaseActivity
     }
 
     @Override
-    public void onListCourseEdit(Course course) {
-        Intent intent = new Intent(this, CourseEditActivity.class);
-        intent.putExtra(COURSE_KEY, course);
-        startActivityForResult(intent, REQUEST_LIST_COURSE_EDIT_COURSE);
+    public void onListCourseSetFinalGrade(Course course) {
+        FinalGradeDialogFragment finalGradeDialog = FinalGradeDialogFragment.newInstance(
+                getString(R.string.title_final_grade_dialog), course);
+        finalGradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
     public void onListGradeEdit(Grade grade) {
         // Show edit grade dialog.
         GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
-                getString(R.string.title_edit_grade_dialog), grade);
+                getString(R.string.title_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }
 
@@ -123,14 +125,14 @@ public class ListFragmentActivity extends BaseActivity
     @Override
     public void onListSemesterNew() {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_new_semester_dialog));
+                getString(R.string.title_semester_dialog));
         semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
     }
 
     @Override
     public void onListSemesterEdit(Semester semester) {
         SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                getString(R.string.title_edit_semester_dialog), semester);
+                getString(R.string.title_semester_dialog), semester);
         semesterDialog.show(getFragmentManager(), EDIT_SEMESTER_TAG);
     }
 
@@ -144,5 +146,14 @@ public class ListFragmentActivity extends BaseActivity
 
         // Refresh the semester list.
         refreshList();
+    }
+
+    @Override
+    public void onFinalGradeSaved(boolean isNew) {
+        String toastMessage = isNew
+                ? getString(R.string.toast_final_grade_saved)
+                : getString(R.string.toast_final_grade_updated);
+
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
     }
 }

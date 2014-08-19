@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
+import com.janclarin.gradepath.dialog.GradeDialogFragment;
 import com.janclarin.gradepath.fragment.CourseDetailFragment;
 import com.janclarin.gradepath.model.Course;
+import com.janclarin.gradepath.model.Grade;
 
 public class CourseDetailActivity extends BaseActivity
-        implements CourseDetailFragment.Callbacks {
+        implements CourseDetailFragment.Callbacks,
+        GradeDialogFragment.OnDialogGradeListener {
 
     private static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
 
@@ -53,5 +56,26 @@ public class CourseDetailActivity extends BaseActivity
         Intent intent = new Intent(this, CourseEditActivity.class);
         intent.putExtra(COURSE_KEY, course);
         startActivityForResult(intent, REQUEST_LIST_COURSE_EDIT_COURSE);
+    }
+
+    @Override
+    public void onEditGrade(Grade grade) {
+
+        // Show edit grade dialog.
+        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+                getString(R.string.title_grade_dialog), grade);
+        gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
+    }
+
+    @Override
+    public void onGradeSaved(boolean isNew) {
+        // String is set to "grade saved" if grade is new, if updating "grade updated."
+        String toastMessage = isNew ? getString(R.string.toast_grade_saved) :
+                getString(R.string.toast_grade_updated);
+
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+        // Update grades list.
+        mFragment.updateListItems();
     }
 }

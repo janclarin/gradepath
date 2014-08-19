@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -67,20 +66,12 @@ public class SemesterDialogFragment extends BaseDialogFragment {
         // Find views.
         mSeasonSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_semester_season);
         mYearSpinner = (Spinner) rootView.findViewById(R.id.spn_dialog_semester_year);
-        mCurrentCheckBox = (CheckBox) rootView.findViewById(R.id.cb_dialog_semester_current);
         mGPA = (EditText) rootView.findViewById(R.id.et_dialog_semester_gpa);
 
-        // If the semester is current, hide the GPA, show otherwise.
-        mCurrentCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                int visibility = isChecked ? View.GONE : View.VISIBLE;
-                mGPA.setVisibility(visibility);
-            }
-        });
-
-        // Set to current by default if there are no semesters.
-        mCurrentCheckBox.setChecked(mDatabase.noSemesters());
+        // Hide GPA field if there are no semesters.
+        if (mDatabase.noSemesters()) {
+            mGPA.setVisibility(View.GONE);
+        }
 
         // Create array mAdapter for seasons and set mAdapter.
         ArrayAdapter<Semester.Season> seasonAdapter = new ArrayAdapter<Semester.Season>(
@@ -110,9 +101,7 @@ public class SemesterDialogFragment extends BaseDialogFragment {
 
         final String positiveButton;
         // Set positive button to "Update" if updating, "Save" if not.
-        // Set checkbox properly based on semester's status.
         if (mSemesterToUpdate != null) {
-            mCurrentCheckBox.setChecked(mSemesterToUpdate.isCurrent());
             positiveButton = mContext.getString(R.string.dialog_update);
         } else {
             positiveButton = mContext.getString(R.string.dialog_save);
@@ -137,6 +126,9 @@ public class SemesterDialogFragment extends BaseDialogFragment {
                 })
                 .create();
 
+        // Prevent the dialog from being canceled on outside touch.
+        alertDialog.setCanceledOnTouchOutside(false);
+
         // Show dialog to allow positive button to be found.
         alertDialog.show();
 
@@ -150,16 +142,14 @@ public class SemesterDialogFragment extends BaseDialogFragment {
                 String gpaString = mGPA.getText().toString().trim();
                 double gpa = gpaString.isEmpty() ? -1 : Double.parseDouble(gpaString);
 
-                boolean isCurrent = mCurrentCheckBox.isChecked();
-
                 Semester semester;
                 // Insert semester if it's not being updated.
                 if (mSemesterToUpdate == null) {
+
                     semester = mDatabase.insertSemester(
                             season,
                             year,
-                            gpa,
-                            isCurrent
+                            gpa
                     );
                 } else {
                     // Update the semester.
@@ -167,8 +157,7 @@ public class SemesterDialogFragment extends BaseDialogFragment {
                             mSemesterToUpdate.getId(),
                             season,
                             year,
-                            gpa,
-                            isCurrent
+                            gpa
                     );
                     semester = null;
                 }

@@ -26,8 +26,6 @@ import java.util.List;
  */
 public class GradeDialogFragment extends BaseDialogFragment {
 
-    private static final String LOG_TAG = GradeDialogFragment.class.getSimpleName();
-
     private OnDialogGradeListener mListener;
 
     private Grade mGradeToUpdate;
@@ -42,6 +40,7 @@ public class GradeDialogFragment extends BaseDialogFragment {
     private EditText mGradePossible;
 
     public GradeDialogFragment() {
+        // Required empty public constructor.
     }
 
     /**
@@ -162,7 +161,7 @@ public class GradeDialogFragment extends BaseDialogFragment {
         }
 
         // Set positive button to "Update" if updating, "Save" if not.
-        String positiveButton = (mGradeToUpdate != null) ? mContext.getString(R.string.dialog_update) : mContext.getString(R.string.dialog_save);
+        final String positiveButton = (mGradeToUpdate != null) ? mContext.getString(R.string.dialog_update) : mContext.getString(R.string.dialog_save);
 
         // Return new dialog using builder. Gets title from arguments.
         final AlertDialog alertDialog = new AlertDialog.Builder(mContext)

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:scrollbarStyle="outsideOverlay"
-    tools:context=".activities.NewCourseActivity">
+    tools:context=".activities.CourseEditActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,34 +12,55 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_text_fields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/theme_primary"
             android:orientation="vertical"
-            android:paddingBottom="48dp">
+            android:paddingBottom="40dp"
+            android:paddingTop="8dp">
 
-            <!-- Course Information -->
+            <Spinner
+                android:id="@+id/spn_course_credits"
+                android:layout_width="88dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/keyline_1"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/tv_dialog_grade_header"
+                style="@style/headerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/spn_course_credits"
+                android:text="@string/course_credits"
+                android:textColor="@color/white_60_opacity" />
+
             <EditText
                 android:id="@+id/et_course_name"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/spn_course_credits"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="@dimen/keyline_1"
-                android:layout_marginRight="@dimen/keyline_1"
-                android:layout_marginTop="16dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@id/spn_course_credits"
                 android:hint="@string/hint_course_name"
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/white_60_opacity"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
+            <!-- Course Information -->
             <EditText
                 android:id="@+id/et_instructor_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/et_course_name"
                 android:layout_marginLeft="@dimen/keyline_1"
                 android:layout_marginRight="@dimen/keyline_1"
                 android:layout_marginTop="8dp"
@@ -54,6 +75,7 @@
                 android:id="@+id/et_instructor_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/et_instructor_name"
                 android:layout_marginLeft="@dimen/keyline_1"
                 android:layout_marginRight="@dimen/keyline_1"
                 android:layout_marginTop="8dp"
@@ -63,8 +85,7 @@
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/white_60_opacity" />
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_grade_components_header"
@@ -98,6 +119,7 @@
             android:layout_alignBottom="@id/button_bottom"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/keyline_1"
+            android:contentDescription="@string/cd_add_button"
             android:src="@drawable/list_add_item" />
 
     </RelativeLayout>

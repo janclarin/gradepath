@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.GradeComponent;
-import com.janclarin.gradepath.model.Reminder;
 import com.janclarin.gradepath.model.Semester;
 
 import java.util.ArrayList;
@@ -27,8 +26,7 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_SEASON,
             DatabaseHelper.COLUMN_YEAR,
-            DatabaseHelper.COLUMN_SEMESTER_GPA,
-            DatabaseHelper.COLUMN_IS_CURRENT
+            DatabaseHelper.COLUMN_SEMESTER_GPA
     };
 
     private static final String[] COURSE_COLUMNS = {
@@ -37,8 +35,8 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_COURSE_NAME,
             DatabaseHelper.COLUMN_INSTRUCTOR_NAME,
             DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL,
+            DatabaseHelper.COLUMN_CREDITS,
             DatabaseHelper.COLUMN_FINAL_GRADE,
-            DatabaseHelper.COLUMN_IS_COMPLETED
     };
 
     private static final String[] COMPONENT_COLUMNS = {
@@ -57,16 +55,6 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_POINTS_RECEIVED,
             DatabaseHelper.COLUMN_POINTS_POSSIBLE,
             DatabaseHelper.COLUMN_DATE_ADDED
-    };
-
-    private static final String[] REMINDER_COLUMNS = {
-            DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_COURSE_ID,
-            DatabaseHelper.COLUMN_REMINDER_NAME,
-            DatabaseHelper.COLUMN_IS_EXAM,
-            DatabaseHelper.COLUMN_IS_COMPLETED,
-            DatabaseHelper.COLUMN_DATE_ADDED,
-            DatabaseHelper.COLUMN_DATE_REMIND
     };
 
     /**
@@ -100,16 +88,13 @@ public class DatabaseFacade {
      *
      * @return semester ID
      */
-    public Semester insertSemester(String season, int year, double gpa, boolean isCurrent) {
+    public Semester insertSemester(String season, int year, double gpa) {
 
         // Cursor to check if this semester exists before inserting it.
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
                 DatabaseHelper.COLUMN_SEASON + " = '" + season + "' AND " +
                         DatabaseHelper.COLUMN_YEAR + " = '" + year + "'", null, null, null, null
         );
-
-        // Set all other semesters as not current if this semester is.
-        if (isCurrent) setOtherSemestersToNotCurrent();
 
         // If there are no semesters with this season and year, insert it into mDatabase.
         // Otherwise, get the semester from the cursor.
@@ -119,7 +104,6 @@ public class DatabaseFacade {
             values.put(DatabaseHelper.COLUMN_SEASON, season);
             values.put(DatabaseHelper.COLUMN_YEAR, year);
             values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
-            values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
 
             long semesterId = mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
 
@@ -144,17 +128,12 @@ public class DatabaseFacade {
      *
      * @return -1 if update failed.
      */
-    public int updateSemester(long semesterId, String season, int year, double gpa,
-                              boolean isCurrent) {
-
-        // Set all other semesters as not current if this semester is.
-        if (isCurrent) setOtherSemestersToNotCurrent();
+    public int updateSemester(long semesterId, String season, int year, double gpa) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEASON, season);
         values.put(DatabaseHelper.COLUMN_YEAR, year);
         values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
-        values.put(DatabaseHelper.COLUMN_IS_CURRENT, isCurrent ? 1 : 0);
 
         return mDatabase.update(DatabaseHelper.TABLE_SEMESTERS, values,
                 DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null);
@@ -185,29 +164,6 @@ public class DatabaseFacade {
 
         cursor.close();
 
-        // Set the most recent semester before the one to be deleted to be current.
-        if (semester.isCurrent()) {
-            List<Semester> semesters = getSemesters();
-            Collections.sort(semesters);
-            Semester mostRecentSemester = semesters.get(semesters.size() - 1);
-            updateSemester(
-                    mostRecentSemester.getId(),
-                    mostRecentSemester.getSeason(),
-                    mostRecentSemester.getYear(),
-                    mostRecentSemester.getGpa(),
-                    true);  // Set to current.
-        }
-    }
-
-    /**
-     * Sets this semester as the current one and all others to not be current.
-     */
-    public int setOtherSemestersToNotCurrent() {
-
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_IS_CURRENT, 0);
-
-        return mDatabase.update(DatabaseHelper.TABLE_SEMESTERS, values, null, null);
     }
 
     /**
@@ -229,19 +185,8 @@ public class DatabaseFacade {
      * @return Current {@code Semester} if it exists, otherwise return null.
      */
     public Semester getCurrentSemester() {
-        Semester semester;
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
-                DatabaseHelper.COLUMN_IS_CURRENT + " = '1'", null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            semester = cursorToSemester(cursor);
-            cursor.close();
-            return semester;
-        } else {
-            cursor.close();
-            return null;
-        }
+        List<Semester> semesters = getSemesters();
+        return semesters.isEmpty() ? null : semesters.get(0);
     }
 
     /**
@@ -266,29 +211,6 @@ public class DatabaseFacade {
 
         // Sort semesters using custom comparator within class.
         Collections.sort(semesters);
-
-        return semesters;
-    }
-
-    /**
-     * Gets a list of all completed semesters.
-     */
-    public List<Semester> getPastSemestersWithGPA() {
-        List<Semester> semesters = new ArrayList<Semester>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
-                DatabaseHelper.COLUMN_IS_CURRENT + " = '0' AND "
-                        + DatabaseHelper.COLUMN_SEMESTER_GPA + " > '-1'", null, null, null, null);
-
-        cursor.moveToFirst();
-
-        // Read distinct semesters from mDatabase into a list.
-        while (!cursor.isAfterLast()) {
-            semesters.add(cursorToSemester(cursor));
-            cursor.moveToNext();
-        }
-
-        cursor.close();
 
         return semesters;
     }
@@ -320,15 +242,15 @@ public class DatabaseFacade {
      * @return course id.
      */
     public long insertCourse(long semesterId, String courseName, String instructorName,
-                             String instructorEmail, int letterGradeValue, boolean isCompleted) {
+                             String instructorEmail, double credits, int letterGradeValue) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, courseName);
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_NAME, instructorName);
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
+        values.put(DatabaseHelper.COLUMN_CREDITS, credits);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
-        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
         // Booleans not supported in SQLite, 1 = true, 0 = false.
 
         // Inserts course into table and returns its id.
@@ -341,15 +263,15 @@ public class DatabaseFacade {
      * @return -1 if update failed.
      */
     public int updateCourse(long courseId, long semesterId, String courseName, String instructorName,
-                            String instructorEmail, int letterGradeValue, boolean isCompleted) {
+                            String instructorEmail, double credits, int letterGradeValue) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
         values.put(DatabaseHelper.COLUMN_COURSE_NAME, courseName);
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_NAME, instructorName);
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
+        values.put(DatabaseHelper.COLUMN_CREDITS, credits);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
-        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
 
         return mDatabase.update(DatabaseHelper.TABLE_COURSES, values,
                 DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
@@ -680,150 +602,55 @@ public class DatabaseFacade {
      *
      * @return cumulative gpa of all completed courses. -1 if there are no completed courses.
      */
-    public double getCumulativeGPA() {
+    public double getCumulativeGPA(List<Semester> semesters) {
 
-        List<Semester> completedSemesters = getPastSemestersWithGPA();
+        double cumulativeGPA = 0;
+        double numSemestersWithGPA = 0;
 
-        double gpa = 0;
+        for (Semester semester : semesters) {
+            double semesterGPA = semester.getGpa();
 
-        if (completedSemesters.isEmpty()) {
-            // Gets gpa from completed courses.
-            int numCompletedCourses = 0;
+            // Add semester GPA if it exists.
+            if (semesterGPA > -1) {
+                cumulativeGPA += semesterGPA;
+                numSemestersWithGPA += 1;
 
-            Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_COURSES,
-                    new String[]{DatabaseHelper.COLUMN_FINAL_GRADE, DatabaseHelper.COLUMN_IS_COMPLETED},
-                    DatabaseHelper.COLUMN_IS_COMPLETED + " = '1'", null, null, null, null);
-
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                // Course final grade is integer of position of LetterGrade enum.
-                int letterGradeIndex = cursor.getInt(0);
-                gpa += Course.LetterGrade.values()[letterGradeIndex].getGpaEquivalent();
-                numCompletedCourses++;
-                cursor.moveToNext();
-            }
-            cursor.close();
-
-            // Divide GPA by number of list_course.
-            gpa = gpa / numCompletedCourses;
-
-            // If there are not completed list_course, return -1.
-            if (numCompletedCourses == 0) {
-                return -1;
             } else {
-                return gpa;
+                // Calculate semester gpa using course final grades if they all exist.
+                List<Course> courses = getCourses(semester.getId());
+
+                if (!courses.isEmpty()) {
+                    double numCoursesWithGrade = 0;
+                    double semesterCredits = 0;
+                    semesterGPA = 0;
+
+                    for (Course course : courses) {
+                        int courseGrade = course.getFinalGradeValue();
+
+                        if (courseGrade > -1) {
+                            double courseCredits = course.getCredits();
+                            semesterGPA += courseGrade * courseCredits;
+                            semesterCredits += courseCredits;
+                            numCoursesWithGrade += 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // Add to total gpa if all courses have final grades.
+                    if (numCoursesWithGrade == courses.size()) {
+                        cumulativeGPA += semesterGPA / semesterCredits;
+                        numSemestersWithGPA += 1;
+                    }
+                }
             }
-        } else {
-            for (Semester semester : completedSemesters) {
-                gpa += semester.getGpa();
-            }
-
-            // Divide gpa by number of completed semesters.
-            return gpa / completedSemesters.size();
         }
+
+        return numSemestersWithGPA > 0
+                ? cumulativeGPA / numSemestersWithGPA
+                : -1;
     }
 
-    /**
-     * Inserts a task into the mDatabase.
-     *
-     * @return reminder ID.
-     */
-    public long insertReminder(long courseId, String name, boolean isGraded, boolean isCompleted,
-                               Calendar remindDate) {
-
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
-        values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
-        values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_DATE_ADDED, Calendar.getInstance().getTimeInMillis());
-        values.put(DatabaseHelper.COLUMN_DATE_REMIND, remindDate.getTimeInMillis());
-
-        return mDatabase.insert(DatabaseHelper.TABLE_REMINDERS, null, values);
-    }
-
-    /**
-     * Update task with task fields.
-     *
-     * @return -1 if update failed.
-     */
-    public int updateReminder(long reminderId, long courseId, String name, boolean isGraded,
-                              boolean isCompleted, Calendar remindDate) {
-
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_COURSE_ID, courseId);
-        values.put(DatabaseHelper.COLUMN_REMINDER_NAME, name);
-        values.put(DatabaseHelper.COLUMN_IS_EXAM, isGraded ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_IS_COMPLETED, isCompleted ? 1 : 0);
-        values.put(DatabaseHelper.COLUMN_DATE_REMIND, remindDate.getTimeInMillis());
-
-        return mDatabase.update(DatabaseHelper.TABLE_REMINDERS, values,
-                DatabaseHelper.COLUMN_ID + " = '" + reminderId + "'", null);
-    }
-
-    /**
-     * Deletes a task from database.
-     */
-    public void deleteReminder(Reminder reminder) {
-
-        mDatabase.delete(DatabaseHelper.TABLE_REMINDERS,
-                DatabaseHelper.COLUMN_ID + " = '" + reminder.getId() + "'", null);
-    }
-
-    /**
-     * @return reminder from database using its ID.
-     */
-    public Reminder getReminder(long reminderId) {
-        Reminder reminder = null;
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_ID + " = '" + reminderId + "'", null, null, null, null);
-
-        if (cursor.moveToFirst())
-            reminder = cursorToReminder(cursor);
-
-        cursor.close();
-
-        return reminder;
-    }
-
-    /**
-     * @return list of all reminder.
-     */
-    public List<Reminder> getReminders() {
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            reminders.add(cursorToReminder(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
-
-    /**
-     * @return list of tasks for a course.
-     */
-    public List<Reminder> getReminders(long courseId) {
-        List<Reminder> reminders = new ArrayList<Reminder>();
-
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_REMINDERS, REMINDER_COLUMNS,
-                DatabaseHelper.COLUMN_COURSE_ID + " = '" + courseId + "'", null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            reminders.add(cursorToReminder(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return reminders;
-    }
 
     /**
      * Reads cursor information and returns a Semester object.
@@ -843,7 +670,6 @@ public class DatabaseFacade {
         semester.setSeason(cursor.getString(1));
         semester.setYear(cursor.getInt(2));
         semester.setGpa(cursor.getDouble(3));
-        semester.setCurrent(cursor.getInt(4) == 1);
 
         return semester;
     }
@@ -866,8 +692,8 @@ public class DatabaseFacade {
         course.setName(cursor.getString(2));
         course.setInstructorName(cursor.getString(3));
         course.setInstructorEmail(cursor.getString(4));
-        course.setFinalGradeValue(cursor.getInt(5));
-        course.setCompleted(cursor.getInt(6) == 1);
+        course.setCredits(cursor.getDouble(5));
+        course.setFinalGradeValue(cursor.getInt(6));
 
         return course;
     }
@@ -919,35 +745,5 @@ public class DatabaseFacade {
         grade.setAddDate(addDate);
 
         return grade;
-    }
-
-    /**
-     * Reads cursor information and returns complete Task object.
-     *
-     * @return Reminder object.
-     */
-    private Reminder cursorToReminder(Cursor cursor) {
-        Reminder reminder = new Reminder();
-
-        try {
-            reminder.setId(cursor.getLong(0));
-        } catch (CursorIndexOutOfBoundsException e) {
-            return null;
-        }
-
-        reminder.setCourseId(cursor.getLong(1));
-        reminder.setName(cursor.getString(2));
-        reminder.setExam((cursor.getInt(3) == 1));
-        reminder.setCompleted((cursor.getInt(4) == 1));
-
-        Calendar addDate = Calendar.getInstance();
-        addDate.setTimeInMillis(cursor.getLong(5));
-        reminder.setAddDate(addDate);
-
-        Calendar remindDate = Calendar.getInstance();
-        remindDate.setTimeInMillis(cursor.getLong(6));
-        reminder.setReminderDate(remindDate);
-
-        return reminder;
     }
 }

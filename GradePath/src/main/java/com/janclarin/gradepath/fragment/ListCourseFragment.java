@@ -2,11 +2,14 @@ package com.janclarin.gradepath.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.janclarin.gradepath.R;
@@ -24,12 +27,12 @@ public class ListCourseFragment extends BaseListFragment {
 
     private OnFragmentListCourseListener mListener;
 
-    public static ListCourseFragment newInstance() {
-        return new ListCourseFragment();
-    }
-
     public ListCourseFragment() {
         // Required empty public constructor.
+    }
+
+    public static ListCourseFragment newInstance() {
+        return new ListCourseFragment();
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ListCourseFragment extends BaseListFragment {
         // For all semesters that contain Courses, add the Semester and Courses to the list.
         for (Semester semester : semesters) {
             List<Course> courses = mDatabase.getCourses(semester.getId());
-            if (courses.size() > 0) {
+            if (!courses.isEmpty()) {
                 // Only add title if it's a past semester.
                 if (!semester.equals(currentSemester)) mListItems.add(semester);
                 Collections.sort(courses);
@@ -78,6 +81,32 @@ public class ListCourseFragment extends BaseListFragment {
         notifyAdapter();
 
         showEmptyStateView(mListItems.isEmpty());
+    }
+
+    /**
+     * Show popup menu on overflow button click.
+     */
+    @Override
+    public void showPopupMenu(View view, int menuId, final int position) {
+        PopupMenu popupMenu = new PopupMenu(mContext, view);
+
+        popupMenu.getMenuInflater().inflate(menuId, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_delete:
+                        deleteSelectedItem(position);
+                    case R.id.menu_set_final_grade:
+                        if (mListener != null)
+                            mListener.onListCourseSetFinalGrade((Course) mAdapter.getItem(position));
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     @Override
@@ -105,8 +134,8 @@ public class ListCourseFragment extends BaseListFragment {
         /* Called when the course item is clicked. Opens course detail fragment. */
         public void onListCourseViewDetails(Course course);
 
-        /* Called when the contextual action bar edit button is clicked. */
-        public void onListCourseEdit(Course course);
+        /* Called when set final grade option is selected. */
+        public void onListCourseSetFinalGrade(Course course);
     }
 
     private class ListAdapter extends BaseListAdapter {
@@ -149,15 +178,32 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.tvTitle.setText(listItem.toString());
             } else {
                 Course course = (Course) listItem;
+                String instructorName = course.getInstructorName();
+
                 viewHolder.tvTitle.setText(course.getName());
-                viewHolder.tvSubtitle.setText(course.getInstructorName());
+
+                final int menu;
+
+                if (instructorName.isEmpty()) {
+                    viewHolder.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
+                    viewHolder.tvSubtitle.setVisibility(View.GONE);
+
+                    menu = R.menu.list_general;
+                } else {
+                    if (viewHolder.tvSubtitle.getVisibility() == View.GONE)
+                        viewHolder.tvSubtitle.setVisibility(View.VISIBLE);
+                    viewHolder.tvSubtitle.setText(instructorName);
+
+                    menu = R.menu.list_course;
+                }
+
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
                 viewHolder.ivDetail.setImageResource(R.drawable.course);
                 // Set button to open popup menu.
                 viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showPopupMenu(view, R.menu.list_general, position);
+                        showPopupMenu(view, menu, position);
                     }
                 });
             }

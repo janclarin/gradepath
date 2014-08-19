@@ -1,16 +1,11 @@
 package com.janclarin.gradepath.model;
 
-import java.util.Calendar;
-
 public class Semester extends DatabaseItem implements Comparable<Semester> {
 
     public static final Season[] seasons = {Season.FALL, Season.WINTER, Season.SPRING, Season.SUMMER};
-    private String name;
     private Season season;
     private int year;
     private double gpa;
-    private boolean isCurrent;
-    private Calendar eDate;
 
     public Semester() {
     }
@@ -46,14 +41,6 @@ public class Semester extends DatabaseItem implements Comparable<Semester> {
 
     public void setYear(int year) {
         this.year = year;
-    }
-
-    public boolean isCurrent() {
-        return isCurrent;
-    }
-
-    public void setCurrent(boolean isCurrent) {
-        this.isCurrent = isCurrent;
     }
 
     public double getGpa() {

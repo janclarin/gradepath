@@ -6,7 +6,7 @@
     <color name="theme_primary_light_see_through">#ccc8e9e9</color>
     <color name="theme_primary_dark">#ff327f7f</color>
     <color name="theme_primary_dark_see_through">#cc327f7f</color>
-   
+
     <color name="theme_secondary">#fff88379</color>
     <color name="theme_secondary_see_through">#e6f88379</color>
     <color name="theme_secondary_light">#fffaa8a1</color>
@@ -17,7 +17,11 @@
     <color name="list_divider">#92a3a3a3</color>
     <color name="notification">#ff47b5b5</color>
 
-    <color name="white_60_opacity">#99ffffff</color>
+    <color name="white_87_opacity">#deffffff</color>
+    <color name="white_57_opacity">#91ffffff</color>
+    <color name="black_87_opacity">#de000000</color>
+    <color name="black_57_opacity">#91000000</color>
+
     <color name="actionbar_divider">#d6d6d6</color>
     <color name="shadow">#e6dddddd</color>
     <color name="shadow_pressed">#e6bbbbbb</color>
@@ -29,5 +33,4 @@
     <color name="course_urgency_1">@color/theme_primary</color>
     <color name="course_urgency_2">@android:color/holo_red_light</color>
 
-    <color name="black">#ff000000</color>
 </resources>

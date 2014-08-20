@@ -2,14 +2,13 @@ package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +30,7 @@ public class CourseEditActivity extends BaseActivity
     private EditText mCourseName;
     private EditText mInstructorName;
     private EditText mInstructorEmail;
-    private Spinner mCredits;
+    private EditText mCredits;
     private LinearLayout mComponentList;
 
     private Course mCourseToUpdate;
@@ -63,7 +62,7 @@ public class CourseEditActivity extends BaseActivity
         mCourseName = (EditText) findViewById(R.id.et_course_name);
         mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
         mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
-        mCredits = (Spinner) findViewById(R.id.spn_course_credits);
+        mCredits = (EditText) findViewById(R.id.et_course_credits);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
 
         // Set add button to open new grade component dialog.
@@ -73,13 +72,6 @@ public class CourseEditActivity extends BaseActivity
                 newGradeComponent();
             }
         });
-
-        Double[] credits = new Double[]{3.0, 6.0};
-        ArrayAdapter<Double> adapter =
-                new ArrayAdapter<Double>(this, R.layout.spinner_item, credits);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mCredits.setAdapter(adapter);
 
         // Set up grade category list view.
         mGradeComponents = new ArrayList<GradeComponent>();
@@ -93,11 +85,16 @@ public class CourseEditActivity extends BaseActivity
             mCourseName.setText(mCourseToUpdate.getName());
             mInstructorName.setText(mCourseToUpdate.getInstructorName());
             mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
-            mCredits.setSelection(adapter.getPosition(mCourseToUpdate.getCredits()));
+            mCredits.setText(new DecimalFormat("#.0#").format(mCourseToUpdate.getCredits()));
 
             // Add grade component view for each existing grade component.
             for (GradeComponent gradeComponent : mGradeComponents)
                 addGradeComponent(gradeComponent);
+        } else {
+            String defaultCredits =
+                    PreferenceManager.getDefaultSharedPreferences(this)
+                            .getString(SettingsActivity.KEY_PREF_COURSE_CREDITS, "");
+            mCredits.setText(defaultCredits);
         }
     }
 
@@ -112,12 +109,6 @@ public class CourseEditActivity extends BaseActivity
         GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
                 getString(R.string.title_grade_component_dialog), gradeComponent);
         gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
-    }
-
-    /**
-     * Set up views.
-     */
-    private void setUpView() {
     }
 
     private View createGradeComponentView(final GradeComponent gradeComponent) {
@@ -198,10 +189,21 @@ public class CourseEditActivity extends BaseActivity
         String courseName = mCourseName.getText().toString().trim();
         String instructorName = mInstructorName.getText().toString().trim();
         String instructorEmail = mInstructorEmail.getText().toString().trim();
+        String credits = mCredits.getText().toString().trim();
+        double creditsValue = 3.0;
 
         String toastMessage = "";
-        if (courseName.isEmpty())
+        if (courseName.isEmpty()) {
             toastMessage = getString(R.string.prompt_enter_course_name);
+        } else if (credits.isEmpty()) {
+            toastMessage = getString(R.string.prompt_enter_credits);
+        } else {
+            try {
+                creditsValue = Double.parseDouble(credits);
+            } catch (NumberFormatException e) {
+                toastMessage = getString(R.string.prompt_enter_credits);
+            }
+        }
 
         if (toastMessage.length() > 0) {
             Toast toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
@@ -213,14 +215,26 @@ public class CourseEditActivity extends BaseActivity
         long courseId;
         if (mCourseToUpdate == null) {
             // Course is a new one not found in Database.
-            courseId = mDatabase.insertCourse(semester.getId(), courseName, instructorName,
-                    instructorEmail, (Double) mCredits.getSelectedItem(), -1);
+            courseId = mDatabase.insertCourse(
+                    semester.getId(),
+                    courseName,
+                    instructorName,
+                    instructorEmail,
+                    creditsValue,
+                    -1
+            );
         } else {
             // Update course.
             courseId = mCourseToUpdate.getId();
-            mDatabase.updateCourse(courseId, mCourseToUpdate.getSemesterId(), courseName,
-                    instructorName, instructorEmail, (Double) mCredits.getSelectedItem(),
-                    mCourseToUpdate.getFinalGradeValue());
+            mDatabase.updateCourse(
+                    courseId,
+                    mCourseToUpdate.getSemesterId(),
+                    courseName,
+                    instructorName,
+                    instructorEmail,
+                    creditsValue,
+                    mCourseToUpdate.getFinalGradeValue()
+            );
         }
 
         for (GradeComponent gradeComponent : mGradeComponents) {

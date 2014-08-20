@@ -97,9 +97,11 @@ public class ListCourseFragment extends BaseListFragment {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_delete:
                         deleteSelectedItem(position);
+                        return true;
                     case R.id.menu_set_final_grade:
                         if (mListener != null)
                             mListener.onListCourseSetFinalGrade((Course) mAdapter.getItem(position));
+                        return true;
                     default:
                         return false;
                 }
@@ -182,19 +184,13 @@ public class ListCourseFragment extends BaseListFragment {
 
                 viewHolder.tvTitle.setText(course.getName());
 
-                final int menu;
-
                 if (instructorName.isEmpty()) {
                     viewHolder.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
                     viewHolder.tvSubtitle.setVisibility(View.GONE);
-
-                    menu = R.menu.list_general;
                 } else {
                     if (viewHolder.tvSubtitle.getVisibility() == View.GONE)
                         viewHolder.tvSubtitle.setVisibility(View.VISIBLE);
                     viewHolder.tvSubtitle.setText(instructorName);
-
-                    menu = R.menu.list_course;
                 }
 
                 viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
@@ -203,7 +199,7 @@ public class ListCourseFragment extends BaseListFragment {
                 viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showPopupMenu(view, menu, position);
+                        showPopupMenu(view, R.menu.list_course, position);
                     }
                 });
             }

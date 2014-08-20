@@ -137,14 +137,13 @@ public class ListFragmentActivity extends BaseActivity
     }
 
     @Override
-    public void onSemesterSaved(boolean isNew, Semester semester) {
+    public void onSemesterSaved(boolean isNew) {
         // String is set to "semester saved" if grade is new, if updating "semester updated."
         String toastMessage = isNew ? getString(R.string.toast_semester_saved) :
                 getString(R.string.toast_semester_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
 
-        // Refresh the semester list.
         refreshList();
     }
 
@@ -155,5 +154,7 @@ public class ListFragmentActivity extends BaseActivity
                 : getString(R.string.toast_final_grade_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+        refreshList();
     }
 }

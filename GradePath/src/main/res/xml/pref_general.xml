@@ -2,6 +2,17 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="3.0"
+        android:inputType="textCapWords"
+        android:key="pref_key_default_credits"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/pref_summary_course_credits"
+        android:title="@string/pref_title_course_credits" />
+
     <PreferenceScreen
         android:key="pref_screen_letter_grade_gpa"
         android:summary="@string/pref_summary_gpa_equivalents"

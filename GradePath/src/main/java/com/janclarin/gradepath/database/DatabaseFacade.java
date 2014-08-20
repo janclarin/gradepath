@@ -88,39 +88,15 @@ public class DatabaseFacade {
      *
      * @return semester ID
      */
-    public Semester insertSemester(String season, int year, double gpa) {
+    public long insertSemester(String season, int year, double gpa) {
 
-        // Cursor to check if this semester exists before inserting it.
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
-                DatabaseHelper.COLUMN_SEASON + " = '" + season + "' AND " +
-                        DatabaseHelper.COLUMN_YEAR + " = '" + year + "'", null, null, null, null
-        );
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_SEASON, season);
+        values.put(DatabaseHelper.COLUMN_YEAR, year);
+        values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
 
-        // If there are no semesters with this season and year, insert it into mDatabase.
-        // Otherwise, get the semester from the cursor.
-        if (!cursor.moveToFirst()) {
-
-            ContentValues values = new ContentValues();
-            values.put(DatabaseHelper.COLUMN_SEASON, season);
-            values.put(DatabaseHelper.COLUMN_YEAR, year);
-            values.put(DatabaseHelper.COLUMN_SEMESTER_GPA, gpa);
-
-            long semesterId = mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
-
-            cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
-                    DatabaseHelper.COLUMN_ID + " = '" + semesterId + "'", null, null, null, null);
-
-            // Set cursor to first row.
-            cursor.moveToFirst();
-        }
-
-        // Get semester object from cursor.
-        Semester semester = cursorToSemester(cursor);
-
-        // Close cursor.
-        cursor.close();
-
-        return semester;
+        // Insert semester into database.
+        return mDatabase.insert(DatabaseHelper.TABLE_SEMESTERS, null, values);
     }
 
     /**
@@ -182,6 +158,26 @@ public class DatabaseFacade {
     }
 
     /**
+     * @return boolean indicating if semester exists.
+     */
+    public boolean semesterExists(String season, int year) {
+
+        boolean semesterExists;
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_SEMESTERS, SEMESTER_COLUMNS,
+                DatabaseHelper.COLUMN_SEASON + " = '" + season + "' AND "
+                        + DatabaseHelper.COLUMN_YEAR + " = '" + year + "'", null, null, null, null);
+
+        // Tries to move to the first semester in the cursor.
+        // If it fails, then semester doesn't exist.
+        semesterExists = cursor.moveToFirst();
+
+        cursor.close();
+
+        return semesterExists;
+    }
+
+    /**
      * @return Current {@code Semester} if it exists, otherwise return null.
      */
     public Semester getCurrentSemester() {
@@ -203,7 +199,41 @@ public class DatabaseFacade {
 
         // Read distinct semesters from mDatabase into a list.
         while (!cursor.isAfterLast()) {
-            semesters.add(cursorToSemester(cursor));
+            Semester semester = cursorToSemester(cursor);
+
+            if (semester.getGpa() == -1) {
+                List<Course> courses = getCourses(semester.getId());
+
+                if (!courses.isEmpty()) {
+                    double numCoursesWithGrade = 0;
+                    double semesterCredits = 0;
+                    double semesterGPA = 0;
+
+                    for (Course course : courses) {
+                        int finalGradeValue = course.getFinalGradeValue();
+
+                        if (finalGradeValue > -1) {
+                            double courseGrade =
+                                    Course.LetterGrade.values()[finalGradeValue].getGpaEquivalent();
+                            double courseCredits = course.getCredits();
+                            semesterGPA += courseGrade * courseCredits;
+                            semesterCredits += courseCredits;
+                            numCoursesWithGrade += 1;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // Set semester GPA to calculated from courses if all have final grades.
+                    semester.setGpa(
+                            numCoursesWithGrade == courses.size()
+                                    ? semesterGPA / semesterCredits
+                                    : -1
+                    );
+                }
+            }
+
+            semesters.add(semester);
             cursor.moveToNext();
         }
 
@@ -614,35 +644,6 @@ public class DatabaseFacade {
             if (semesterGPA > -1) {
                 cumulativeGPA += semesterGPA;
                 numSemestersWithGPA += 1;
-
-            } else {
-                // Calculate semester gpa using course final grades if they all exist.
-                List<Course> courses = getCourses(semester.getId());
-
-                if (!courses.isEmpty()) {
-                    double numCoursesWithGrade = 0;
-                    double semesterCredits = 0;
-                    semesterGPA = 0;
-
-                    for (Course course : courses) {
-                        int courseGrade = course.getFinalGradeValue();
-
-                        if (courseGrade > -1) {
-                            double courseCredits = course.getCredits();
-                            semesterGPA += courseGrade * courseCredits;
-                            semesterCredits += courseCredits;
-                            numCoursesWithGrade += 1;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    // Add to total gpa if all courses have final grades.
-                    if (numCoursesWithGrade == courses.size()) {
-                        cumulativeGPA += semesterGPA / semesterCredits;
-                        numSemestersWithGPA += 1;
-                    }
-                }
             }
         }
 

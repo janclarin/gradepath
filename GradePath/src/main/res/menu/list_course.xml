@@ -2,11 +2,15 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_set_final_grade"
+        android:id="@+id/menu_grade_calculator"
         android:orderInCategory="100"
+        android:title="@string/grade_calculator" />
+    <item
+        android:id="@+id/menu_set_final_grade"
+        android:orderInCategory="200"
         android:title="@string/set_final_grade" />
     <item
         android:id="@+id/menu_delete"
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         android:title="@string/delete" />
 </menu>

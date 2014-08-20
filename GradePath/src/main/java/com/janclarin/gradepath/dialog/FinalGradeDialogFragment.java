@@ -64,8 +64,11 @@ public class FinalGradeDialogFragment extends BaseDialogFragment {
 
         int finalGradeValue = mCourseToUpdate.getFinalGradeValue();
 
-        mSeekBar.setProgress(finalGradeValue > -1 ? finalGradeValue : 6);
+        finalGradeValue = finalGradeValue > -1
+                ? finalGradeValue
+                : 6;
 
+        mSeekBar.setProgress(finalGradeValue);
         mFinalGrade.setText(Course.LetterGrade.values()[finalGradeValue].toString());
 
         // Set seek bar change listener.
@@ -96,10 +99,6 @@ public class FinalGradeDialogFragment extends BaseDialogFragment {
                 .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        if (mListener != null) {
-                            mListener.onFinalGradeSaved(mCourseToUpdate.getFinalGradeValue() == -1);
-                        }
-
                         mDatabase.updateCourse(
                                 mCourseToUpdate.getId(),
                                 mCourseToUpdate.getSemesterId(),
@@ -109,6 +108,11 @@ public class FinalGradeDialogFragment extends BaseDialogFragment {
                                 mCourseToUpdate.getCredits(),
                                 mSeekBar.getProgress()
                         );
+
+                        if (mListener != null) {
+                            mListener.onFinalGradeSaved(mCourseToUpdate.getFinalGradeValue() == -1);
+                        }
+
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

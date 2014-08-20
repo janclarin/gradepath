@@ -43,7 +43,7 @@
         android:layout_marginRight="8dp"
         android:layout_toLeftOf="@id/divider_grade_component"
         android:singleLine="true"
-        android:textColor="@android:color/primary_text_light"
+        android:textColor="@color/black_87_opacity"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textColor="@android:color/primary_text_light"
+            android:textColor="@color/black_87_opacity"
             android:textSize="16sp" />
 
         <TextView

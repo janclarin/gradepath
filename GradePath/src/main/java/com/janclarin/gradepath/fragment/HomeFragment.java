@@ -208,9 +208,11 @@ public class HomeFragment extends BaseListFragment {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_delete:
                         deleteSelectedItem(position);
+                        return true;
                     case R.id.menu_set_final_grade:
                         if (mListener != null)
                             mListener.onHomeSetFinalGrade((Course) mAdapter.getItem(position));
+                        return true;
                     default:
                         return false;
                 }

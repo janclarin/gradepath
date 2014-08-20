@@ -9,7 +9,7 @@
     <!-- General -->
     <string name="done">Done</string>
     <string name="delete">Delete</string>
-    <string name="cancelled">Cancelled</string>
+    <string name="cancelled">Canceled</string>
 
     <!-- Dialogs -->
     <string name="title_delete_dialog">Delete %1$s?</string>
@@ -27,20 +27,18 @@
     <!-- Semesters -->
     <string name="title_fragment_list_semesters">Semesters</string>
     <string name="title_semester_dialog">Semester</string>
-    <string name="semester_current">Current</string>
+    <string name="title_semester_dialog_current">Current Semester</string>
+    <string name="all_semesters">All Semesters</string>
     <string name="tv_gpa">GPA</string>
     <string name="tv_list_semester_empty">No semesters</string>
     <string name="not_available">N/A</string>
     <string name="cumulative_gpa">Cumulative GPA:</string>
-    <string name="cb_current_semester">Current</string>
     <string name="hint_dialog_semester_gpa">GPA (optional)</string>
     <string name="toast_semester_saved">Semester saved</string>
     <string name="toast_semester_updated">Semester updated</string>
-    <string name="no_semesters">No semesters</string>
-    <string name="all_semesters">All Semesters</string>
-    <string name="current_semester">Current semester</string>
-    <string name="add_first_semester">Add a semester. \n Click on the top-right icon.</string>
+    <string name="no_semesters">No semesters yet</string>
     <string name="gpa">GPA</string>
+    <string name="already_exists">already exists</string>
     <string name="season_fall">Fall</string>
     <string name="season_winter">Winter</string>
     <string name="season_spring">Spring</string>
@@ -75,24 +73,24 @@
     <string name="et_grade_component_number_of_items">Number of items</string>
     <string name="prompt_enter_course_name">Enter course name</string>
     <string name="course_credits">credits</string>
+    <string name="prompt_enter_credits">Enter credits</string>
+    <string name="grade_calculator">Open Grade Calculator</string>
 
     <!-- Final grade -->
     <string name="title_final_grade_dialog">Final Grade</string>
     <string name="toast_final_grade_saved">Final grade saved</string>
     <string name="toast_final_grade_updated">Final grade updated</string>
-    <string name="set_final_grade">Set final grade</string>
+    <string name="set_final_grade">Set Final Grade</string>
 
     <!-- Grade components -->
-    <string name="title_grade_component_dialog">Grade component</string>
+    <string name="title_grade_component_dialog">Grade Component</string>
     <string name="grade_component_total_weight_invalid">Grade component weights must sum to 100%</string>
     <string name="grade_component_updated">Grade component updated</string>
     <string name="grade_component_saved">Grade component saved</string>
-    <string name="add_grade_component">New component</string>
 
     <!-- Grades -->
     <string name="title_fragment_list_grades">Grades</string>
     <string name="title_grade_dialog">Grade</string>
-    <string name="grade">Grade</string>
     <string name="tv_list_grade_empty">No grades yet</string>
     <string name="tv_dialog_grade_component">Component</string>
     <string name="tv_dialog_grade">Grade</string>

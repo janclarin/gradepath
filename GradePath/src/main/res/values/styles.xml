@@ -36,7 +36,6 @@
 
     <!-- ActionBar tabs text style -->
     <style name="CustomActionBarTabText" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@color/tab_indicator</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
@@ -51,7 +50,6 @@
 
     <style name="ActionBarTabStyle.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_gradepath</item>
-        <item name="android:textColor">@color/white_opacity</item>
     </style>
 
     <style name="DropDownNav.Gradepath" parent="@android:style/Widget.Holo.Light.Spinner">
@@ -81,19 +79,12 @@
         <item name="android:padding">8dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:textSize">34sp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:visibility">gone</item>
-    </style>
-
-    <!-- Check box -->
-    <style name="checkBox">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- Spinner-style button -->
@@ -116,20 +107,21 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="headerTextView">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="subtitleTextView">
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">@android:color/tertiary_text_light</item>
+        <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:textSize">14sp</item>
     </style>
 </resources>
+

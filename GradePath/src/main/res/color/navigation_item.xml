@@ -2,6 +2,6 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/theme_primary_dark" android:state_selected="true" />
-    <item android:color="@color/theme_primary_dark" android:state_pressed="true" />
-    <item android:color="@color/black" />
+    <item android:color="@color/theme_primary_dark" android:state_activated="true" />
+    <item android:color="@color/black_87_opacity" />
 </selector>

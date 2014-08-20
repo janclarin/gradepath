@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.MainActivity;
@@ -142,31 +143,34 @@ public class SemesterDialogFragment extends BaseDialogFragment {
                 String gpaString = mGPA.getText().toString().trim();
                 double gpa = gpaString.isEmpty() ? -1 : Double.parseDouble(gpaString);
 
-                Semester semester;
-                // Insert semester if it's not being updated.
+                // Insert semester if it's not being updated
                 if (mSemesterToUpdate == null) {
 
-                    semester = mDatabase.insertSemester(
-                            season,
-                            year,
-                            gpa
-                    );
+                    // If a semester doesn't exist with the same season and year, add it to database.
+                    if (!mDatabase.semesterExists(season, year)) {
+                        mDatabase.insertSemester(season, year, gpa);
+                        // Notify listener that semester is saved.
+                        if (mListener != null) {
+                            mListener.onSemesterSaved(mSemesterToUpdate == null);
+                        }
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(
+                                mContext,
+                                season + " " + year + " " + mContext.getString(R.string.already_exists),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
                 } else {
                     // Update the semester.
-                    mDatabase.updateSemester(
-                            mSemesterToUpdate.getId(),
-                            season,
-                            year,
-                            gpa
-                    );
-                    semester = null;
+                    mDatabase.updateSemester(mSemesterToUpdate.getId(), season, year, gpa);
+                    // Notify listener that semester is saved.
+                    if (mListener != null) {
+                        mListener.onSemesterSaved(mSemesterToUpdate == null);
+                    }
+                    alertDialog.dismiss();
                 }
 
-                // Notify listener that semester is saved.
-                if (mListener != null) {
-                    mListener.onSemesterSaved(mSemesterToUpdate == null, semester);
-                }
-                alertDialog.dismiss();
             }
         });
         return alertDialog;
@@ -197,7 +201,7 @@ public class SemesterDialogFragment extends BaseDialogFragment {
         /**
          * Called when a semester is saved.
          */
-        public void onSemesterSaved(boolean isNew, Semester semester);
+        public void onSemesterSaved(boolean isNew);
     }
 
 }

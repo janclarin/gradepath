@@ -33,7 +33,6 @@ import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Semester;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 
@@ -63,7 +62,6 @@ public class MainActivity extends BaseActivity
      */
     private static final DrawerItem[] mDrawerItems = new DrawerItem[]{
             new DrawerItem(R.string.title_fragment_home, R.drawable.home),
-            new DrawerItem(R.string.title_fragment_calculator, R.drawable.calculator),
             new DrawerItem(R.string.title_activity_settings, R.drawable.settings)
     };
     private final Semester mAllSemestersOption = new Semester() {
@@ -119,7 +117,7 @@ public class MainActivity extends BaseActivity
         if (mSemesters.isEmpty()) {
             // Ask for semester input.
             SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
-                    getString(R.string.current_semester));
+                    getString(R.string.title_semester_dialog_current));
             semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
 
@@ -260,10 +258,22 @@ public class MainActivity extends BaseActivity
      */
     private void onNavDrawerItemSelected(int position) {
 
-        if (position == 2) {
-            // Open settings activity.
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+        // Selected drawer item.
+        DrawerItem drawerItem = mDrawerItems[mCurrentSelectedPosition];
+
+        switch (position) {
+            case 0:
+                mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, mCurrentFragment)
+                        .commit();
+                break;
+            case 1:
+                // Open settings activity.
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
         }
 
         mCurrentSelectedPosition = position;
@@ -315,21 +325,14 @@ public class MainActivity extends BaseActivity
             intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 2);
             startActivity(intent);
         } else {
-            // Selected drawer item.
-            DrawerItem drawerItem = mDrawerItems[mCurrentSelectedPosition];
-
+            // Refresh home fragment when semester changed.
             if (mCurrentSelectedPosition == 0) {
                 mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
-            } else if (mCurrentSelectedPosition == 1) {
-                mCurrentFragment = CalculatorFragment.newInstance();
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, mCurrentFragment)
+                        .commit();
             }
-
-            drawerItem.setFragment(mCurrentFragment);
-
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, mCurrentFragment)
-                    .commit();
         }
         return mCurrentFragment != null;
     }
@@ -443,7 +446,7 @@ public class MainActivity extends BaseActivity
 
     /* Dialog listeners */
     @Override
-    public void onSemesterSaved(boolean isNew, Semester semester) {
+    public void onSemesterSaved(boolean isNew) {
         // String is set to "semester saved" if grade is new, if updating "semester updated."
         String toastMessage = isNew ? getString(R.string.toast_semester_saved) :
                 getString(R.string.toast_semester_updated);
@@ -473,6 +476,8 @@ public class MainActivity extends BaseActivity
                 : getString(R.string.toast_final_grade_updated);
 
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+        refreshListCourse();
     }
 
     /**
@@ -481,7 +486,6 @@ public class MainActivity extends BaseActivity
     private static class DrawerItem {
         private final int mTitle;
         private final int mIcon;
-        private WeakReference<Fragment> mFragmentReference;
 
         public DrawerItem(int title, int icon) {
             mTitle = title;
@@ -494,14 +498,6 @@ public class MainActivity extends BaseActivity
 
         public int getIcon() {
             return mIcon;
-        }
-
-        public Fragment getFragment() {
-            return mFragmentReference == null ? null : mFragmentReference.get();
-        }
-
-        public void setFragment(Fragment fragment) {
-            this.mFragmentReference = new WeakReference<Fragment>(fragment);
         }
     }
 

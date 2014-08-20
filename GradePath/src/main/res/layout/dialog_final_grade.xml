@@ -22,6 +22,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
+        android:textColor="@color/black_87_opacity"
         android:textSize="45sp" />
 
 </LinearLayout>

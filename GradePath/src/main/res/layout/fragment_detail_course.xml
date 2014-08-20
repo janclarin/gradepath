@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/theme_primary"
         android:orientation="vertical"
-        android:paddingBottom="24dp"
+        android:paddingBottom="20dp"
         android:paddingLeft="@dimen/keyline_1"
         android:paddingRight="@dimen/keyline_1">
 
@@ -18,11 +18,8 @@
             android:id="@+id/tv_course_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:ellipsize="middle"
-            android:fontFamily="sans-serif-light"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white_87_opacity"
             android:textSize="24sp" />
 
         <LinearLayout
@@ -34,20 +31,20 @@
                 android:id="@+id/tv_instructor_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:singleLine="true"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white_87_opacity"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_instructor_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:autoLink="email"
                 android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textColorLink="@android:color/white"
+                android:textColor="@color/white_87_opacity"
+                android:textColorLink="@color/white_87_opacity"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -55,8 +52,8 @@
             android:id="@+id/tv_course_credits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/white"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white_87_opacity"
             android:textSize="16sp" />
     </LinearLayout>
 

@@ -23,6 +23,7 @@ import java.util.List;
  */
 public class ListSemesterFragment extends BaseListFragment {
 
+    private static final DecimalFormat gpaFormat = new DecimalFormat("#.0#");
     private ImageButton mAddItemButton;
     private OnFragmentListSemesterListener mListener;
 
@@ -164,7 +165,7 @@ public class ListSemesterFragment extends BaseListFragment {
                 double gpa = mDatabase.getCumulativeGPA(mSemesters);
 
                 if (gpa > -1) {
-                    info += new DecimalFormat("#.0#").format(gpa);
+                    info += gpaFormat.format(gpa);
                 } else {
                     info += mContext.getString(R.string.not_available);
                 }
@@ -183,7 +184,7 @@ public class ListSemesterFragment extends BaseListFragment {
                 viewHolder.tvSubtitle.setText(
                         getString(R.string.tv_gpa) + ": "
                                 + (gpa > -1 ?
-                                Double.toString(semester.getGpa())
+                                gpaFormat.format(semester.getGpa())
                                 : mContext.getString(R.string.not_available))
                 );
 

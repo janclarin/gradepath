@@ -70,6 +70,7 @@ abstract public class BaseListFragment extends BaseFragment {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_delete:
                         deleteSelectedItem(position);
+                        return true;
                     default:
                         return false;
                 }

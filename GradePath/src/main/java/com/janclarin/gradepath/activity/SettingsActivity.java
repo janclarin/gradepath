@@ -12,6 +12,7 @@ import com.janclarin.gradepath.R;
 
 public class SettingsActivity extends PreferenceActivity {
 
+    public static final String KEY_PREF_COURSE_CREDITS = "pref_key_default_credits";
     public static final String KEY_PREF_LETTER_GRADES = "pref_key_letter_grades";
     /**
      * A preference value change listener that updates the preference's summary
@@ -70,15 +71,6 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            // TODO: If Settings has multiple levels, Up should navigate up
-            // that hierarchy.
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }

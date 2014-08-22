@@ -5,5 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:gravity="center_vertical"
-    android:textColor="@color/navigation_item"
+    android:textColor="@color/black_87_opacity"
     android:textSize="16sp" />

@@ -2,12 +2,14 @@ package com.janclarin.gradepath.fragment;
 
 
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ public class CourseDetailFragment extends BaseListFragment {
     private TextView mCourseName;
     private TextView mInstructorName;
     private TextView mInstructorEmail;
+    private LinearLayout mTextFields;
 
     public CourseDetailFragment() {
         // Required empty public constructor
@@ -53,6 +56,7 @@ public class CourseDetailFragment extends BaseListFragment {
         super.onCreate(savedInstanceState);
 
         mCourse = (Course) getArguments().getSerializable(BaseActivity.COURSE_KEY);
+
     }
 
     @Override
@@ -66,6 +70,7 @@ public class CourseDetailFragment extends BaseListFragment {
         mInstructorName = (TextView) rootView.findViewById(R.id.tv_instructor_name);
         mInstructorEmail = (TextView) rootView.findViewById(R.id.tv_instructor_email);
         mListView = (ListView) rootView.findViewById(R.id.lv_list_items);
+        mTextFields = (LinearLayout) rootView.findViewById(R.id.layout_text_fields);
 
         rootView.findViewById(R.id.btn_edit_course).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +84,7 @@ public class CourseDetailFragment extends BaseListFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        setBackgroundColors();
         updateTextViews();
         updateListItems();
         mAdapter = new ListAdapter();
@@ -130,7 +135,6 @@ public class CourseDetailFragment extends BaseListFragment {
         }
     }
 
-
     @Override
     public void updateListItems() {
         clearListItems();
@@ -165,11 +169,23 @@ public class CourseDetailFragment extends BaseListFragment {
         notifyAdapter();
     }
 
+    private void setBackgroundColors() {
+        final int color = mCourse.getColor();
+
+        // Set actionbar color to course color.
+        getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(color));
+
+        // Set background color to course color.
+        mTextFields.setBackgroundColor(color);
+
+    }
+
     /**
      * Gets the updated course from the database and refreshes the text views.
      */
     public void onCourseUpdated(Course course) {
         mCourse = course;
+        setBackgroundColors();
         updateTextViews();
         updateListItems();
     }
@@ -225,7 +241,6 @@ public class CourseDetailFragment extends BaseListFragment {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.list_header_general, parent, false);
                     viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
-                    viewHolder.divider = convertView.findViewById(R.id.divider_view);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.list_item_general_two_line, parent, false);
@@ -245,15 +260,12 @@ public class CourseDetailFragment extends BaseListFragment {
                 GradeComponent gradeComponent = (GradeComponent) item;
 
                 viewHolder.tvTitle.setText(
-                        gradeComponent.getName()
-                                + " ("
-                                + decimalFormat.format(gradeComponent.getComponentAverage())
-                                + " / "
-                                + decimalFormat.format(gradeComponent.getWeight())
+                        gradeComponent.getName() + " "
+                                + "("
+                                + gradeComponent.getComponentAverageString()
                                 + ")"
                 );
 
-                if (position == 0) viewHolder.divider.setVisibility(View.GONE);
             } else {
                 Grade grade = (Grade) item;
                 viewHolder.tvTitle.setText(grade.getName());

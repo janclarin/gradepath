@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.dialog.GradeDialogFragment;
+import com.janclarin.gradepath.dialog.GradeDialog;
 import com.janclarin.gradepath.fragment.CourseDetailFragment;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.Grade;
 
 public class CourseDetailActivity extends BaseActivity
         implements CourseDetailFragment.Callbacks,
-        GradeDialogFragment.OnDialogGradeListener {
+        GradeDialog.OnDialogGradeListener {
 
     private static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
 
@@ -62,7 +62,7 @@ public class CourseDetailActivity extends BaseActivity
     public void onEditGrade(Grade grade) {
 
         // Show edit grade dialog.
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+        GradeDialog gradeDialog = GradeDialog.newInstance(
                 getString(R.string.title_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }

@@ -22,15 +22,32 @@
     <color name="black_87_opacity">#de000000</color>
     <color name="black_57_opacity">#91000000</color>
 
-    <color name="actionbar_divider">#d6d6d6</color>
-    <color name="shadow">#e6dddddd</color>
-    <color name="shadow_pressed">#e6bbbbbb</color>
+    <color name="grey">#e6cccccc</color>
+
+    <color name="actionbar_divider">#ffd6d6d6</color>
+    <color name="shadow">#e6cccccc</color>
+    <color name="shadow_pressed">#e6aaaaaa</color>
 
     <color name="card_fill">#fff</color>
     <color name="card_fill_pressed">#ccc</color>
 
-    <color name="course_urgency_0">#666</color>
-    <color name="course_urgency_1">@color/theme_primary</color>
-    <color name="course_urgency_2">@android:color/holo_red_light</color>
+    <!-- Material design colors -->
+    <color name="red_500">#ffe51c23</color>
+    <color name="pink_500">#ffe91e63</color>
+    <color name="purple_500">#ff9c27b0</color>
+    <color name="deep_purple_500">#ff673ab7</color>
+    <color name="indigo_500">#ff3f51b5</color>
+    <color name="blue_500">#ff5677fc</color>
+    <color name="light_blue_500">#ff03a9f4</color>
+    <color name="cyan_500">#ff00bcd4</color>
+    <color name="teal_500">#ff009688</color>
+    <color name="green_500">#ff259b24</color>
+    <color name="light_green_500">#ff8bc34a</color>
+    <color name="lime_500">#ffcddc39</color>
+    <color name="yellow_500">#ffffeb3b</color>
+    <color name="amber_500">#ffffc107</color>
+    <color name="orange_500">#ffff9800</color>
+    <color name="deep_orange_500">#ffff5722</color>
 
+    <color name="white">#ffffffff</color>
 </resources>

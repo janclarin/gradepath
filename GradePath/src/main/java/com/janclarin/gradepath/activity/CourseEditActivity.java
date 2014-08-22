@@ -1,6 +1,8 @@
 package com.janclarin.gradepath.activity;
 
 import android.app.ActionBar;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -9,21 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.dialog.GradeComponentDialogFragment;
+import com.janclarin.gradepath.dialog.ColorPickerDialog;
+import com.janclarin.gradepath.dialog.GradeComponentDialog;
 import com.janclarin.gradepath.model.Course;
 import com.janclarin.gradepath.model.GradeComponent;
 import com.janclarin.gradepath.model.Semester;
+import com.janclarin.gradepath.view.ColorPickerSwatch;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseEditActivity extends BaseActivity
-        implements GradeComponentDialogFragment.OnDialogGradeComponentListener {
+        implements GradeComponentDialog.OnDialogGradeComponentListener,
+        ColorPickerSwatch.OnColorSelectedListener {
 
     public static final String LOG_TAG = CourseEditActivity.class.getSimpleName();
 
@@ -31,10 +37,12 @@ public class CourseEditActivity extends BaseActivity
     private EditText mInstructorName;
     private EditText mInstructorEmail;
     private EditText mCredits;
+    private RelativeLayout mTextFields;
     private LinearLayout mComponentList;
 
     private Course mCourseToUpdate;
     private int updatePosition = -1;
+    private int mCourseColor;
 
     // List of grade components.
     private List<GradeComponent> mGradeComponents;
@@ -63,7 +71,33 @@ public class CourseEditActivity extends BaseActivity
         mInstructorName = (EditText) findViewById(R.id.et_instructor_name);
         mInstructorEmail = (EditText) findViewById(R.id.et_instructor_email);
         mCredits = (EditText) findViewById(R.id.et_course_credits);
+        mTextFields = (RelativeLayout) findViewById(R.id.layout_text_fields);
         mComponentList = (LinearLayout) findViewById(R.id.ll_grade_components);
+
+        findViewById(R.id.btn_choose_course_color).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Resources res = getResources();
+                ColorPickerDialog colorPicker = ColorPickerDialog.newInstance(
+                        R.string.title_color_picker_dialog,
+                        new int[]{
+                                res.getColor(R.color.theme_primary),
+                                res.getColor(R.color.orange_500),
+                                res.getColor(R.color.deep_purple_500),
+                                res.getColor(R.color.red_500),
+                                res.getColor(R.color.blue_500),
+                                res.getColor(R.color.cyan_500),
+                                res.getColor(R.color.green_500),
+                                res.getColor(R.color.pink_500),
+                        },
+                        mCourseColor,
+                        4,
+                        ColorPickerDialog.SIZE_SMALL
+                );
+                colorPicker.setOnColorSelectedListener(CourseEditActivity.this);
+                colorPicker.show(getFragmentManager(), "Color Picker");
+            }
+        });
 
         // Set add button to open new grade component dialog.
         findViewById(R.id.btn_add_grade_component).setOnClickListener(new View.OnClickListener() {
@@ -87,6 +121,9 @@ public class CourseEditActivity extends BaseActivity
             mInstructorEmail.setText(mCourseToUpdate.getInstructorEmail());
             mCredits.setText(new DecimalFormat("#.0#").format(mCourseToUpdate.getCredits()));
 
+            // Get course color from course.
+            mCourseColor = mCourseToUpdate.getColor();
+
             // Add grade component view for each existing grade component.
             for (GradeComponent gradeComponent : mGradeComponents)
                 addGradeComponent(gradeComponent);
@@ -95,18 +132,24 @@ public class CourseEditActivity extends BaseActivity
                     PreferenceManager.getDefaultSharedPreferences(this)
                             .getString(SettingsActivity.KEY_PREF_COURSE_CREDITS, "");
             mCredits.setText(defaultCredits);
+
+            // Set course color to default.
+            mCourseColor = getResources().getColor(R.color.theme_primary);
         }
+
+        // Set action bar and text fields background color.
+        onColorSelected(mCourseColor);
     }
 
     private void newGradeComponent() {
-        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+        GradeComponentDialog gradeComponentDialog = GradeComponentDialog.newInstance(
                 getString(R.string.title_grade_component_dialog));
         gradeComponentDialog.show(getFragmentManager(), NEW_GRADE_COMPONENT_TAG);
     }
 
     private void editGradeComponent(GradeComponent gradeComponent) {
         updatePosition = mGradeComponents.indexOf(gradeComponent);
-        GradeComponentDialogFragment gradeComponentDialog = GradeComponentDialogFragment.newInstance(
+        GradeComponentDialog gradeComponentDialog = GradeComponentDialog.newInstance(
                 getString(R.string.title_grade_component_dialog), gradeComponent);
         gradeComponentDialog.show(getFragmentManager(), EDIT_GRADE_COMPONENT_TAG);
     }
@@ -221,7 +264,8 @@ public class CourseEditActivity extends BaseActivity
                     instructorName,
                     instructorEmail,
                     creditsValue,
-                    -1
+                    -1,
+                    mCourseColor
             );
         } else {
             // Update course.
@@ -233,7 +277,8 @@ public class CourseEditActivity extends BaseActivity
                     instructorName,
                     instructorEmail,
                     creditsValue,
-                    mCourseToUpdate.getFinalGradeValue()
+                    mCourseToUpdate.getFinalGradeValue(),
+                    mCourseColor
             );
         }
 
@@ -301,6 +346,13 @@ public class CourseEditActivity extends BaseActivity
                 new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
         );
+    }
+
+    @Override
+    public void onColorSelected(int color) {
+        getActionBar().setBackgroundDrawable(new ColorDrawable(color));
+        mTextFields.setBackgroundColor(color);
+        mCourseColor = color;
     }
 
     @Override

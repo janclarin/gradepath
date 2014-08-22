@@ -13,9 +13,9 @@
         </item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Gradepath
         </item>
-        <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabText</item>
         <item name="android:actionBarTabBarStyle">@style/CustomActionBarTabBar</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="ActionBar.Solid.Gradepath" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
@@ -24,7 +24,7 @@
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_gradepath</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Gradepath</item>
         <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:height">48dp</item>
+        <item name="android:height">56dp</item>
     </style>
 
     <style name="CustomActionBarTabBar" parent="@android:style/Widget.Holo.Light.ActionBar.TabBar">
@@ -75,7 +75,7 @@
     </style>
 
     <!-- Borderless button for empty view for list fragments -->
-    <style name="emptyListTextView">
+    <style name="EmptyListTextView">
         <item name="android:padding">8dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -88,13 +88,13 @@
     </style>
 
     <!-- Spinner-style button -->
-    <style name="spinnerButton" parent="@android:style/Widget.Holo.Light.Spinner">
+    <style name="SpinnerButton" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:layout_height">40dp</item>
         <item name="android:enabled">true</item>
         <item name="android:paddingLeft">12dp</item>
     </style>
 
-    <style name="dialogPrompt">
+    <style name="DialogPrompt">
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_marginBottom">48dp</item>
         <item name="android:paddingBottom">24dp</item>
@@ -103,7 +103,7 @@
         <item name="android:paddingTop">8dp</item>
     </style>
 
-    <style name="listHeaderTextView">
+    <style name="ListHeaderTextView">
         <item name="android:gravity">center_vertical</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">16sp</item>
@@ -111,14 +111,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="headerTextView">
+    <style name="HeaderTextView">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="subtitleTextView">
+    <style name="SubtitleTextView">
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/black_57_opacity</item>
         <item name="android:textSize">14sp</item>

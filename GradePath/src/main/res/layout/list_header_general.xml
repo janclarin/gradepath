@@ -5,19 +5,15 @@
     android:layout_height="48dp"
     android:background="@android:color/white">
 
-    <View
-        android:id="@+id/divider_view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider" />
-
     <TextView
         android:id="@+id/tv_title_header"
-        style="@style/listHeaderTextView"
+        style="@style/ListHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/keyline_1" />
+        android:layout_marginLeft="@dimen/keyline_1"
+        android:layout_marginRight="@dimen/keyline_1"
+        android:textColor="@color/black_57_opacity" />
 
 </RelativeLayout>

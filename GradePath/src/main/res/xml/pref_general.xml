@@ -5,6 +5,7 @@
     <EditTextPreference
         android:capitalize="words"
         android:defaultValue="3.0"
+        android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
         android:inputType="textCapWords"
         android:key="pref_key_default_credits"
         android:maxLines="1"
@@ -16,7 +17,111 @@
     <PreferenceScreen
         android:key="pref_screen_letter_grade_gpa"
         android:summary="@string/pref_summary_gpa_equivalents"
-        android:title="@string/pref_gpa_equivalents">
+        android:title="@string/pref_title_gpa_equivalents">
+
+        <EditTextPreference
+            android:defaultValue="4.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_a_plus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_a_plus" />
+
+        <EditTextPreference
+            android:defaultValue="4.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_a"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_a" />
+
+        <EditTextPreference
+            android:defaultValue="3.7"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_a_minus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_a_minus" />
+
+        <EditTextPreference
+            android:defaultValue="3.3"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_b_plus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_b_plus" />
+
+        <EditTextPreference
+            android:defaultValue="3.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_b"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_b" />
+
+        <EditTextPreference
+            android:defaultValue="2.7"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_b_minus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_b_minus" />
+
+        <EditTextPreference
+            android:defaultValue="2.3"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_c_plus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_c_plus" />
+
+        <EditTextPreference
+            android:defaultValue="2.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_c"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_c" />
+
+        <EditTextPreference
+            android:defaultValue="1.7"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_c_minus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_c_minus" />
+
+        <EditTextPreference
+            android:defaultValue="1.3"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_d_plus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_d_plus" />
+
+        <EditTextPreference
+            android:defaultValue="1.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_d"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_d" />
+
+        <EditTextPreference
+            android:defaultValue="0.7"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_d_minus"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_d_minus" />
+
+        <EditTextPreference
+            android:defaultValue="0.0"
+            android:digits="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ."
+            android:inputType="numberDecimal"
+            android:key="pref_key_gpa_f"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_f" />
 
     </PreferenceScreen>
 

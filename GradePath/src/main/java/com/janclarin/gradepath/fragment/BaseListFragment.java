@@ -81,6 +81,13 @@ abstract public class BaseListFragment extends BaseFragment {
     }
 
     /**
+     * Open grade calculator activity.
+     */
+    protected void showGradeCalculator(Course course) {
+
+    }
+
+    /**
      * Delete selected item. Display confirmation message for courses.
      */
     protected void deleteSelectedItem(int position) {
@@ -215,7 +222,7 @@ abstract public class BaseListFragment extends BaseFragment {
                 colorDrawable.setIntrinsicWidth(COLOR_CIRCLE_DIAMETER);
                 colorDrawable.setIntrinsicHeight(COLOR_CIRCLE_DIAMETER);
                 colorDrawable.getPaint().setStyle(Paint.Style.FILL);
-                colorDrawable.getPaint().setColor(getResources().getColor(color));
+                colorDrawable.getPaint().setColor(color);
             }
 
             return colorDrawable;
@@ -262,7 +269,6 @@ abstract public class BaseListFragment extends BaseFragment {
         public TextView tvSubtitle2;
         public ImageView ivDetail;
         public View btnSecondary;
-        public View divider;
     }
 
     /**

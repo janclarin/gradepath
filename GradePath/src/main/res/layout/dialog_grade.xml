@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/dialogPrompt"
+    style="@style/DialogPrompt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.janclarin.gradepath.dialog.GradeDialogFragment">
+    tools:context="com.janclarin.gradepath.dialog.GradeDialog">
 
     <EditText
         android:id="@+id/et_grade_name"
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/tv_dialog_grade_header"
-        style="@style/headerTextView"
+        style="@style/HeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/et_grade_name"
@@ -58,7 +58,7 @@
     <!-- Course spinner -->
     <TextView
         android:id="@+id/tv_dialog_grade_course_header"
-        style="@style/headerTextView"
+        style="@style/HeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_grade"
@@ -77,7 +77,7 @@
     <!-- Grade component spinner -->
     <TextView
         android:id="@+id/tv_dialog_grade_component_header"
-        style="@style/headerTextView"
+        style="@style/HeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spn_dialog_grade_courses"

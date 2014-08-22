@@ -23,10 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.janclarin.gradepath.R;
-import com.janclarin.gradepath.dialog.FinalGradeDialogFragment;
-import com.janclarin.gradepath.dialog.GradeDialogFragment;
-import com.janclarin.gradepath.dialog.SemesterDialogFragment;
-import com.janclarin.gradepath.fragment.CalculatorFragment;
+import com.janclarin.gradepath.dialog.FinalGradeDialog;
+import com.janclarin.gradepath.dialog.GradeDialog;
+import com.janclarin.gradepath.dialog.SemesterDialog;
 import com.janclarin.gradepath.fragment.HomeFragment;
 import com.janclarin.gradepath.fragment.ListSemesterFragment;
 import com.janclarin.gradepath.model.Course;
@@ -42,16 +41,19 @@ import java.util.List;
 public class MainActivity extends BaseActivity
         implements ActionBar.OnNavigationListener,
         HomeFragment.FragmentHomeListener,
-        CalculatorFragment.Callbacks,
-        SemesterDialogFragment.OnDialogSemesterListener,
-        GradeDialogFragment.OnDialogGradeListener,
-        FinalGradeDialogFragment.Callbacks {
+        SemesterDialog.OnDialogSemesterListener,
+        GradeDialog.OnDialogGradeListener,
+        FinalGradeDialog.Callbacks {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     /**
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    /**
+     * Remember the position of the selected item in Semester list.
+     */
+    private static final String STATE_SEMESTER_SELECTED_POSITION = "selection_semester_position";
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
      * expands it. This shared preference tracks this.
@@ -76,6 +78,7 @@ public class MainActivity extends BaseActivity
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private int mCurrentSelectedPosition;
+    private int mCurrentSemesterPosition;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private ListView mDrawerListView;
@@ -102,6 +105,7 @@ public class MainActivity extends BaseActivity
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mCurrentSemesterPosition = savedInstanceState.getInt(STATE_SEMESTER_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
     }
@@ -116,7 +120,7 @@ public class MainActivity extends BaseActivity
         // If no semesters, set title to app name.
         if (mSemesters.isEmpty()) {
             // Ask for semester input.
-            SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
+            SemesterDialog semesterDialog = SemesterDialog.newInstance(
                     getString(R.string.title_semester_dialog_current));
             semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
@@ -132,9 +136,19 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Set semester to saved value.
+        if (!mSemesters.isEmpty())
+            getActionBar().setSelectedNavigationItem(mCurrentSemesterPosition);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putInt(STATE_SEMESTER_SELECTED_POSITION, mCurrentSemesterPosition);
     }
 
     @Override
@@ -151,7 +165,7 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.new_semester) {
             // Show semester dialog.
-            SemesterDialogFragment semesterDialog = SemesterDialogFragment.newInstance(
+            SemesterDialog semesterDialog = SemesterDialog.newInstance(
                     getString(R.string.title_semester_dialog));
             semesterDialog.show(getFragmentManager(), NEW_SEMESTER_TAG);
         }
@@ -159,15 +173,6 @@ public class MainActivity extends BaseActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /* Go back to home. If on home and back is pressed, leave app */
-    @Override
-    public void onBackPressed() {
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        super.onBackPressed();
     }
 
     private void showGlobalActionBar() {
@@ -258,17 +263,16 @@ public class MainActivity extends BaseActivity
      */
     private void onNavDrawerItemSelected(int position) {
 
-        // Selected drawer item.
-        DrawerItem drawerItem = mDrawerItems[mCurrentSelectedPosition];
-
         switch (position) {
             case 0:
-                mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
+                if (!(mCurrentFragment instanceof HomeFragment)) {
+                    mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
 
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, mCurrentFragment)
-                        .commit();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, mCurrentFragment)
+                            .commit();
+                }
                 break;
             case 1:
                 // Open settings activity.
@@ -325,6 +329,9 @@ public class MainActivity extends BaseActivity
             intent.putExtra(ListFragmentActivity.FRAGMENT_TYPE, 2);
             startActivity(intent);
         } else {
+            // Set current semester position.
+            mCurrentSemesterPosition = position;
+
             // Refresh home fragment when semester changed.
             if (mCurrentSelectedPosition == 0) {
                 mCurrentFragment = HomeFragment.newInstance(mCurrentSemester);
@@ -402,14 +409,14 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onHomeAddGrade() {
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+        GradeDialog gradeDialog = GradeDialog.newInstance(
                 getString(R.string.title_grade_dialog));
         gradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
 
     @Override
     public void onHomeSetFinalGrade(Course course) {
-        FinalGradeDialogFragment finalGradeDialog = FinalGradeDialogFragment.newInstance(
+        FinalGradeDialog finalGradeDialog = FinalGradeDialog.newInstance(
                 getString(R.string.title_final_grade_dialog), course);
         finalGradeDialog.show(getFragmentManager(), NEW_GRADE_TAG);
     }
@@ -417,7 +424,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onHomeEditGrade(Grade grade) {
         // Show edit grade dialog.
-        GradeDialogFragment gradeDialog = GradeDialogFragment.newInstance(
+        GradeDialog gradeDialog = GradeDialog.newInstance(
                 getString(R.string.title_grade_dialog), grade);
         gradeDialog.show(getFragmentManager(), EDIT_GRADE_TAG);
     }

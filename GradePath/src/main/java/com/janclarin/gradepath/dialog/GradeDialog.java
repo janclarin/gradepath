@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Dialog for adding and updating grades.
  */
-public class GradeDialogFragment extends BaseDialogFragment {
+public class GradeDialog extends BaseDialog {
 
     private OnDialogGradeListener mListener;
 
@@ -39,7 +39,7 @@ public class GradeDialogFragment extends BaseDialogFragment {
     private EditText mGradeReceived;
     private EditText mGradePossible;
 
-    public GradeDialogFragment() {
+    public GradeDialog() {
         // Required empty public constructor.
     }
 
@@ -48,8 +48,8 @@ public class GradeDialogFragment extends BaseDialogFragment {
      *
      * @return A new instance of GradeDialogFragment.
      */
-    public static GradeDialogFragment newInstance(String title) {
-        GradeDialogFragment fragment = new GradeDialogFragment();
+    public static GradeDialog newInstance(String title) {
+        GradeDialog fragment = new GradeDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         fragment.setArguments(args);
@@ -61,8 +61,8 @@ public class GradeDialogFragment extends BaseDialogFragment {
      *
      * @return A new instance of GradeDialogFragment.
      */
-    public static GradeDialogFragment newInstance(String title, Course course) {
-        GradeDialogFragment fragment = new GradeDialogFragment();
+    public static GradeDialog newInstance(String title, Course course) {
+        GradeDialog fragment = new GradeDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(MainActivity.COURSE_KEY, course);
@@ -73,8 +73,8 @@ public class GradeDialogFragment extends BaseDialogFragment {
     /**
      * Call when updating a grade.
      */
-    public static GradeDialogFragment newInstance(String title, Grade grade) {
-        GradeDialogFragment fragment = new GradeDialogFragment();
+    public static GradeDialog newInstance(String title, Grade grade) {
+        GradeDialog fragment = new GradeDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(MainActivity.GRADE_KEY, grade);

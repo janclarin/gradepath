@@ -18,5 +18,5 @@
 
     <TextView
         android:id="@+id/tv_list_empty"
-        style="@style/emptyListTextView" />
+        style="@style/EmptyListTextView" />
 </FrameLayout>

@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/tv_subtitle"
-            style="@style/subtitleTextView"
+            style="@style/SubtitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

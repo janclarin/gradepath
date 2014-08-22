@@ -37,6 +37,7 @@ public class DatabaseFacade {
             DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL,
             DatabaseHelper.COLUMN_CREDITS,
             DatabaseHelper.COLUMN_FINAL_GRADE,
+            DatabaseHelper.COLUMN_COURSE_COLOR
     };
 
     private static final String[] COMPONENT_COLUMNS = {
@@ -272,7 +273,8 @@ public class DatabaseFacade {
      * @return course id.
      */
     public long insertCourse(long semesterId, String courseName, String instructorName,
-                             String instructorEmail, double credits, int letterGradeValue) {
+                             String instructorEmail, double credits, int letterGradeValue,
+                             int color) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
@@ -281,6 +283,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
         values.put(DatabaseHelper.COLUMN_CREDITS, credits);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
+        values.put(DatabaseHelper.COLUMN_COURSE_COLOR, color);
         // Booleans not supported in SQLite, 1 = true, 0 = false.
 
         // Inserts course into table and returns its id.
@@ -293,7 +296,8 @@ public class DatabaseFacade {
      * @return -1 if update failed.
      */
     public int updateCourse(long courseId, long semesterId, String courseName, String instructorName,
-                            String instructorEmail, double credits, int letterGradeValue) {
+                            String instructorEmail, double credits, int letterGradeValue,
+                            int color) {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SEMESTER_ID, semesterId);
@@ -302,6 +306,7 @@ public class DatabaseFacade {
         values.put(DatabaseHelper.COLUMN_INSTRUCTOR_EMAIL, instructorEmail);
         values.put(DatabaseHelper.COLUMN_CREDITS, credits);
         values.put(DatabaseHelper.COLUMN_FINAL_GRADE, letterGradeValue);
+        values.put(DatabaseHelper.COLUMN_COURSE_COLOR, color);
 
         return mDatabase.update(DatabaseHelper.TABLE_COURSES, values,
                 DatabaseHelper.COLUMN_ID + " = '" + courseId + "'", null);
@@ -695,6 +700,7 @@ public class DatabaseFacade {
         course.setInstructorEmail(cursor.getString(4));
         course.setCredits(cursor.getDouble(5));
         course.setFinalGradeValue(cursor.getInt(6));
+        course.setColor(cursor.getInt(7));
 
         return course;
     }

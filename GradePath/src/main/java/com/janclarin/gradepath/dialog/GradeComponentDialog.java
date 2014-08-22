@@ -15,7 +15,7 @@ import com.janclarin.gradepath.model.GradeComponent;
 
 import java.text.DecimalFormat;
 
-public class GradeComponentDialogFragment extends BaseDialogFragment {
+public class GradeComponentDialog extends BaseDialog {
 
     private static final String COURSE_ID = "Course ID";
     private static final String GRADE_COMPONENT_KEY = "Grade Component";
@@ -28,20 +28,20 @@ public class GradeComponentDialogFragment extends BaseDialogFragment {
     private long mCourseId;
 
 
-    public GradeComponentDialogFragment() {
+    public GradeComponentDialog() {
         // Required empty public constructor.
     }
 
-    public static GradeComponentDialogFragment newInstance(String title) {
-        GradeComponentDialogFragment fragment = new GradeComponentDialogFragment();
+    public static GradeComponentDialog newInstance(String title) {
+        GradeComponentDialog fragment = new GradeComponentDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static GradeComponentDialogFragment newInstance(String title, GradeComponent gradeComponent) {
-        GradeComponentDialogFragment fragment = new GradeComponentDialogFragment();
+    public static GradeComponentDialog newInstance(String title, GradeComponent gradeComponent) {
+        GradeComponentDialog fragment = new GradeComponentDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(GRADE_COMPONENT_KEY, gradeComponent);

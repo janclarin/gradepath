@@ -2,11 +2,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/dialogPrompt"
+    style="@style/DialogPrompt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.janclarin.gradepath.dialog.GradeComponentDialogFragment">
+    tools:context="com.janclarin.gradepath.dialog.GradeComponentDialog">
 
     <EditText
         android:id="@+id/et_grade_component_name"

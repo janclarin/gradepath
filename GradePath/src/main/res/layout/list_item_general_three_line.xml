@@ -48,16 +48,22 @@
             android:id="@+id/tv_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="4dp"
             android:singleLine="true"
             android:textColor="@color/black_87_opacity"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_subtitle_2"
-            style="@style/subtitleTextView"
+            style="@style/SubtitleTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/keyline_2"
+        android:background="@color/list_divider" />
 </RelativeLayout>

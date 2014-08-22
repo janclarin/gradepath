@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,30 +19,29 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class SemesterDialogFragment extends BaseDialogFragment {
+public class SemesterDialog extends BaseDialog {
 
     private OnDialogSemesterListener mListener;
 
     private Semester mSemesterToUpdate;
     private Spinner mSeasonSpinner;
     private Spinner mYearSpinner;
-    private CheckBox mCurrentCheckBox;
     private EditText mGPA;
 
-    public SemesterDialogFragment() {
+    public SemesterDialog() {
         // Required empty public constructor
     }
 
-    public static SemesterDialogFragment newInstance(String title) {
-        SemesterDialogFragment fragment = new SemesterDialogFragment();
+    public static SemesterDialog newInstance(String title) {
+        SemesterDialog fragment = new SemesterDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static SemesterDialogFragment newInstance(String title, Semester semester) {
-        SemesterDialogFragment fragment = new SemesterDialogFragment();
+    public static SemesterDialog newInstance(String title, Semester semester) {
+        SemesterDialog fragment = new SemesterDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(MainActivity.SEMESTER_KEY, semester);

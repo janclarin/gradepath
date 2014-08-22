@@ -143,7 +143,6 @@ public class ListSemesterFragment extends BaseListFragment {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.list_header_general, parent, false);
                     viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
-                    viewHolder.divider = convertView.findViewById(R.id.divider_view);
                 } else {
                     convertView = LayoutInflater.from(mContext)
                             .inflate(R.layout.list_item_general_two_line, parent, false);
@@ -171,8 +170,6 @@ public class ListSemesterFragment extends BaseListFragment {
                 }
 
                 viewHolder.tvTitle.setText(info);
-
-                if (position == 0) viewHolder.divider.setVisibility(View.GONE);
             } else {
                 Semester semester = (Semester) listItem;
                 viewHolder.tvTitle.setText(semester.toString());

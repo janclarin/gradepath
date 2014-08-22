@@ -45,9 +45,16 @@
 
         <TextView
             android:id="@+id/tv_subtitle"
-            style="@style/subtitleTextView"
+            style="@style/SubtitleTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/keyline_2"
+        android:background="@color/list_divider" />
 </RelativeLayout>

@@ -45,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_INSTRUCTOR_EMAIL = "instructor_email";
     public static final String COLUMN_CREDITS = "credits";
     public static final String COLUMN_FINAL_GRADE = "final_grade";
+    public static final String COLUMN_COURSE_COLOR = "course_color";
     private static final String CREATE_TABLE_COURSES = "CREATE TABLE "
             + TABLE_COURSES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_SEMESTER_ID + " INTEGER NOT NULL, "
@@ -52,7 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_INSTRUCTOR_NAME + " TEXT NOT NULL, "
             + COLUMN_INSTRUCTOR_EMAIL + " TEXT NOT NULL, "
             + COLUMN_CREDITS + " REAL NOT NULL, "
-            + COLUMN_FINAL_GRADE + " INTEGER NOT NULL"
+            + COLUMN_FINAL_GRADE + " INTEGER NOT NULL, "
+            + COLUMN_COURSE_COLOR + " INTEGER NOT NULL"
             + ");";
 
     /**
@@ -93,7 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Database variables.
      */
     private static final String DATABASE_NAME = "gradepath.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static DatabaseHelper sInstance;
 
     /**

@@ -16,7 +16,7 @@ import com.janclarin.gradepath.R;
 import com.janclarin.gradepath.activity.BaseActivity;
 import com.janclarin.gradepath.model.Course;
 
-public class FinalGradeDialogFragment extends BaseDialogFragment {
+public class FinalGradeDialog extends BaseDialog {
 
     private Callbacks mListener;
 
@@ -25,12 +25,12 @@ public class FinalGradeDialogFragment extends BaseDialogFragment {
     private SeekBar mSeekBar;
     private TextView mFinalGrade;
 
-    public FinalGradeDialogFragment() {
+    public FinalGradeDialog() {
         // Required empty public constructor.
     }
 
-    public static FinalGradeDialogFragment newInstance(String title, Course course) {
-        FinalGradeDialogFragment fragment = new FinalGradeDialogFragment();
+    public static FinalGradeDialog newInstance(String title, Course course) {
+        FinalGradeDialog fragment = new FinalGradeDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
         args.putSerializable(BaseActivity.COURSE_KEY, course);
@@ -106,7 +106,8 @@ public class FinalGradeDialogFragment extends BaseDialogFragment {
                                 mCourseToUpdate.getInstructorName(),
                                 mCourseToUpdate.getInstructorEmail(),
                                 mCourseToUpdate.getCredits(),
-                                mSeekBar.getProgress()
+                                mSeekBar.getProgress(),
+                                mCourseToUpdate.getColor()
                         );
 
                         if (mListener != null) {

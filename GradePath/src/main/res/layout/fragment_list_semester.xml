@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tv_list_empty"
-        style="@style/emptyListTextView" />
+        style="@style/EmptyListTextView" />
 
     <ImageButton
         android:id="@+id/btn_add_item"

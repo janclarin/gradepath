@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.janclarin.gradepath.database.DatabaseFacade;
 
-abstract public class BaseDialogFragment extends DialogFragment {
+abstract public class BaseDialog extends DialogFragment {
 
     public static final String DIALOG_TITLE = "Title";
     protected Context mContext;

@@ -24,6 +24,7 @@ import com.janclarin.gradepath.model.DatabaseItem;
 import com.janclarin.gradepath.model.Grade;
 import com.janclarin.gradepath.model.Semester;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +38,6 @@ public class HomeFragment extends BaseListFragment {
     private FragmentHomeListener mListener;
 
     private LongSparseArray<Course> mCoursesById;
-    private int mNumGradesToShow = 3;
     private Semester mSemester;
 
     public HomeFragment() {
@@ -167,22 +167,28 @@ public class HomeFragment extends BaseListFragment {
         List<Course> courses = mDatabase.getCourses(mSemester.getId());
         Collections.sort(courses);
 
-        // For every course, map course ID to the course.
-        for (Course course : courses) {
-            Long courseId = course.getId();
-            mCoursesById.put(courseId, course);
-        }
-
         if (!courses.isEmpty()) {
-            // Add all courses to the list now.
+            List<Grade> grades = new ArrayList<Grade>();
+
+            // Add course header.
             mListItems.add(new Header(getString(R.string.title_fragment_list_courses)));
-            mListItems.addAll(courses);
 
-            // Get list of recent grades.
-            List<Grade> grades = mDatabase.getRecentGrades(mNumGradesToShow);
+            for (Course course : courses) {
+                // Add courses to map and list items.
+                Long courseId = course.getId();
+                mCoursesById.put(courseId, course);
 
+                // Add course to list.
+                mListItems.add(course);
+
+                // Get grades for course and add to grades list.
+                grades.addAll(mDatabase.getGrades(courseId));
+            }
+
+            // Add grade header, sort grades by add date, and all to list.
             if (!grades.isEmpty()) {
                 mListItems.add(new Header(getString(R.string.title_fragment_list_grades)));
+                Collections.sort(grades);
                 mListItems.addAll(grades);
             }
 
@@ -212,6 +218,9 @@ public class HomeFragment extends BaseListFragment {
                     case R.id.menu_set_final_grade:
                         if (mListener != null)
                             mListener.onHomeSetFinalGrade((Course) mAdapter.getItem(position));
+                        return true;
+                    case R.id.menu_grade_calculator:
+                        showGradeCalculator((Course) mAdapter.getItem(position));
                         return true;
                     default:
                         return false;
@@ -296,11 +305,9 @@ public class HomeFragment extends BaseListFragment {
                 switch (itemViewType) {
                     case ITEM_VIEW_TYPE_HEADER: {
                         convertView = LayoutInflater.from(mContext)
-                                .inflate(R.layout.list_header_home, parent, false);
+                                .inflate(R.layout.list_header_general, parent, false);
 
                         viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_header);
-                        viewHolder.btnSecondary = convertView.findViewById(R.id.btn_more);
-                        viewHolder.divider = convertView.findViewById(R.id.divider_view);
                         break;
                     }
                     case ITEM_VIEW_TYPE_MAIN_2_LINE: {
@@ -333,30 +340,19 @@ public class HomeFragment extends BaseListFragment {
             if (item instanceof Header) {
                 final String name = ((Header) item).getName();
                 viewHolder.tvTitle.setText(name);
-                viewHolder.btnSecondary.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (mListener != null) {
-                            if (name.equals(getString(R.string.title_fragment_list_grades))) {
-                                mListener.onHomeViewGrades();
-                            } else {
-                                mListener.onHomeViewCourses();
-                            }
-                        }
-                    }
-                });
-                // If this is the first header, hide the divider.
-                if (position == 0) viewHolder.divider.setVisibility(View.GONE);
             } else {
+                Course course;
+
                 if (item instanceof Grade) {
                     Grade grade = (Grade) item;
+                    course = mCoursesById.get(grade.getCourseId());
                     viewHolder.tvTitle.setText(grade.getName());
-                    viewHolder.tvSubtitle.setText(mCoursesById.get(grade.getCourseId()).getName());
-                    viewHolder.tvSubtitle2.setText(
+                    viewHolder.tvSubtitle.setText(
                             grade.getGradePercentage() + " "
                                     + getString(R.string.bullet) + " "
                                     + grade.toString()
                     );
+                    viewHolder.tvSubtitle2.setText(course.getName());
                     viewHolder.ivDetail.setImageResource(R.drawable.grade);
 
                     // Set button to open popup menu.
@@ -367,7 +363,8 @@ public class HomeFragment extends BaseListFragment {
                         }
                     });
                 } else {
-                    Course course = (Course) item;
+                    // If item is a course.
+                    course = (Course) item;
                     String instructorName = course.getInstructorName();
 
                     if (instructorName.isEmpty()) {
@@ -389,9 +386,9 @@ public class HomeFragment extends BaseListFragment {
                         }
                     });
                 }
-                // Set circle background based on course's color.
-                viewHolder.ivDetail.setBackground(getColorCircle(R.color.theme_primary));
 
+                // Set circle background based on course's color.
+                viewHolder.ivDetail.setBackground(getColorCircle(course.getColor()));
             }
 
             return convertView;

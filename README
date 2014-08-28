@@ -1,3 +1,4 @@
 GradePath
 =========
-Android application.
+Grade-keeping application that support weighted grades, courses, and semesters. 
+Calculates cumulative GPA. All data is stored in an SQLite database.

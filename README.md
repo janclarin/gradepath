@@ -1,6 +1,5 @@
 ### GradePath
-
-**An Android application that keeps track of weighted grades, courses over several semesters. All of the data is stored in an SQLite database.**
+An Android application that keeps track of weighted grades, courses over several semesters. All of the data is stored in an SQLite database.
 
 It is currently available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.janclarin.gradepath).
 

@@ -3,6 +3,7 @@
 **An Android application that keeps track of weighted grades, courses over several semesters. All of the data is stored in an SQLite database.**
 
 It is currently available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.janclarin.gradepath).
+
 ----
 #### Why?
 I could not find an Android application that supported keeping track of weighted grades and calculating them, so I decided to make my own. GradePath was the first serious Android application I have ever written, excluding several practice applications I have tinkered with in the past.
